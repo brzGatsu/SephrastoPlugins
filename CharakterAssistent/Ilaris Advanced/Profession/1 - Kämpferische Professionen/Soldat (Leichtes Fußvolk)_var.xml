@@ -1,0 +1,6 @@
+<Charakter>
+  <Auswahl>
+	<Fertigkeit name="Hiebwaffen" wert="5"/>
+	<Fertigkeit name="Klingenwaffen" wert="5"/>
+  </Auswahl>
+</Charakter>

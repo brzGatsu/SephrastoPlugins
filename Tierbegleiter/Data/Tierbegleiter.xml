@@ -1,0 +1,337 @@
+<Datenbank>
+  <Tierbegleiter name="Wildschwein" ws="9" rs="2" mr="3" gs="7" ini="3" ko="22" ge="8" kk="18" groesse="3" reittier="1">
+    <Modifikatoren>
+      <Modifikator name="Laufen" mod="12"/>
+      <Modifikator name="Pirschen" mod="4"/>
+      <Modifikator name="Wachsamkeit" mod="10"/>
+      <Modifikator name="Zähigkeit" mod="4"/>
+      <Modifikator name="Standfest"/>
+      <Modifikator name="Sturmangriff"/>
+      <Modifikator name="Reiterkampf WM" mod="0"/>
+    </Modifikatoren>
+    <Waffen>
+      <Waffe name="Stoß" rw="0" vt="3" at="10" w6="2" plus="4" eigenschaften="Niederwerfen"/>
+    </Waffen>
+  </Tierbegleiter>
+  <Tierbegleiter name="Kriegswildschwein" ws="11" rs="2" mr="3" gs="7" ini="3" ko="22" ge="8" kk="18" groesse="3" reittier="1">
+    <Modifikatoren>
+      <Modifikator name="Laufen" mod="12"/>
+      <Modifikator name="Pirschen" mod="4"/>
+      <Modifikator name="Wachsamkeit" mod="10"/>
+      <Modifikator name="Zähigkeit" mod="4"/>
+      <Modifikator name="Standfest"/>
+      <Modifikator name="Sturmangriff"/>
+      <Modifikator name="Reiterkampf WM" mod="1"/>
+    </Modifikatoren>
+    <Waffen>
+      <Waffe name="Stoß" rw="0" vt="3" at="10" w6="2" plus="6" eigenschaften="Niederwerfen"/>
+    </Waffen>
+  </Tierbegleiter>
+  <Tierbegleiter name="Wolf" ws="4" rs="1" mr="2" gs="8" ini="2" ko="6" ge="14" kk="6" mu="6" groesse="2">
+    <Modifikatoren>
+      <Modifikator name="Laufen" mod="24"/>
+      <Modifikator name="Pirschen" mod="12"/>
+      <Modifikator name="Wachsamkeit" mod="18"/>
+      <Modifikator name="Zähigkeit" mod="4"/>
+      <Modifikator name="Niederwerfen"/>
+      <Modifikator name="Standfest"/>
+      <Modifikator name="Sturmangriff"/>
+      <Modifikator name="Angepasst II (Dunkelheit)"/>
+    </Modifikatoren>
+    <Waffen>
+      <Waffe name="Biss" rw="0" vt="6" at="6" w6="2" plus="0" eigenschaften="Zerbrechlich"/>
+    </Waffen>
+  </Tierbegleiter>
+  <Tierbegleiter name="Großer Hund" ws="4" rs="1" mr="2" gs="8" ini="2" ko="6" ge="14" kk="6" mu="6" groesse="2">
+    <Modifikatoren>
+      <Modifikator name="Laufen" mod="24"/>
+      <Modifikator name="Pirschen" mod="12"/>
+      <Modifikator name="Wachsamkeit" mod="18"/>
+      <Modifikator name="Zähigkeit" mod="4"/>
+      <Modifikator name="Niederwerfen"/>
+      <Modifikator name="Standfest"/>
+      <Modifikator name="Sturmangriff"/>
+      <Modifikator name="Angepasst II (Dunkelheit)"/>
+    </Modifikatoren>
+    <Waffen>
+      <Waffe name="Biss" rw="0" vt="6" at="6" w6="2" plus="0" eigenschaften="Zerbrechlich"/>
+    </Waffen>
+  </Tierbegleiter>
+  <Tierbegleiter name="Kampfhund" ws="4" rs="1" mr="2" gs="7" ini="2" ko="8" ge="14" kk="8" mu="6" groesse="2">
+    <Modifikatoren>
+      <Modifikator name="Laufen" mod="20"/>
+      <Modifikator name="Pirschen" mod="12"/>
+      <Modifikator name="Wachsamkeit" mod="18"/>
+      <Modifikator name="Zähigkeit" mod="4"/>
+      <Modifikator name="Niederwerfen"/>
+      <Modifikator name="Standfest"/>
+      <Modifikator name="Sturmangriff"/>
+      <Modifikator name="Angepasst II (Dunkelheit)"/>
+    </Modifikatoren>
+    <Waffen>
+      <Waffe name="Biss" rw="0" vt="7" at="7" w6="2" plus="0" eigenschaften="Zerbrechlich"/>
+    </Waffen>
+  </Tierbegleiter>
+  <Tierbegleiter name="Khoramsbestie" ws="4" rs="1" mr="2" gs="8" ini="2" ko="8" ge="14" kk="8" mu="6" groesse="2">
+    <Modifikatoren>
+      <Modifikator name="Laufen" mod="24"/>
+      <Modifikator name="Pirschen" mod="12"/>
+      <Modifikator name="Wachsamkeit" mod="18"/>
+      <Modifikator name="Zähigkeit" mod="4"/>
+      <Modifikator name="Niederwerfen"/>
+      <Modifikator name="Standfest"/>
+      <Modifikator name="Sturmangriff"/>
+      <Modifikator name="Angepasst II (Dunkelheit)"/>
+    </Modifikatoren>
+    <Waffen>
+      <Waffe name="Biss" rw="0" vt="8" at="8" w6="2" plus="0" eigenschaften="Zerbrechlich"/>
+    </Waffen>
+  </Tierbegleiter>
+  <Tierbegleiter name="Kriegspferd" ws="15" rs="0" mr="6" gs="10" ini="1" ko="24" ge="8" kk="26" mu="12" groesse="4" kategorie="1" reittier="1">
+    <Modifikatoren>
+      <Modifikator name="Wachsamkeit" mod="10"/>
+      <Modifikator name="Zähigkeit" mod="10"/>
+      <Modifikator name="Rüstungsgewöhnung"/>
+      <Modifikator name="Standfest"/>
+      <Modifikator name="Reiterkampf WM" mod="1"/>
+    </Modifikatoren>
+    <Waffen>
+      <Waffe name="Tritt" rw="1" vt="5" at="12" w6="2" plus="2" eigenschaften="Niederwerfen"/>
+      <Waffe name="Biss" rw="0" vt="2" at="12" w6="1" plus="3" eigenschaften="Zerbrechlich"/>
+    </Waffen>
+  </Tierbegleiter>
+  <Tierbegleiter name="Tralloper Kriegspferd" ws="16" rs="0" mr="6" gs="8" ini="1" ko="24" ge="8" kk="26" mu="12" groesse="4" kategorie="1" reittier="1">
+    <Modifikatoren>
+      <Modifikator name="Wachsamkeit" mod="10"/>
+      <Modifikator name="Zähigkeit" mod="10"/>
+      <Modifikator name="Rüstungsgewöhnung"/>
+      <Modifikator name="Standfest"/>
+      <Modifikator name="Reiterkampf WM" mod="0"/>
+    </Modifikatoren>
+    <Waffen>
+      <Waffe name="Tritt" rw="1" vt="5" at="12" w6="2" plus="4" eigenschaften="Niederwerfen"/>
+      <Waffe name="Biss" rw="0" vt="2" at="12" w6="1" plus="5" eigenschaften="Zerbrechlich"/>
+    </Waffen>
+  </Tierbegleiter>
+  <Tierbegleiter name="Reitpferd" ws="13" rs="0" mr="6" gs="12" ini="1" ko="24" ge="8" kk="26" mu="12" groesse="4" kategorie="1" reittier="1">
+    <Modifikatoren>
+      <Modifikator name="Wachsamkeit" mod="10"/>
+      <Modifikator name="Zähigkeit" mod="10"/>
+      <Modifikator name="Rüstungsgewöhnung"/>
+      <Modifikator name="Standfest"/>
+      <Modifikator name="Reiterkampf WM" mod="-1"/>
+    </Modifikatoren>
+    <Waffen>
+      <Waffe name="Tritt" rw="1" vt="5" at="12" w6="2" plus="0" eigenschaften="Niederwerfen"/>
+      <Waffe name="Biss" rw="0" vt="2" at="12" w6="1" plus="1" eigenschaften="Zerbrechlich"/>
+    </Waffen>
+  </Tierbegleiter>
+  <Tierbegleiter name="Reitpony" ws="11" rs="0" mr="6" gs="10" ini="1" ko="24" ge="8" kk="26" mu="12" groesse="4" kategorie="1" reittier="1">
+    <Modifikatoren>
+      <Modifikator name="Wachsamkeit" mod="10"/>
+      <Modifikator name="Zähigkeit" mod="10"/>
+      <Modifikator name="Rüstungsgewöhnung"/>
+      <Modifikator name="Standfest"/>
+      <Modifikator name="Reiterkampf WM" mod="0"/>
+    </Modifikatoren>
+    <Waffen>
+      <Waffe name="Tritt" rw="1" vt="5" at="12" w6="2" plus="0" eigenschaften="Niederwerfen"/>
+      <Waffe name="Biss" rw="0" vt="2" at="12" w6="1" plus="1" eigenschaften="Zerbrechlich"/>
+    </Waffen>
+  </Tierbegleiter>
+  <Tierbegleiter name="Elefant" ws="15" rs="1" mr="4" gs="9" ini="1" ko="140" kk="120" mu="10" groesse="5">
+    <Modifikatoren>
+      <Modifikator name="Wachsamkeit" mod="12"/>
+      <Modifikator name="Zähigkeit" mod="14"/>
+      <Modifikator name="Laufen" mod="14"/>
+      <Modifikator name="Standfest"/>
+      <Modifikator name="Überrennen"/>
+      <Modifikator name="Unaufhaltsam"/>
+      <Modifikator name="Zerstörerisch I"/>
+      <Modifikator name="Zerstörerisch II"/>
+      <Modifikator name="Koloss II"/>
+    </Modifikatoren>
+    <Waffen>
+      <Waffe name="Stoßzähne" rw="1" vt="6" at="8" w6="5" plus="4" eigenschaften="Niederwerfen"/>
+      <Waffe name="Trampeln" rw="1" vt="4" at="6" w20="3" plus="0" eigenschaften="Flächenangriff (1 Schritt Umkreis), Niederwerfen (-8)"/>
+    </Waffen>
+  </Tierbegleiter>
+  <Tierbegleiter name="Kriegselefant" ws="15" rs="1" mr="4" gs="9" ini="1" ko="140" kk="120" mu="10" groesse="5">
+    <Modifikatoren>
+      <Modifikator name="Wachsamkeit" mod="12"/>
+      <Modifikator name="Zähigkeit" mod="14"/>
+      <Modifikator name="Laufen" mod="14"/>
+      <Modifikator name="Standfest"/>
+      <Modifikator name="Überrennen"/>
+      <Modifikator name="Unaufhaltsam"/>
+      <Modifikator name="Zerstörerisch I"/>
+      <Modifikator name="Zerstörerisch II"/>
+      <Modifikator name="Koloss II"/>
+    </Modifikatoren>
+    <Waffen>
+      <Waffe name="Stoßzähne" rw="1" vt="10" at="12" w6="5" plus="4" eigenschaften="Niederwerfen"/>
+      <Waffe name="Trampeln" rw="1" vt="8" at="10" w20="3" plus="0" eigenschaften="Flächenangriff (1 Schritt Umkreis), Niederwerfen (-8)"/>
+    </Waffen>
+  </Tierbegleiter>
+  <Tierbegleiter name="Mammut" ws="17" rs="2" mr="4" gs="9" ini="1" ko="200" kk="160" mu="10" groesse="5">
+    <Modifikatoren>
+      <Modifikator name="Wachsamkeit" mod="12"/>
+      <Modifikator name="Zähigkeit" mod="14"/>
+      <Modifikator name="Laufen" mod="14"/>
+      <Modifikator name="Standfest"/>
+      <Modifikator name="Überrennen"/>
+      <Modifikator name="Unaufhaltsam"/>
+      <Modifikator name="Zerstörerisch I"/>
+      <Modifikator name="Zerstörerisch II"/>
+      <Modifikator name="Resistenz gegen Kälte"/>
+      <Modifikator name="Koloss II"/>
+    </Modifikatoren>
+    <Waffen>
+      <Waffe name="Stoßzähne" rw="1" vt="6" at="8" w6="5" plus="9" eigenschaften="Niederwerfen"/>
+      <Waffe name="Trampeln" rw="1" vt="4" at="6" w20="3" plus="5" eigenschaften="Flächenangriff (1 Schritt Umkreis), Niederwerfen (-8)"/>
+    </Waffen>
+  </Tierbegleiter>
+  <Tierbegleiter name="Bär" ws="11" rs="2" mr="6" gs="6" ini="2" ge="16" ko="42" kk="40" mu="16" groesse="4">
+    <Modifikatoren>
+      <Modifikator name="Wachsamkeit" mod="16"/>
+      <Modifikator name="Zähigkeit" mod="14"/>
+      <Modifikator name="Laufen" mod="16"/>
+      <Modifikator name="Pirschen" mod="8"/>
+      <Modifikator name="Standfest"/>
+      <Modifikator name="Sturmangriff"/>
+      <Modifikator name="Koloss I"/>
+    </Modifikatoren>
+    <Waffen>
+      <Waffe name="Prankenhieb" rw="1" vt="6" at="13" w6="2" plus="6" eigenschaften="Niederwerfen (–4), Doppelangriff"/>
+      <Waffe name="Biss" rw="0" vt="3" at="14" w6="4" plus="6" eigenschaften="Zerbrechlich"/>
+    </Waffen>
+  </Tierbegleiter>
+  <Tierbegleiter name="Kleinaffe" ws="2" rs="0" mr="1" gs="5" ini="3" ff="6" kl="-6" kk="-6" mu="-2" groesse="1">
+    <Modifikatoren>
+      <Modifikator name="Wachsamkeit" mod="12"/>
+      <Modifikator name="Zähigkeit" mod="-4"/>
+      <Modifikator name="Pirschen" mod="16"/>
+    </Modifikatoren>
+    <Waffen>
+      <Waffe name="Biss" rw="0" vt="12" at="9" w6="1" plus="-1" eigenschaften=""/>
+    </Waffen>
+  </Tierbegleiter>
+  <Tierbegleiter name="Katze" ws="2" rs="0" mr="4" gs="6" ini="6" kl="-6" kk="-8" mu="0" groesse="1">
+    <Modifikatoren>
+      <Modifikator name="Wachsamkeit" mod="12"/>
+      <Modifikator name="Zähigkeit" mod="-4"/>
+      <Modifikator name="Pirschen" mod="20"/>
+      <Modifikator name="Angepasst II (Dunkelheit)"/>
+    </Modifikatoren>
+    <Waffen>
+      <Waffe name="Biss" rw="0" vt="12" at="12" w6="1" plus="0" eigenschaften=""/>
+    </Waffen>
+  </Tierbegleiter>
+  <Tierbegleiter name="Eule" ws="2" rs="0" mr="4" gs="1" gs2="10" ini="1" kl="-4" kk="-8" mu="4" groesse="1">
+    <Modifikatoren>
+      <Modifikator name="Wachsamkeit" mod="16"/>
+      <Modifikator name="Zähigkeit" mod="-4"/>
+      <Modifikator name="Pirschen" mod="16"/>
+      <Modifikator name="Flieger"/>
+      <Modifikator name="Angepasst II (Dunkelheit)"/>
+    </Modifikatoren>
+    <Waffen>
+      <Waffe name="Krallen" rw="0" vt="6" at="13" w6="1" plus="0"/>
+    </Waffen>
+  </Tierbegleiter>
+  <Tierbegleiter name="Kröte" ws="1" rs="0" mr="8" gs="1" ini="-1" kl="-4" kk="-16" mu="0" groesse="0">
+    <Modifikatoren>
+      <Modifikator name="Wachsamkeit" mod="12"/>
+      <Modifikator name="Zähigkeit" mod="-8"/>
+      <Modifikator name="Pirschen" mod="28"/>
+      <Modifikator name="Sehen" mod="12"/>
+      <Modifikator name="Magiegespür"/>
+    </Modifikatoren>
+    <Waffen>
+      <Waffe name="Ausweichen" rw="0" vt="6"/>
+    </Waffen>
+  </Tierbegleiter>
+  <Tierbegleiter name="Rabe" ws="2" rs="0" mr="2" gs="1" gs2="9" ini="0" kl="-2" kk="-8" mu="-2" groesse="1">
+    <Modifikatoren>
+      <Modifikator name="Wachsamkeit" mod="18"/>
+      <Modifikator name="Zähigkeit" mod="-4"/>
+      <Modifikator name="Pirschen" mod="12"/>
+      <Modifikator name="Flieger"/>
+    </Modifikatoren>
+    <Waffen>
+      <Waffe name="Krallen" rw="0" vt="8" at="12" w6="1" plus="1"/>
+    </Waffen>
+  </Tierbegleiter>
+  <Tierbegleiter name="Schlange" ws="2" rs="0" mr="6" gs="2" ini="0" kl="-6" kk="-8" mu="-4" groesse="1">
+    <Modifikatoren>
+      <Modifikator name="Wachsamkeit" mod="16"/>
+      <Modifikator name="Zähigkeit" mod="-4"/>
+      <Modifikator name="Pirschen" mod="24"/>
+      <Modifikator name="Sehen" mod="10"/>
+      <Modifikator name="Magiegespür"/>
+    </Modifikatoren>
+    <Waffen>
+      <Waffe name="Biss" rw="0" vt="8" at="13" w6="1" plus="1" eigenschaften="Gift je nach Schlange"/>
+    </Waffen>
+  </Tierbegleiter>
+  <Tierbegleiter name="Schröter" ws="4" rs="3" mr="13" gs="1" ini="0" ge="4" ko="14" kk="8" mu="4" groesse="3">
+    <Modifikatoren>
+      <Modifikator name="Wachsamkeit" mod="12"/>
+      <Modifikator name="Zähigkeit" mod="10"/>
+      <Modifikator name="Doppelangriff"/>
+      <Modifikator name="Standfest"/>
+    </Modifikatoren>
+    <Waffen>
+      <Waffe name="Zange" rw="1" vt="4" at="9" w6="2" plus="2" eigenschaften="Rüstungsbrechend, Umklammern (–2, 18)"/>
+      <Waffe name="Biss" rw="0" vt="2" at="12" w6="2" plus="0" eigenschaften="Rüstungsbrechend"/>
+    </Waffen>
+  </Tierbegleiter>
+  <Tierbegleiter name="Säbelzahntiger" ws="11" rs="1" mr="6" gs="11" ini="10" ge="20" ko="22" kk="20" mu="18" groesse="4">
+    <Modifikatoren>
+      <Modifikator name="Wachsamkeit" mod="18"/>
+      <Modifikator name="Pirschen" mod="18"/>
+      <Modifikator name="Laufen" mod="16"/>
+      <Modifikator name="Zähigkeit" mod="16"/>
+      <Modifikator name="Angepasst II (Dunkelheit)"/>
+      <Modifikator name="Blitzschnell">Erleidet keine Passierschläge, wenn er sich aus dem Nahkampf zurückzieht</Modifikator>
+      <Modifikator name="Sturmangriff"/>
+      <Modifikator name="Standfest"/>
+    </Modifikatoren>
+    <Waffen>
+      <Waffe name="Prankenhieb" rw="1" vt="12" at="16" w6="2" plus="4" eigenschaften="Doppelangriff, Niederwerfen (–4)"/>
+      <Waffe name="Biss" rw="0" vt="2" at="16" w6="5" plus="2" eigenschaften="Zerbrechlich"/>
+    </Waffen>
+  </Tierbegleiter>
+  <Tierbegleiter name="Löwe" ws="10" rs="1" mr="6" gs="11" ini="10" ge="16" ko="18" kk="16" mu="14" groesse="4">
+    <Modifikatoren>
+      <Modifikator name="Wachsamkeit" mod="18"/>
+      <Modifikator name="Pirschen" mod="18"/>
+      <Modifikator name="Laufen" mod="16"/>
+      <Modifikator name="Zähigkeit" mod="16"/>
+      <Modifikator name="Angepasst II (Dunkelheit)"/>
+      <Modifikator name="Blitzschnell">Erleidet keine Passierschläge, wenn er sich aus dem Nahkampf zurückzieht</Modifikator>
+      <Modifikator name="Sturmangriff"/>
+      <Modifikator name="Standfest"/>
+    </Modifikatoren>
+    <Waffen>
+      <Waffe name="Prankenhieb" rw="1" vt="12" at="16" w6="2" plus="0" eigenschaften="Doppelangriff, Niederwerfen (–4)"/>
+      <Waffe name="Biss" rw="0" vt="2" at="16" w6="5" plus="-2" eigenschaften="Zerbrechlich"/>
+    </Waffen>
+  </Tierbegleiter>
+  <Tierbegleiter name="Panther" ws="11" rs="1" mr="6" gs="11" ini="10" ge="28" ko="24" kk="16" mu="18" groesse="4">
+    <Modifikatoren>
+      <Modifikator name="Wachsamkeit" mod="18"/>
+      <Modifikator name="Pirschen" mod="24"/>
+      <Modifikator name="Laufen" mod="16"/>
+      <Modifikator name="Zähigkeit" mod="16"/>
+      <Modifikator name="Angepasst II (Dunkelheit)"/>
+      <Modifikator name="Blitzschnell">Erleidet keine Passierschläge, wenn er sich aus dem Nahkampf zurückzieht</Modifikator>
+      <Modifikator name="Sturmangriff"/>
+      <Modifikator name="Standfest"/>
+    </Modifikatoren>
+    <Waffen>
+      <Waffe name="Prankenhieb" rw="1" vt="12" at="16" w6="1" plus="2" eigenschaften="Doppelangriff, Niederwerfen (–4)"/>
+      <Waffe name="Biss" rw="0" vt="2" at="16" w6="4" plus="0" eigenschaften="Zerbrechlich"/>
+    </Waffen>
+  </Tierbegleiter>
+</Datenbank>
