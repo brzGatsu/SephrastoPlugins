@@ -170,7 +170,9 @@ class RSCharakterRuestungWrapper(QtCore.QObject):
         infoBox.addButton("Ja", QtWidgets.QMessageBox.YesRole)
         result = infoBox.exec()
         if result == 0:
-            self.ui.checkZonen.setChecked(not self.ui.checkZonen.isChecked())
+            self.ui.checkZonen.blockSignals(True)
+            self.ui.checkZonen.setCheckState(QtCore.Qt.Unchecked if self.ui.checkZonen.isChecked() else QtCore.Qt.Checked)
+            self.ui.checkZonen.blockSignals(False)
             return
 
         Wolke.Char.zonenSystemNutzen = self.ui.checkZonen.isChecked()
