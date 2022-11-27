@@ -1,4 +1,5 @@
 # SephrastoPlugins
+In diesem Repo sammle ich alle meine Plugins für den Ilaris-Charaktergenerator Sephrasto. Plugins und andere Beiträge von anderen Entwicklern sind gerne gesehen, kontaktiert mich einfach auf dem Ilaris Tools Discord.
 
 ## CharakterAssistent
 Enthält einen Baukasten mit WdH Spezies, Kulturen und Kämpferprofessionen für Ilaris Advanced
