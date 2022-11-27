@@ -45,5 +45,14 @@ Dieses Plugin erlaubt das Erstellen von Tierbegleitern entsprechend des Ilaris B
 ## Tragkraft
 Das Plugin setzt die Tragkraft der Regeln für Reisen von Alrik Normalpaktierer um (https://dsaforum.de/viewtopic.php?f=180&t=55321&hilit=reiseregeln). Die Tragkraft und der resultierende BE-Modifikator werden in der ersten Inventarzeile angezeigt. Der BE-Modifikator wird nicht(!) bei der BE oder den Kampfwerten eingerechnet. Allen anderen Zeilen kann ein Platzbedarf zugewiesen werden.
 
+## WaffenPlus
+Dieses Plugin schafft einige Anpassungsmöglichkeiten für Waffen:
+- Zeigt im Waffen-Tab ein VT-WM Feld an. Waffen in der Datenbank kann die Eigenschaft Unhandlich(X) gegeben werden, wobei X von der VT abgezogen wird. Beispiel: ein WM von 2 und Unhandlich (3) bedeutet einen Gesamt-WM von 2/-1.
+- Optionale Waffeneigenschaften, die mit '(*)' am Ende des Namens markiert werden; Beispiel: die Streitaxt erhält die Eigenschaft Rüstungsbrechend (*). Diese Markierung muss im Charaktereditor entfernt werden, ansonsten wird die Eigenschaft nicht auf dem Charakterbogen ausgegeben.
+- In den Hausregeln können bestimmte Waffeneigenschaften via 'WaffenPlus Plugin: Waffeneigenschaften Gruppieren' in der PDF separat gruppiert werden.
+- Die Waffeneigenschaft Vielseitig gibt Waffen eine Doppelreichweite.
+
+Diese Features (außer Vielseitig) können in den Hausregeln über diverse 'WaffenPlus Plugin' Einstellungen deaktiviert werden. Vielseitig kann einfach gelöscht werden.
+
 ## Zaubertricks
 Das Plugin sorgt dafür, dass die Zaubertricks-Fertigkeit aus WeZwanzigs Hausregeln und Ilaris Advanced nicht steigerbar ist und auch im Seitenpanel entsprechend angezeigt wird. Außerdem trägt es im Charakterbogen beim PW einen Strich ein. Achtung: Das Plugin enthält keine Hausregeldatenbank mit den entsprechenden Zaubertricks, beziehe diese bitte von WeZwanzig oder Ilaris Advanced.
