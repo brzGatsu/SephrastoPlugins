@@ -48,7 +48,7 @@ Das Plugin setzt die Tragkraft der Regeln für Reisen von Alrik Normalpaktierer 
 ## WaffenPlus
 Dieses Plugin schafft einige Anpassungsmöglichkeiten für Waffen:
 - Zeigt im Waffen-Tab ein VT-WM Feld an. Waffen in der Datenbank kann die Eigenschaft Unhandlich(X) gegeben werden, wobei X von der VT abgezogen wird. Beispiel: ein WM von 2 und Unhandlich (3) bedeutet einen Gesamt-WM von 2/-1.
-- Optionale Waffeneigenschaften, die mit '(*)' am Ende des Namens markiert werden; Beispiel: die Streitaxt erhält die Eigenschaft Rüstungsbrechend (*). Diese Markierung muss im Charaktereditor entfernt werden, ansonsten wird die Eigenschaft nicht auf dem Charakterbogen ausgegeben.
+- Optionale Waffeneigenschaften, die mit '(\*)' am Ende des Namens markiert werden; Beispiel: die Streitaxt erhält die Eigenschaft Rüstungsbrechend (\*). Diese Markierung muss im Charaktereditor entfernt werden, ansonsten wird die Eigenschaft nicht auf dem Charakterbogen ausgegeben.
 - In den Hausregeln können bestimmte Waffeneigenschaften via 'WaffenPlus Plugin: Waffeneigenschaften Gruppieren' in der PDF separat gruppiert werden.
 - Die Waffeneigenschaft Vielseitig gibt Waffen eine Doppelreichweite.
 
