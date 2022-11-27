@@ -3,17 +3,37 @@ from Wolke import Wolke
 import Definitionen
 import os
 from CharakterPrintUtility import CharakterPrintUtility
+import Version
+
+# This utility function didnt exist before 3.2.2 in Version.py
+def isClientSameOrHigher(major, minor, build):
+    if Version._sephrasto_version_major < major:
+        return False
+
+    if Version._sephrasto_version_major > major:
+        return True
+
+    if Version._sephrasto_version_minor < minor:
+        return False
+
+    if Version._sephrasto_version_minor > minor:
+        return True
+
+    return Version._sephrasto_version_build >= build
 
 class Plugin:
     def __init__(self):
-        EventBus.addAction("pdf_geschrieben", self.pdfGeschriebenHook)
+        if isClientSameOrHigher(3, 2, 2):
+            EventBus.addFilter("charakter_xml_schreiben", self.charakterSchreibenHook)
+        else:
+            EventBus.addAction("pdf_geschrieben", self.pdfGeschriebenHook)
 
     @staticmethod
     def getDescription():
-        return "Dieses Plugin speichert die Charakterwerte beim PDF-Export zusätzlich als Textdatei ab. Die Werte können dadurch leicht kopiert und z.B. in Trello-Karten eingefügt werden."
+        return "Dieses Plugin speichert die Charakterwerte beim Speichern zusätzlich als Textdatei ab. Die Werte können dadurch leicht kopiert und z.B. in Trello-Karten eingefügt werden."
 
-    def pdfGeschriebenHook(self, params):
-        char = Wolke.Char
+    def charakterSchreibenHook(self, node, params):
+        char = params["charakter"]
         content = []
 
         content.append("=== Beschreibung ===")
@@ -70,7 +90,8 @@ class Plugin:
 
         content.append("\nFreie Fertigkeiten:")
         for fert in CharakterPrintUtility.getFreieFertigkeiten(char):
-            content.append(fert)
+            if fert:
+                content.append(fert)
 
         content.append("\n=== Kampf === ")
         content.append("WS " + str(char.ws))
@@ -107,23 +128,28 @@ class Plugin:
             count += 1
         content.pop()
 
-        content.append("\n=== Übernatürliche Fertigkeiten und Talente ===")
+        isZauberer = char.aspBasis + char.aspMod > 0
+        isGeweiht = char.kapBasis + char.kapMod > 0
+        
+        if isZauberer or isGeweiht:
+            content.append("\n=== Übernatürliche Fertigkeiten und Talente ===")
 
-        content.append("\nVorteile:")
-        for v in vorteileUeber:
-            content.append(v)
+            content.append("\nVorteile:")
+            for v in vorteileUeber:
+                content.append(v)
 
-        content.append("\nÜbernatürliche Fertigkeiten:")
-        for f in CharakterPrintUtility.getÜberFertigkeiten(char):
-            fert = char.übernatürlicheFertigkeiten[f]
-            content.append(fert.name + " " + str(fert.probenwertTalent))
+            content.append("\nÜbernatürliche Fertigkeiten:")
+            for f in CharakterPrintUtility.getÜberFertigkeiten(char):
+                fert = char.übernatürlicheFertigkeiten[f]
+                content.append(fert.name + " " + str(fert.probenwertTalent))
 
-        content.append("\nÜbernatürliche Talente:")
-        for talent in CharakterPrintUtility.getÜberTalente(char):
-            content.append(talent.anzeigeName + " " + str(talent.pw))
+            content.append("\nÜbernatürliche Talente:")
+            for talent in CharakterPrintUtility.getÜberTalente(char):
+                content.append(talent.anzeigeName + " " + str(talent.pw))
 
-        path = os.path.splitext(params["filename"])[0] + "_text.txt"
+        path = os.path.splitext(params["filepath"])[0] + "_text.txt"
         with open(path, 'w', encoding="utf-8") as f:
             f.write("\n".join(content))
+        return node
 
 
