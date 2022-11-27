@@ -19,7 +19,7 @@ Das Plugin gibt den PDF-Regelanhang eines Charakters oder gar die ganze Sephrast
 
 Schaut euch gerne auch die handgemachten Manöverkarten auf dsaforum.de an! Die dort enthaltenen Karten sind in der Regel übersichtlicher und besser formatiert, als der Output von diesem Plugin. Zudem findet ihr dort eine Druckanleitung für der Karten. Das Plugin hat allerdings den Vorteil, dass es auch Hausregeln, Vorteile, Zauber und Liturgien ausgeben kann.
 
-## RuestungsnPlus
+## RuestungenPlus
 Dieses Plugin teilt die drei Rüstungen auf jeweils eigene Tabs auf. Dort werden sie nach Slots (wie Arme und Kopf) aufgeteilt, sodass einzelne Rüstungsteile besser verwaltet werden können. Im Charakterbogen erscheinen aus Platzmangel weiterhin nur die berechneten kompletten Rüstungen, die Einzelteile können aber im Regelanhang ausgegeben werden: Hierzu musst du in der Datenbankeinstellung 'Regelanhang: Reihenfolge' an der gewünschten Position (z.B. nach 'W') ein 'R' einfügen.
 Wenn du die Option 'Rüstungseigenschaften' aktivierst, kannst du zusätzlich Rüstungseigenschaften anlegen, optional mit Scripts versehen und Slots zuweisen.
 
