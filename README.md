@@ -1,5 +1,6 @@
 # SephrastoPlugins
 In diesem Repo sammle ich alle meine Plugins für den Ilaris-Charaktergenerator Sephrasto. Plugins und andere Beiträge von anderen Entwicklern sind gerne gesehen, kontaktiert mich einfach auf dem Ilaris Tools Discord.
+Grundsätzlich unterstützen die Plugins immer die neueste Sephrasto-Version, ältere Versionen ohne Gewähr.
 
 ## CharakterAssistent
 Enthält einen Baukasten mit WdH Spezies, Kulturen und Kämpferprofessionen für Ilaris Advanced
@@ -49,7 +50,7 @@ Das Plugin setzt die Tragkraft der Regeln für Reisen von Alrik Normalpaktierer 
 Dieses Plugin schafft einige Anpassungsmöglichkeiten für Waffen:
 - Zeigt im Waffen-Tab ein VT-WM Feld an. Waffen in der Datenbank kann die Eigenschaft Unhandlich(X) gegeben werden, wobei X von der VT abgezogen wird. Beispiel: ein WM von 2 und Unhandlich (3) bedeutet einen Gesamt-WM von 2/-1.
 - Optionale Waffeneigenschaften, die mit '(\*)' am Ende des Namens markiert werden; Beispiel: die Streitaxt erhält die Eigenschaft Rüstungsbrechend (\*). Diese Markierung muss im Charaktereditor entfernt werden, ansonsten wird die Eigenschaft nicht auf dem Charakterbogen ausgegeben.
-- In den Hausregeln können bestimmte Waffeneigenschaften via 'WaffenPlus Plugin: Waffeneigenschaften Gruppieren' in der PDF separat gruppiert werden.
+- In den Hausregeln können bestimmte Waffeneigenschaften via 'WaffenPlus Plugin: Waffeneigenschaften Gruppieren' in der PDF separat gruppiert werden. Dies kann beispielsweise genutzt werden, um bestimmte Waffeneigenschaften als Angriffsarten herauszuheben (siehe IA).
 - Die Waffeneigenschaft Vielseitig gibt Waffen eine Doppelreichweite.
 
 Diese Features (außer Vielseitig) können in den Hausregeln über diverse 'WaffenPlus Plugin' Einstellungen deaktiviert werden. Vielseitig kann einfach gelöscht werden.
