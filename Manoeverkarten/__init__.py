@@ -145,14 +145,6 @@ else:
         self.db.einstellungen[e.name] = e
 
         e = DatenbankEinstellung()
-        e.name = "Manöverkarten Plugin: Karten ohne Hintergrund"
-        e.beschreibung = "Wenn diese Option aktiviert wird, verwendet der Kartengenerator Karten mit weißem Hintergrund - ideal, um Tinte zu sparen."
-        e.wert = "False"
-        e.typ = "Bool"
-        e.isUserAdded = False
-        self.db.einstellungen[e.name] = e
-
-        e = DatenbankEinstellung()
         e.name = "Manöverkarten Plugin: Charaktereditor Button zeigen"
         e.beschreibung = "Wenn diese Option aktiviert ist, wird im Charaktereditor eine Manöverkarten-Button zum Exportieren der charakterspezifischen Manöverkarten angezeigt."
         e.wert = "True"
@@ -168,7 +160,24 @@ else:
         e.isUserAdded = False
         self.db.einstellungen[e.name] = e
 
-    def shortenTalent(self, text, dbExport = False):
+    def optionsPopup(self, databaseExport = False):
+        messagebox = QtWidgets.QMessageBox()
+        messagebox.setWindowTitle("Manöverkarten Export")
+        messagebox.setText("Sollen die Karten mit oder ohne Hintergrundbild exportiert werden? Letzteres spart Tinte, wenn du sie ausdrucken möchtest.")
+        messagebox.setIcon(QtWidgets.QMessageBox.Question)
+        messagebox.addButton("Mit Hintergrund", QtWidgets.QMessageBox.YesRole)
+        messagebox.addButton("Ohne Hintergrund", QtWidgets.QMessageBox.YesRole)
+        messagebox.addButton("Abbrechen", QtWidgets.QMessageBox.RejectRole)
+        messagebox.setEscapeButton(QtWidgets.QMessageBox.Close)  
+        if databaseExport:
+            check = QtWidgets.QCheckBox()
+            check.setText("Jede Karte als einzelne Datei (statt in gesammelte Decks) ausgeben")
+            check.setChecked(False)
+            messagebox.setCheckBox(check)
+
+        return messagebox.exec(), messagebox.checkBox().isChecked() if messagebox.checkBox() else False
+
+    def shortenText(self, text, dbExport = False):
         #Remove everything from Sephrasto on
         index = text.find('\nSephrasto')
         if index != -1:
@@ -244,8 +253,6 @@ else:
             fields["Text"] = CharakterPrintUtility.getLinkedDescription(Wolke.Char, vorteil)
             if not fields["Text"]:
                 continue
-            if "\n" in fields["Text"]:
-                fields["Text"] = "- " + fields["Text"].replace("\n", "\n- ")
             fields["Text"] = self.adjustSize(fields["Text"])
             karten.append(self.writeTempPDF(pdfName, fields))
 
@@ -259,7 +266,7 @@ else:
             if not beschreibung:
                 continue
             if "\n" in beschreibung:
-                beschreibung = "- " + beschreibung.replace("\n", "\n- ")
+                beschreibung = "- " + beschreibung.replace("\n\n", "\n").replace("\n", "\n- ")
 
             nextVortText = CharakterPrintUtility.getLinkedName(Wolke.Char, vorteil) + ":\n"
             nextVortText += beschreibung
@@ -279,7 +286,7 @@ else:
         fields = { "Titel" : "", "Text" : "" }
         for tal in talente:
             fields["Titel"] = tal.na
-            fields["Text"] = self.adjustSize(self.shortenTalent(tal.text))
+            fields["Text"] = self.adjustSize(self.shortenText(tal.text))
             karten.append(self.writeTempPDF(pdfName, fields))
 
     def trimManöverName(self, name):
@@ -364,6 +371,11 @@ else:
         startDir = ""
         if os.path.isdir(Wolke.Settings['Pfad-Chars']):
             startDir = Wolke.Settings['Pfad-Chars']
+
+        result = self.optionsPopup()
+        if result == 2:
+            return
+        ohneHintergrund = result == 1
 
         spath, _ = QtWidgets.QFileDialog.getSaveFileName(None,"Manöverkarten speichern...", startDir, "PDF-Datei (*.pdf)")
         if spath == "":
@@ -460,7 +472,7 @@ else:
                 karte = os.path.join(kartenPfad, self.db.einstellungen["Manöverkarten Plugin: Anrufungsfarbe"].toText() + ".pdf")
                 self.writeTalentKarten(karten, karte, anrufungen)
 
-        if self.db.einstellungen["Manöverkarten Plugin: Karten ohne Hintergrund"].toBool():
+        if ohneHintergrund:
             PdfSerializer.concat(karten, spath)
             PdfSerializer.squeeze(spath, spath)
         else:
@@ -476,25 +488,41 @@ else:
         if Wolke.Settings['PDF-Open']:
             os.startfile(spath, 'open')
 
-    def writeDatenbankDeck(self, karten, spath, deckName):
+    def writeDatenbankDeck(self, karten, titel, spath, deckName, ohneHintergrund, eineDateiProKarte):
         if len(karten) == 0:
             return
-        if self.db.einstellungen["Manöverkarten Plugin: Karten ohne Hintergrund"].toBool():
-            path = os.path.join(spath, deckName + ".pdf")
-            PdfSerializer.concat(karten, path)
-            PdfSerializer.squeeze(path, path)
 
+        if eineDateiProKarte:
+            for i in range(len(karten)):
+                karte = karten[i]
+                kartenPfad = os.path.dirname(os.path.abspath(__file__))
+                kartenPfad = os.path.join(kartenPfad, "Data")
+                hintergrundPath = os.path.join(kartenPfad, "hintergrund.pdf")
+                kartenName = "".join(c for c in titel[i] if c not in "\/:*?<>|")
+                path = os.path.join(spath, f"{deckName}_{kartenName}.pdf")
+                #shutil.copyfile(karte, path)
+                if ohneHintergrund:
+                    PdfSerializer.squeeze(karte, path)
+                else:
+                    PdfSerializer.addBackground(karte, hintergrundPath, path)
+                    PdfSerializer.squeeze(path, path)
         else:
-            handle, concatPath = tempfile.mkstemp()
-            os.close(handle)
-            PdfSerializer.concat(karten, concatPath)
-            kartenPfad = os.path.dirname(os.path.abspath(__file__))
-            kartenPfad = os.path.join(kartenPfad, "Data")
-            hintergrundPath = os.path.join(kartenPfad, "hintergrund.pdf")
-            path = os.path.join(spath, deckName + ".pdf")
-            PdfSerializer.addBackground(concatPath, hintergrundPath, path)
-            PdfSerializer.squeeze(path, path)
-            os.remove(concatPath)
+            if ohneHintergrund:
+                path = os.path.join(spath, deckName + ".pdf")
+                PdfSerializer.concat(karten, path)
+                PdfSerializer.squeeze(path, path)
+
+            else:
+                handle, concatPath = tempfile.mkstemp()
+                os.close(handle)
+                PdfSerializer.concat(karten, concatPath)
+                kartenPfad = os.path.dirname(os.path.abspath(__file__))
+                kartenPfad = os.path.join(kartenPfad, "Data")
+                hintergrundPath = os.path.join(kartenPfad, "hintergrund.pdf")
+                path = os.path.join(spath, deckName + ".pdf")
+                PdfSerializer.addBackground(concatPath, hintergrundPath, path)
+                PdfSerializer.squeeze(path, path)
+                os.remove(concatPath)
 
         for karte in karten:
             os.remove(karte)
@@ -517,6 +545,11 @@ else:
     def writeDatenbankKarten(self):
         if self.db is None:
             return
+
+        result, eineDateiProKarte = self.optionsPopup(True)
+        if result == 2:
+            return
+        ohneHintergrund = result == 1
 
         startDir = ""
         spath = QtWidgets.QFileDialog.getExistingDirectory(None, "Wähle einen Ordner, in dem die Kartendecks gespeichert werden sollen", startDir)
@@ -590,23 +623,19 @@ else:
             scriptVariables = { "typ" : typ, "farbe" : "schwarz" }
             exec(vorteilFarbeScript, scriptVariables)
             karte = os.path.join(kartenPfad, scriptVariables["farbe"] + ".pdf")
+            titel = []
             for vorteil in vorteileGruppiert[typ]:
                 fields["Titel"] = vorteil.name
-                if "Regelanhang: Vorteilsbeschreibungen ersetzen" in self.db.einstellungen: # sephrasto 3.2+
-                    fields["Text"] = self.shortenTalent(self.getVorteilDescription(vorteil), True)
-                else:
-                    fields["Text"] = self.shortenTalent(vorteil.text, True)
-                if "\n" in fields["Text"]:
-                    fields["Text"] = "- " + fields["Text"].replace("\n", "\n- ")
-                fields["Text"] = self.adjustSize(fields["Text"])
+                fields["Text"] = self.adjustSize(self.shortenText(vorteil.text, True))
+                titel.append(fields["Titel"])
                 karten.append(self.writeTempPDF(karte, fields))
-            self.writeDatenbankDeck(karten, spath, vorteilTypen[typ])
+            self.writeDatenbankDeck(karten, titel, spath, vorteilTypen[typ], ohneHintergrund, eineDateiProKarte)
 
         for typ in range(len(manöverTypen)):
             scriptVariables = { "typ" : typ, "farbe" : "schwarz" }
             exec(manöverFarbeScript, scriptVariables)
             karte = os.path.join(kartenPfad, scriptVariables["farbe"] + ".pdf")
-
+            titel = []
             for manöver in manöverGruppiert[typ]:
                 fields["Titel"] = self.trimManöverName(manöver.name)
                 fields["Text"] = ""
@@ -619,36 +648,45 @@ else:
                     fields["Text"] += "Gegenprobe: " + manöver.gegenprobe + "\n"
                 fields["Text"] += manöver.text
                 fields["Text"] = self.adjustSize(fields["Text"])
+                titel.append(fields["Titel"])
                 karten.append(self.writeTempPDF(karte, fields))
-            self.writeDatenbankDeck(karten, spath, manöverTypen[typ])
+            self.writeDatenbankDeck(karten, titel, spath, manöverTypen[typ], ohneHintergrund, eineDateiProKarte)
 
         karte = os.path.join(kartenPfad, self.db.einstellungen["Manöverkarten Plugin: Waffeneigenschaftenfarbe"].toText() + ".pdf")
+        titel = []
         for we in waffeneigenschaften:
             fields["Titel"] = we.name
             fields["Text"] = self.adjustSize(we.text)
+            titel.append(fields["Titel"])
             karten.append(self.writeTempPDF(karte, fields))
-        self.writeDatenbankDeck(karten, spath, "Waffeneigenschaften")
+        self.writeDatenbankDeck(karten, titel, spath, "Waffeneigenschaften", ohneHintergrund, eineDateiProKarte)
 
         karte = os.path.join(kartenPfad, self.db.einstellungen["Manöverkarten Plugin: Zauberfarbe"].toText() + ".pdf")
         for i in range(len(zauber)):
+            titel = []
             for talent in zauber[i]:
                 fields["Titel"] = talent.name
-                fields["Text"] = self.adjustSize(self.shortenTalent(talent.text, dbExport = True))
+                fields["Text"] = self.adjustSize(self.shortenText(talent.text, dbExport = True))
+                titel.append(fields["Titel"])
                 karten.append(self.writeTempPDF(karte, fields))
-            self.writeDatenbankDeck(karten, spath, fertigkeitsTypen[i])
+            self.writeDatenbankDeck(karten, titel, spath, fertigkeitsTypen[i], ohneHintergrund, eineDateiProKarte)
 
         karte = os.path.join(kartenPfad, self.db.einstellungen["Manöverkarten Plugin: Liturgienfarbe"].toText() + ".pdf")
         for i in range(len(liturgien)):
+            titel = []
             for talent in liturgien[i]:
                 fields["Titel"] = talent.name
-                fields["Text"] = self.adjustSize(self.shortenTalent(talent.text, dbExport = True))
+                fields["Text"] = self.adjustSize(self.shortenText(talent.text, dbExport = True))
+                titel.append(fields["Titel"])
                 karten.append(self.writeTempPDF(karte, fields))
-            self.writeDatenbankDeck(karten, spath, fertigkeitsTypen[i])
+            self.writeDatenbankDeck(karten, titel, spath, fertigkeitsTypen[i], ohneHintergrund, eineDateiProKarte)
 
         karte = os.path.join(kartenPfad, self.db.einstellungen["Manöverkarten Plugin: Anrufungsfarbe"].toText() + ".pdf")
         for i in range(len(anrufungen)):
+            titel = []
             for talent in anrufungen[i]:
                 fields["Titel"] = talent.name
-                fields["Text"] = self.adjustSize(self.shortenTalent(talent.text, dbExport = True))
+                fields["Text"] = self.adjustSize(self.shortenText(talent.text, dbExport = True))
+                titel.append(fields["Titel"])
                 karten.append(self.writeTempPDF(karte, fields))
-            self.writeDatenbankDeck(karten, spath, fertigkeitsTypen[i])
+            self.writeDatenbankDeck(karten, titel, spath, fertigkeitsTypen[i], ohneHintergrund, eineDateiProKarte)
