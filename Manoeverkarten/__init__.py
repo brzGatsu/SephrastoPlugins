@@ -498,7 +498,13 @@ else:
                 kartenPfad = os.path.dirname(os.path.abspath(__file__))
                 kartenPfad = os.path.join(kartenPfad, "Data")
                 hintergrundPath = os.path.join(kartenPfad, "hintergrund.pdf")
-                kartenName = "".join(c for c in titel[i] if c not in "\/:*?<>|")
+
+                kartenName = titel[i].replace(" / ", " oder ").replace("/", " oder ")
+                chop = [" (passiv)", " (Passiv)", " (einfach)", " (voll)", " (Sinn)", " (Tier)"]
+                for suffix in chop:
+                    if kartenName.endswith(suffix):
+                        kartenName = kartenName[:-len(suffix)]
+                kartenName = "".join(c for c in kartenName if c not in "\/:*?<>|+‘´`'!?[]{}(),")
                 path = os.path.join(spath, f"{deckName}_{kartenName}.pdf")
                 #shutil.copyfile(karte, path)
                 if ohneHintergrund:
@@ -626,8 +632,8 @@ else:
             titel = []
             for vorteil in vorteileGruppiert[typ]:
                 fields["Titel"] = vorteil.name
-                fields["Text"] = self.adjustSize(self.shortenText(vorteil.text, True))
                 titel.append(fields["Titel"])
+                fields["Text"] = self.adjustSize(self.shortenText(vorteil.text, True))
                 karten.append(self.writeTempPDF(karte, fields))
             self.writeDatenbankDeck(karten, titel, spath, vorteilTypen[typ], ohneHintergrund, eineDateiProKarte)
 
@@ -638,6 +644,7 @@ else:
             titel = []
             for manöver in manöverGruppiert[typ]:
                 fields["Titel"] = self.trimManöverName(manöver.name)
+                titel.append(fields["Titel"])
                 fields["Text"] = ""
                 if manöver.probe:
                     if len(manöver.probe) > 15:
@@ -648,7 +655,6 @@ else:
                     fields["Text"] += "Gegenprobe: " + manöver.gegenprobe + "\n"
                 fields["Text"] += manöver.text
                 fields["Text"] = self.adjustSize(fields["Text"])
-                titel.append(fields["Titel"])
                 karten.append(self.writeTempPDF(karte, fields))
             self.writeDatenbankDeck(karten, titel, spath, manöverTypen[typ], ohneHintergrund, eineDateiProKarte)
 
@@ -656,8 +662,8 @@ else:
         titel = []
         for we in waffeneigenschaften:
             fields["Titel"] = we.name
-            fields["Text"] = self.adjustSize(we.text)
             titel.append(fields["Titel"])
+            fields["Text"] = self.adjustSize(we.text)
             karten.append(self.writeTempPDF(karte, fields))
         self.writeDatenbankDeck(karten, titel, spath, "Waffeneigenschaften", ohneHintergrund, eineDateiProKarte)
 
@@ -666,8 +672,8 @@ else:
             titel = []
             for talent in zauber[i]:
                 fields["Titel"] = talent.name
-                fields["Text"] = self.adjustSize(self.shortenText(talent.text, dbExport = True))
                 titel.append(fields["Titel"])
+                fields["Text"] = self.adjustSize(self.shortenText(talent.text, dbExport = True))
                 karten.append(self.writeTempPDF(karte, fields))
             self.writeDatenbankDeck(karten, titel, spath, fertigkeitsTypen[i], ohneHintergrund, eineDateiProKarte)
 
@@ -676,8 +682,8 @@ else:
             titel = []
             for talent in liturgien[i]:
                 fields["Titel"] = talent.name
-                fields["Text"] = self.adjustSize(self.shortenText(talent.text, dbExport = True))
                 titel.append(fields["Titel"])
+                fields["Text"] = self.adjustSize(self.shortenText(talent.text, dbExport = True))
                 karten.append(self.writeTempPDF(karte, fields))
             self.writeDatenbankDeck(karten, titel, spath, fertigkeitsTypen[i], ohneHintergrund, eineDateiProKarte)
 
@@ -686,7 +692,7 @@ else:
             titel = []
             for talent in anrufungen[i]:
                 fields["Titel"] = talent.name
-                fields["Text"] = self.adjustSize(self.shortenText(talent.text, dbExport = True))
                 titel.append(fields["Titel"])
+                fields["Text"] = self.adjustSize(self.shortenText(talent.text, dbExport = True))
                 karten.append(self.writeTempPDF(karte, fields))
             self.writeDatenbankDeck(karten, titel, spath, fertigkeitsTypen[i], ohneHintergrund, eineDateiProKarte)
