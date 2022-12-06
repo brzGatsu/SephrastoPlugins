@@ -500,7 +500,7 @@ else:
                 hintergrundPath = os.path.join(kartenPfad, "hintergrund.pdf")
 
                 kartenName = titel[i].replace(" / ", " oder ").replace("/", " oder ")
-                chop = [" (passiv)", " (Passiv)", " (einfach)", " (voll)", " (Sinn)", " (Tier)"]
+                chop = [" (passiv)", " (Passiv)", " (einfach)", " (voll)", " (Sinn)", " (Tier)", " [Fertigkeit oder Attribut]"]
                 for suffix in chop:
                     if kartenName.endswith(suffix):
                         kartenName = kartenName[:-len(suffix)]
