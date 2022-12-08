@@ -163,7 +163,11 @@ else:
     def optionsPopup(self, databaseExport = False):
         messagebox = QtWidgets.QMessageBox()
         messagebox.setWindowTitle("Manöverkarten Export")
-        messagebox.setText("Sollen die Karten mit oder ohne Hintergrundbild exportiert werden? Letzteres spart Tinte, wenn du sie ausdrucken möchtest.")
+
+        text = "Sollen die Karten mit oder ohne Hintergrundbild exportiert werden? Letzteres spart Tinte, wenn du sie ausdrucken möchtest."
+        if databaseExport:
+            text = "Achtung: Der Export kann mehrere Minuten dauern.\n\n" + text
+        messagebox.setText(text)
         messagebox.setIcon(QtWidgets.QMessageBox.Question)
         messagebox.addButton("Mit Hintergrund", QtWidgets.QMessageBox.YesRole)
         messagebox.addButton("Ohne Hintergrund", QtWidgets.QMessageBox.YesRole)
@@ -504,9 +508,8 @@ else:
                 for suffix in chop:
                     if kartenName.endswith(suffix):
                         kartenName = kartenName[:-len(suffix)]
-                kartenName = "".join(c for c in kartenName if c not in "\/:*?<>|+‘´`'!?[]{}(),")
+                kartenName = "".join(c for c in kartenName if c not in "\/:*?<>|+‘´`'!?[]{}(),").strip()
                 path = os.path.join(spath, f"{deckName}_{kartenName}.pdf")
-                #shutil.copyfile(karte, path)
                 if ohneHintergrund:
                     PdfSerializer.squeeze(karte, path)
                 else:
