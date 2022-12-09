@@ -185,7 +185,7 @@ else:
         #Remove everything from Sephrasto on
         index = text.find('\nSephrasto')
         if index != -1:
-            text = text[:index]
+            text = text[:index].strip()
 
         index = text.find(' Sephrasto:')
         if index != -1:
@@ -198,7 +198,7 @@ else:
         index = text.find('\nAnmerkung')
         anmerkung = ""
         if index != -1:
-            anmerkung = text[index:]
+            anmerkung = text[index:].strip()
             text = text[:index]
 
         #Remove everything from Fertigkeiten on
@@ -214,7 +214,7 @@ else:
         text = text.strip(" \n")
 
         if anmerkung:
-            text += (anmerkung)
+            text += anmerkung
 
         return text
 
@@ -538,17 +538,17 @@ else:
         karten.clear()
 
     def getVorteilDescription(self, vorteil):
-        beschreibung = vorteil.text.replace("\n\n", "\n")
-        if len(vorteil.cheatsheetBeschreibung) > 0 and not "$kommentar$" in vorteil.cheatsheetBeschreibung:
-            beschreibung = vorteil.cheatsheetBeschreibung
-
+        beschreibung = vorteil.text
         if vorteil.linkKategorie == VorteilLinkKategorie.Vorteil:
             beschreibungenErsetzen = [int(typ) for typ in self.db.einstellungen["Regelanhang: Vorteilsbeschreibungen ersetzen"].toTextList()]
-            if vorteil.typ in beschreibungenErsetzen:
+            namenErsetzen = [int(typ) for typ in self.db.einstellungen["Regelanhang: Vorteilsnamen ersetzen"].toTextList()]
+
+            #hacky, for the db export we only want to merge descriptions for kampfstile and traditionen
+            if vorteil.typ in beschreibungenErsetzen or not vorteil.typ in namenErsetzen:
                 return beschreibung
+            
             beschreibung2 = self.getVorteilDescription(self.db.vorteile[vorteil.linkElement])
             beschreibung = CharakterPrintUtility.mergeDescriptions(beschreibung2, beschreibung)
-
         return beschreibung
 
     def writeDatenbankKarten(self):
@@ -636,7 +636,10 @@ else:
             for vorteil in vorteileGruppiert[typ]:
                 fields["Titel"] = vorteil.name
                 titel.append(fields["Titel"])
-                fields["Text"] = self.adjustSize(self.shortenText(vorteil.text, True))
+                fields["Text"] = self.shortenText(self.getVorteilDescription(vorteil), True)
+                if "\n" in fields["Text"]:
+                    fields["Text"] = "- " + fields["Text"].replace("\n\n", "\n").replace("\n", "\n- ")
+                fields["Text"] = self.adjustSize(fields["Text"])
                 karten.append(self.writeTempPDF(karte, fields))
             self.writeDatenbankDeck(karten, titel, spath, vorteilTypen[typ], ohneHintergrund, eineDateiProKarte)
 
