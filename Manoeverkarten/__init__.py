@@ -551,6 +551,31 @@ else:
             beschreibung = CharakterPrintUtility.mergeDescriptions(beschreibung2, beschreibung)
         return beschreibung
 
+    def getVorteilAppendix(self, vorteil):
+        voraussetzungen = [v.strip() for v in Hilfsmethoden.VorArray2Str(vorteil.voraussetzungen).split(",")]
+        voraussetzungen = [v for v in voraussetzungen if not v.startswith("Kein Vorteil Tradition")]
+        voraussetzungen = [v + " und 2 weitere Attribute auf insgesamt 16" if "MeisterAttribut" in v else v for v in voraussetzungen]
+        voraussetzungen = ", ".join(voraussetzungen)
+        voraussetzungen = voraussetzungen.replace(" ODER ", " oder ")
+        voraussetzungen = voraussetzungen.replace("'", "") # remove apostrophes from "Fertigkeit" and "Übernatürliche-Fertigkeit"
+        voraussetzungen = voraussetzungen.replace("Fertigkeit ", "")
+        voraussetzungen = voraussetzungen.replace("Übernatürliche-Fertigkeit ", "")
+        voraussetzungen = voraussetzungen.replace("MeisterAttribut ", "")
+        voraussetzungen = voraussetzungen.replace("Attribut ", "")
+        voraussetzungen = voraussetzungen.replace("Vorteil ", "")
+        voraussetzungen = voraussetzungen.replace("Kein ", "kein ")
+        if not voraussetzungen:
+            voraussetzungen = "keine"
+
+        voraussetzungen = (voraussetzungen[:70] + '...') if len(voraussetzungen) > 70 else voraussetzungen
+
+        if vorteil.variableKosten:
+            voraussetzungen += f"; EP-Kosten variabel"
+        else:
+            voraussetzungen += f"; {vorteil.kosten} EP"
+        return "\n\nVoraussetzungen: " + voraussetzungen
+
+
     def writeDatenbankKarten(self):
         if self.db is None:
             return
@@ -575,7 +600,7 @@ else:
         manöverTypen = self.db.einstellungen["Manöver: Typen"].toTextList()
         vorteileGruppiert = []
         for i in range(len(vorteilTypen)):
-            vorteileGruppiert.append([v for v in self.db.vorteile.values() if v.text and v.cheatsheetAuflisten and v.typ == i])
+            vorteileGruppiert.append([v for v in self.db.vorteile.values() if v.text and v.typ == i])
             vorteileGruppiert[i] = sorted(vorteileGruppiert[i], key = lambda v: v.name)
 
         manöverGruppiert = []
@@ -639,7 +664,7 @@ else:
                 fields["Text"] = self.shortenText(self.getVorteilDescription(vorteil), True)
                 if "\n" in fields["Text"]:
                     fields["Text"] = "- " + fields["Text"].replace("\n\n", "\n").replace("\n", "\n- ")
-                fields["Text"] = self.adjustSize(fields["Text"])
+                fields["Text"] = self.adjustSize(fields["Text"] + self.getVorteilAppendix(vorteil))
                 karten.append(self.writeTempPDF(karte, fields))
             self.writeDatenbankDeck(karten, titel, spath, vorteilTypen[typ], ohneHintergrund, eineDateiProKarte)
 
