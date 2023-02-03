@@ -117,8 +117,10 @@ class Plugin:
                         W.eigenschaften.remove(we)
                         break
                 isEmpty = W == Objekte.Nahkampfwaffe()
-                self.spinWM2[index].setEnabled(not isEmpty and type(W) == Objekte.Nahkampfwaffe)
-                self.spinWM2[index].setValue(vtWM if type(W) == Objekte.Nahkampfwaffe else 0)
+
+                vtVerboten = Wolke.DB.einstellungen["Waffen: Talente VT verboten"].toTextList()
+                self.spinWM2[index].setEnabled(not isEmpty and not (W.name in vtVerboten or W.talent in vtVerboten))
+                self.spinWM2[index].setValue(vtWM if self.spinWM2[index].isEnabled() else 0)
                 super().loadWeaponIntoFields(W, index)
 
             def createWaffe(self, index):
@@ -140,13 +142,13 @@ class Plugin:
 
             def diffWeapons(self, weapon1, weapon2):
                 diff = []
-                w6Diff = weapon1.W6 - weapon2.W6
+                würfelDiff = weapon1.würfel - weapon2.würfel
                 plusDiff = weapon1.plus - weapon2.plus
 
-                haerteDiff = weapon1.haerte - weapon2.haerte
-                waffenHaerteWSStern = Wolke.DB.einstellungen["Waffen: Härte WSStern"].toTextList()
-                if weapon2.name in waffenHaerteWSStern:
-                    haerteDiff = weapon1.haerte - Wolke.Char.wsStern
+                härteDiff = weapon1.härte - weapon2.härte
+                waffenHärteWSStern = Wolke.DB.einstellungen["Waffen: Härte WSStern"].toTextList()
+                if weapon2.name in waffenHärteWSStern:
+                    härteDiff = weapon1.härte - Wolke.Char.wsStern
 
                 atWMDiff = weapon1.wm - weapon2.wm
                 def getUnhandlichParam(weapon):
@@ -166,22 +168,27 @@ class Plugin:
                 eigPlusDiff = list(set(w1Eig) - set(w2Eig))
                 eigMinusDiff = list(set(w2Eig) - set(w1Eig))
 
-                if w6Diff != 0:
-                    diff.append("TP " + ("+" if w6Diff >= 0 else "") + str(w6Diff) + "W6")
+                if würfelDiff != 0:
+                    diff.append("TP " + ("+" if würfelDiff >= 0 else "") + str(würfelDiff) + "W" + str(weapon1.würfelSeiten))
                 if plusDiff != 0:
                     tmp = ("+" if plusDiff >= 0 else "") + str(plusDiff)
-                    if w6Diff != 0:
+                    if würfelDiff != 0:
                         diff[0] += tmp
                     else:
                         diff.append("TP " + tmp)
                 if rwDiff != 0:
                     diff.append("RW " + ("+" if rwDiff >= 0 else "") + str(rwDiff))
                 if atWMDiff != 0 or vtWMDiff != 0:
-                    diff.append("WM " + ("+" if atWMDiff >= 0 else "") + str(atWMDiff) + "/" + ("+" if vtWMDiff >= 0 else "") + str(vtWMDiff))
+                    diff.append("WM " + ("+" if atWMDiff >= 0 else "") + str(atWMDiff))
+                    vtVerboten = Wolke.DB.einstellungen["Waffen: Talente VT verboten"].toTextList()
+                    if weapon1.name in vtVerboten or weapon1.talent in vtVerboten:
+                        diff[-1] += "/-"
+                    else:
+                        diff[-1] += "/" + ("+" if vtWMDiff >= 0 else "") + str(vtWMDiff)
                 if lzDiff != 0:
                     diff.append("LZ " + ("+" if lzDiff >= 0 else "") + str(lzDiff))
-                if haerteDiff != 0:
-                    diff.append("Härte " + ("+" if haerteDiff >= 0 else "") + str(haerteDiff))
+                if härteDiff != 0:
+                    diff.append("Härte " + ("+" if härteDiff >= 0 else "") + str(härteDiff))
                 if len(eigPlusDiff) > 0:
                     diff.append("Eigenschaften +" + ", +".join(eigPlusDiff))
                 if len(eigMinusDiff) > 0:
@@ -217,13 +224,16 @@ class Plugin:
                         eigenschaftenNew.append(we)
                 self.ui.labelEigenschaften.setText("Eigenschaften: " + ", ".join(eigenschaftenNew))
                 if type(W) == Objekte.Nahkampfwaffe:
-                    self.ui.labelWMLZ_Text.setText("Waffenmodifikator AT/VT")
-                    self.ui.labelWMLZ.setText(("+" if W.wm > 0 else "") + str(W.wm) + "/" + ("+" if vtWM > 0 else "") + str(vtWM))
+                    self.ui.labelWM_Text.setText("Waffenmodifikator AT/VT")
+                    self.ui.labelWM.setText(("+" if W.wm > 0 else "") + str(W.wm) + "/" + ("+" if vtWM > 0 else "") + str(vtWM))
+                else:
+                    self.ui.labelWM_Text.setText("Waffenmodifikator")
+                    self.ui.labelWM.setText(("+" if W.wm > 0 else "") + str(W.wm))
 
         return IAWaffenPicker
 
     def pdfExportWaffenHook(self, fields, params):
-        waffen = copy.deepcopy(Wolke.Char.waffen) #{ name, text, W6, plus, eigenschaften[], haerte, fertigkeit, talent, kampfstile[], kampfstil, rw, wm/lz}[]>
+        waffen = copy.deepcopy(Wolke.Char.waffen) #{ name, text, würfel, würfelseiten, plus, eigenschaften[], härte, fertigkeit, talent, kampfstile[], kampfstil, rw, wm, lz}[]>
   
         waffeToKey = {}
         for i in range(0, min(len(waffen), 8)):

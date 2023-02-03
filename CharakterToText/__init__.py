@@ -4,6 +4,7 @@ import Definitionen
 import os
 from CharakterPrintUtility import CharakterPrintUtility
 import Version
+import Objekte
 
 # This utility function didnt exist before 3.2.2 in Version.py
 def isClientSameOrHigher(major, minor, build):
@@ -38,7 +39,7 @@ class Plugin:
 
         content.append("=== Beschreibung ===")
         content.append("Name: " + char.name)
-        content.append("Spezies: " + char.rasse)
+        content.append("Spezies: " + char.spezies)
         content.append("Kurzbeschreibung: " + char.kurzbeschreibung)
         content.append("Status: " + Definitionen.Statusse[char.status])
         content.append("Heimat: " + char.heimat)
@@ -78,9 +79,9 @@ class Plugin:
         lastType = -1
         for f in CharakterPrintUtility.getFertigkeiten(char):
             fert = char.fertigkeiten[f]
-            if lastType != fert.printclass:
-                content.append("\n" + fertigkeitsTypen[fert.printclass] + ":")
-                lastType = fert.printclass
+            if lastType != fert.typ:
+                content.append("\n" + fertigkeitsTypen[fert.typ] + ":")
+                lastType = fert.typ
 
             talente = CharakterPrintUtility.getTalente(char, fert)
             talentStr = " "
@@ -117,11 +118,21 @@ class Plugin:
                 continue
 
             werte = char.waffenwerte[count]
-            keinSchaden = waffe.W6 == 0 and waffe.plus == 0
+            keinSchaden = waffe.würfel == 0 and waffe.plus == 0
             sg = ""
             if waffe.plus >= 0:
                 sg = "+"
-            content.append(waffe.anzeigename + " AT " + str(werte.AT) + " VT " + str(werte.VT) + " " + ("-" if keinSchaden else str(werte.TPW6) + "W6" + sg + str(werte.TPPlus)))
+            content.append(waffe.anzeigename)
+            if type(waffe) == Objekte.Fernkampfwaffe:
+                content[-1] += " LZ " + str(waffe.lz)
+            content[-1] += " AT " + str(werte.at)
+
+            vtVerboten = Wolke.DB.einstellungen["Waffen: Talente VT verboten"].toTextList()
+            if waffe.talent in vtVerboten or waffe.name in vtVerboten:
+                content[-1] += " VT -"
+            else:
+                content[-1] += " VT " + str(werte.vt)
+            content[-1] += " " + ("-" if keinSchaden else str(werte.würfel) + "W" + str(waffe.würfelSeiten) + sg + str(werte.plus))
             if len(waffe.eigenschaften) > 0:
                 content.append(", ".join(waffe.eigenschaften))
             content.append("")

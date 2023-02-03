@@ -54,7 +54,7 @@ class Plugin:
         fertigkeitsTypenProfan = self.db.einstellungen["Fertigkeiten: Typen profan"].toTextList()
         fertigkeitenGruppiert = {}
         for i in range(len(fertigkeitsTypenProfan)):
-            fertigkeiten = [f for f in self.db.fertigkeiten.values() if f.printclass == i]
+            fertigkeiten = [f for f in self.db.fertigkeiten.values() if f.typ == i]
             fertigkeiten = sorted(fertigkeiten, key = lambda f: f.name)
             fertigkeitenGruppiert[fertigkeitsTypenProfan[i]] = fertigkeiten
         return fertigkeitenGruppiert
@@ -63,7 +63,7 @@ class Plugin:
         fertigkeitsTypenUeber = self.db.einstellungen["Fertigkeiten: Typen übernatürlich"].toTextList()
         fertigkeitenGruppiert = {}
         for i in range(len(fertigkeitsTypenUeber)):
-            fertigkeiten = [f for f in self.db.übernatürlicheFertigkeiten.values() if f.printclass == i]
+            fertigkeiten = [f for f in self.db.übernatürlicheFertigkeiten.values() if f.typ == i]
             fertigkeiten = sorted(fertigkeiten, key = lambda f: f.name)
             fertigkeitenGruppiert[fertigkeitsTypenUeber[i]] = fertigkeiten
         return fertigkeitenGruppiert
@@ -95,8 +95,8 @@ class Plugin:
 
             for f in talent.fertigkeiten:
                 if self.db.übernatürlicheFertigkeiten[f].talenteGruppieren:
-                    return self.db.übernatürlicheFertigkeiten[f].printclass
-            return self.db.übernatürlicheFertigkeiten[talent.fertigkeiten[0]].printclass
+                    return self.db.übernatürlicheFertigkeiten[f].typ
+            return self.db.übernatürlicheFertigkeiten[talent.fertigkeiten[0]].typ
 
         def sortTalente(talent):
             return (getTalentTyp(talent), talent.name)
@@ -242,7 +242,11 @@ class Plugin:
             content.append(f"=== {fert} ===\n")
             for w in waffen:
                 tpPlus = f"+{w.plus}" if w.plus >= 0 else f"{w.plus}"
-                content.append(f"{w.name} | TP {w.W6}W6{tpPlus} | RW {w.rw} | WM {w.wm} | Härte {w.haerte} | Eigenschaften: " + (", ".join(w.eigenschaften) if len(w.eigenschaften) > 0 else "-"))
+
+                if type(w) == Objekte.Fernkampfwaffe:
+                    content.append(f"{w.name} | TP {w.würfel}W{w.würfelSeiten}{tpPlus} | RW {w.rw} | WM {w.wm} | LZ {w.lz} | Härte {w.härte} | Eigenschaften: " + (", ".join(w.eigenschaften) if len(w.eigenschaften) > 0 else "-"))
+                else:
+                    content.append(f"{w.name} | TP {w.würfel}W{w.würfelSeiten}{tpPlus} | RW {w.rw} | WM {w.wm} | Härte {w.härte} | Eigenschaften: " + (", ".join(w.eigenschaften) if len(w.eigenschaften) > 0 else "-"))
                 # also available: w.kampfstile (array of strings)
                 content.append("")
 
