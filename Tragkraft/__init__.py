@@ -115,7 +115,7 @@ class Plugin:
                 countr += 1
             if i == 0:
                 pass
-            elif Wolke.Char.ausrüstungPlatzbedarf[i] > 0:
+            elif len(Wolke.Char.ausrüstungPlatzbedarf) > i and Wolke.Char.ausrüstungPlatzbedarf[i] > 0:
                 fields['Ausruestung' + str(index)] += " (Last " + str(Wolke.Char.ausrüstungPlatzbedarf[i]) + ")"
             if count >= 20:
                 break
