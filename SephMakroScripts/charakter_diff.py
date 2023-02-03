@@ -37,9 +37,9 @@ def diffCharacters():
         return str(value) if value < 0 else "+" + str(value)
 
     print("Änderungen von " + os.path.basename(pathOld) + " (alt) zu " + os.path.basename(pathNew) + " (neu)\n")
-    print("EP Total: " + valStr(charNew.EPtotal - charOld.EPtotal))
-    print("EP ausgegeben: " + valStr(charNew.EPspent - charOld.EPspent))
-    print("EP verbleibend: " + valStr((charNew.EPtotal - charNew.EPspent) - (charOld.EPtotal - charOld.EPspent)))
+    print("EP Total: " + valStr(charNew.epGesamt - charOld.epGesamt))
+    print("EP ausgegeben: " + valStr(charNew.epAusgegeben - charOld.epAusgegeben))
+    print("EP verbleibend: " + valStr((charNew.epGesamt - charNew.epAusgegeben) - (charOld.epGesamt - charOld.epAusgegeben)))
 
     print("\n=== Attribute ===")
     for attribut in Definitionen.Attribute:
@@ -58,8 +58,8 @@ def diffCharacters():
             print(vorteil + ": entfernt")
         elif not vorteil in charOld.vorteile and vorteil in charNew.vorteile:
             print(vorteil + ": gekauft")
-        elif vorteil in charOld.vorteileVariable and vorteil in charNew.vorteileVariable and charOld.vorteileVariable[vorteil].kosten != charNew.vorteileVariable[vorteil].kosten:
-            print(vorteil + ": variable Kosten geändert (" + valStr(charNew.vorteileVariable[vorteil].kosten - charOld.vorteileVariable[vorteil].kosten) + " EP)")
+        elif vorteil in charOld.vorteileVariableKosten and vorteil in charNew.vorteileVariableKosten and charOld.vorteileVariableKosten[vorteil] != charNew.vorteileVariableKosten[vorteil]:
+            print(vorteil + ": variable Kosten geändert (" + valStr(charNew.vorteileVariableKosten[vorteil] - charOld.vorteileVariableKosten[vorteil]) + " EP)")
 
     print("\n=== Freie Fertigkeiten ===")
     fertigkeiten = set([f.name for f in charOld.freieFertigkeiten] + [f.name for f in charNew.freieFertigkeiten])
@@ -84,8 +84,8 @@ def diffCharacters():
                     talenteStr += "> " + talent + ": entfernt\n"
                 elif not talent in  old[fertigkeit].gekaufteTalente and talent in new[fertigkeit].gekaufteTalente:
                     talenteStr += "> " + talent + ": gekauft\n"
-                elif talent in charOld.talenteVariable and talent in charNew.talenteVariable and charOld.talenteVariable[talent].kosten != charNew.talenteVariable[talent].kosten:
-                    talenteStr += "> " + talent + ": variable Kosten geändert (" + valStr(charNew.talenteVariable[talent].kosten - charOld.talenteVariable[talent].kosten) + " EP)\n"
+                elif talent in charOld.talenteVariableKosten and talent in charNew.talenteVariableKosten and charOld.talenteVariableKosten[talent] != charNew.talenteVariableKosten[talent]:
+                    talenteStr += "> " + talent + ": variable Kosten geändert (" + valStr(charNew.talenteVariableKosten[talent] - charOld.talenteVariableKosten[talent]) + " EP)\n"
             if talenteStr:
                 if old[fertigkeit].wert == new[fertigkeit].wert:
                     print(fertigkeit + ": +0")

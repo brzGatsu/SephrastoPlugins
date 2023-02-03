@@ -6,9 +6,10 @@ import Objekte
 # Die hier konfigurierten Werte werden in der Regel mit den Waffenwerten multipliziert
 # Eine Waffe mit 2W6 Schaden erhält also 2 * ratingTPW6 Bewertungspunkte
 ratingTPW6 = 3.5
+ratingTPW20 = 10.5
 ratingTPPlus = 1
 ratingWM = 2
-ratingHaerte = 0.1
+ratingHärte = 0.1
 
 # Bei Bedarf können auch die Waffentalente zur Bewertung beitragen
 # Die Liste ist beliebig erweiterbar
@@ -78,10 +79,13 @@ for waffe in waffen:
         lastTalent = waffe.talent
         print("\n=== " + waffe.talent + " ===")
     rating = 0
-    rating += waffe.W6 * ratingTPW6
+    if waffe.würfelSeiten == 6:
+        rating += waffe.würfel * ratingTPW6
+    else:
+        rating += waffe.würfel * ratingTPW20
     rating += waffe.plus * ratingTPPlus
     rating += waffe.wm * ratingWM
-    rating += waffe.haerte * ratingHaerte
+    rating += waffe.härte * ratingHärte
     rating += ratingReichweite(waffe)
     rating += ratingLadezeit(waffe)
     if waffe.talent in ratingTalent:
