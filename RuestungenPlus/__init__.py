@@ -20,7 +20,7 @@ class Plugin:
         EventBus.addFilter("datenbank_editor_typen", self.datenbankEditorTypenHook)
         EventBus.addFilter("datenbank_xml_laden", self.datenbankXmlLadenHook)
         EventBus.addFilter("datenbank_xml_schreiben", self.datenbankXmlSchreibenHook)
-        EventBus.addAction("charakter_aktualisieren_waffeneigenschaftscripts", self.charakterAktualisierenHandler)
+        EventBus.addAction("charakter_aktualisieren_fertigkeiten", self.charakterAktualisierenHandler)
 
         # Regelanhang
         EventBus.addAction("regelanhang_anfuegen", self.regelanhangAnfuegenHandler)
@@ -33,8 +33,6 @@ class Plugin:
         EventBus.addAction("charakter_instanziiert", self.charakterInstanziiertHandler)
         EventBus.addAction("charakter_xml_geladen", self.charakterXmlGeladenHook)
         EventBus.addFilter("charakter_xml_schreiben", self.charakterXmlSchreibenHook, 100)
-
-
 
     @staticmethod
     def getDescription():
@@ -140,7 +138,7 @@ class Plugin:
         return datenbank.ruestungseigenschaften[weName]
 
     def API_getEigenschaftParam(self, paramNb):
-        match = re.search(r"\((.*?)\)", self.currentEigenschaft, re.UNICODE)
+        match = re.search(r"\((.+?)\)", self.currentEigenschaft, re.UNICODE)
         if not match:
             raise Exception("Die Rüstungseigenschaft '" + self.currentEigenschaft + "' erfordert einen Parameter, aber es wurde keiner gefunden")
         parameters = list(map(str.strip, match.group(1).split(";")))

@@ -148,7 +148,7 @@ class Plugin:
                 härteDiff = weapon1.härte - weapon2.härte
                 waffenHärteWSStern = Wolke.DB.einstellungen["Waffen: Härte WSStern"].toTextList()
                 if weapon2.name in waffenHärteWSStern:
-                    härteDiff = weapon1.härte - Wolke.Char.wsStern
+                    härteDiff = 0
 
                 atWMDiff = weapon1.wm - weapon2.wm
                 def getUnhandlichParam(weapon):
