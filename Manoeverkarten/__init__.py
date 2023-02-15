@@ -622,8 +622,8 @@ else:
 
             for f in talent.fertigkeiten:
                 if self.db.übernatürlicheFertigkeiten[f].talenteGruppieren:
-                    return self.db.übernatürlicheFertigkeiten[f].printclass
-            return self.db.übernatürlicheFertigkeiten[talent.fertigkeiten[0]].printclass
+                    return self.db.übernatürlicheFertigkeiten[f].typ
+            return self.db.übernatürlicheFertigkeiten[talent.fertigkeiten[0]].typ
 
         def sortTalente(talent):
             return (getTalentTyp(talent), talent.name)
