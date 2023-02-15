@@ -135,21 +135,22 @@ class CustomCardMerger:
             messageBox.setWindowTitle("Karten in Bilder konvertieren?")
             messageBox.setText("Möchtest du die Karten in Bilder konvertieren, z. B. für den Discord Bot?")
             messageBox.addButton("Ja", QtWidgets.QMessageBox.YesRole)
+            messageBox.addButton("Ja (ohne Kategorie im Namen)", QtWidgets.QMessageBox.YesRole)
             messageBox.addButton("Nein", QtWidgets.QMessageBox.NoRole)
             result = messageBox.exec()
-            if result == 0:
+            if result == 0 or result == 1:
                 dstPath = os.path.join(pluginCardsFolder, "bilder")
                 if os.path.isdir(dstPath):
                     shutil.rmtree(dstPath)
                 os.mkdir(dstPath)
                 for file in PathHelper.listdir(pluginCardsFolder):
-                    if not os.path.isfile(file):
+                    if not os.path.isfile(os.path.join(pluginCardsFolder,file)):
                         continue
                     pdf = pdfium.PdfDocument(os.path.join(pluginCardsFolder,file))
                     page = pdf.get_page(0)
                     image = page.render_to(
                         pdfium.BitmapConv.pil_image,
-                        scale=4,
+                        scale=300/72,
                         rotation=0,
                         crop=(0, 0, 0, 0),
                         fill_colour=(255, 255, 255, 255),
@@ -157,7 +158,12 @@ class CustomCardMerger:
                         greyscale=False,
                         optimise_mode=pdfium.OptimiseMode.NONE,
                     )
-                    image.save(os.path.join(dstPath, os.path.filename()), os.path.splitext(os.path.basename(file))[0] + ".png")
+
+                    name = os.path.splitext(os.path.basename(file))[0]
+                    if result == 1:
+                        index = name.find("_")
+                        name = name[index+1:]
+                    image.save(os.path.join(dstPath, name + ".png"))
                     image.close()
                     page.close()
                     pdf.close()
