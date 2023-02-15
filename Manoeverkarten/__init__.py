@@ -424,7 +424,7 @@ else:
                 Wolke.Char.voraussetzungenPrüfen(self.db.manöver[m].voraussetzungen)]))
 
         kartenPfad = os.path.dirname(os.path.abspath(__file__))
-        kartenPfad = os.path.join(kartenPfad, "Data")
+        kartenPfad = os.path.join(kartenPfad, "Data", "Templates")
 
         vorteileZusammenfassen = self.db.einstellungen["Manöverkarten Plugin: Vorteile zusammenfassen"].toTextList()
         for i in range(len(vorteileZusammenfassen)):
@@ -500,7 +500,7 @@ else:
             for i in range(len(karten)):
                 karte = karten[i]
                 kartenPfad = os.path.dirname(os.path.abspath(__file__))
-                kartenPfad = os.path.join(kartenPfad, "Data")
+                kartenPfad = os.path.join(kartenPfad, "Data", "Templates")
                 hintergrundPath = os.path.join(kartenPfad, "hintergrund.pdf")
 
                 kartenName = titel[i].replace(" / ", " oder ").replace("/", " oder ")
@@ -526,7 +526,7 @@ else:
                 os.close(handle)
                 PdfSerializer.concat(karten, concatPath)
                 kartenPfad = os.path.dirname(os.path.abspath(__file__))
-                kartenPfad = os.path.join(kartenPfad, "Data")
+                kartenPfad = os.path.join(kartenPfad, "Data", "Templates")
                 hintergrundPath = os.path.join(kartenPfad, "hintergrund.pdf")
                 path = os.path.join(spath, deckName + ".pdf")
                 PdfSerializer.addBackground(concatPath, hintergrundPath, path)
@@ -590,8 +590,13 @@ else:
         if spath == "":
             return
 
+        if False: #test
+            from Manoeverkarten.CustomCardMerger import CustomCardMerger
+            CustomCardMerger.merge(spath, ohneHintergrund)
+            return
+
         kartenPfad = os.path.dirname(os.path.abspath(__file__))
-        kartenPfad = os.path.join(kartenPfad, "Data")
+        kartenPfad = os.path.join(kartenPfad, "Data", "Templates")
 
         manöverFarbeScript = self.db.einstellungen["Manöverkarten Plugin: Manöverfarbe Script"].toText()
         vorteilFarbeScript = self.db.einstellungen["Manöverkarten Plugin: Vorteilsfarbe Script"].toText()
@@ -727,3 +732,15 @@ else:
                 fields["Text"] = self.adjustSize(self.shortenText(talent.text, dbExport = True))
                 karten.append(self.writeTempPDF(karte, fields))
             self.writeDatenbankDeck(karten, titel, spath, fertigkeitsTypen[i], ohneHintergrund, eineDateiProKarte)
+
+        if eineDateiProKarte:
+            messageBox = QtWidgets.QMessageBox()
+            messageBox.setIcon(QtWidgets.QMessageBox.Question)
+            messageBox.setWindowTitle("Fertig - Karten zusammenführen?")
+            messageBox.setText("Export abgeschlossen. Möchtest du die generierten Karten mit (Gatsus) handgemachten Karten zusammenführen?")
+            messageBox.addButton("Ja", QtWidgets.QMessageBox.YesRole)
+            messageBox.addButton("Nein", QtWidgets.QMessageBox.RejectRole)
+            result = messageBox.exec()
+            if result == 0:
+                from Manoeverkarten.CustomCardMerger import CustomCardMerger
+                CustomCardMerger.merge(spath, ohneHintergrund)
