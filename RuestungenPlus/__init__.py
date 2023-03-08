@@ -195,42 +195,56 @@ class Plugin:
         teilrüstungen = [Wolke.Char.teilrüstungen1, Wolke.Char.teilrüstungen2, Wolke.Char.teilrüstungen3]
         slots = Wolke.DB.einstellungen["Rüstungen: Typen"].toTextList()
         addEigenschaften = self.db.einstellungen["RüstungenPlus Plugin: Rüstungseigenschaften"].toBool() 
-        strList = []
+        strList = ["<article><span class='ruleCategoryHeading'>Rüstungen</span><br>"]
         for i in range(len(Wolke.Char.rüstung)):
-            strList.append("Rüstung " + str(i+1) + " - " + Wolke.Char.rüstung[i].name)
+            if not Wolke.Char.rüstung[i].name and Wolke.Char.rüstung[i].getRSGesamtInt() == 0:
+                continue
+            if i != 0:
+                strList.append("<article>")
+            strList.append("<span class='ruleHeading'>Rüstung " + str(i+1) + "</span><br>")
+            strList.append(Wolke.Char.rüstung[i].name)
             if addEigenschaften and Wolke.Char.rüstung[i].text:
-                strList.append(": " + Wolke.Char.rüstung[i].text)
+                strList.append("<br>Eigenschaften: " + Wolke.Char.rüstung[i].text)
 
-            if Wolke.Char.zonenSystemNutzen:
-                strList.append("\nSlot: Name | RS: Beine | L. Arm | R. Arm | Bauch | Brust | Kopf")
+            strList.append("<table><tr>")
+            strList.append("<th style='text-align: left;'>Name</th>")
+            if Wolke.Char.zonenSystemNutzen:       
+                for header in ["Beine", "L.&nbsp;Arm", "R.&nbsp;Arm", "Bauch", "Brust", "Kopf"]:
+                    strList.append("<th>" + header + "</th>")
             else:
-                strList.append("\nSlot: Name | RS")
-            if addEigenschaften:
-                strList.append(" | Eigenschaften")
+                strList.append("<th>RS</th>")
+            strList.append("</tr>")
 
             for r in teilrüstungen[i]:
                 if sum(r.rs) == 0:
                     continue
+                strList.append("<tr>")
+                strList.append("<td>" + r.name + "</td>")
                 if Wolke.Char.zonenSystemNutzen:
-                    strList.append("\n" + slots[r.typ] + ": " + r.name + " | " + str(r.rs[0]) + " | " + str(r.rs[1]) + " | " + str(r.rs[2]) + " | " + str(r.rs[3]) + " | " + str(r.rs[4]) + " | " + str(r.rs[5]))
+                    for cell in [str(r.rs[0]), str(r.rs[1]), str(r.rs[2]), str(r.rs[3]), str(r.rs[4]), str(r.rs[5])]:
+                        strList.append("<td style='text-align: center;'>" + cell + "</td>")
                 else:
-                    strList.append("\n" + slots[r.typ] + ": " + r.name + " | " + str(r.getRSGesamtInt()))
+                    strList.append("<td style='text-align: center;'>" + str(r.getRSGesamtInt()) + "</td>")
+                strList.append("</tr>")
+                strList.append("<tr>")
+                strList.append("<td colspan='100' style='font-size: 6pt;'>&nbsp;&nbsp;&nbsp;&nbsp;" + slots[r.typ])
+                if addEigenschaften:
+                    strList.append(" | Eigenschaften: ")
+                    if r.name in Wolke.DB.rüstungen:
+                        strList.append(Wolke.DB.rüstungen[r.name].text or "-")
+                    else:
+                        strList.append("-")
+                strList.append("</td></tr>")
 
-                if not addEigenschaften:
-                    continue
-                if r.name in Wolke.DB.rüstungen:
-                    strList.append(" | " + (Wolke.DB.rüstungen[r.name].text or "-"))
-                else:
-                    strList.append(" | -")
-            
-            strList.append("\n\n")
+            strList.append("</table>")
+            strList.append("</article>")
 
-        appendCb("Rüstungen", "".join(strList))
+        if len(strList) > 1:
+            appendCb("".join(strList))
 
         if not addEigenschaften:
             return
 
-        strList = []
         eigenschaftenList = {}
         for i in range(len(Wolke.Char.rüstung)):
             if not Wolke.Char.rüstung[i].text:
@@ -244,12 +258,17 @@ class Plugin:
                 except Exception:
                     continue #Manually added Eigenschaften are allowed
 
+        count = 0
+        strList = ["<article><span class='ruleCategoryHeading'>Rüstungseigenschaften</span><br>"]
         for eig in sorted(eigenschaftenList):
-            strList.append(eig)
-            strList.append("\n")
+            count += 1
+            if count != 1:
+                strList.append("<article>")
+            strList.append("<span class='ruleHeading'>" + eig + "</span><br>")
             strList.append(eigenschaftenList[eig])
-            strList.append("\n\n")
-        appendCb("Rüstungseigenschaften", "".join(strList))
+            strList.append("</article>")
+        if len(strList) > 1:
+            appendCb("".join(strList))
 
     # -----------------------
     # Slots
