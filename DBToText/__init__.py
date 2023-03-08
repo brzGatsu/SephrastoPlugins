@@ -41,14 +41,14 @@ class Plugin:
             vorteileGruppiert[vorteilTypen[i]] = vorteile
         return vorteileGruppiert
 
-    def getManöver(self):
-        manöverTypen = self.db.einstellungen["Manöver: Typen"].toTextList()
-        manöverGruppiert = {}
-        for i in range(len(manöverTypen)):
-            manöver = [m for m in self.db.manöver.values() if m.typ == i]
-            manöver = sorted(manöver, key = lambda m: m.name)
-            manöverGruppiert[manöverTypen[i]] = manöver
-        return manöverGruppiert
+    def getRegeln(self):
+        regelTypen = self.db.einstellungen["Regeln: Typen"].toTextList()
+        regelnGruppiert = {}
+        for i in range(len(regelTypen)):
+            regeln = [m for m in self.db.regeln.values() if m.typ == i]
+            regeln = sorted(regeln, key = lambda m: m.name)
+            regelnGruppiert[regelTypen[i]] = regeln
+        return regelnGruppiert
 
     def getFertigkeitenProfan(self):
         fertigkeitsTypenProfan = self.db.einstellungen["Fertigkeiten: Typen profan"].toTextList()
@@ -201,40 +201,41 @@ class Plugin:
                     content.append(f"Voraussetzungen: {self.voraussetzungenToString(f.voraussetzungen)}")
                 content.append("")
 
-        (zauber, liturgien, anrufungen) = self.getTalenteÜbernatürlich()
-        content.append("\ ZAUBER\n")
-        for z in zauber:
-            content.append(t.name)
-            content.append(self.shortenText(t.text))
-            # also available: t.fertigkeiten (array of strings), t.voraussetzungen (array, see voraussetzungenToString), t.kosten (int)
-            content.append("")
+        (zauberKategorien, liturgienKategorien, anrufungenKategorien) = self.getTalenteÜbernatürlich()
+        content.append("\nZAUBER\n")
+        for zauber in zauberKategorien:
+            for z in zauber:
+                content.append(z.name)
+                content.append(self.shortenText(z.text))
+                # also available: t.fertigkeiten (array of strings), t.voraussetzungen (array, see voraussetzungenToString), t.kosten (int)
+                content.append("")
 
-        content.append("\ LITURGIEN\n")
-        for z in zauber:
-            content.append(t.name)
-            content.append(self.shortenText(t.text))
-            # also available: t.fertigkeiten (array of strings), t.voraussetzungen (array, see voraussetzungenToString), t.kosten (int)
-            content.append("")
+        content.append("\nLITURGIEN\n")
+        for liturgien in liturgienKategorien:
+            for l in liturgien:
+                content.append(l.name)
+                content.append(self.shortenText(l.text))
+                # also available: t.fertigkeiten (array of strings), t.voraussetzungen (array, see voraussetzungenToString), t.kosten (int)
+                content.append("")
 
-        content.append("\ ANRUFUNGEN\n")
-        for z in zauber:
-            content.append(t.name)
-            content.append(self.shortenText(t.text))
-            # also available: t.fertigkeiten (array of strings), t.voraussetzungen (array, see voraussetzungenToString), t.kosten (int)
-            content.append("")
+        content.append("\nANRUFUNGEN\n")
+        for anrufungen in anrufungenKategorien:
+            for a in anrufungen:
+                content.append(a.name)
+                content.append(self.shortenText(a.text))
+                # also available: t.fertigkeiten (array of strings), t.voraussetzungen (array, see voraussetzungenToString), t.kosten (int)
+                content.append("")
 
-        content.append("\nMANÖVER\n")
-        for mTyp, manöver in self.getManöver().items():
-            content.append(f"=== {mTyp} ===\n")
-            for m in manöver:
-                content.append(m.name)
-                if m.probe:
-                    content[-1] += f" ({m.probe})"
-                if (m.gegenprobe):
-                    content.append(f"Gegenprobe: {m.gegenprobe}")
-                content.append(f"Wirkung: {self.shortenText(m.text)}")
-                if len(m.voraussetzungen) > 0:
-                    content.append(f"Voraussetzungen: {self.voraussetzungenToString(m.voraussetzungen)}")
+        content.append("\nREGELN\n")
+        for rTyp, regeln in self.getRegeln().items():
+            content.append(f"=== {rTyp} ===\n")
+            for r in regeln:
+                content.append(r.name)
+                if r.probe:
+                    content[-1] += f" ({r.probe})"
+                content.append(f"Wirkung: {self.shortenText(r.text)}")
+                if len(r.voraussetzungen) > 0:
+                    content.append(f"Voraussetzungen: {self.voraussetzungenToString(r.voraussetzungen)}")
                 content.append("")
 
         content.append("\nWAFFEN\n")
