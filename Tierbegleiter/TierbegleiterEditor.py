@@ -16,26 +16,15 @@ from shutil import which
 import re
 from TextTagCompleter import TextTagCompleter
 from Hilfsmethoden import Hilfsmethoden
+from Charakterbogen import Charakterbogen
 
 class TierbegleiterEditor(object):
     def __init__(self):
         self.datenbank = TierbegleiterDatenbank.TierbegleiterDatenbank()
         self.zuchteigenschaftenValid = True
         self.attribute = ["KO", "MU", "GE", "KK", "IN", "KL", "CH", "FF", "WS", "RS", "WS*", "MR", "GS", "GS2", "TP", "INI", "WM"]
-        rootdir = os.path.dirname(os.path.abspath(__file__))
-        self.tierbegleiterBogenPath = os.path.join(rootdir, "Data", "Tierbegleiterbogen.pdf")
-        
-        self.rulesPath = os.path.join("Data", "Charakterbögen", "Regeln.pdf") # use the rules page that comes with sephrasto
-        self.rulesBackground = os.path.join("Data", "Charakterbögen", "Hintergrund.pdf")
-        self.rulesLineCount = 100
-        self.rulesCharCount = 80
-        fontSize = Wolke.Settings['Cheatsheet-Fontsize']
-        if fontSize == 1:
-            self.rulesLineCount = 80
-            self.rulesCharCount = 55
-        elif fontSize == 2:
-            self.rulesLineCount = 60
-            self.rulesCharCount = 45
+        self.charakterbogen = Charakterbogen() # use default settings
+        self.charakterbogen.load(os.path.join(os.path.dirname(os.path.abspath(__file__)), "Data", "Tierbegleiterbogen.pdf"))
 
         self.attributModifiers = {}
         self.talentModifiers = {}
@@ -270,10 +259,10 @@ class TierbegleiterEditor(object):
             file.truncate()
 
     def savePdfClickedHandler(self):       
-        if not os.path.isfile(self.tierbegleiterBogenPath):
+        if not os.path.isfile(self.charakterbogen.filePath):
             messagebox = QtWidgets.QMessageBox()
             messagebox.setWindowTitle("Fehler!")
-            messagebox.setText("Konnte " + tierBogenPath + " nicht im Pluginordner finden")
+            messagebox.setText("Konnte " + self.charakterbogen.filePath + " nicht im Pluginordner finden")
             messagebox.setIcon(QtWidgets.QMessageBox.Critical)
             messagebox.setStandardButtons(QtWidgets.QMessageBox.Ok)
             messagebox.exec()
@@ -284,7 +273,7 @@ class TierbegleiterEditor(object):
         else:
             startDir = ""
 
-        startDir = os.path.join(startDir, self.ui.leName.text() or "Tierbegleiter")
+        startDir = os.path.join(startDir, self.ui.leName.text() or os.path.splitext(os.path.basename(self.savepath))[0] or "Tierbegleiter")
             
         # Let the user choose a saving location and name
         spath, _ = QtWidgets.QFileDialog.getSaveFileName(None,"Tierbegleiterbogen erstellen...",startDir,"PDF-Datei (*.pdf)")
@@ -612,7 +601,9 @@ class TierbegleiterEditor(object):
                 reitenWaffe.at = self.ui.sbReiten.value() + reiterkampfWM + self.ui.sbRK.value()
                 reitenWaffe.vt = self.ui.sbReiten.value() + reiterkampfWM + self.ui.sbRK.value()
                 reitenWaffe.plus += self.ui.sbRK.value()
-                reitenWaffe.eigenschaften += ", AT +4 gegen kleinere Gegner"
+                if reitenWaffe.eigenschaften:
+                    reitenWaffe.eigenschaften += ", "
+                reitenWaffe.eigenschaften += "AT +4 gegen kleinere Gegner"
                 waffen.append(reitenWaffe)
 
             vorteilModifiers.append(copy.copy(self.datenbank.tiervorteile["Sturmangriff (Reiterkampf)"]))
@@ -634,8 +625,6 @@ class TierbegleiterEditor(object):
             else:
                 if self.ui.sbRK.value() > 2:
                     vorteilModifiers.append(self.datenbank.tiervorteile["Überrennen (Reiterkampf)"])
-
-
 
         del attributModifiers["TP"]
         del attributModifiers["WM"]
@@ -754,18 +743,11 @@ class TierbegleiterEditor(object):
         self.ui.labelImage.setPixmap(QPixmap())
         self.ui.labelImage.setText(self.labelImageText)
 
-    def getLineCount(self, text):
-        lines = text.split("\n")
-        lineCount = 0
-        for line in lines:
-            lineCount += max(int(math.ceil(len(line) / self.rulesCharCount)), 1)
-        lineCount = lineCount - 1 #every text ends with two newlines, the second doesnt count, subtract 1
+    def categoryHeading(self, text):
+        return "<span class='ruleCategoryHeading'>" + text + "</span><br>"
 
-        #the largest fontsize tends to more lines beause of missing hyphenation
-        if Wolke.Settings["Cheatsheet-Fontsize"] > 1:
-            lineCount += int(lineCount * 0.2)
-
-        return lineCount
+    def ruleHeading(self, text):
+        return "<span class='ruleHeading'>" + text + "</span><br>"
 
     def createPdf(self, path):
         fields = copy.copy(self.attributModifiers)
@@ -780,12 +762,12 @@ class TierbegleiterEditor(object):
             talentModifierList.append(temp)
         talentModifierList = sorted(talentModifierList)
 
-        for i in range(0, 10):
+        for i in range(0, self.charakterbogen.maxFertigkeiten):
             if i < len(talentModifierList):
                 fields['Talent.' + str(i)] = talentModifierList[i][0]
                 fields['TalentPW.' + str(i)] = talentModifierList[i][1]
 
-        for i in range(0, 22):
+        for i in range(0, self.charakterbogen.maxVorteile):
             if i < len(self.vorteilModifiers):
                 fields['Vorteil.' + str(i)] = self.vorteilModifiers[i].name
 
@@ -842,115 +824,77 @@ class TierbegleiterEditor(object):
             handle, tmpTierbegleiterPath = tempfile.mkstemp()
             os.close(handle)
 
-        flatten = Wolke.Settings['Formular-Editierbarkeit'] == 2
-        PdfSerializer.write_pdf(self.tierbegleiterBogenPath, fields, tmpTierbegleiterPath, flatten)
-        tmpTierbegleiterPath = self.stampImage(tmpTierbegleiterPath)
+        flatten = not Wolke.Settings['Formular-Editierbarkeit']
+        PdfSerializer.write_pdf(self.charakterbogen.filePath, fields, tmpTierbegleiterPath, flatten)
+
+        buffer = QtCore.QBuffer()
+        buffer.open(QtCore.QIODevice.WriteOnly);
+        self.characterImage.save(buffer, "JPG")
+        image = buffer.data().data()
+        if image:
+            # The approach is to convert the image to pdf and stamp it over the char sheet with pdftk
+            image_pdf = PdfSerializer.convertJpgToPdf(image, self.charakterbogen.getImageSize(0, [193, 254]), self.charakterbogen.getImageOffset(0), self.charakterbogen.getPageLayout())
+            stamped_pdf = PdfSerializer.stamp(tmpTierbegleiterPath, image_pdf)
+            os.remove(image_pdf)
+            os.remove(tmpTierbegleiterPath)
+            tmpTierbegleiterPath = stamped_pdf
 
         if addRules:
             fields = {}
-
-            fields["Seite"] = 1
-            fields['Regeln1'] = ""
-            fields['Regeln2'] = ""
-        
             rules = []
             if len(tiereigenschaften) > 0:
-                rules.append("===== TIEREIGENSCHAFTEN =====\n\n")
+                count = 0
+                rules.append("<article>" + self.categoryHeading("Tiereigenschaften"))
                 for vorteilMod in tiereigenschaften:
-                    rules.append(vorteilMod.name + ": " + vorteilMod.wirkung + "\n\n")
-        
+                    count += 1
+                    if count != 1:
+                        rules.append("<article>")
+                    rules.append(self.ruleHeading(vorteilMod.name))
+                    rules.append(vorteilMod.wirkung)
+                    rules.append("</article>")
+
             if sum(1 for v in self.vorteilModifiers if not v.manöver) > 0:
-                rules.append("===== TIERVORTEILE =====\n\n")
+                rules.append("<article>" + self.categoryHeading("Tiervorteile"))
                 if self.datenbank.iaZuchtAusbildung:
                     rules.append("Der Einsatz eines Vorteils, der nicht passiv ist, erfordert eine Probe auf Tiere beeinflussen (20). Kampfmanöver gelten immer als passiv.\n\n")
+                count = 0
                 for vorteilMod in tiervorteile:
                     if vorteilMod.wirkung and not vorteilMod.manöver:
-                        rules.append(vorteilMod.name + ": " + vorteilMod.wirkung + "\n\n")
+                        count += 1
+                        if count != 1:
+                            rules.append("<article>")
+                        rules.append(self.ruleHeading(vorteilMod.name))
+                        rules.append(vorteilMod.wirkung)
+                        rules.append("</article>")
 
             if sum(1 for v in self.vorteilModifiers if v.manöver) > 0:
-                rules.append("===== MANÖVER UND WAFFENEIGENSCHAFTEN =====\n\n")
+                count = 0
+                rules.append("<article>" + self.categoryHeading("Manöver und Waffeneigenschaften"))
                 for vorteilMod in tiervorteile:
                     if vorteilMod.wirkung and vorteilMod.manöver:
-                        rules.append(vorteilMod.name + ": " + vorteilMod.wirkung + "\n\n")      
+                        count += 1
+                        if count != 1:
+                            rules.append("<article>")
+                        rules.append(self.ruleHeading(vorteilMod.name))
+                        rules.append(vorteilMod.wirkung)
+                        rules.append("</article>")
+            rules = "".join(rules).replace("\n", "<br>")
+            html = ""
+            with open(self.charakterbogen.regelanhangPfad, 'r', encoding="utf-8") as infile:
+                html = infile.read()
+                html = html.replace("{rules_content}", rules).replace("{rules_font_size}", str(Wolke.Settings['Cheatsheet-Fontsize']))
+            baseUrl = QtCore.QUrl.fromLocalFile(QtCore.QFileInfo(self.charakterbogen.regelanhangPfad).absoluteFilePath())
+            rulesFile = PdfSerializer.convertHtmlToPdf(html, baseUrl, self.charakterbogen.getRegelanhangPageLayout())
+            if self.charakterbogen.regelanhangHintergrundPfad:
+                tmpRulesFile = PdfSerializer.addBackground(rulesFile, self.charakterbogen.regelanhangHintergrundPfad)
+                os.remove(rulesFile)
+                rulesFile = tmpRulesFile
 
-            lineCount = 0
-            count = 0
-            for rule in rules:
-                fields['Regeln1'] += rule
-                lineCount += self.getLineCount(rule)
-                count += 1
-                if lineCount > self.rulesLineCount:
-                    break
-
-            if count == len(rules) and self.rulesLineCount - lineCount > 0:
-                fields['Regeln1'] += "\n" * (self.rulesLineCount - lineCount)
-
-            lineCount = 0
-            for rule in rules[count:]:
-                fields['Regeln2'] += rule
-                lineCount += self.getLineCount(rule)
-                count += 1
-            if count == len(rules) and self.rulesLineCount - lineCount > 0:
-                fields['Regeln2'] += "\n" * (self.rulesLineCount - lineCount)
-
-            flatten = Wolke.Settings['Formular-Editierbarkeit'] == 1 or Wolke.Settings['Formular-Editierbarkeit'] == 2
-            tmpRulesPath = PdfSerializer.write_pdf(self.rulesPath, fields, None, flatten)
-
-            # Add the background image separately with a pdftk "background" call - this way it will be shared by all pages to decrease file size
-            out_file = PdfSerializer.addBackground(tmpRulesPath, self.rulesBackground)
-            PdfSerializer.concat([tmpTierbegleiterPath, out_file], path)
-            os.remove(tmpRulesPath)
-            os.remove(out_file)
+            PdfSerializer.concat([tmpTierbegleiterPath, rulesFile], path)
+            os.remove(tmpTierbegleiterPath)
+            os.remove(rulesFile)
 
         PdfSerializer.squeeze(path, path)
 
         if Wolke.Settings['PDF-Open']:
             Hilfsmethoden.openFile(path)
-
-    def stampImage(self, page):
-        if not self.characterImage:
-            return page
-
-        if platform.system() != 'Windows' and which("convert") is None:
-            messagebox = QtWidgets.QMessageBox()
-            messagebox.setWindowTitle("Kann Charakterbild nicht einfügen")
-            messagebox.setText("Das Einfügen des Charakterbilds benötigt das Programm 'convert' im Systempfad. Installationsdetails gibt es unter https://imagemagick.org. Der Charakterbogen wird nun ohne das Bild erstellt.")
-            messagebox.setIcon(QtWidgets.QMessageBox.Warning)
-            messagebox.setStandardButtons(QtWidgets.QMessageBox.Ok)
-            messagebox.exec()
-            return pages
-
-        # The approach is to convert the image to pdf and stamp it over the char sheet with pdftk
-
-        handle, image_file = tempfile.mkstemp()
-        os.close(handle)
-        self.characterImage.save(image_file, "JPG")
-
-        # Setting page size to a2 so stamping has to reduce size - this way we can use a higher image resolution.
-        # The numbers after the page size are offsets from bottom and right to fit the image in the right spot
-        # Density (dpi) has to be fixed, otherwise page offsets break
-        # gravity + extent adds letterboxes to the image if needed, this keeps the image centered and allows to use fixed page offsets
-        convertPath = "convert"
-        if platform.system() == 'Windows':
-            convertPath = "Bin\\ImageMagick\\convert"
-
-        try:
-            image_pdf = PdfSerializer.convertImageToPDF(image_file, [193, 254], "a2", [-192.50,212])
-            page1stamped_pdf = PdfSerializer.stamp(page, image_pdf)
-
-            os.remove(image_file)
-            os.remove(image_pdf)
-            os.remove(page)
-            return page1stamped_pdf
-        except Exception as e:
-            messagebox = QtWidgets.QMessageBox()
-            messagebox.setWindowTitle("Kann Charakterbild nicht einfügen")
-            text = "Das Einfügen des Charakterbilds ist fehlgeschlagen: " + str(e) + "."
-            if platform.system() == 'Linux':
-                text += "\nUnter Linux gibt es ein bekanntes Problem mit ImageMagick, siehe https://github.com/Aeolitus/Sephrasto/blob/master/README.md für einen Workaround."
-            text += "\nDer Charakterbogen wird nun ohne das Bild erstellt."
-            messagebox.setText(text)
-            messagebox.setIcon(QtWidgets.QMessageBox.Warning)
-            messagebox.setStandardButtons(QtWidgets.QMessageBox.Ok)
-            messagebox.exec()
-            return page
