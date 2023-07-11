@@ -150,7 +150,6 @@
       <Modifikator name="Schrecksicher"/>
       <Modifikator name="Seitengänge"/>
       <Modifikator name="Stillstand"/>
-      <Modifikator name="Vollstopp"/>
       <Modifikator name="Wache"/>
       <Modifikator name="Weiches Gangwerk"/>
       <Modifikator name="Zügelloses Reiten"/>
@@ -189,7 +188,6 @@
       <Modifikator name="Reitertreue"/>
       <Modifikator name="Schrecksicher"/>
       <Modifikator name="Überrennen (Reiterkampf)"/>
-      <Modifikator name="Vollstopp"/>
       <Modifikator name="Wache"/>
       <Modifikator name="Komm"/>
       <Modifikator name="Stopp"/>
@@ -213,7 +211,6 @@
       <Modifikator name="Reitertreue"/>
       <Modifikator name="Schrecksicher"/>
       <Modifikator name="Überrennen (Reiterkampf)"/>
-      <Modifikator name="Vollstopp"/>
       <Modifikator name="Wache"/>
       <Modifikator name="Komm"/>
       <Modifikator name="Stopp"/>
@@ -235,7 +232,6 @@
       <Modifikator name="Reitertreue"/>
       <Modifikator name="Schrecksicher"/>
       <Modifikator name="Überrennen (Reiterkampf)"/>
-      <Modifikator name="Vollstopp"/>
       <Modifikator name="Wache"/>
       <Modifikator name="Komm"/>
       <Modifikator name="Stopp"/>
@@ -257,7 +253,6 @@
       <Modifikator name="Reitertreue"/>
       <Modifikator name="Schrecksicher"/>
       <Modifikator name="Überrennen (Reiterkampf)"/>
-      <Modifikator name="Vollstopp"/>
       <Modifikator name="Wache"/>
       <Modifikator name="Komm"/>
       <Modifikator name="Stopp"/>

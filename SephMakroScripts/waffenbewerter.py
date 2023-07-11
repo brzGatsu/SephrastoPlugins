@@ -1,6 +1,5 @@
 import math
 import re
-import Objekte
 
 #================= Settings ==================
 # Die hier konfigurierten Werte werden in der Regel mit den Waffenwerten multipliziert
@@ -56,13 +55,13 @@ ratingEigenschaften = {
 # Reichweite und Ladezeit werden durch Funktionen berechnet
 def ratingReichweite(waffe):
     # 1 für jede Stufe ab 4
-    if type(waffe) == Objekte.Nahkampfwaffe or waffe.rw < 4:
+    if waffe.nahkampf or waffe.rw < 4:
         return 0
     return int(round(math.log2(waffe.rw))) - 1
 
 def ratingLadezeit(waffe):
     # -4 für jede Stufe ab LZ 1
-    if type(waffe) == Objekte.Nahkampfwaffe or waffe.lz == 0:
+    if waffe.nahkampf or waffe.lz == 0:
         return 0
 
     return -4 * (int(round(math.log2(waffe.lz))) +1)
@@ -71,7 +70,7 @@ def ratingLadezeit(waffe):
 def removeParameters(eigenschaft):
     return re.sub(r"\((.*?)\)", "", eigenschaft, re.UNICODE).strip()
 
-waffen = sorted(datenbank.waffen.values(), key = lambda w: (0 if type(w) == Objekte.Nahkampfwaffe else 1, w.talent, w.name))
+waffen = sorted(datenbank.waffen.values(), key = lambda w: (0 if w.nahkampf else 1, w.talent, w.name))
 
 lastTalent = ""
 for waffe in waffen:

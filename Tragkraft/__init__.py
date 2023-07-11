@@ -2,13 +2,13 @@ from PySide6 import QtWidgets, QtCore, QtGui
 import lxml.etree as etree
 from EventBus import EventBus
 from Wolke import Wolke
-from DatenbankEinstellung import DatenbankEinstellung
-import Objekte
+from Core.DatenbankEinstellung import DatenbankEinstellung
+from Core.AbgeleiteterWert import AbgeleiteterWertDefinition
 
 class Plugin:
     def __init__(self):
         EventBus.addAction("basisdatenbank_geladen", self.basisDatenbankGeladenHandler)
-        EventBus.addAction("charakter_aktualisieren_vorteilscripts", self.charakterAktualisierenVorteileHandler)
+        EventBus.addAction("datenbank_geladen", self.datenbankGeladenHandler)
         EventBus.addAction("post_charakter_aktualisieren", self.postCharakterAktualisierenHandler)
         EventBus.addAction("charakter_instanziiert", self.charakterInstanziiertHandler)
         EventBus.addFilter("class_inventar_wrapper", self.provideInventarWrapperHook)
@@ -18,13 +18,13 @@ class Plugin:
 
     @staticmethod
     def getDescription():
-        return "Das Plugin setzt die Tragkraft der 'Regeln für Reisen' von Alrik Normalpaktierer um (siehe dsaforum.de). Die Formel zur Berechnung dieser kann in der Datenbank-Einstellung 'Basis TK Script' gefunden werden.\n" +\
+        return "Das Plugin setzt die Tragkraft der 'Regeln für Reisen' von Alrik Normalpaktierer um (siehe dsaforum.de). Dazu wird in der Regelbasis ein neuer abgeleiteter Wert 'TK' eingefügt, wodurch die neuen Script-Funktionen 'getTK', 'setTK' und 'modifyTK' zur Verfügung stehen." +\
+    "Durch diese kann die Tragkraft mit Vorteilen oder Waffeneigenschaften modifiziert werden.\n.\n" +\
     "Die Tragkraft und der resultierende BE-Modifikator werden in der ersten Inventarzeile angezeigt. Der BE-Modifikator wird nicht(!) bei der BE oder den Waffen eingerechnet. Allen anderen Zeilen kann eine Last zugewiesen werden.\n" +\
-    "Zudem stehen die neuen Script-Funktionen 'getTK', 'setTK' und 'modifyTK' zur Verfügung, um die Tragkraft mit Vorteilen oder Waffeneigenschaften zu modifizieren.\n" +\
     "Mit der Datenbank-Einstellung 'Last BE Script' kann angegeben werden, wie aus Tragkraft und Last der BE-Modifikator berechnet wird."
 
     def changesCharacter(self):
-        return self.db.einstellungen["Tragkraft Plugin: Aktivieren"].toBool()
+        return self.db.einstellungen["Tragkraft Plugin: Aktivieren"].wert
 
     def basisDatenbankGeladenHandler(self, params):
         self.db = params["datenbank"]
@@ -32,48 +32,42 @@ class Plugin:
         e = DatenbankEinstellung()
         e.name = "Tragkraft Plugin: Aktivieren"
         e.beschreibung = "Hiermit kannst du das Tragkraft-Plugin nur für diese Hausregeln deaktivieren und es trotzdem allgemein in den Sephrasto-Einstellungen aktiviert lassen."
-        e.wert = "True"
+        e.text = "True"
         e.typ = "Bool"
-        e.isUserAdded = False
-        self.db.einstellungen[e.name] = e
+        self.db.loadElement(e)
 
-        e = DatenbankEinstellung()
-        e.name = "Tragkraft Plugin: Basis TK Script"
-        e.beschreibung = "Das Pythonscript berechnet die Basis-Tragkraft. Es steht hierfür die Funktion getAttribut('Attributsname') zur Verfügung."
-        e.wert = "getAttribut('KK')*2"
-        e.typ = "Text"
-        e.isUserAdded = False
-        self.db.einstellungen[e.name] = e
+        ab = AbgeleiteterWertDefinition()
+        ab.name = "TK"
+        ab.anzeigename = "Tragkraft"
+        ab.text = "Die Tragkraft bestimmt, wieviel Last du mit dir führen kannst. Jeder getragene Gegenstand, der über diese Menge hinausgeht, erhöht deine BE um 1, reduziert dein DH also um 2. Fällt dein DH dadurch auf 1, kannst du keinen weiteren Gegenstand transportieren."
+        ab.formel = "KK * 2"
+        ab.script = "getAttribut('KK')*2"
+        ab.finalscript = ""
+        ab.sortorder = 60
+        self.db.loadElement(ab)
 
         e = DatenbankEinstellung()
         e.name = "Tragkraft Plugin: Last BE Script"
         e.beschreibung = "Das Pythonscript berechnet den BE-Modifikator durch Tragkraft und Last. Es stehen hierfür die Funktionen getAttribut('Attributsname'), getTK() und getLast() zur Verfügung.\n" +\
            "Letztere liefert einen Int-Array mit den Last-Einträgen der Inventarzeilen zurück (exklusive der ersten Zeile). Der Modifikator muss der Variable 'be' zugewiesen werden."
-        e.wert = "be = max(sum(getLast()) - getTK(), 0)"
-        e.typ = "Text"
-        e.isUserAdded = False
-        self.db.einstellungen[e.name] = e
+        e.text = "be = max(sum(getLast()) - getTK(), 0)"
+        e.typ = "Exec"
+        self.db.loadElement(e)
+
+    def datenbankGeladenHandler(self, params):
+        if not self.db.einstellungen["Tragkraft Plugin: Aktivieren"].wert and params["isCharakterEditor"]:
+            self.db.referenceDB[AbgeleiteterWertDefinition].pop("TK")
+            if "TK" in self.db.abgeleiteteWerte:
+                self.db.abgeleiteteWerte.pop("TK")
 
     def charakterInstanziiertHandler(self, params):
-        if not self.db.einstellungen["Tragkraft Plugin: Aktivieren"].toBool():
+        if not self.db.einstellungen["Tragkraft Plugin: Aktivieren"].wert:
             return
         char = params["charakter"]
-        char.tk = 0
         char.ausrüstungPlatzbedarf = []
-        char.charakterScriptAPI["getTK"] = lambda: char.tk
-        char.charakterScriptAPI["setTK"] = lambda tk: setattr(char, 'tk', tk)
-        char.charakterScriptAPI["modifyTK"] = lambda tk: setattr(char, 'tk', char.tk + tk)
-
-    def charakterAktualisierenVorteileHandler(self, params):
-        if not self.db.einstellungen["Tragkraft Plugin: Aktivieren"].toBool():
-            return
-        char = params["charakter"]
-
-        scriptAPI = { 'getAttribut' : lambda attribut: char.attribute[attribut].wert }
-        char.tk = eval(Wolke.DB.einstellungen["Tragkraft Plugin: Basis TK Script"].toText(), scriptAPI)
 
     def postCharakterAktualisierenHandler(self, params):
-        if not self.db.einstellungen["Tragkraft Plugin: Aktivieren"].toBool():
+        if not self.db.einstellungen["Tragkraft Plugin: Aktivieren"].wert:
             return
         char = params["charakter"]
 
@@ -83,12 +77,12 @@ class Plugin:
 
         scriptAPI = {
             'getAttribut' : lambda attribut: char.attribute[attribut].wert,
-            'getTK' : lambda: char.tk,
+            'getTK' : lambda: char.abgeleiteteWerte["TK"].wert,
             'getLast' : lambda: char.ausrüstungPlatzbedarf[1:] if len(char.ausrüstungPlatzbedarf) > 1 else [0],
             'be' : 0
         }
-        exec(Wolke.DB.einstellungen["Tragkraft Plugin: Last BE Script"].toText(), scriptAPI)
-        text = f"Tragkraft {char.tk}, Last {pb} -> zusätzliche BE {scriptAPI['be']}"
+        exec(Wolke.DB.einstellungen["Tragkraft Plugin: Last BE Script"].wert, scriptAPI)
+        text = f"Tragkraft {char.abgeleiteteWerte['TK'].wert}, Last {pb} -> zusätzliche BE {scriptAPI['be']}"
 
         if len(char.ausrüstung) == 0:
             char.ausrüstung.append(text)
@@ -101,7 +95,7 @@ class Plugin:
             char.ausrüstungPlatzbedarf.append(0)
 
     def pdfExportHook(self, fields, params):
-        if not self.db.einstellungen["Tragkraft Plugin: Aktivieren"].toBool():
+        if not self.db.einstellungen["Tragkraft Plugin: Aktivieren"].wert:
             return fields
         count = 1
         countl = 1
@@ -124,7 +118,7 @@ class Plugin:
 
     
     def charakterXmlLadenHook(self, root, params):
-        if not self.db.einstellungen["Tragkraft Plugin: Aktivieren"].toBool():
+        if not self.db.einstellungen["Tragkraft Plugin: Aktivieren"].wert:
             return root
 
         objekte = root.find('Objekte')
@@ -142,7 +136,7 @@ class Plugin:
         return root
 
     def charakterXmlSchreibenHook(self, root, params):
-        if not self.db.einstellungen["Tragkraft Plugin: Aktivieren"].toBool():
+        if not self.db.einstellungen["Tragkraft Plugin: Aktivieren"].wert:
             return root
 
         objekte = root.find('Objekte')
@@ -158,7 +152,7 @@ class Plugin:
         return root
 
     def provideInventarWrapperHook(self, base, params):
-        if not self.db.einstellungen["Tragkraft Plugin: Aktivieren"].toBool():
+        if not self.db.einstellungen["Tragkraft Plugin: Aktivieren"].wert:
             return base
 
         class TKInventarWrapper(base):

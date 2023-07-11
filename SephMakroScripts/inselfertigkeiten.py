@@ -16,7 +16,7 @@ gekaufteVorteile = ["Geweiht I", "Zauberer I", "Paktierer I"]
 #========== Implementation ===========
 
 fertigkeiten = sorted(datenbank.übernatürlicheFertigkeiten.values(), key= lambda f : (f.typ, f.name))
-spezialTalente = sorted([t for t in datenbank.talente.values() if t.isSpezialTalent() and not t.name.endswith("(passiv)")], key = lambda t:  t.name)
+spezialTalente = sorted([t for t in datenbank.talente.values() if t.spezialTalent and not t.name.endswith("(passiv)")], key = lambda t:  t.name)
 traditionen = [v.name for v in datenbank.vorteile.values() if v.name.startswith("Tradition") and v.name.endswith(" I")]
 traditionen += zusatzTraditionen
 
@@ -26,12 +26,12 @@ for fertigkeit in fertigkeiten:
     for tradition in traditionen:
         vorteile = [tradition] + gekaufteVorteile
         talente[fertigkeit.name][tradition] = []
-        if not Hilfsmethoden.voraussetzungenPrüfen(vorteile, [], [], [], [], fertigkeit.voraussetzungen):
+        if not Hilfsmethoden.voraussetzungenPrüfen(fertigkeit, vorteile, [], [], [], [], []):
             continue
         for talent in spezialTalente:
             if not fertigkeit.name in talent.fertigkeiten:
                 continue
-            if not Hilfsmethoden.voraussetzungenPrüfen(vorteile, [], [], [], [], talent.voraussetzungen):
+            if not Hilfsmethoden.voraussetzungenPrüfen(talent, vorteile, [], [], [], [], []):
                 continue
             talente[fertigkeit.name][tradition].append(talent)
 
@@ -60,7 +60,7 @@ for fertigkeit in talente:
                 if f == fertigkeit or f in problematicFerts[tradition]:
                     continue
                 vorteile = [tradition] + gekaufteVorteile
-                if not Hilfsmethoden.voraussetzungenPrüfen(vorteile, [], [], [], [], datenbank.übernatürlicheFertigkeiten[f].voraussetzungen):
+                if not Hilfsmethoden.voraussetzungenPrüfen(datenbank.übernatürlicheFertigkeiten[f], vorteile, [], [], [], [], []):
                     continue
                 fine = True
                 break

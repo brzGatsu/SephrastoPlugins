@@ -13,6 +13,7 @@ import Datenbank
 from Wolke import Wolke
 from EinstellungenWrapper import EinstellungenWrapper
 import PathHelper
+from Hilfsmethoden import Hilfsmethoden
 
 @contextlib.contextmanager
 def stdoutIO(stdout=None):
@@ -25,8 +26,7 @@ def stdoutIO(stdout=None):
 
 class SephMakroEditor(object):
     def __init__(self):
-        Wolke.DB = Datenbank.Datenbank()
-        EinstellungenWrapper.addSettings(["SephMakro_Pfad"])
+        EinstellungenWrapper.addSettings({"SephMakro_Pfad" : ""})
 
     def setupMainForm(self):
         self.editor = TextEdit()
@@ -45,13 +45,17 @@ class SephMakroEditor(object):
 
         self.highlighter = Highlighter(self.editor.document())
 
-        self.ui.buttonRun.setIcon(self.formMain.style().standardIcon(QStyle.SP_MediaPlay))
+        buttonSize = Hilfsmethoden.emToPixels(3.2)
+        self.ui.buttonRun.setFixedSize(buttonSize, buttonSize)
+        self.ui.buttonRun.setText("\uf04b")
         self.ui.buttonRun.clicked.connect(self.run)
 
-        self.ui.buttonLoad.setIcon(self.formMain.style().standardIcon(QStyle.SP_DialogOpenButton))
+        self.ui.buttonLoad.setFixedSize(buttonSize, buttonSize)
+        self.ui.buttonLoad.setText("\uf07c")
         self.ui.buttonLoad.clicked.connect(self.load)
 
-        self.ui.buttonSave.setIcon(self.formMain.style().standardIcon(QStyle.SP_DialogSaveButton))
+        self.ui.buttonSave.setFixedSize(buttonSize, buttonSize)
+        self.ui.buttonSave.setText("\uf0c7")
         self.ui.buttonSave.clicked.connect(self.save)
 
         self.ui.buttonSaveOutput.clicked.connect(self.saveOutput)
@@ -62,6 +66,19 @@ class SephMakroEditor(object):
 
         self.buttonRefs = []
         self.updateButtons()
+
+        optionsList = EinstellungenWrapper.getDatenbanken(Wolke.Settings['Pfad-Regeln'])
+        self.ui.comboDB.addItems(optionsList)
+        if Wolke.Settings['Datenbank'] in optionsList:
+            self.ui.comboDB.setCurrentText(Wolke.Settings['Datenbank'])
+        self.ui.comboDB.currentIndexChanged.connect(self.onDbChange)
+        self.onDbChange()
+
+    def onDbChange(self):
+        if self.ui.comboDB.currentText() == "Keine":
+            Wolke.DB = Datenbank.Datenbank(None, True)
+        else:
+            Wolke.DB = Datenbank.Datenbank(self.ui.comboDB.currentText(), True)
 
     def run(self):
         with stdoutIO() as s:

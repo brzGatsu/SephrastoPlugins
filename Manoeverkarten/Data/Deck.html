@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="de-DE">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script src="textfit/textFit.js"></script>
+        <script src="{sephrasto_dir}/Data/Charakterbögen/Regelanhang/hyphen/hyphen.js"></script>
+        <script src="{sephrasto_dir}/Data/Charakterbögen/Regelanhang/hyphen/de-1996.js"></script>
+        <script>
+        window.onload = function(){
+            textFit(document.getElementById('title'), { alignHoriz: true, minFontSize:5, maxFontSize: 12.25, detectMultiLine: false, widthOnly: true });
+            //Content (hyphenate & textfit)
+            content = document.getElementById('content');
+            var hyphenateHTMLSync = createHyphenator(hyphenationPatternsDe1996, { html: true });
+            content.innerHTML = hyphenateHTMLSync(content.innerHTML) ;
+            textFit(content, { minFontSize: 1, maxFontSize: 9.5 }); 
+        }
+        </script>
+        <style>
+        @font-face {
+            font-family: 'Aniron';
+            src: url('{sephrasto_dir}/Data/Fonts/Aniron/anirb___.ttf') format('truetype');
+        }
+    
+        @font-face {
+            font-family: 'Crimson Pro';
+            src: url('{sephrasto_dir}/Data/Fonts/Crimson Pro/CrimsonPro-Regular.ttf') format('truetype');
+            font-style: normal;
+            font-weight: 400;
+        }
+    
+        @font-face {
+            font-family: 'Crimson Pro';
+            src: url('{sephrasto_dir}/Data/Fonts/Crimson Pro/CrimsonPro-Italic.ttf') format('truetype');
+            font-style: italic;
+            font-weight: 400;
+        }
+    
+        @font-face {
+            font-family: 'Crimson Pro';
+            src: url('{sephrasto_dir}/Data/Fonts/Crimson Pro/CrimsonPro-Bold.ttf') format('truetype');
+            font-style: bold;
+            font-weight: 700;
+        }
+
+        html, body {
+            font-family: 'Minion Pro', 'Crimson Pro';
+            margin: 0;
+            padding: 0;
+        }
+        
+        #title {
+            position: fixed;
+            font-family: 'Aniron';
+            width: 180px;
+            height: 30px;
+            top: 14px;
+            left: 26px;
+        }
+        
+        #subtitle {
+            position: fixed;
+            font-family: 'Aniron';
+            font-size: 17px;
+            color: {card_title_color};
+            width: 194px;
+            height: 59px;
+            top: 45px;
+            left: 19px;
+            text-align: center;
+        }
+        
+        #content {
+            position: fixed;
+            width: 194px;
+            height: 203px;
+            top: 104px;
+            left: 19px;
+            line-height: 1.35;
+            padding: 0;
+        }
+        
+        #background
+        {
+            position: fixed;
+            top: 4px;
+            right: 4px;
+            bottom: 4px;
+            left: 4px;
+            background-color: white;
+            background-image: {card_backgroundimage};
+            background-size: 100% 100%;
+        }
+
+        img {
+            width:92%;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 2pt;
+            margin-bottom: 2pt;
+        }
+        </style>
+    </head>
+    <body>
+        <div id="background"></div>
+        <div id="title">{card_subtitle}</div>
+        <div id="subtitle">{card_title}</div>
+        <div id="content">{card_content}</div>
+    </body>
+</html>

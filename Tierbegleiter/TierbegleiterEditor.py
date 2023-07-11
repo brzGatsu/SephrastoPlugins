@@ -14,9 +14,11 @@ import base64
 import platform
 from shutil import which
 import re
-from TextTagCompleter import TextTagCompleter
+from QtUtils.TextTagCompleter import TextTagCompleter
 from Hilfsmethoden import Hilfsmethoden
 from Charakterbogen import Charakterbogen
+import shutil
+from QtUtils.ProgressDialogExt import ProgressDialogExt
 
 class TierbegleiterEditor(object):
     def __init__(self):
@@ -92,6 +94,10 @@ class TierbegleiterEditor(object):
         self.labelImageText = self.ui.labelImage.text()
         self.ui.buttonLoadImage.clicked.connect(self.buttonLoadImageClicked)
         self.ui.buttonDeleteImage.clicked.connect(self.buttonDeleteImageClicked)
+        
+        self.ui.checkRegeln.setChecked(Wolke.Settings['Cheatsheet'])
+        self.ui.spinRegelnGroesse.setValue(Wolke.Settings['Cheatsheet-Fontsize'])
+        self.ui.checkEditierbar.setChecked(Wolke.Settings['Formular-Editierbarkeit'])
 
         for i in range(self.ui.tabWidget.tabBar().count()):
             self.ui.tabWidget.tabBar().setTabTextColor(i, QtGui.QColor(Wolke.HeadingColor))
@@ -176,6 +182,13 @@ class TierbegleiterEditor(object):
             inventoryLine.setText(ausruestung[count].text)
             count += 1
 
+        if root.find('RegelnAnhängen') is not None:
+            self.ui.checkRegeln.setChecked(root.find('RegelnAnhängen').text == "1")
+        if root.find('RegelnGrösse') is not None:
+            self.ui.spinRegelnGroesse.setValue(int(root.find('RegelnGrösse').text))
+        if root.find('FormularEditierbarkeit') is not None:
+            self.ui.checkEditierbar.setChecked(root.find('FormularEditierbarkeit').text == "1")
+
         self.currentlyLoading = False
         self.updateTitlebar()
         self.stateChanged()
@@ -184,7 +197,11 @@ class TierbegleiterEditor(object):
         file = " - Neuer Tierbegleiter"
         if self.savepath:
             file = " - " + os.path.basename(self.savepath)
-        self.formMain.setWindowTitle("Sephrasto" + file)
+
+        rules = ""
+        if Wolke.Settings['Datenbank']:
+           rules = " (" + os.path.splitext(os.path.basename(Wolke.Settings['Datenbank']))[0] + ")"
+        self.formMain.setWindowTitle("Sephrasto" + file + rules)
 
     def saveClickedHandler(self):
         if self.savepath != "":
@@ -250,6 +267,10 @@ class TierbegleiterEditor(object):
         ausruestung = etree.SubElement(root, 'Ausrüstung')
         for inventoryLine in self.inventory:
             etree.SubElement(ausruestung, 'Gegenstand').text = inventoryLine.text()
+
+        etree.SubElement(root, 'RegelnAnhängen').text = "1" if self.ui.checkRegeln.isChecked() else "0"
+        etree.SubElement(root, 'RegelnGrösse').text = str(self.ui.spinRegelnGroesse.value())
+        etree.SubElement(root, 'FormularEditierbarkeit').text = "1" if self.ui.checkEditierbar.isChecked() else "0"
 
         doc = etree.ElementTree(root)
         with open(self.savepath,'wb') as file:
@@ -393,8 +414,8 @@ class TierbegleiterEditor(object):
         if summary:
             lineStart = "<p>"
             lineEnd = "</p>"
-            boldStart = '<span style=" font-weight:bold;">'
-            boldEnd = '</span>'
+            boldStart = '<b>'
+            boldEnd = '</b>'
 
         text = ""
         addTitle = len(attributModifiers) + len(talentModifiers) + len(vorteilModifiers) > 1
@@ -644,7 +665,7 @@ class TierbegleiterEditor(object):
 
         text = self.modifiersToString(attributModifiers, talentModifiers, vorteilModifiers, waffen, True)
         if self.datenbank.iaZuchtAusbildung:
-            text += '<p><span style=" font-weight:bold;">Preis: </span>'
+            text += '<p><b>Preis: </b>'
             preis = tier.preis
             zucht = self.ui.cbZucht.currentIndex()
             if zucht == 0 or zucht == 1:
@@ -744,12 +765,19 @@ class TierbegleiterEditor(object):
         self.ui.labelImage.setText(self.labelImageText)
 
     def categoryHeading(self, text):
-        return "<span class='ruleCategoryHeading'>" + text + "</span><br>"
+        return "<h2>" + text + "</h2>"
 
     def ruleHeading(self, text):
-        return "<span class='ruleHeading'>" + text + "</span><br>"
+        return "<h3>" + text + "</h3>"
 
     def createPdf(self, path):
+        dlg = ProgressDialogExt(minimum = 0, maximum = 100)
+        dlg.disableCancel()
+        dlg.setWindowTitle("Exportiere Tierbegleiter")
+        dlg.show()
+        QtWidgets.QApplication.processEvents() #make sure the dialog immediatelly shows
+
+        dlg.setLabelText("Befülle Formularfelder")
         fields = copy.copy(self.attributModifiers)
         fields["WSStern"] = fields["WS*"]
 
@@ -817,22 +845,29 @@ class TierbegleiterEditor(object):
                     tiervorteile.append(self.datenbank.tiervorteile[name])
         tiervorteile = sorted(tiervorteile, key = lambda vort: vort.name)
 
-        addRules = len(tiervorteile) + len(tiereigenschaften) > 0
+        addRules = self.ui.checkRegeln.isChecked() and (len(tiervorteile) + len(tiereigenschaften) > 0)
+        handle, tmpTierbegleiterPath = tempfile.mkstemp()
+        os.close(handle)
 
-        tmpTierbegleiterPath = path
-        if addRules:
-            handle, tmpTierbegleiterPath = tempfile.mkstemp()
-            os.close(handle)
-
-        flatten = not Wolke.Settings['Formular-Editierbarkeit']
+        flatten = not self.ui.checkEditierbar.isChecked()
         PdfSerializer.write_pdf(self.charakterbogen.filePath, fields, tmpTierbegleiterPath, flatten)
 
-        buffer = QtCore.QBuffer()
-        buffer.open(QtCore.QIODevice.WriteOnly);
-        self.characterImage.save(buffer, "JPG")
-        image = buffer.data().data()
-        if image:
+        bookmarks = []
+        for i in range(PdfSerializer.getNumPages(self.charakterbogen.filePath)):
+            text = "Charakterbogen"
+            if i < len(self.charakterbogen.seitenbeschreibungen):
+                text = self.charakterbogen.seitenbeschreibungen[i]
+            bookmarks.append(PdfSerializer.PdfBookmark("S. " + str(i+1) + " - " + text, i+1))
+        i += 1
+
+        if self.characterImage is not None:
             # The approach is to convert the image to pdf and stamp it over the char sheet with pdftk
+            dlg.setLabelText("Stemple Charakterbild")
+            dlg.setValue(30)
+            buffer = QtCore.QBuffer()
+            buffer.open(QtCore.QIODevice.WriteOnly);
+            self.characterImage.save(buffer, "JPG")
+            image = buffer.data().data()
             image_pdf = PdfSerializer.convertJpgToPdf(image, self.charakterbogen.getImageSize(0, [193, 254]), self.charakterbogen.getImageOffset(0), self.charakterbogen.getPageLayout())
             stamped_pdf = PdfSerializer.stamp(tmpTierbegleiterPath, image_pdf)
             os.remove(image_pdf)
@@ -840,61 +875,75 @@ class TierbegleiterEditor(object):
             tmpTierbegleiterPath = stamped_pdf
 
         if addRules:
+            dlg.setLabelText("Erstelle Regelanhang")
+            dlg.setValue(50)
             fields = {}
-            rules = []
+            rules = ["<h1>Regeln für " + self.ui.leName.text() + "</h1>"]
             if len(tiereigenschaften) > 0:
-                count = 0
-                rules.append("<article>" + self.categoryHeading("Tiereigenschaften"))
+                rules.append(self.categoryHeading("Tiereigenschaften"))
                 for vorteilMod in tiereigenschaften:
-                    count += 1
-                    if count != 1:
-                        rules.append("<article>")
+                    rules.append("<article>")
                     rules.append(self.ruleHeading(vorteilMod.name))
                     rules.append(vorteilMod.wirkung)
                     rules.append("</article>")
 
             if sum(1 for v in self.vorteilModifiers if not v.manöver) > 0:
-                rules.append("<article>" + self.categoryHeading("Tiervorteile"))
+                rules.append(self.categoryHeading("Tiervorteile"))
                 if self.datenbank.iaZuchtAusbildung:
                     rules.append("Der Einsatz eines Vorteils, der nicht passiv ist, erfordert eine Probe auf Tiere beeinflussen (20). Kampfmanöver gelten immer als passiv.\n\n")
-                count = 0
                 for vorteilMod in tiervorteile:
                     if vorteilMod.wirkung and not vorteilMod.manöver:
-                        count += 1
-                        if count != 1:
-                            rules.append("<article>")
+                        rules.append("<article>")
                         rules.append(self.ruleHeading(vorteilMod.name))
                         rules.append(vorteilMod.wirkung)
                         rules.append("</article>")
 
             if sum(1 for v in self.vorteilModifiers if v.manöver) > 0:
-                count = 0
-                rules.append("<article>" + self.categoryHeading("Manöver und Waffeneigenschaften"))
+                rules.append(self.categoryHeading("Manöver und Waffeneigenschaften"))
                 for vorteilMod in tiervorteile:
                     if vorteilMod.wirkung and vorteilMod.manöver:
-                        count += 1
-                        if count != 1:
-                            rules.append("<article>")
+                        rules.append("<article>")
                         rules.append(self.ruleHeading(vorteilMod.name))
                         rules.append(vorteilMod.wirkung)
                         rules.append("</article>")
             rules = "".join(rules).replace("\n", "<br>")
             html = ""
             with open(self.charakterbogen.regelanhangPfad, 'r', encoding="utf-8") as infile:
+                rules = rules.replace("$sephrasto_dir$", "file:///" + os.getcwd().replace('\\', '/'))
+                rules = rules.replace("$regeln_dir$", "file:///" + Wolke.Settings['Pfad-Regeln'].replace('\\', '/'))
+                rules = rules.replace("$plugins_dir$", "file:///" + Wolke.Settings['Pfad-Plugins'].replace('\\', '/'))
                 html = infile.read()
-                html = html.replace("{rules_content}", rules).replace("{rules_font_size}", str(Wolke.Settings['Cheatsheet-Fontsize']))
+                html = html.replace("{sephrasto_dir}", "file:///" + os.getcwd().replace('\\', '/'))
+                html = html.replace("{rules_content}", rules)
+                html = html.replace("{rules_font_size}", str(self.ui.spinRegelnGroesse.value()))
             baseUrl = QtCore.QUrl.fromLocalFile(QtCore.QFileInfo(self.charakterbogen.regelanhangPfad).absoluteFilePath())
-            rulesFile = PdfSerializer.convertHtmlToPdf(html, baseUrl, self.charakterbogen.getRegelanhangPageLayout())
+            rulesFile = PdfSerializer.convertHtmlToPdf(html, baseUrl, self.charakterbogen.getRegelanhangPageLayout(), 100)
+
+            for j in range(1, PdfSerializer.getNumPages(rulesFile)+1):
+                bookmarks.append(PdfSerializer.PdfBookmark("S. " + str(i+1) + " - Regelanhang " + str(j), i+1))
+                i += 1
+
             if self.charakterbogen.regelanhangHintergrundPfad:
                 tmpRulesFile = PdfSerializer.addBackground(rulesFile, self.charakterbogen.regelanhangHintergrundPfad)
                 os.remove(rulesFile)
                 rulesFile = tmpRulesFile
 
-            PdfSerializer.concat([tmpTierbegleiterPath, rulesFile], path)
+            tmp = PdfSerializer.concat([tmpTierbegleiterPath, rulesFile])
             os.remove(tmpTierbegleiterPath)
             os.remove(rulesFile)
+            tmpTierbegleiterPath = tmp
 
+        dlg.setLabelText("Füge Lesezeichen hinzu")
+        dlg.setValue(80)
+        PdfSerializer.addBookmarks(tmp, bookmarks, path)
+        os.remove(tmp)
+
+        dlg.setLabelText("Optimiere Dateigröße")
+        dlg.setValue(90)
         PdfSerializer.squeeze(path, path)
+        dlg.setValue(100)
+        dlg.hide()
+        dlg.deleteLater()
 
         if Wolke.Settings['PDF-Open']:
             Hilfsmethoden.openFile(path)

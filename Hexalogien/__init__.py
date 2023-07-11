@@ -1,6 +1,6 @@
 from EventBus import EventBus
 from Wolke import Wolke
-from DatenbankEinstellung import DatenbankEinstellung
+from Core.DatenbankEinstellung import DatenbankEinstellung
 
 class Plugin:
     def __init__(self):
@@ -26,7 +26,7 @@ class Plugin:
         return "Dieses Plugin halbiert die EP-Kosten von Talenten aus elementaren Hexalogien. Der volle EP-Preis muss nur für das teuerste erlernte Talent aus der Hexalogie bezahlt werden.\nBeinhaltet sind alle bestätigten Hexalogien gemäß https://de.wiki-aventurica.de/wiki/Hexalogie (nicht die vermuteten), zusätzlich noch die Herbeirufung und Macht des <Elements> Zauber."
 
     def changesCharacter(self):
-        return self.db.einstellungen["Hexalogien Plugin: Aktivieren"].toBool()
+        return self.db.einstellungen["Hexalogien Plugin: Aktivieren"].wert
 
     def basisDatenbankGeladenHandler(self, params):
         self.db = params["datenbank"]
@@ -34,13 +34,12 @@ class Plugin:
         e = DatenbankEinstellung()
         e.name = "Hexalogien Plugin: Aktivieren"
         e.beschreibung = Plugin.getDescription()
-        e.wert = "True"
+        e.text = "True"
         e.typ = "Bool"
-        e.isUserAdded = False
-        self.db.einstellungen[e.name] = e
+        self.db.loadElement(e)
 
     def talentKostenHook(self, val, params):
-        if not self.db.einstellungen["Hexalogien Plugin: Aktivieren"].toBool():
+        if not self.db.einstellungen["Hexalogien Plugin: Aktivieren"].wert:
             return val
 
         talent = params["talent"]
@@ -51,7 +50,7 @@ class Plugin:
 
         dbTalent = Wolke.DB.talente[talent]
 
-        if not dbTalent.isSpezialTalent():
+        if not dbTalent.spezialTalent:
             return val
 
         talHexalogie = None
@@ -61,18 +60,12 @@ class Plugin:
                 talHexalogie = hexalogie
                 break
 
-        if talHexalogie == None:
+        if talHexalogie is None:
             return val
-
-        paidTalents = set()
-        for fer in char.übernatürlicheFertigkeiten:
-            for tal in char.übernatürlicheFertigkeiten[fer].gekaufteTalente:
-                paidTalents.add(tal)
-        paidTalents.add(talent)
 
         mostExpensivePaid = talent
         for tal in talHexalogie:
-            if tal in paidTalents:
+            if tal in char.talente:
                 if Wolke.DB.talente[tal].kosten >= Wolke.DB.talente[mostExpensivePaid].kosten:
                     mostExpensivePaid = tal
 

@@ -2,6 +2,7 @@ from PySide6 import QtWidgets, QtCore, QtGui
 from EventBus import EventBus
 from SephMakro import SephMakroEditor
 from SephMakro import SephMakroMain
+from Hilfsmethoden import Hilfsmethoden
 
 class Plugin:
     def __init__(self):
@@ -14,7 +15,11 @@ class Plugin:
     def createMainWindowButtons(self):
         self.mainWindowButton = QtWidgets.QPushButton()
         self.mainWindowButton.setObjectName("buttonPlugin")
-        self.mainWindowButton.setText("SephMakro")
+        self.mainWindowButton.setToolTip("SephMakro")
+        buttonSize = Hilfsmethoden.emToPixels(3.2)
+        self.mainWindowButton.setFixedSize(buttonSize, buttonSize)
+        self.mainWindowButton.setProperty("class", "icon")
+        self.mainWindowButton.setText("\uf120")
         self.mainWindowButton.clicked.connect(self.createSephMakroEditor)
         return [self.mainWindowButton]
 
@@ -24,4 +29,5 @@ class Plugin:
         self.ed.ui = SephMakroMain.Ui_formMain()
         self.ed.ui.setupUi(self.ed.formMain)
         self.ed.setupMainForm()
+        self.ed.formMain.setWindowTitle
         self.ed.formMain.show()

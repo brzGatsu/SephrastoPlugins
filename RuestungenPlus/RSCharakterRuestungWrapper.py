@@ -7,13 +7,21 @@ from Wolke import Wolke
 from EventBus import EventBus
 import logging
 from CharakterRuestungPickerWrapper import RuestungPicker
-import Objekte
+from Core.Ruestung import Ruestung, RuestungDefinition
 from Hilfsmethoden import Hilfsmethoden
-from TextTagCompleter import TextTagCompleter
+from QtUtils.TextTagCompleter import TextTagCompleter
+from functools import partial
 
 class RSCharakterRuestungWrapper(QtCore.QObject):
     modified = QtCore.Signal()
     reloadRSTabs = QtCore.Signal()
+
+    @staticmethod
+    def applyEigenschaften(r):
+        r.eigenschaften = []
+        if r.definition.text:
+            r.eigenschaften = list(map(str.strip, r.definition.text.split(",")))
+        return r
 
     def __init__(self, index):
         super().__init__()
@@ -33,8 +41,8 @@ class RSCharakterRuestungWrapper(QtCore.QObject):
 
         self.ui.checkZonen.stateChanged.connect(self.checkZonenChanged)
 
-        self.ruestungsTypen = Wolke.DB.einstellungen["Rüstungen: Typen"].toTextList()
-        self.ruestungsEigenschaften = Wolke.DB.einstellungen["RüstungenPlus Plugin: Rüstungseigenschaften"].toBool()
+        self.ruestungsTypen = Wolke.DB.einstellungen["Rüstungen: Typen"].wert
+        self.ruestungsEigenschaften = Wolke.DB.einstellungen["RüstungenPlus Plugin: Rüstungseigenschaften"].wert
         self.gesamtZRS = [self.ui.spinGesamtBein, self.ui.spinGesamtLarm, self.ui.spinGesamtRarm, self.ui.spinGesamtBauch, self.ui.spinGesamtBrust, self.ui.spinGesamtKopf]
 
         self.ui.editGesamtName.editingFinished.connect(self.updateGesamtRuestung)
@@ -49,6 +57,7 @@ class RSCharakterRuestungWrapper(QtCore.QObject):
 
             self.editGesamtEigenschaften = QtWidgets.QLineEdit()
             self.editGesamtEigenschaften.editingFinished.connect(self.updateGesamtRuestung)
+            self.editGesamtEigenschaften.editingFinished.connect(partial(self.updateEigenschaftenTooltip, edit=self.editGesamtEigenschaften))
             self.ui.Ruestungen.addWidget(self.editGesamtEigenschaften, 1, 11, 1, 1)
             self.ui.editGesamtName.setMaximumSize(QtCore.QSize(200, 16777215))
 
@@ -112,6 +121,7 @@ class RSCharakterRuestungWrapper(QtCore.QObject):
             if self.ruestungsEigenschaften:
                 leEigenschaft = QtWidgets.QLineEdit()
                 leEigenschaft.editingFinished.connect(self.updateRuestungen)
+                leEigenschaft.editingFinished.connect(partial(self.updateEigenschaftenTooltip, edit=leEigenschaft))
                 self.editEigenschaften.append(leEigenschaft)
                 self.ui.Ruestungen.addWidget(leEigenschaft, row, col, 1, 1)
                 eigenschaftenCompleter = TextTagCompleter(leEigenschaft, Wolke.DB.ruestungseigenschaften.keys())
@@ -120,9 +130,8 @@ class RSCharakterRuestungWrapper(QtCore.QObject):
 
             addR = QtWidgets.QPushButton()
             addR.setText('\u002b')
-            addR.setMaximumSize(QtCore.QSize(20, 20))
-            addR.setProperty("class", "icon")
-            addR.clicked.connect(lambda qtNeedsThis=False, idx=index: self.selectArmor(idx))
+            addR.setProperty("class", "iconSmall")
+            addR.clicked.connect(partial(self.selectArmor, index = i))
             self.buttons.append(addR)
             self.ui.Ruestungen.addWidget(addR, row, col, 1, 1)
 
@@ -179,20 +188,13 @@ class RSCharakterRuestungWrapper(QtCore.QObject):
         self.modified.emit()
         self.reloadRSTabs.emit()
 
-    def isArmorDefault(self, R):
-        tmp = R.typ
-        R.typ = 0
-        result = R == Objekte.Ruestung()
-        R.typ = tmp
-        return result
-
     def updateGesamtRuestung(self):
         if self.currentlyLoading:
             return
         R = self.createRuestung(self.gesamtIndex)
         self.refreshDerivedArmorValues(R, self.gesamtIndex)
         while self.index >= len(Wolke.Char.rüstung):
-            Wolke.Char.rüstung.append(Objekte.Ruestung())
+            Wolke.Char.rüstung.append(RSCharakterRuestungWrapper.applyEigenschaften(Ruestung(RuestungDefinition())))
 
         if Wolke.Char.rüstung[self.index] != R:
             Wolke.Char.rüstung[self.index] = R
@@ -208,7 +210,7 @@ class RSCharakterRuestungWrapper(QtCore.QObject):
             ruestungNeu.append(R)
             self.refreshDerivedArmorValues(R, index)
 
-            if self.isArmorDefault(R):
+            if R.name == "":
                 self.buttons[index].setText('\u002b')
             else:
                 self.buttons[index].setText('\uf2ed')
@@ -219,8 +221,10 @@ class RSCharakterRuestungWrapper(QtCore.QObject):
         self.charTeilrüstungen.clear()
         self.charTeilrüstungen += ruestungNeu
 
-        R = Objekte.Ruestung()
-        R.name = self.ui.editGesamtName.text()
+
+        definition = RuestungDefinition()
+        definition.name = self.ui.editGesamtName.text()
+        R = RSCharakterRuestungWrapper.applyEigenschaften(Ruestung(definition))
         for type in range(len(self.ruestungsTypen)):
             if self.ui.checkZonen.isChecked():
                 for i in range(6):
@@ -231,7 +235,10 @@ class RSCharakterRuestungWrapper(QtCore.QObject):
         beDelta = self.ui.spinGesamtBE.value() - self.ui.spinGesamtRS.value()
         R.be = R.getRSGesamtInt() + beDelta
         if self.ruestungsEigenschaften:
-            R.text = self.editGesamtEigenschaften.text()
+            if self.editGesamtEigenschaften.text():
+                R.eigenschaften = list(map(str.strip, self.editGesamtEigenschaften.text().split(",")))
+            else:
+                R.eigenschaften = []
 
         self.currentlyLoading = True
         self.loadArmorIntoFields(R, self.gesamtIndex)
@@ -270,8 +277,13 @@ class RSCharakterRuestungWrapper(QtCore.QObject):
                 self.ui.spinGesamtPunkte.setToolTip("")
 
     def createRuestung(self, index):
-        R = Objekte.Ruestung() 
-        R.name = self.editRName[index].text()
+        name = self.editRName[index].text()
+        if name in Wolke.DB.rüstungen:
+            R = Ruestung(Wolke.DB.rüstungen[name])
+        else:
+            definition = RuestungDefinition()
+            definition.name = name
+            R = Ruestung(definition)
         if self.ui.checkZonen.isChecked():
             for i in range(0, 6):
                 R.rs[i] = self.spinZRS[index][i].value()
@@ -283,8 +295,28 @@ class RSCharakterRuestungWrapper(QtCore.QObject):
         else:
             R.be = R.getRSGesamtInt()
             R.typ = index
-        R.text = self.editEigenschaften[index].text() or "" if self.ruestungsEigenschaften else ""
+        if self.ruestungsEigenschaften:
+            if self.editEigenschaften[index].text():
+                R.eigenschaften = list(map(str.strip, self.editEigenschaften[index].text().split(",")))
+            else:
+                R.eigenschaften = []
         return R
+
+    def updateEigenschaftenTooltip(self, edit):
+        eigenschaften = list(map(str.strip, edit.text().split(",")))
+        tooltip = ""
+        for eig in eigenschaften:
+            name = re.sub(r"\((.*?)\)", "", eig, re.UNICODE).strip() # remove parameters
+            if name in Wolke.DB.ruestungseigenschaften:
+                ruestungseigenschaft = Wolke.DB.ruestungseigenschaften[name]
+                if ruestungseigenschaft.text:
+                    tooltip += "<b>" + eig + ":</b> " + ruestungseigenschaft.text + "\n"
+            elif eig:
+                tooltip += "<b>" + eig + ":</b> Unbekannte Eigenschaft\n"
+        
+        if tooltip:
+            tooltip = tooltip[:-1].replace("\n", "<br>")
+        edit.setToolTip(tooltip)
 
     def loadArmorIntoFields(self, R, index):
         self.editRName[index].setText(R.name)
@@ -300,18 +332,19 @@ class RSCharakterRuestungWrapper(QtCore.QObject):
         self.spinRS[index].setValue(R.getRSGesamtInt())
 
         if self.ruestungsEigenschaften:
-            self.editEigenschaften[index].setText(R.text)
+            self.editEigenschaften[index].setText(", ".join(R.eigenschaften))
+            self.updateEigenschaftenTooltip(self.editEigenschaften[index])
 
         self.refreshDerivedArmorValues(R, index)
 
         if index != self.gesamtIndex:
-            if self.isArmorDefault(R):
+            if R.name == "":
                 self.buttons[index].setText('\u002b')
             else:
                 self.buttons[index].setText('\uf2ed')
 
     def selectArmor(self, index):
-        if index >= len(self.charTeilrüstungen) or self.isArmorDefault(self.charTeilrüstungen[index]):
+        if index >= len(self.charTeilrüstungen) or self.charTeilrüstungen[index].name == "":
             logging.debug("Starting RuestungPicker")
 
             pickerClass = EventBus.applyFilter("class_ruestungspicker_wrapper", RuestungPicker)
@@ -319,12 +352,12 @@ class RSCharakterRuestungWrapper(QtCore.QObject):
             logging.debug("RuestungPicker created")
             if picker.ruestung is not None:
                 self.currentlyLoading = True
-                self.loadArmorIntoFields(picker.ruestung, index)
+                self.loadArmorIntoFields(RSCharakterRuestungWrapper.applyEigenschaften(Ruestung(picker.ruestung)), index)
                 self.currentlyLoading = False
                 self.updateRuestungen()
         else:
             self.currentlyLoading = True
-            self.loadArmorIntoFields(Objekte.Ruestung(), index)
+            self.loadArmorIntoFields(RSCharakterRuestungWrapper.applyEigenschaften(Ruestung(picker.ruestung)), index)
             self.currentlyLoading = False
             self.updateRuestungen()
 
@@ -360,7 +393,7 @@ class RSCharakterRuestungWrapper(QtCore.QObject):
             self.buttons[typIdx].setVisible(showType)
 
             if not showType:
-                self.loadArmorIntoFields(Objekte.Ruestung(), typIdx)
+                self.loadArmorIntoFields(RSCharakterRuestungWrapper.applyEigenschaften(Ruestung(RuestungDefinition())), typIdx)
 
         self.currentlyLoading = False
         self.updateRuestungen()

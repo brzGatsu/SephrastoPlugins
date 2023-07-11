@@ -4,7 +4,7 @@
   <Vorteil name="Eingefahren">Passiv. Das Tier lässt sich einspannen.</Vorteil>
   <Vorteil name="Enge Verbindung">Passiv. Nur für Reiter mit Tierempathie oder ähnlichem Zauber. Du erhältst keinen Malus für Reiten ohne Sattel und Zaumzeug.</Vorteil>
   <Vorteil name="Geländesicher">Passiv. Abzüge auf Proben durch Untergrund sinken um eine Stufe.</Vorteil>
-  <Vorteil name="Kehrtwende">Passiv. Du benötigst lediglich eine freie Aktion, um das stehende Reittier in die entgegengesetzte Richtung zu wenden.</Vorteil>
+  <Vorteil name="Kehrtwende">Passiv. Das Reittier kann aus jeder Gangart heraus abrupt auf der Hinterhand stoppen. Du benötigst lediglich eine freie Aktion, um das stehende Reittier in die entgegengesetzte Richtung zu wenden.</Vorteil>
   <Vorteil name="Komm">Das Tier kommt auf Befehl (Rufen/Pfeifen) zum Besitzer.</Vorteil>
   <Vorteil name="Lanzengang">Passiv. Das Reittier erleichtert Reiten-Proben während Lanzenangriffen um +4.</Vorteil>
   <Vorteil name="Laut">Das Tier schlägt auf Befehl an, aber auch, wenn es Wild oder einen Eindringling wahrnimmt.</Vorteil>
@@ -19,7 +19,6 @@
   <Vorteil name="Still">Das Tier ist auf Kommando die nächste Zeit still.</Vorteil>
   <Vorteil name="Stillstand">Das Reittier steht auf Kommando still. Du ignorierst währenddessen den Fernkampf-Malus für Berittener Schütze.</Vorteil>
   <Vorteil name="Trick">Das Tier führt auf Kommando einen bestimmten Trick aus. Dies muss für jeden individuellen Trick separat erlernt werden.</Vorteil>
-  <Vorteil name="Vollstopp">Passiv. Das Reittier kann aus jeder Gangart heraus abrupt auf der Hinterhand stoppen. Du musst beim Sturmangriff nicht weiterreiten und riskierst dadurch keinen Passierschlag mehr.</Vorteil>
   <Vorteil name="Zusammenarbeit">Passiv. Das Tier hat gelernt, mit anderen Tieren seiner Art und Ausbildung zusammenzuarbeiten. So können z.B. Hütetiere gemeinsam eine Herde treiben, Jagdtiere gemeinsam auf die Jagd gehen, oder Pferde gemeinsam eine Kutsche ziehen, falls sie eingefahren sind.</Vorteil>
   <Vorteil name="Anzeige">Passiv. Ein Jagdtier hat gelernt, entdeckte Wesen nicht zu verjagen, sondern seinem Herrn die Richtung zu diesem zu weisen.</Vorteil>
   <Vorteil name="Fass I">Das Tier greift den gewünschten Gegner an, bis der Besitzer das Signal „Aus!“ gibt. Für jede Größenklasse über der des Tieres, ist die Probe auf Tiere beeinflussen um -8 erschwert.</Vorteil>
@@ -58,14 +57,12 @@ Wirkung: Das Ziel muss in einer Freien Reaktion bis zu 2 Schritt zurückweichen,
 Wirkung: Der Angriff richtet doppelten Waffenschaden an. Zusätzliche Trefferpunkte aus Kommandos, anderen Manövern usw. werden nicht verdoppelt.</Vorteil>
   <Vorteil name="Standfest">Passiv. Nach einem Sturz befindet das Tier sich in kniender statt liegender Position.</Vorteil>
   <Vorteil name="Sturmangriff" manöver="1">Ermöglicht das Manöver Sturmangriff (Bewegung und AT).
-Wirkung: Die Kombination der Aktionen Bewegung und Konflikt ist nicht erschwert. Außerdem richtet die Attacke GS Trefferpunkte zusätzlich an.
+Wirkung: Die Kombination der Aktionen Bewegung und Konflikt ist nicht erschwert. Außerdem richtet die nächste Attacke GS Trefferpunkte zusätzlich an.
 Voraussetzungen: Die Bewegung muss vor dem Angriff ausgeführt werden und in einer möglichst geraden Linie erfolgen. 
-Besonderheiten: Bei einer Kombination mit anderen Manövern profitiert nur der erste Angriff vom Sturmangriff.
 Anmerkung: Sturzflugangriffe von fliegenden Gegnern folgen denselben Regeln. Bei besonders kleinen Gegnern oder kurzem Anlauf sollte der Spielleiter den Schaden verringern; Anlauf ist nicht nötig, wenn das Tier in der letzten Initiativephase die Aktion Bewegung genutzt hat, ohne anzuhalten.</Vorteil>
     <Vorteil name="Sturmangriff (Reiterkampf)" manöver="1">Ermöglicht das Manöver Sturmangriff (Bewegung und AT).
-Wirkung: Die Kombination der Aktionen Bewegung und Konflikt ist nicht erschwert. Außerdem richtet die Attacke GS Trefferpunkte zusätzlich an. Du musst mindestens zwei Schritt weiterreiten und riskierst damit einen Passierschlag.
-Voraussetzungen: Vorteil Reiterkampf I und Kampf in diesem Stil; die Bewegung muss vor dem Angriff ausgeführt werden und in einer möglichst geraden Linie erfolgen. 
-Besonderheiten: Bei einer Kombination mit anderen Manövern profitiert nur der erste Angriff vom Sturmangriff.
+Wirkung: Die Kombination der Aktionen Bewegung und Konflikt ist nicht erschwert. Außerdem richtet die nächste Attacke GS Trefferpunkte zusätzlich an.
+Voraussetzungen: Vorteil Reiterkampf I und Kampf in diesem Stil; die Bewegung muss vor dem Angriff ausgeführt werden und in einer möglichst geraden Linie erfolgen.
 Anmerkung: Sturzflugangriffe von fliegenden Gegnern folgen denselben Regeln. Bei besonders kleinen Gegnern oder kurzem Anlauf sollte der Spielleiter den Schaden verringern; Anlauf ist nicht nötig, wenn du in der letzten Initiativephase die Aktion Bewegung genutzt hast, ohne anzuhalten.</Vorteil>
   <Vorteil name="Überrennen" manöver="1">Ermöglicht das Manöver Überrennen (Bewegung und AT).
 Wirkung: Das Reittier stürmt in die gegnerische Formation. Seine Attacke trifft alle Gegner in seiner Bahn, bis es durch mindestens 2 erfolgreiche Verteidigungen gestoppt wird. Außerdem richtet die Attacke GS Trefferpunkte zusätzlich an. Die Kombination der Aktionen Bewegung und Konflikt ist nicht erschwert.

@@ -2,13 +2,13 @@
 from PySide6 import QtWidgets, QtCore, QtGui
 import lxml.etree as etree
 from EventBus import EventBus
-from DatenbankEinstellung import DatenbankEinstellung
-import Objekte
+from Core.DatenbankEinstellung import DatenbankEinstellung
+from Core.Ruestung import Ruestung, RuestungDefinition
 from Hilfsmethoden import Hilfsmethoden
-from RuestungenPlus import RSCharakterRuestungWrapper
+from RuestungenPlus.RSCharakterRuestungWrapper import RSCharakterRuestungWrapper
 from Wolke import Wolke
 import DatenbankEditor
-from RuestungenPlus import RSDatenbankEditRuestungseigenschaftWrapper
+from RuestungenPlus import RSDatenbankEditRuestungseigenschaftWrapper, Ruestungseigenschaft
 import copy
 import re
 
@@ -43,10 +43,10 @@ class Plugin:
     "Wenn du die Option 'Rüstungseigenschaften' aktivierst, kannst du zusätzlich Rüstungseigenschaften anlegen, optional mit Scripts versehen und Slots zuweisen."
 
     def changesCharacter(self):
-        return self.db.einstellungen["RüstungenPlus Plugin: Aktivieren"].toBool()
+        return self.db.einstellungen["RüstungenPlus Plugin: Aktivieren"].wert
 
     def changesDatabase(self):
-        return self.db.einstellungen["RüstungenPlus Plugin: Rüstungseigenschaften"].toBool()
+        return True
 
     def basisDatenbankGeladenHandler(self, params):
         self.db = params["datenbank"]
@@ -54,31 +54,29 @@ class Plugin:
         e = DatenbankEinstellung()
         e.name = "RüstungenPlus Plugin: Aktivieren"
         e.beschreibung = "Hiermit kannst du das RüstungenPlus-Plugin nur für diese Hausregeln deaktivieren und es trotzdem allgemein in den Sephrasto-Einstellungen aktiviert lassen."
-        e.wert = "True"
+        e.text = "True"
         e.typ = "Bool"
-        e.isUserAdded = False
-        self.db.einstellungen[e.name] = e
+        self.db.loadElement(e)
 
         e = DatenbankEinstellung()
         e.name = "RüstungenPlus Plugin: Rüstungseigenschaften"
-        e.beschreibung = "Falls aktiviert, erhalten alle Rüstungsslots eine weitere Spalte für Rüstungseigenschaften. Diese können im Datenbankeditor angelegt und wie Waffeneigenschaften mit Scripts versehen werden (erfordert einen Neustart des Datenbankeditors nach Aktivierung). "+\
+        e.beschreibung = "Falls aktiviert, erhalten alle Rüstungsslots eine weitere Spalte für Rüstungseigenschaften. Diese können im Datenbankeditor angelegt und wie Waffeneigenschaften mit Scripts versehen werden. "+\
             "Die Eigenschaften werden dann im Beschreibungsfeld der Rüstungen angegeben. Die bestehenden Beschreibungen sollten also nach Aktivierung als erstes bei allen Rüstungen geleert werden."
-        e.wert = "False"
+        e.text = "False"
         e.typ = "Bool"
-        e.isUserAdded = False
-        self.db.einstellungen[e.name] = e
-    
+        self.db.loadElement(e)
+
         self.db.ruestungseigenschaften = {}       
-        self.db.tablesByName["Rüstungseigenschaft"] = self.db.ruestungseigenschaften
+        self.db.insertTable(Ruestungseigenschaft.Ruestungseigenschaft, self.db.ruestungseigenschaften)
 
     # -----------------------
     # Rüstungseigenschaften
     # -----------------------
 
     def datenbankEditorTypenHook(self, typen, params):
-        if not self.db.einstellungen["RüstungenPlus Plugin: Rüstungseigenschaften"].toBool():
-            return typen
-        typen["Rüstungseigenschaft"] = DatenbankEditor.DatenbankTypWrapper(self.addRuestungseigenschaft, self.editRuestungseigenschaft)
+        typ = Ruestungseigenschaft.Ruestungseigenschaft
+        editor = RSDatenbankEditRuestungseigenschaftWrapper.RSDatenbankEditRuestungseigenschaftWrapper
+        typen[typ] = DatenbankEditor.DatenbankTypWrapper(typ, editor, True)
         return typen
 
     def datenbankXmlLadenHook(self, root, params):
@@ -87,22 +85,20 @@ class Plugin:
 
         eigenschaftNodes = root.findall('Rüstungseigenschaft')
         for eigenschaft in eigenschaftNodes:
-            R = RSDatenbankEditRuestungseigenschaftWrapper.Ruestungseigenschaft()
+            R = Ruestungseigenschaft.Ruestungseigenschaft()
             R.name = eigenschaft.get('name')
             R.text = eigenschaft.text or ''
             R.script = eigenschaft.get('script')
-            R.scriptOnlyFirst = eigenschaft.attrib['scriptOnlyFirst'] == "1"
-            R.isUserAdded = True
+            if 'scriptOnlyFirst' in eigenschaft.attrib:
+                R.scriptOnlyFirst = eigenschaft.attrib['scriptOnlyFirst'] == "1"
                                             
-            if params["conflictCallback"] and R.name in self.db.ruestungseigenschaften:
-                R = params["conflictCallback"]('Rüstungseigenschaft', self.db.ruestungseigenschaften[R.name], R)
-            self.db.ruestungseigenschaften.update({R.name: R})
+            self.db.loadElement(R, params["basisdatenbank"], params["conflictCallback"])
 
         return root
 
     def datenbankXmlSchreibenHook(self, root, params):
-        for we in self.db.ruestungseigenschaften:
-            eigenschaft = self.db.ruestungseigenschaften[we]
+        for eigenschaft in self.db.ruestungseigenschaften.values():
+            if not self.db.isChangedOrNew(eigenschaft): continue
             w = etree.SubElement(root, 'Rüstungseigenschaft')
             w.set('name', eigenschaft.name)
             w.set('scriptOnlyFirst', "1" if eigenschaft.scriptOnlyFirst else "0")
@@ -111,14 +107,6 @@ class Plugin:
                 w.set('script', eigenschaft.script)
 
         return root
-
-    def addRuestungseigenschaft(self):
-        we = RSDatenbankEditRuestungseigenschaftWrapper.Ruestungseigenschaft()
-        return self.editRuestungseigenschaft(we)
-
-    def editRuestungseigenschaft(self, inp, readonly = False):
-        dbW = RSDatenbankEditRuestungseigenschaftWrapper.RSDatenbankEditRuestungseigenschaftWrapper(self.db, inp, readonly)
-        return dbW.ruestungseigenschaft
 
     @staticmethod
     def getRuestungseigenschaft(eigStr, datenbank):
@@ -147,7 +135,7 @@ class Plugin:
         return parameters[paramNb-1]
 
     def charakterAktualisierenHandler(self, params):
-        if not self.db.einstellungen["RüstungenPlus Plugin: Rüstungseigenschaften"].toBool():
+        if not self.db.einstellungen["RüstungenPlus Plugin: Rüstungseigenschaften"].wert:
             return
 
         char = params["charakter"]
@@ -159,29 +147,28 @@ class Plugin:
         api['modifyZRSPunkte'] = lambda zrs: setattr(self.currentRuestung, 'zrsMod', self.currentRuestung.zrsMod + zrs)
 
         for i in range(len(char.rüstung)):
-            if not char.rüstung[i].text:
-                continue
             self.currentRuestung = char.rüstung[i]
             self.currentRuestung.zrsMod = 0
-            eigenschaften = list(map(str.strip, char.rüstung[i].text.split(",")))
-            for eig in eigenschaften:
+            if not hasattr(self.currentRuestung, "eigenschaften"):
+                RSCharakterRuestungWrapper.applyEigenschaften(self.currentRuestung)
+            for eig in self.currentRuestung.eigenschaften:
                 self.currentEigenschaft = eig
                 try:
-                    we = Plugin.getRuestungseigenschaft(eig, Wolke.DB)
+                    ruestungsEigenschaft = Plugin.getRuestungseigenschaft(eig, Wolke.DB)
                 except Exception:
                     continue #Manually added Eigenschaften are allowed
-                if not we.script:
+                if not ruestungsEigenschaft.script:
                     continue
-                if we.scriptOnlyFirst and i != 0:
+                if ruestungsEigenschaft.scriptOnlyFirst and i != 0:
                     continue
-                exec(we.script, api)
+                ruestungsEigenschaft.executeScript(api)
 
     # -----------------------
     # Regelanhang
     # -----------------------
 
     def regelanhangAnfuegenHandler(self, params):
-        if not self.db.einstellungen["RüstungenPlus Plugin: Aktivieren"].toBool():
+        if not self.db.einstellungen["RüstungenPlus Plugin: Aktivieren"].wert:
             return
         reihenfolge = params["reihenfolge"]
         appendCb = params["appendCallback"]
@@ -193,21 +180,19 @@ class Plugin:
             return
 
         teilrüstungen = [Wolke.Char.teilrüstungen1, Wolke.Char.teilrüstungen2, Wolke.Char.teilrüstungen3]
-        slots = Wolke.DB.einstellungen["Rüstungen: Typen"].toTextList()
-        addEigenschaften = self.db.einstellungen["RüstungenPlus Plugin: Rüstungseigenschaften"].toBool() 
-        strList = ["<article><span class='ruleCategoryHeading'>Rüstungen</span><br>"]
+        slots = Wolke.DB.einstellungen["Rüstungen: Typen"].wert
+        addEigenschaften = self.db.einstellungen["RüstungenPlus Plugin: Rüstungseigenschaften"].wert 
+        strList = ["<h2>Rüstungen</h1>"]
         for i in range(len(Wolke.Char.rüstung)):
             if not Wolke.Char.rüstung[i].name and Wolke.Char.rüstung[i].getRSGesamtInt() == 0:
                 continue
-            if i != 0:
-                strList.append("<article>")
-            strList.append("<span class='ruleHeading'>Rüstung " + str(i+1) + "</span><br>")
+            strList.append("<article><h3>Rüstung " + str(i+1) + "</h3>")
             strList.append(Wolke.Char.rüstung[i].name)
-            if addEigenschaften and Wolke.Char.rüstung[i].text:
-                strList.append("<br>Eigenschaften: " + Wolke.Char.rüstung[i].text)
+            if addEigenschaften and len(Wolke.Char.rüstung[i].eigenschaften) > 0:
+                strList.append("<br>Eigenschaften: " + ", ".join(Wolke.Char.rüstung[i].eigenschaften))
 
             strList.append("<table><tr>")
-            strList.append("<th style='text-align: left;'>Name</th>")
+            strList.append("<th align='left'>Name</th>")
             if Wolke.Char.zonenSystemNutzen:       
                 for header in ["Beine", "L.&nbsp;Arm", "R.&nbsp;Arm", "Bauch", "Brust", "Kopf"]:
                     strList.append("<th>" + header + "</th>")
@@ -222,16 +207,16 @@ class Plugin:
                 strList.append("<td>" + r.name + "</td>")
                 if Wolke.Char.zonenSystemNutzen:
                     for cell in [str(r.rs[0]), str(r.rs[1]), str(r.rs[2]), str(r.rs[3]), str(r.rs[4]), str(r.rs[5])]:
-                        strList.append("<td style='text-align: center;'>" + cell + "</td>")
+                        strList.append("<td align='center'>" + cell + "</td>")
                 else:
-                    strList.append("<td style='text-align: center;'>" + str(r.getRSGesamtInt()) + "</td>")
+                    strList.append("<td align='center'>" + str(r.getRSGesamtInt()) + "</td>")
                 strList.append("</tr>")
                 strList.append("<tr>")
                 strList.append("<td colspan='100' style='font-size: 6pt;'>&nbsp;&nbsp;&nbsp;&nbsp;" + slots[r.typ])
                 if addEigenschaften:
                     strList.append(" | Eigenschaften: ")
-                    if r.name in Wolke.DB.rüstungen:
-                        strList.append(Wolke.DB.rüstungen[r.name].text or "-")
+                    if len(r.eigenschaften) > 0:
+                        strList.append(", ".join(r.eigenschaften))
                     else:
                         strList.append("-")
                 strList.append("</td></tr>")
@@ -247,10 +232,7 @@ class Plugin:
 
         eigenschaftenList = {}
         for i in range(len(Wolke.Char.rüstung)):
-            if not Wolke.Char.rüstung[i].text:
-                continue
-            eigenschaften = list(map(str.strip, Wolke.Char.rüstung[i].text.split(",")))
-            for eig in eigenschaften:
+            for eig in Wolke.Char.rüstung[i].eigenschaften:
                 try:
                     we = Plugin.getRuestungseigenschaft(eig, Wolke.DB)
                     if we.text:
@@ -259,12 +241,10 @@ class Plugin:
                     continue #Manually added Eigenschaften are allowed
 
         count = 0
-        strList = ["<article><span class='ruleCategoryHeading'>Rüstungseigenschaften</span><br>"]
+        strList = ["<h2>Rüstungseigenschaften</h2>"]
         for eig in sorted(eigenschaftenList):
             count += 1
-            if count != 1:
-                strList.append("<article>")
-            strList.append("<span class='ruleHeading'>" + eig + "</span><br>")
+            strList.append("<article><h3>" + eig + "</h3>")
             strList.append(eigenschaftenList[eig])
             strList.append("</article>")
         if len(strList) > 1:
@@ -275,7 +255,7 @@ class Plugin:
     # -----------------------
 
     def provideRuestungPickerWrapperHook(self, base, params):
-        if not self.db.einstellungen["RüstungenPlus Plugin: Aktivieren"].toBool():
+        if not self.db.einstellungen["RüstungenPlus Plugin: Aktivieren"].wert:
             return base
 
         class RSRuestungPicker(base):
@@ -295,7 +275,7 @@ class Plugin:
         return RSRuestungPicker
 
     def provideAusruestungWrapperHook(self, base, params):
-        if not self.db.einstellungen["RüstungenPlus Plugin: Aktivieren"].toBool():
+        if not self.db.einstellungen["RüstungenPlus Plugin: Aktivieren"].wert:
             return base
 
         class RSCharakterEquipmentWrapper(base):
@@ -308,7 +288,7 @@ class Plugin:
 
                 self.ruestungWrapper = []
                 for i in range(3):
-                    wrapper = RSCharakterRuestungWrapper.RSCharakterRuestungWrapper(i)
+                    wrapper = RSCharakterRuestungWrapper(i)
                     wrapper.modified.connect(self.onModified)
                     wrapper.reloadRSTabs.connect(self.reloadRSTabs)
                     self.ui.tabs.insertTab(1+i, wrapper.form, "Rüstung " + str(i+1))
@@ -328,7 +308,7 @@ class Plugin:
         return RSCharakterEquipmentWrapper
 
     def provideInventarWrapperHook(self, base, params):
-        if not self.db.einstellungen["RüstungenPlus Plugin: Aktivieren"].toBool():
+        if not self.db.einstellungen["RüstungenPlus Plugin: Aktivieren"].wert:
             return base
 
         class RSCharakterInventarWrapper(base):
@@ -340,7 +320,7 @@ class Plugin:
         return RSCharakterInventarWrapper
 
     def charakterInstanziiertHandler(self, params):
-        if not self.db.einstellungen["RüstungenPlus Plugin: Aktivieren"].toBool():
+        if not self.db.einstellungen["RüstungenPlus Plugin: Aktivieren"].wert:
             return
         char = params["charakter"]
         char.teilrüstungen1 = []
@@ -348,7 +328,7 @@ class Plugin:
         char.teilrüstungen3 = []
 
     def charakterXmlGeladenHook(self, params):
-        if not self.db.einstellungen["RüstungenPlus Plugin: Aktivieren"].toBool():
+        if not self.db.einstellungen["RüstungenPlus Plugin: Aktivieren"].wert:
             return
 
         root = params["xmlRoot"]
@@ -361,22 +341,26 @@ class Plugin:
 
         for i in range(3):
             for rüs in objekte.findall('Teilrüstungen'+str(i+1)+'/Rüstung'):
-                rüst = Objekte.Ruestung()
-                rüst.name = rüs.attrib['name']
+                name = rüs.attrib['name']
+                definition = None
+                if name in Wolke.DB.rüstungen:
+                    definition = Wolke.DB.rüstungen[name]
+                else:
+                    definition = RuestungDefinition()
+                    definition.name = name
+                rüst = Ruestung(definition)
                 rüst.be = int(rüs.attrib['be'])
                 rüst.rs = Hilfsmethoden.RsStr2Array(rüs.attrib['rs'])
                 if 'typ' in rüs.attrib:
                     rüst.typ = int(rüs.attrib['typ'])
-                rüst.text = rüs.text
+                RSCharakterRuestungWrapper.applyEigenschaften(rüst)
                 teilrüstungen[i].append(rüst)
 
-        count = 0
-        for rüs in objekte.findall('Rüstungen/Rüstung'):
-            char.rüstung[count].text = rüs.text
-            count += 1
+        for rüst in char.rüstung:
+            RSCharakterRuestungWrapper.applyEigenschaften(rüst)
 
     def charakterXmlSchreibenHook(self, root, params):
-        if not self.db.einstellungen["RüstungenPlus Plugin: Aktivieren"].toBool():
+        if not self.db.einstellungen["RüstungenPlus Plugin: Aktivieren"].wert:
             return root
 
         objekte = root.find('Objekte')
@@ -394,10 +378,10 @@ class Plugin:
                 rüsNode.set('be',str(rüst.be))
                 rüsNode.set('rs',Hilfsmethoden.RsArray2Str(rüst.rs))
                 rüsNode.set('typ',str(rüst.typ))
-                rüsNode.text = rüst.text
+                rüsNode.text = ", ".join(rüst.eigenschaften)
 
         count = 0
         for rüs in objekte.findall('Rüstungen/Rüstung'):
-            rüs.text = char.rüstung[count].text
+            rüs.text = ", ".join(char.rüstung[count].eigenschaften)
             count += 1
         return root

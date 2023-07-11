@@ -27,7 +27,7 @@ kostenModifikatoren = {
 #========== Implementation ===========
 traditionen = [v.name for v in datenbank.vorteile.values() if v.name.startswith("Tradition") and v.name.endswith(" I")]
 traditionen += zusatzTraditionen
-spezialTalente = [t for t in datenbank.talente.values() if t.isSpezialTalent()]
+spezialTalente = [t for t in datenbank.talente.values() if t.spezialTalent]
 if skipPassivTalente:
     spezialTalente = [t for t in spezialTalente if not t.name.endswith("(passiv)")]
 fertigkeiten = sorted(datenbank.übernatürlicheFertigkeiten.values(), key= lambda f : (f.typ, f.name))
@@ -38,7 +38,7 @@ for fertigkeit in fertigkeiten:
     talentCost = {}
     for tradition in traditionen:
         vorteile = [tradition] + gekaufteVorteile
-        if not Hilfsmethoden.voraussetzungenPrüfen(vorteile, [], [], [], [], fertigkeit.voraussetzungen):
+        if not Hilfsmethoden.voraussetzungenPrüfen(fertigkeit, vorteile, [], [], [], [], []):
             continue
         talentCost[tradition] = 0
         if debugFertigkeit:
@@ -46,7 +46,7 @@ for fertigkeit in fertigkeiten:
         for talent in sorted(spezialTalente, key = lambda t:  t.name):
             if not fertigkeit.name in talent.fertigkeiten:
                 continue
-            if not Hilfsmethoden.voraussetzungenPrüfen(vorteile, [], [], [], [], talent.voraussetzungen):
+            if not Hilfsmethoden.voraussetzungenPrüfen(talent, vorteile, [], [], [], [], []):
                 continue
 
             if talent.name in kostenModifikatoren:

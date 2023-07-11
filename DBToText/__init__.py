@@ -6,20 +6,25 @@ import os
 import re
 import math
 from Hilfsmethoden import Hilfsmethoden, WaffeneigenschaftException
-import Objekte
 from CharakterPrintUtility import CharakterPrintUtility
-from DatenbankEinstellung import DatenbankEinstellung
-from Fertigkeiten import VorteilLinkKategorie, KampffertigkeitTyp
+from Core.Fertigkeit import KampffertigkeitTyp
 import lxml.etree as etree
 
 class Plugin:
     def __init__(self):
         EventBus.addAction("basisdatenbank_geladen", self.basisDatenbankGeladenHook)
+        EventBus.addAction("dbe_menuitems_erstellen", self.menusErstellen)
         self.db = None
 
     @staticmethod
     def getDescription():
         return "Exportiert via Datenbank-Editor Button die Datenbank in ein Text-Format."
+
+    def menusErstellen(self, params):
+        addMenuItemCB = params["addMenuItemCB"]
+        self.exportDB = QtGui.QAction("Text-Export")
+        self.exportDB.triggered.connect(self.export)
+        addMenuItemCB("Export", self.exportDB)
 
     def createDatabaseButtons(self):
         self.exportDB = QtWidgets.QPushButton()
@@ -33,7 +38,7 @@ class Plugin:
         self.db = params["datenbank"]
 
     def getVorteile(self):
-        vorteilTypen = self.db.einstellungen["Vorteile: Typen"].toTextList()
+        vorteilTypen = self.db.einstellungen["Vorteile: Typen"].wert
         vorteileGruppiert = {}
         for i in range(len(vorteilTypen)):
             vorteile = [v for v in self.db.vorteile.values() if v.typ == i]
@@ -42,7 +47,7 @@ class Plugin:
         return vorteileGruppiert
 
     def getRegeln(self):
-        regelTypen = self.db.einstellungen["Regeln: Typen"].toTextList()
+        regelTypen = self.db.einstellungen["Regeln: Typen"].wert
         regelnGruppiert = {}
         for i in range(len(regelTypen)):
             regeln = [m for m in self.db.regeln.values() if m.typ == i]
@@ -51,7 +56,7 @@ class Plugin:
         return regelnGruppiert
 
     def getFertigkeitenProfan(self):
-        fertigkeitsTypenProfan = self.db.einstellungen["Fertigkeiten: Typen profan"].toTextList()
+        fertigkeitsTypenProfan = self.db.einstellungen["Fertigkeiten: Typen profan"].wert
         fertigkeitenGruppiert = {}
         for i in range(len(fertigkeitsTypenProfan)):
             fertigkeiten = [f for f in self.db.fertigkeiten.values() if f.typ == i]
@@ -60,7 +65,7 @@ class Plugin:
         return fertigkeitenGruppiert
 
     def getFertigkeitenÜbernatürlich(self):
-        fertigkeitsTypenUeber = self.db.einstellungen["Fertigkeiten: Typen übernatürlich"].toTextList()
+        fertigkeitsTypenUeber = self.db.einstellungen["Fertigkeiten: Typen übernatürlich"].wert
         fertigkeitenGruppiert = {}
         for i in range(len(fertigkeitsTypenUeber)):
             fertigkeiten = [f for f in self.db.übernatürlicheFertigkeiten.values() if f.typ == i]
@@ -84,64 +89,26 @@ class Plugin:
         return sorted(self.db.waffeneigenschaften.values(), key = lambda w: w.name)
 
     def getTalenteProfan(self):
-        return sorted([t for t in self.db.talente.values() if not t.isSpezialTalent()], key = lambda t : t.name)
+        return sorted([t for t in self.db.talente.values() if not t.spezialTalent], key = lambda t : t.name)
 
     def getTalenteÜbernatürlich(self):
-        talenteUeber = [t for t in self.db.talente.values() if t.isSpezialTalent()]
+        talenteUeber = [t for t in self.db.talente.values() if t.spezialTalent]
 
-        def getTalentTyp(talent):
-            if len(talent.fertigkeiten) == 0:
-                return 0
-
-            for f in talent.fertigkeiten:
-                if self.db.übernatürlicheFertigkeiten[f].talenteGruppieren:
-                    return self.db.übernatürlicheFertigkeiten[f].typ
-            return self.db.übernatürlicheFertigkeiten[talent.fertigkeiten[0]].typ
-
-        def sortTalente(talent):
-            return (getTalentTyp(talent), talent.name)
-
-        talenteUeber = sorted(talenteUeber, key = lambda talent: sortTalente(talent))
-        liturgieTypen = [int(t) for t in self.db.einstellungen["Fertigkeiten: Liturgie-Typen"].toTextList()]
-        anrufungTypen = [int(t) for t in self.db.einstellungen["Fertigkeiten: Anrufungs-Typen"].toTextList()]
-        zauber = []
-        liturgien = []
-        anrufungen = []
-        fertigkeitsTypenUeber = self.db.einstellungen["Fertigkeiten: Typen übernatürlich"].toTextList()
-        for t in fertigkeitsTypenUeber:
-            zauber.append([])
-            liturgien.append([])
-            anrufungen.append([])
-
-        for tal in talenteUeber:
-            typ = getTalentTyp(tal)
-            if typ >= len(fertigkeitsTypenUeber):
-                continue
-            if typ in liturgieTypen:
-                liturgien[typ].append(tal)
-            elif typ in anrufungTypen:
-                anrufungen[typ].append(tal)
+        def sortTalente(tal):
+            hauptFert = tal.hauptfertigkeit
+            if hauptFert is None:
+                return (0, "", tal.name)
+            elif hauptFert.talenteGruppieren:
+               return (hauptFert.typ, hauptFert.name, tal.name)
             else:
-                zauber[typ].append(tal)
+               return (hauptFert.typ, "", tal.name)
 
-        return (zauber, liturgien, anrufungen)
+        talenteByTyp = []
+        for typ in range(len(self.db.einstellungen["Talente: Spezialtalent Typen"].wert)):
+            talenteByTyp.append([t for t in talenteUeber if t.spezialTyp == typ])
+            talenteByTyp[-1].sort(key = sortTalente)
 
-    def voraussetzungenToString(self, voraussetzungen):
-        voraussetzungen = [v.strip() for v in Hilfsmethoden.VorArray2Str(voraussetzungen).split(",")]
-        voraussetzungen = [v for v in voraussetzungen if not v.startswith("Kein Vorteil Tradition")]
-        voraussetzungen = [v + " und 2 weitere Attribute auf insgesamt 16" if "MeisterAttribut" in v else v for v in voraussetzungen]
-        voraussetzungen = ", ".join(voraussetzungen)
-        voraussetzungen = voraussetzungen.replace(" ODER ", " oder ")
-        voraussetzungen = voraussetzungen.replace("'", "") # remove apostrophes from "Fertigkeit" and "Übernatürliche-Fertigkeit"
-        voraussetzungen = voraussetzungen.replace("Fertigkeit ", "")
-        voraussetzungen = voraussetzungen.replace("Übernatürliche-Fertigkeit ", "")
-        voraussetzungen = voraussetzungen.replace("MeisterAttribut ", "")
-        voraussetzungen = voraussetzungen.replace("Attribut ", "")
-        voraussetzungen = voraussetzungen.replace("Vorteil ", "")
-        voraussetzungen = voraussetzungen.replace("Kein ", "kein ")
-        if not voraussetzungen:
-            voraussetzungen = "keine"
-        return voraussetzungen
+        return talenteByTyp
 
     def shortenText(self, text):
         index = text.find('\nSephrasto')
@@ -157,14 +124,46 @@ class Plugin:
             return
 
         content = []
-        content.append("VORTEILE\n")
+
+        content.append("ATTRIBUTE\n")
+        attribute = [a for a in sorted(self.db.attribute.values(), key=lambda value: value.sortorder)]
+        for attribut in attribute:
+            # see Core.Attribut.AttributDefinition for all properties
+            content.append(f"{attribut.anzeigename} ({attribut.name})")
+            if attribut.text:
+                content.append(attribut.text)
+            content.append("")
+
+        content.append("\nABGELEITETE WERTE\n")
+        abgeleiteteWerte = [a for a in sorted(self.db.abgeleiteteWerte.values(), key=lambda value: value.sortorder)]
+        for ab in abgeleiteteWerte:
+            # see Core.AbgeleiteterWert.AbgeleiteterWertDefinition for all properties
+            content.append(f"{ab.anzeigename} ({ab.name})")
+            if ab.text:
+                content.append(ab.text)
+            if ab.formel:
+                content.append("Formel: " + ab.formel)
+            content.append("")
+
+        content.append("\nENERGIEN\n")
+        energien = [e for e in sorted(self.db.energien.values(), key=lambda value: value.sortorder)]
+        for en in energien:
+            # see Core.Energie.EnergieDefinition for all properties
+            content.append(f"{en.anzeigename} ({en.name})")
+            if en.text:
+                content.append(en.text)
+            content.append("Voraussetzungen: " + Hilfsmethoden.VorArray2AnzeigeStr(en.voraussetzungen, self.db))
+            content.append(f"")
+
+        content.append("\nVORTEILE\n")
         for vTyp, vorteile in self.getVorteile().items():
             content.append(f"==={vTyp} ===\n")
             for v in vorteile:
+                # see Core.Vorteil.VorteilDefinition for all properties
                 content.append(v.name)
                 content.append(self.shortenText(v.text))
                 if (len(v.voraussetzungen) > 0):
-                    content.append(f"Voraussetzungen: {self.voraussetzungenToString(v.voraussetzungen)}; {v.kosten} EP")
+                    content.append(f"Voraussetzungen: {Hilfsmethoden.VorArray2AnzeigeStr(v.voraussetzungen, self.db)}; {v.kosten} EP")
                 else:
                     content.append(f"Voraussetzungen: {v.kosten} EP")
                 content.append(f"Nachkauf: {v.nachkauf}")
@@ -174,85 +173,76 @@ class Plugin:
         for fTyp, fertigkeiten in self.getFertigkeitenProfan().items():
             content.append(f"=== {fTyp} ===\n")
             for f in fertigkeiten:
+                # see Core.Fertigkeit.FertigkeitDefinition for all properties
                 sf = str(f.steigerungsfaktor)
                 if f.kampffertigkeit == KampffertigkeitTyp.Nahkampf:
                     sf = "4/" + str(sf)
                 content.append(f"{f.name} ({f.attribute[0]}/{f.attribute[1]}/{f.attribute[2]}, {sf})")
                 content.append(self.shortenText(f.text))
                 if len(f.voraussetzungen) > 0:
-                    content.append(f"Voraussetzungen: {self.voraussetzungenToString(f.voraussetzungen)}")
+                    content.append(f"Voraussetzungen: {Hilfsmethoden.VorArray2AnzeigeStr(f.voraussetzungen, self.db)}")
                 content.append("")
 
         content.append("\nPROFANE TALENTE\n")
         for t in self.getTalenteProfan():
+            # see Core.Talent.TalentDefinition for all properties
             content.append(t.name)
             if t.verbilligt == 1:
                 content[-1] += " (verbilligt)"
-            content.append(self.shortenText(t.text))
+            if t.text:
+                content.append(self.shortenText(t.text))
             content.append("")
 
         content.append("\nÜBERNATÜRLICHE FERTIGKEITEN\n")
         for fTyp, fertigkeiten in self.getFertigkeitenÜbernatürlich().items():
             content.append(f"=== {fTyp} ===\n")
             for f in fertigkeiten:
+                # see Core.Fertigkeit.FertigkeitDefinition for all properties
                 content.append(f"{f.name} ({f.attribute[0]}/{f.attribute[1]}/{f.attribute[2]}, {f.steigerungsfaktor})")
                 content.append(self.shortenText(f.text))
                 if len(f.voraussetzungen) > 0:
-                    content.append(f"Voraussetzungen: {self.voraussetzungenToString(f.voraussetzungen)}")
+                    content.append(f"Voraussetzungen: {Hilfsmethoden.VorArray2AnzeigeStr(f.voraussetzungen, self.db)}")
                 content.append("")
 
-        (zauberKategorien, liturgienKategorien, anrufungenKategorien) = self.getTalenteÜbernatürlich()
-        content.append("\nZAUBER\n")
-        for zauber in zauberKategorien:
-            for z in zauber:
-                content.append(z.name)
-                content.append(self.shortenText(z.text))
-                # also available: t.fertigkeiten (array of strings), t.voraussetzungen (array, see voraussetzungenToString), t.kosten (int)
-                content.append("")
-
-        content.append("\nLITURGIEN\n")
-        for liturgien in liturgienKategorien:
-            for l in liturgien:
-                content.append(l.name)
-                content.append(self.shortenText(l.text))
-                # also available: t.fertigkeiten (array of strings), t.voraussetzungen (array, see voraussetzungenToString), t.kosten (int)
-                content.append("")
-
-        content.append("\nANRUFUNGEN\n")
-        for anrufungen in anrufungenKategorien:
-            for a in anrufungen:
-                content.append(a.name)
-                content.append(self.shortenText(a.text))
-                # also available: t.fertigkeiten (array of strings), t.voraussetzungen (array, see voraussetzungenToString), t.kosten (int)
+        talenteByTyp = self.getTalenteÜbernatürlich()
+        spezialTalentTypen = list(self.db.einstellungen["Talente: Spezialtalent Typen"].wert.values())
+        for i in range(len(talenteByTyp)):
+            content.append("\n" + spezialTalentTypen[i].upper() + "\n")
+            for t in talenteByTyp[i]:
+                # see Core.Talent.TalentDefinition for all properties
+                content.append(t.name)
+                content.append(self.shortenText(t.text))      
                 content.append("")
 
         content.append("\nREGELN\n")
         for rTyp, regeln in self.getRegeln().items():
             content.append(f"=== {rTyp} ===\n")
             for r in regeln:
+                # see Core.Regel.Regel for all properties
                 content.append(r.name)
                 if r.probe:
                     content[-1] += f" ({r.probe})"
                 content.append(f"Wirkung: {self.shortenText(r.text)}")
                 if len(r.voraussetzungen) > 0:
-                    content.append(f"Voraussetzungen: {self.voraussetzungenToString(r.voraussetzungen)}")
+                    content.append(f"Voraussetzungen: {Hilfsmethoden.VorArray2AnzeigeStr(r.voraussetzungen, self.db)}")
                 content.append("")
 
         content.append("\nWAFFEN\n")
         for fert, waffen in self.getWaffen().items():
             content.append(f"=== {fert} ===\n")
             for w in waffen:
+                # see Core.Waffe.WaffeDefinition for all properties
                 tpPlus = f"+{w.plus}" if w.plus >= 0 else f"{w.plus}"
 
-                if type(w) == Objekte.Fernkampfwaffe:
+                if w.fernkampf:
                     content.append(f"{w.name} | TP {w.würfel}W{w.würfelSeiten}{tpPlus} | RW {w.rw} | WM {w.wm} | LZ {w.lz} | Härte {w.härte} | Eigenschaften: " + (", ".join(w.eigenschaften) if len(w.eigenschaften) > 0 else "-"))
                 else:
                     content.append(f"{w.name} | TP {w.würfel}W{w.würfelSeiten}{tpPlus} | RW {w.rw} | WM {w.wm} | Härte {w.härte} | Eigenschaften: " + (", ".join(w.eigenschaften) if len(w.eigenschaften) > 0 else "-"))
-                # also available: w.kampfstile (array of strings)
                 content.append("")
 
         content.append("\nWAFFENEIGENSCHAFTEN\n")
         for we in self.getWaffeneigenschaften():
+            # see Core.Waffeneigenschaft.Waffeneigenschaft for all properties
             content.append(we.name)
             if we.text:
                 content.append(self.shortenText(we.text))

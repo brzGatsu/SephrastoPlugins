@@ -8,8 +8,7 @@ from EinstellungenWrapper import EinstellungenWrapper
 import copy
 import re
 from CheatsheetGenerator import CheatsheetGenerator
-from DatenbankEinstellung import DatenbankEinstellung
-import Objekte
+from Core.DatenbankEinstellung import DatenbankEinstellung
 from Hilfsmethoden import Hilfsmethoden
 
 class Plugin:
@@ -32,13 +31,12 @@ class Plugin:
         e = DatenbankEinstellung()
         e.name = "Zaubertricks Plugin: Aktivieren"
         e.beschreibung = "Hiermit kannst du das Zaubertricks-Plugin nur für diese Hausregeln deaktivieren und es trotzdem allgemein in den Sephrasto-Einstellungen aktiviert lassen."
-        e.wert = "True"
+        e.text = "True"
         e.typ = "Bool"
-        e.isUserAdded = False
-        self.db.einstellungen[e.name] = e
+        self.db.loadElement(e)
 
     def provideUeberWrapperZaubertricksHook(self, base, params):
-        if not self.db.einstellungen["Zaubertricks Plugin: Aktivieren"].toBool():
+        if not self.db.einstellungen["Zaubertricks Plugin: Aktivieren"].wert:
             return base
 
         class ZTUebernatuerlichWrapper(base):
@@ -83,7 +81,7 @@ class Plugin:
         return ZTUebernatuerlichWrapper
 
     def pdfExportZaubertricksHook(self, fields, params):
-        if not self.db.einstellungen["Zaubertricks Plugin: Aktivieren"].toBool():
+        if not self.db.einstellungen["Zaubertricks Plugin: Aktivieren"].wert:
             return fields
 
         for field in fields:

@@ -1,33 +1,12 @@
 from EventBus import EventBus
 from Wolke import Wolke
-import Definitionen
 import os
 from CharakterPrintUtility import CharakterPrintUtility
 import Version
-import Objekte
-
-# This utility function didnt exist before 3.2.2 in Version.py
-def isClientSameOrHigher(major, minor, build):
-    if Version._sephrasto_version_major < major:
-        return False
-
-    if Version._sephrasto_version_major > major:
-        return True
-
-    if Version._sephrasto_version_minor < minor:
-        return False
-
-    if Version._sephrasto_version_minor > minor:
-        return True
-
-    return Version._sephrasto_version_build >= build
 
 class Plugin:
     def __init__(self):
-        if isClientSameOrHigher(3, 2, 2):
-            EventBus.addFilter("charakter_xml_schreiben", self.charakterSchreibenHook)
-        else:
-            EventBus.addAction("pdf_geschrieben", self.pdfGeschriebenHook)
+        EventBus.addFilter("charakter_xml_schreiben", self.charakterSchreibenHook)
 
     @staticmethod
     def getDescription():
@@ -41,7 +20,7 @@ class Plugin:
         content.append("Name: " + char.name)
         content.append("Spezies: " + char.spezies)
         content.append("Kurzbeschreibung: " + char.kurzbeschreibung)
-        content.append("Status: " + Definitionen.Statusse[char.status])
+        content.append("Status: " + Wolke.DB.einstellungen["Statusse"].wert[char.status])
         content.append("Heimat: " + char.heimat)
 
         content.append("\nEigenheiten:")
@@ -50,22 +29,20 @@ class Plugin:
                 content.append(eigenheit)
 
         content.append("\n=== Attribute === ")
-        for attribut in Definitionen.Attribute:
-            content.append(attribut + " " + str(char.attribute[attribut].wert) + "/" + str(char.attribute[attribut].probenwert))
+        attribute = [a for a in sorted(char.attribute.values(), key=lambda value: value.sortorder)]
+        for attribut in attribute:
+            content.append(attribut.name + " " + str(attribut.wert) + "/" + str(attribut.probenwert))
 
         content.append("\nAbgeleitete Werte und Energien:")
-        content.append("WS " + str(char.ws))
-        content.append("MR " + str(char.mr))
-        content.append("GS " + str(char.gs))
-        content.append("SB " + str(char.schadensbonus))
-        content.append("INI " + str(char.ini))
-        if "Zauberer I" in char.vorteile:
-            content.append("AsP " + str(char.asp.wert + char.aspBasis + char.aspMod))
-        if "Geweiht I" in char.vorteile:
-            content.append("KaP " + str(char.kap.wert + char.kapBasis + char.kapMod))
-        if "Paktierer I" in char.vorteile:
-            content.append("GuP " + str(char.kap.wert + char.kapBasis + char.kapMod))
-        content.append("Max SchiP " + str(char.schipsMax))
+        abgeleiteteWerte = [a for a in sorted(char.abgeleiteteWerte.values(), key=lambda value: value.sortorder)]
+        for ab in abgeleiteteWerte:
+            if not ab.anzeigen:
+                continue
+            content.append(ab.name + " " + str(ab.wert))
+
+        energien = [e for e in sorted(char.energien.values(), key=lambda value: value.sortorder)]
+        for en in energien:
+            content.append(en.name + " " + str(en.gesamtwert))
 
         content.append("\n=== Allgemeine und Profane Vorteile === ")
         vorteile = CharakterPrintUtility.getVorteile(char)
@@ -75,7 +52,7 @@ class Plugin:
 
         content.append("\n=== Profane Fertigkeiten === ")
 
-        fertigkeitsTypen = Wolke.DB.einstellungen["Fertigkeiten: Typen profan"].toTextList()
+        fertigkeitsTypen = Wolke.DB.einstellungen["Fertigkeiten: Typen profan"].wert
         lastType = -1
         for f in CharakterPrintUtility.getFertigkeiten(char):
             fert = char.fertigkeiten[f]
@@ -86,7 +63,7 @@ class Plugin:
             talente = CharakterPrintUtility.getTalente(char, fert)
             talentStr = " "
             if len(talente) > 0:
-                talentStr = " (" + ", ".join([t.anzeigeName for t in talente]) + ") "
+                talentStr = " (" + ", ".join(talente) + ") "
             content.append(fert.name + talentStr + str(fert.probenwert) + "/" + str(fert.probenwertTalent))
 
         content.append("\nFreie Fertigkeiten:")
@@ -95,11 +72,15 @@ class Plugin:
                 content.append(fert)
 
         content.append("\n=== Kampf === ")
-        content.append("WS " + str(char.ws))
-        content.append("WS* " + str(char.wsStern))
-        content.append("GS* " + str(char.gsStern))
-        content.append("Dh* " + str(char.dhStern))
-        content.append("INI " + str(char.ini))
+        if "WS" in abgeleiteteWerte:
+            content.append("WS " + str(abgeleiteteWerte["WS"].wert))
+            content.append("WS* " + str(abgeleiteteWerte["WS"].finalwert))
+        if "GS" in abgeleiteteWerte:
+            content.append("GS* " + str(abgeleiteteWerte["GS"].finalwert))
+        if "DH" in abgeleiteteWerte:
+            content.append("DH* " + str(abgeleiteteWerte["DH"].finalwert))
+        if "INI" in abgeleiteteWerte:
+            content.append("INI " + str(abgeleiteteWerte["INI"].wert))
 
         content.append("\nVorteile:")
         for v in vorteileKampf:
@@ -123,11 +104,11 @@ class Plugin:
             if waffe.plus >= 0:
                 sg = "+"
             content.append(waffe.anzeigename)
-            if type(waffe) == Objekte.Fernkampfwaffe:
+            if waffe.fernkampf:
                 content[-1] += " LZ " + str(waffe.lz)
             content[-1] += " AT " + str(werte.at)
 
-            vtVerboten = Wolke.DB.einstellungen["Waffen: Talente VT verboten"].toTextList()
+            vtVerboten = Wolke.DB.einstellungen["Waffen: Talente VT verboten"].wert
             if waffe.talent in vtVerboten or waffe.name in vtVerboten:
                 content[-1] += " VT -"
             else:
@@ -139,10 +120,14 @@ class Plugin:
             count += 1
         content.pop()
 
-        isZauberer = char.aspBasis + char.aspMod > 0
-        isGeweiht = char.kapBasis + char.kapMod > 0
-        
-        if isZauberer or isGeweiht:
+        überFerts = CharakterPrintUtility.getÜberFertigkeiten(char)
+        überTalente = CharakterPrintUtility.getÜberTalente(char)
+        anyÜberTalente = False
+        for arr in überTalente:
+            if len(arr) > 0:
+                anyÜberTalente = True
+                break
+        if len(vorteileUeber) > 0 or len(überFerts) > 0 or anyÜberTalente:
             content.append("\n=== Übernatürliche Fertigkeiten und Talente ===")
 
             content.append("\nVorteile:")
@@ -150,13 +135,14 @@ class Plugin:
                 content.append(v)
 
             content.append("\nÜbernatürliche Fertigkeiten:")
-            for f in CharakterPrintUtility.getÜberFertigkeiten(char):
+            for f in überFerts:
                 fert = char.übernatürlicheFertigkeiten[f]
                 content.append(fert.name + " " + str(fert.probenwertTalent))
 
             content.append("\nÜbernatürliche Talente:")
-            for talent in CharakterPrintUtility.getÜberTalente(char):
-                content.append(talent.anzeigeName + " " + str(talent.pw))
+            for arr in überTalente:
+                for talent in arr:
+                    content.append(talent.anzeigename + " " + str(talent.probenwert))
 
         path = os.path.splitext(params["filepath"])[0] + "_text.txt"
         with open(path, 'w', encoding="utf-8") as f:

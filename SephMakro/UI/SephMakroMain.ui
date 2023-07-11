@@ -48,6 +48,9 @@
        <property name="shortcut">
         <string>F5</string>
        </property>
+       <property name="class" stdset="0">
+        <string>icon</string>
+       </property>
       </widget>
      </item>
      <item>
@@ -57,6 +60,9 @@
        </property>
        <property name="shortcut">
         <string>Ctrl+O</string>
+       </property>
+       <property name="class" stdset="0">
+        <string>icon</string>
        </property>
       </widget>
      </item>
@@ -68,7 +74,20 @@
        <property name="shortcut">
         <string>Ctrl+S</string>
        </property>
+       <property name="class" stdset="0">
+        <string>icon</string>
+       </property>
       </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Hausregeln:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="comboDB"/>
      </item>
      <item>
       <spacer name="horizontalSpacer">

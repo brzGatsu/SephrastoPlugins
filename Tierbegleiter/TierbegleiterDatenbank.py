@@ -10,7 +10,7 @@ class DatabaseException(Exception):
 class TierbegleiterDatenbank():
     def __init__(self):
         sephrastoDB = Datenbank()
-        self.iaZuchtAusbildung = sephrastoDB.einstellungen["Tierbegleiter Plugin: IA Zucht und Ausbildung"].toBool()
+        self.iaZuchtAusbildung = sephrastoDB.einstellungen["Tierbegleiter Plugin: IA Zucht und Ausbildung"].wert
 
         self.guteZuchteigenschaften = {}
         self.schlechteZuchteigenschaften = {}

@@ -1,0 +1,463 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xsl:stylesheet [
+   <!ENTITY nbsp "&#160;">
+]>
+<Datenbank>
+  <Karte name="Grundregeln" typ="4" subtyp="-1" titel="$original$" subtitel="Ilaris" fusszeile="" farbe="#000000">&lt;img src="$plugins_dir$/Manoeverkarten/Data/Deckbilder/Grundregeln.png"&gt;</Karte>
+  <Karte name="Profanes" typ="4" subtyp="-1" titel="$original$" subtitel="Ilaris" fusszeile="" farbe="#000000">&lt;img src="$plugins_dir$/Manoeverkarten/Data/Deckbilder/Profanes.png"&gt;</Karte>
+  <Karte name="Gesundheit" typ="4" subtyp="-1" titel="$original$" subtitel="Ilaris" fusszeile="" farbe="#632423">&lt;img src="$plugins_dir$/Manoeverkarten/Data/Deckbilder/Gesundheit.png"&gt;</Karte>
+  <Karte name="Kampf" typ="4" subtyp="-1" titel="$original$" subtitel="Ilaris" fusszeile="" farbe="#984806">&lt;img src="$plugins_dir$/Manoeverkarten/Data/Deckbilder/Kampf.png"&gt;</Karte>
+  <Karte name="Magie" typ="4" subtyp="-1" titel="$original$" subtitel="Ilaris" fusszeile="" farbe="#5F4778">&lt;img src="$plugins_dir$/Manoeverkarten/Data/Deckbilder/Magie.png"&gt;</Karte>  <Karte name="Zauber" typ="4" subtyp="-1" titel="$original$" subtitel="Ilaris" fusszeile="" farbe="#ff0000">&lt;img src="$plugins_dir$/Manoeverkarten/Data/Deckbilder/Zauber.png"&gt;</Karte>
+  <Karte name="Karma" typ="4" subtyp="-1" titel="$original$" subtitel="Ilaris" fusszeile="" farbe="#C19758">&lt;img src="$plugins_dir$/Manoeverkarten/Data/Deckbilder/Karma.png"&gt;</Karte>
+  <Karte name="Paktierer" typ="4" subtyp="-1" titel="$original$" subtitel="Ilaris" fusszeile="" farbe="#CB1C7C">&lt;img src="$plugins_dir$/Manoeverkarten/Data/Deckbilder/Paktierer.png"&gt;</Karte>
+  <Karte name="Zauber" typ="4" subtyp="-1" titel="$original$" subtitel="Ilaris" fusszeile="" farbe="#5F4778">&lt;img src="$plugins_dir$/Manoeverkarten/Data/Deckbilder/Zauber.png"&gt;</Karte>
+  <Karte name="Liturgien" typ="4" subtyp="-1" titel="$original$" subtitel="Ilaris" fusszeile="" farbe="#C19758">&lt;img src="$plugins_dir$/Manoeverkarten/Data/Deckbilder/Liturgien.png"&gt;</Karte>
+  <Karte name="Anrufungen" typ="4" subtyp="-1" titel="$original$" subtitel="Ilaris" fusszeile="" farbe="#CB1C7C">&lt;img src="$plugins_dir$/Manoeverkarten/Data/Deckbilder/Anrufungen.png"&gt;</Karte>
+  <Karte name="Längerfristige Aktion" typ="1" subtyp="12" titel="$original$" subtitel="" fusszeile="$original$">Trage hier Aktionen wie Konzentration ein, um die verbleibenden Initiativephasen zu zählen. Streiche entsprechend Gesamtdauer und dann in jeder Initiativephase von links nach rechts die Zahlen durch.
+&lt;table&gt;
+&lt;tr&gt;
+    &lt;th style="width: 110px; border-right: 1px solid #4A000B;"&gt;Aktion&lt;/th&gt;
+    &lt;th &gt;Verbl. Dauer&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr height="24px"&gt;
+    &lt;td style="border-right: 1px solid #4A000B;"&gt;&nbsp;&lt;/td&gt;
+    &lt;td style="text-align: center; font-size: 10px;"&gt;8&nbsp;&nbsp;7&nbsp;&nbsp;6&nbsp;&nbsp;5&nbsp;&nbsp;4&nbsp;&nbsp;3&nbsp;&nbsp;2&nbsp;&nbsp;1&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr height="24px"&gt;
+    &lt;td style="border-right: 1px solid #4A000B;"&gt;&nbsp;&lt;/td&gt;
+    &lt;td style="text-align: center; font-size: 10px;"&gt;8&nbsp;&nbsp;7&nbsp;&nbsp;6&nbsp;&nbsp;5&nbsp;&nbsp;4&nbsp;&nbsp;3&nbsp;&nbsp;2&nbsp;&nbsp;1&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr height="24px"&gt;
+    &lt;td style="border-right: 1px solid #4A000B;"&gt;&nbsp;&lt;/td&gt;
+    &lt;td style="text-align: center; font-size: 10px;"&gt;8&nbsp;&nbsp;7&nbsp;&nbsp;6&nbsp;&nbsp;5&nbsp;&nbsp;4&nbsp;&nbsp;3&nbsp;&nbsp;2&nbsp;&nbsp;1&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr height="24px"&gt;
+    &lt;td style="border-right: 1px solid #4A000B;"&gt;&nbsp;&lt;/td&gt;
+    &lt;td style="text-align: center; font-size: 10px;"&gt;8&nbsp;&nbsp;7&nbsp;&nbsp;6&nbsp;&nbsp;5&nbsp;&nbsp;4&nbsp;&nbsp;3&nbsp;&nbsp;2&nbsp;&nbsp;1&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr height="24px"&gt;
+    &lt;td style="border-right: 1px solid #4A000B;"&gt;&nbsp;&lt;/td&gt;
+    &lt;td style="text-align: center; font-size: 10px;"&gt;8&nbsp;&nbsp;7&nbsp;&nbsp;6&nbsp;&nbsp;5&nbsp;&nbsp;4&nbsp;&nbsp;3&nbsp;&nbsp;2&nbsp;&nbsp;1&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr height="24px"&gt;
+    &lt;td style="border-right: 1px solid #4A000B;"&gt;&nbsp;&lt;/td&gt;
+    &lt;td style="text-align: center; font-size: 10px;"&gt;8&nbsp;&nbsp;7&nbsp;&nbsp;6&nbsp;&nbsp;5&nbsp;&nbsp;4&nbsp;&nbsp;3&nbsp;&nbsp;2&nbsp;&nbsp;1&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr height="24px"&gt;
+    &lt;td style="border-right: 1px solid #4A000B;"&gt;&nbsp;&lt;/td&gt;
+    &lt;td style="text-align: center; font-size: 10px;"&gt;8&nbsp;&nbsp;7&nbsp;&nbsp;6&nbsp;&nbsp;5&nbsp;&nbsp;4&nbsp;&nbsp;3&nbsp;&nbsp;2&nbsp;&nbsp;1&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr height="24px"&gt;
+    &lt;td style="border-right: 1px solid #4A000B;"&gt;&nbsp;&lt;/td&gt;
+    &lt;td style="text-align: center; font-size: 10px;"&gt;8&nbsp;&nbsp;7&nbsp;&nbsp;6&nbsp;&nbsp;5&nbsp;&nbsp;4&nbsp;&nbsp;3&nbsp;&nbsp;2&nbsp;&nbsp;1&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;</Karte>
+  <Karte name="Modifikator" typ="1" subtyp="12" titel="$original$" subtitel="" fusszeile="$original$">Trage hier längerfristige Modifikatoren ein, um die verbleibenden Initiativephasen zu zählen. Streiche entsprechend Gesamtdauer und dann in jeder Initiativephase von links nach rechts die Zahlen durch.
+&lt;table&gt;
+&lt;tr&gt;
+    &lt;th style="width: 110px; border-right: 1px solid #4A000B;"&gt;Ursache &amp;amp; Modifikator&lt;/th&gt;
+    &lt;th&gt;Verbl. Dauer&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr height="24px"&gt;
+    &lt;td style="border-right: 1px solid #4A000B;"&gt;&nbsp;&lt;/td&gt;
+    &lt;td style="text-align: center; font-size: 10px;"&gt;8&nbsp;&nbsp;7&nbsp;&nbsp;6&nbsp;&nbsp;5&nbsp;&nbsp;4&nbsp;&nbsp;3&nbsp;&nbsp;2&nbsp;&nbsp;1&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr height="24px"&gt;
+    &lt;td style="border-right: 1px solid #4A000B;"&gt;&nbsp;&lt;/td&gt;
+    &lt;td style="text-align: center; font-size: 10px;"&gt;8&nbsp;&nbsp;7&nbsp;&nbsp;6&nbsp;&nbsp;5&nbsp;&nbsp;4&nbsp;&nbsp;3&nbsp;&nbsp;2&nbsp;&nbsp;1&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr height="24px"&gt;
+    &lt;td style="border-right: 1px solid #4A000B;"&gt;&nbsp;&lt;/td&gt;
+    &lt;td style="text-align: center; font-size: 10px;"&gt;8&nbsp;&nbsp;7&nbsp;&nbsp;6&nbsp;&nbsp;5&nbsp;&nbsp;4&nbsp;&nbsp;3&nbsp;&nbsp;2&nbsp;&nbsp;1&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr height="24px"&gt;
+    &lt;td style="border-right: 1px solid #4A000B;"&gt;&nbsp;&lt;/td&gt;
+    &lt;td style="text-align: center; font-size: 10px;"&gt;8&nbsp;&nbsp;7&nbsp;&nbsp;6&nbsp;&nbsp;5&nbsp;&nbsp;4&nbsp;&nbsp;3&nbsp;&nbsp;2&nbsp;&nbsp;1&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr height="24px"&gt;
+    &lt;td style="border-right: 1px solid #4A000B;"&gt;&nbsp;&lt;/td&gt;
+    &lt;td style="text-align: center; font-size: 10px;"&gt;8&nbsp;&nbsp;7&nbsp;&nbsp;6&nbsp;&nbsp;5&nbsp;&nbsp;4&nbsp;&nbsp;3&nbsp;&nbsp;2&nbsp;&nbsp;1&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr height="24px"&gt;
+    &lt;td style="border-right: 1px solid #4A000B; border-bottom: 1px solid #4A000B;"&gt;&nbsp;&lt;/td&gt;
+    &lt;td style="border-bottom: 1px solid #4A000B; text-align: center; font-size: 10px;"&gt;8&nbsp;&nbsp;7&nbsp;&nbsp;6&nbsp;&nbsp;5&nbsp;&nbsp;4&nbsp;&nbsp;3&nbsp;&nbsp;2&nbsp;&nbsp;1&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr height="24px"&gt;
+    &lt;td colspan="2" style="font-variant: small-caps;"&gt;&lt;b&gt;Gesamt:&lt;/b&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr height="24px"&gt;
+    &lt;td colspan="2" style="border-bottom: 1px solid #4A000B;"&gt;&nbsp;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;</Karte>
+  <Karte name="Hitze und Kälte" typ="1" subtyp="11" titel="$original$" subtitel="" fusszeile="$original$">Die Verzögerung entspricht immer dem Intervall. &lt;b&gt;Schutz gegen Hitze&lt;/b&gt; bietet nur eine Rast im Schatten, kühler Wind, oder, nach Spielleiterentscheid, ein mindestens doppelter Wasserverbrauch. All diese Maßnahmen senken die Temperaturstufe um je -1. Warme, trockene Kleidung schützt gegen &lt;b&gt;Kälte&lt;/b&gt; und erhöht die Temperaturstufe um +1 (dicke Winterkleidung) bis +2 (fellgefütterte Kleidung). Die Behinderung solcher Kleidung ist genauso hoch wie ihr Kälteschutz. Außerdem erhöht ein Lagerfeuer die Temperatur um +1 Stufe, während sie durch Wind um -1 oder sogar -2 Stufen gesenkt wird.
+&lt;table style="white-space: nowrap;"&gt;
+&lt;tr&gt;
+    &lt;th align="left"&gt;Stufe&lt;/th&gt;
+    &lt;th&gt;Temperatur&lt;/th&gt;
+    &lt;th&gt;Intervall&lt;/th&gt;
+    &lt;th&gt;Schaden&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+    &lt;td&gt;&lt;b&gt;Khômglut&lt;/b&gt;&lt;/td&gt;
+    &lt;td align="center"&gt;60 bis 100 °C&lt;/td&gt;
+    &lt;td align="center"&gt;1/4 Std.&lt;/td&gt;
+    &lt;td align="center"&gt;1 Erschöpf.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+    &lt;td&gt;&lt;b&gt;Heiß&lt;/b&gt;&lt;/td&gt;
+    &lt;td align="center"&gt;40 bis 60 °C&lt;/td&gt;
+    &lt;td align="center"&gt;1 Std.&lt;/td&gt;
+    &lt;td align="center"&gt;1 Erschöpf.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+    &lt;td&gt;&lt;b&gt;Normal&lt;/b&gt;&lt;/td&gt;
+    &lt;td align="center"&gt;0 bis 40 °C&lt;/td&gt;
+    &lt;td align="center"&gt;-&lt;/td&gt;
+    &lt;td align="center"&gt;-&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+    &lt;td&gt;&lt;b&gt;Kalt&lt;/b&gt;&lt;/td&gt;
+    &lt;td align="center"&gt;0 bis -20 °C&lt;/td&gt;
+    &lt;td align="center"&gt;1 Std.&lt;/td&gt;
+    &lt;td align="center"&gt;1 Erschöpf.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+    &lt;td&gt;&lt;b&gt;Eiskalt&lt;/b&gt;&lt;/td&gt;
+    &lt;td align="center"&gt;-20 bis -40 °C&lt;/td&gt;
+    &lt;td align="center"&gt;1/4 Std.&lt;/td&gt;
+    &lt;td align="center"&gt;1 Wunde&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+    &lt;td&gt;&lt;b&gt;Firunsfrost&lt;/b&gt;&lt;/td&gt;
+    &lt;td align="center"&gt;-40 bis -60 °C&lt;/td&gt;
+    &lt;td align="center"&gt;1 Min.&lt;/td&gt;
+    &lt;td align="center"&gt;1 Wunde&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+    &lt;td&gt;&lt;b&gt;Grimmfrost&lt;/b&gt;&lt;/td&gt;
+    &lt;td align="center"&gt;-60 bis -100 °C&lt;/td&gt;
+    &lt;td align="center"&gt;1/4 Min.&lt;/td&gt;
+    &lt;td align="center"&gt;1 Wunde&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;</Karte>
+  <Karte name="Körperliche Anstrengung" typ="1" subtyp="11" titel="$original$" subtitel="" fusszeile="$original$">Wie lange dein Charakter eine anstrengende Tätigkeit durchhält, hängt von deiner Konstitution und deiner Behinderung – kurz deinem &lt;b&gt;Durchhaltevermögen (DH)&lt;/b&gt; – ab. Das Durchhaltevermögen ergibt sich aus &lt;b&gt;KO - 2xBE&lt;/b&gt;, aber beträgt wenigstens 1. Es ist auf deinem Charakterbogen vermerkt.
+&lt;table style="white-space: nowrap;"&gt;
+&lt;tr&gt;
+    &lt;th align="left"&gt;Tätigkeit&lt;/th&gt;
+    &lt;th&gt;Verzögerung&lt;/th&gt;
+    &lt;th&gt;Intervall&lt;/th&gt;
+    &lt;th&gt;Schaden&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+    &lt;td&gt;&lt;b&gt;Marsch&lt;/b&gt;&lt;/td&gt;
+    &lt;td align="center"&gt;DH x 2 Std.&lt;/td&gt;
+    &lt;td align="center"&gt;2 Std.&lt;/td&gt;
+    &lt;td align="center"&gt;1 Erschöpf.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+    &lt;td&gt;&lt;b&gt;Eilmarsch&lt;/b&gt;&lt;/td&gt;
+    &lt;td align="center"&gt;DH x 1 Std.&lt;/td&gt;
+    &lt;td align="center"&gt;1 Std.&lt;/td&gt;
+    &lt;td align="center"&gt;1 Erschöpf.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+    &lt;td&gt;&lt;b&gt;Dauerlauf&lt;/b&gt;&lt;/td&gt;
+    &lt;td align="center"&gt;DH x 8 Min.&lt;/td&gt;
+    &lt;td align="center"&gt;8 Min.&lt;/td&gt;
+    &lt;td align="center"&gt;1 Erschöpf.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+    &lt;td&gt;&lt;b&gt;Schwimmen&lt;/b&gt;&lt;/td&gt;
+    &lt;td align="center"&gt;DH x 8 Min.&lt;/td&gt;
+    &lt;td align="center"&gt;8 Min.&lt;/td&gt;
+    &lt;td align="center"&gt;1 Erschöpf.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;
+Die Verzögerungszeit beginnt von vorne, wenn dein Charakter so lange rastet, wie die anstrengende Tätigkeit dauerte. Eine solche Rast dauert mindestens eine Stunde und maximal eine Nacht.</Karte>
+  <Karte name="Hunger und Durst" typ="1" subtyp="11" titel="$original$" subtitel="" fusszeile="$original$">Nahrungs- oder Wassermangel können innerhalb einiger Tage zum Tod führen.
+&lt;table&gt;
+&lt;tr&gt;
+    &lt;th align="left"&gt;Tätigkeit&lt;/th&gt;
+    &lt;th&gt;Verzögerung&lt;/th&gt;
+    &lt;th&gt;Intervall&lt;/th&gt;
+    &lt;th&gt;Schaden&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+    &lt;td&gt;&lt;b&gt;Hunger&lt;/b&gt;&lt;/td&gt;
+    &lt;td align="center"&gt;2 Tage&lt;/td&gt;
+    &lt;td align="center"&gt;1 Tag&lt;/td&gt;
+    &lt;td align="center"&gt;1 Wunde&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+    &lt;td&gt;&lt;b&gt;Durst&lt;/b&gt;&lt;/td&gt;
+    &lt;td align="center"&gt;1 Tag&lt;/td&gt;
+    &lt;td align="center"&gt;1/2 Tag&lt;/td&gt;
+    &lt;td align="center"&gt;1 Wunde&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;
+Diese Zeitspannen gelten, wenn dein Charakter überhaupt kein Wasser oder keine Nahrung zur Verfügung hat. Muss er mit der halben benötigten Menge auskommen, verdreifachen sich Verzögerung und Intervall. Die Verzögerung beginnt von vorne, wenn dein Charakter mindestens eine Woche ausreichend Nahrung bzw. Wasser zu sich nimmt.</Karte>
+  <Karte name="Kommandos" typ="1" subtyp="8" titel="$original$" subtitel="" fusszeile="$original$">Erfahrene Anführer befehligen ihre Kampfgefährten nicht nur, sie inspirieren sie. Mit den entsprechenden Vorteilen (S.&nbsp;42) kannst du in einer Aktion Konflikt eine &lt;b&gt;Anführen-Probe&lt;/b&gt; (16, I) ablegen, um bis zu &lt;b&gt;4 Mitstreitern&lt;/b&gt; in Hörweite einen &lt;b&gt;Bonus&lt;/b&gt; für diesen Kampf zu verleihen. Hohe Qualität (S.&nbsp;7) vervierfacht die Zahl der Mitstreiter. Jeder Kämpfer kann nur von einem Anführen-Effekt gleichzeitig profitieren.
+    Der Effekt endet am Ende des Kampfes, bei Kampfunfähigkeit des Anführers oder wenn dieser neue Befehle ruft. Der Anführer selbst profitiert nicht von Kommandos.
+&lt;table&gt;
+&lt;tr&gt;
+    &lt;th style="border-right: 1px solid #4A000B; width: 12px;"&gt;&lt;/th&gt;
+    &lt;th align="left"&gt;Kommando&lt;/th&gt;
+    &lt;th align="left"&gt;Wirkung&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+    &lt;td style="border-right: 1px solid #4A000B;"&gt;&lt;/td&gt;
+    &lt;td&gt;&lt;b&gt;Haltet stand!&lt;/b&gt;&lt;/td&gt;
+    &lt;td&gt;Furcht-Effekte 1 Stufe gesenkt&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+    &lt;td style="border-right: 1px solid #4A000B;"&gt;&lt;/td&gt;
+    &lt;td&gt;&lt;b&gt;Formiert euch!&lt;/b&gt;&lt;/td&gt;
+    &lt;td&gt;+1 VT&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+    &lt;td style="border-right: 1px solid #4A000B;"&gt;&lt;/td&gt;
+    &lt;td&gt;&lt;b&gt;Keine Gefangenen!&lt;/b&gt;&lt;/td&gt;
+    &lt;td&gt;+2 TP&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+    &lt;td style="border-right: 1px solid #4A000B;"&gt;&lt;/td&gt;
+    &lt;td&gt;&lt;b&gt;Kennt keinen Schmerz!&lt;/b&gt;&lt;/td&gt;
+    &lt;td&gt;+1 WS&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;
+&lt;i&gt;&lt;b&gt;Lege diese Karte vor dir ab&lt;/b&gt; und markiere die entsprechende Zeile, &lt;b&gt;wenn du einen Kommandoeffekt erhältst&lt;/b&gt;.&lt;/i&gt;</Karte>
+  <Karte name="Einschüchtern &amp; Furcht" typ="1" subtyp="8" titel="$original$" subtitel="$original$" fusszeile="$original$">Du kannst eine Aktion Konflikt aufwenden und eine &lt;b&gt;Einschüchtern&lt;/b&gt;-Probe gegen den &lt;b&gt;MU&lt;/b&gt; deines Gegners ablegen. Eine misslungene Probe kann nicht wiederholt werden. Gelingt die Probe, erleidet dein Gegner einen Furcht-Effekt Stufe 1 (Hohe Qualität: +1 Stufe oder 2x Zahl der Ziele – dann eine MU-Gruppenprobe, wenn die Mutigste flieht, fliehen alle). Der Effekt endet am Ende des Kampfes, bei Kampfunfähigkeit des Einschüchternden oder wenn der eingeschüchterte Gegner weit genug geflohen ist.
+&lt;table&gt;
+&lt;tr&gt;
+    &lt;th style="border-right: 1px solid #4A000B; width: 12px;"&gt;&lt;/th&gt;
+    &lt;th align="left"&gt;Furcht&lt;/th&gt;
+    &lt;th align="left"&gt;Wirkung&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+    &lt;td style="border-right: 1px solid #4A000B;"&gt;&lt;/td&gt;
+    &lt;td&gt;&lt;b&gt;Stufe 1&lt;/b&gt;&lt;/td&gt;
+    &lt;td&gt;Proben -2&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+    &lt;td style="border-right: 1px solid #4A000B;"&gt;&lt;/td&gt;
+    &lt;td&gt;&lt;b&gt;Stufe 2&lt;/b&gt;&lt;/td&gt;
+    &lt;td&gt;Proben -4 und wenn möglich Rückzug vor Auslöser&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+    &lt;td style="border-right: 1px solid #4A000B;"&gt;&lt;/td&gt;
+    &lt;td&gt;&lt;b&gt;Stufe 3&lt;/b&gt;&lt;/td&gt;
+    &lt;td&gt;Proben -8 und Flucht, bis Auslöser außer Sicht&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+    &lt;td style="border-right: 1px solid #4A000B;"&gt;&lt;/td&gt;
+    &lt;td&gt;&lt;b&gt;Stufe 4&lt;/b&gt;&lt;/td&gt;
+    &lt;td&gt;Proben -8 und nur noch zur Flucht erlaubt&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;
+&lt;i&gt;&lt;b&gt;Lege diese Karte vor dir ab&lt;/b&gt; und markiere die entsprechende Zeile, &lt;b&gt;wenn du Furcht erleidest&lt;/b&gt;.&lt;/i&gt;</Karte>
+  <Karte name="Reaktion" typ="1" subtyp="5" titel="$original$" subtitel="$original$" fusszeile="$original$">$original$
+
+&lt;i&gt;&lt;b&gt;Lege diese Karte vor dir ab, wenn du eine Reaktion aufsparst.&lt;/b&gt;&lt;/i&gt;</Karte>
+  <Karte name="Wundschmerz" typ="1" subtyp="11" titel="$original$" subtitel="$original$" fusszeile="$original$">$original$
+&lt;i&gt;&lt;b&gt;Lege diese Karte vor dir ab, wenn du betäubt bist.&lt;/b&gt;&lt;/i&gt;</Karte>
+  <Karte name="Kampfunfähigkeit" typ="1" subtyp="11" titel="$original$" subtitel="$original$" fusszeile="$original$">$original$
+
+&lt;i&gt;&lt;b&gt;Lege diese Karte vor dir ab, wenn du kampfunfähig bist.&lt;/b&gt;&lt;/i&gt;</Karte>
+  <Karte name="Blutungen und Tod" typ="1" subtyp="11" titel="$original$" subtitel="$original$" fusszeile="$original$">$original$
+
+&lt;i&gt;&lt;b&gt;Lege diese Karte vor dir ab, wenn du blutest.&lt;/b&gt;&lt;/i&gt;</Karte>
+  <Karte name="Aktionen 1" typ="1" subtyp="5" titel="$original$" subtitel="" fusszeile="" löschen="0">&lt;p&gt;Du kannst &lt;b&gt;eine volle&lt;/b&gt; oder &lt;b&gt;bis zu zwei verschiedene einfache Aktionen&lt;/b&gt; ausführen – wenn du zwei einfache Aktionen nutzt, sind alle Proben in diesen Aktionen um -4 erschwert. Proben außerhalb dieser Aktionen sind von dem Malus nicht betroffen.&lt;/p&gt;
+&lt;p&gt;&lt;b&gt;Konflikt (einfach)&lt;/b&gt;
+Du kannst deinen Gegner angreifen, vorbereitete Zauber ausführen oder dein Gegenüber einschüchtern. Fast jede vergleichende Probe ist ein Konflikt.
+    Auch das &lt;b&gt;Aufstehen&lt;/b&gt; kostet eine Aktion Konflikt. Allerdings kann ein Kontrahent versuchen, das mit einer Reaktion zu verhindern, dann muss dir zusätzlich eine vergleichende GE-Probe (I) gelingen. Um nur von der liegenden in eine kniende oder von der knienden in eine stehende Position zu kommen, ist keine Probe nötig – wohl aber die Aktion.&lt;/p&gt;
+&lt;p&gt;&lt;b&gt;Volle Defensive (voll)&lt;/b&gt;
+Alle Verteidigungen bis zu deiner nächsten Initiativephase sind um +4 erleichtert. Mit Defensiver Kampfstil wird dies zu einer einfachen Aktion.&lt;/p&gt;</Karte>
+  <Karte name="Aktionen 2" typ="1" subtyp="5" titel="$original$" subtitel="" fusszeile="" löschen="0">&lt;p&gt;&lt;b&gt;Volle Offensive (voll)&lt;/b&gt;
+Alle Nahkampfangriffe in deiner Initiativephase sind um +4 erleichtert, alle Verteidigungen bis zu deiner nächsten Initiativephase um -8 erschwert.&lt;/p&gt;
+&lt;p&gt;&lt;b&gt;Bereit machen (einfach)&lt;/b&gt;
+Du ziehst eine Waffe (1 Aktion), kramst einen Heiltrank hervor (je nach Aufbewahrungsort 2-4 Aktionen) oder führst andere Handlungen aus, die nicht deine volle Aufmerksamkeit benötigen.&lt;/p&gt;
+&lt;p&gt;&lt;b&gt;Bewegung (einfach)&lt;/b&gt;
+Du läufst, reitest oder schwingst an einem Seil.&lt;/p&gt;
+&lt;table&gt;
+&lt;tr&gt;
+    &lt;th align="left"&gt;Aktion&lt;/th&gt;
+    &lt;th&gt;Reichweite in Schritt&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+    &lt;td&gt;&lt;b&gt;Laufen&lt;/b&gt;&lt;/td&gt;
+    &lt;td align="center"&gt;GS&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+    &lt;td&gt;&lt;b&gt;Laufen&lt;/b&gt;, unsicherer Untergrund&lt;/td&gt;
+    &lt;td align="center"&gt;GS / 2&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+    &lt;td&gt;&lt;b&gt;Kriechen&lt;/b&gt;&lt;/td&gt;
+    &lt;td align="center"&gt;GS / 4&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+    &lt;td&gt;&lt;b&gt;Sprinten&lt;/b&gt;, geradeaus&lt;/td&gt;
+    &lt;td align="center"&gt;GS x 2&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+    &lt;td&gt;&lt;b&gt;Sprinten&lt;/b&gt;, geradeaus, ohne Ausr&amp;uuml;stung&lt;/td&gt;
+    &lt;td align="center"&gt;GS x 4&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;</Karte>
+  <Karte name="Aktionen 3" typ="1" subtyp="5" titel="$original$" subtitel="" fusszeile="" löschen="0">&lt;p&gt;&lt;b&gt;Konzentration (voll)&lt;/b&gt;
+Du führst eine Handlung aus, die deine volle Konzentration erfordert. Dazu gehört das Vorbereiten eines Zaubers oder Fernkampfangriffes sowie das Entschärfen einer Falle. Du kannst bis zu deiner nächsten Initiativephase keine Freien Aktionen oder Reaktionen ausführen und musst bei Störungen eine Willenskraft-Probe (16, I) ablegen. Erleidest du Schaden, steigt die Schwierigkeit der Probe um +4 Punkte pro soeben erlittener Wunde. Bei Misslingen verfallen alle bereits aufgewendeten Aktionen.&lt;/p&gt;
+&lt;p&gt;&lt;b&gt;Verzögern (voll)&lt;/b&gt;
+Du wartest ab und handelst erst, wenn ein bestimmtes Ereignis eintritt. Dazu bestimmst du das Ereignis und die genaue Handlung, die du ausführen möchtest. Diese Handlung kann direkt vor oder nach dem Ereignis stattfinden, muss aber eine einfache Aktion sein; Proben sind um -4 erschwert. Sollte das Ereignis bis zu deiner nächsten Initiativephase nicht eintreten, verfällt die Aktion.&lt;/p&gt;</Karte>
+  <Karte name="Aktion Bereit machen (einfach)" löschen="1" typ="1" subtyp="5" titel="Bereit machen" subtitel="$original$" fusszeile="Aktion (einfach)">$original$</Karte>
+  <Karte name="Aktion Bewegung (einfach)" löschen="1" typ="1" subtyp="5" titel="Bewegung" subtitel="$original$" fusszeile="Aktion (einfach)">$original$</Karte>
+  <Karte name="Aktion Konflikt (einfach)" löschen="1" typ="1" subtyp="5" titel="Konflikt" subtitel="$original$" fusszeile="Aktion (einfach)">$original$</Karte>
+  <Karte name="Aktion Konzentration (voll)" löschen="1" typ="1" subtyp="5" titel="Konzentration" subtitel="$original$" fusszeile="Aktion (voll)">$original$</Karte>
+  <Karte name="Aktion Verzögern (voll)" löschen="1" typ="1" subtyp="5" titel="Verzögern" subtitel="$original$" fusszeile="Aktion (voll)">$original$</Karte>
+  <Karte name="Aktion Volle Defensive (voll)" löschen="1" typ="1" subtyp="5" titel="Volle Defensive" subtitel="$original$" fusszeile="Aktion (voll)">$original$</Karte>
+  <Karte name="Aktion Volle Offensive (voll)" löschen="1" typ="1" subtyp="5" titel="Volle Offensive" subtitel="$original$" fusszeile="Aktion (voll)">$original$</Karte>
+  <Karte name="Eigenschaft Aufrechterhalten (M)" typ="1" subtyp="4" titel="Aufrechterhalten" subtitel="$original$" fusszeile="Zaubereigenschaft">$original$</Karte>
+  <Karte name="Eigenschaft Ballistisch" typ="1" subtyp="4" titel="Ballistisch" subtitel="$original$" fusszeile="Zaubereigenschaft">$original$</Karte>
+  <Karte name="Eigenschaft Konzentration (M)" typ="1" subtyp="4" titel="Konzentration" subtitel="$original$" fusszeile="Zaubereigenschaft">$original$</Karte>
+  <Karte name="Eigenschaft Illusion (Sinn)" typ="1" subtyp="4" titel="Illusion (Sinn)" subtitel="$original$" fusszeile="Zaubereigenschaft">$original$</Karte>
+  <Karte name="Eigenschaft Konterprobe (M)" typ="1" subtyp="4" titel="Konterprobe" subtitel="$original$" fusszeile="Zaubereigenschaft">$original$</Karte>
+  <Karte name="Eigenschaft Objektritual" typ="1" subtyp="4" titel="Objektritual" subtitel="$original$" fusszeile="Zaubereigenschaft">$original$</Karte>
+  <Karte name="Eigenschaft Aufrechterhalten (L)" typ="1" subtyp="7" titel="Aufrechterhalten" subtitel="$original$" fusszeile="Liturgieeigenschaft">$original$</Karte>
+  <Karte name="Eigenschaft Konzentration (L)" typ="1" subtyp="7" titel="Konzentration" subtitel="$original$" fusszeile="Liturgieeigenschaft">$original$</Karte>
+  <Karte name="Eigenschaft Konterprobe (L)" typ="1" subtyp="7" titel="Konterprobe" subtitel="$original$" fusszeile="Liturgieeigenschaft">$original$</Karte>
+  <Karte name="Eigenschaft Aufrechterhalten (D)" typ="1" subtyp="10" titel="Aufrechterhalten" subtitel="$original$" fusszeile="Anrufungseigenschaft">$original$</Karte>
+  <Karte name="Eigenschaft Konzentration (D)" typ="1" subtyp="10" titel="Konzentration" subtitel="$original$" fusszeile="Anrufungseigenschaft">$original$</Karte>
+  <Karte name="Eigenschaft Konterprobe (D)" typ="1" subtyp="10" titel="Konterprobe" subtitel="$original$" fusszeile="Anrufungseigenschaft">$original$</Karte>
+  <Karte name="Antimagie - Gegenzauber" typ="1" subtyp="4" titel="Gegenzauber" subtitel="$original$" fusszeile="Antimagie Modifikation">$original$</Karte>
+  <Karte name="Antimagie - Magie unterdrücken" typ="1" subtyp="4" titel="Magie unterdrücken" subtitel="$original$" fusszeile="Antimagie Modifikation">$original$</Karte>
+  <Karte name="Antimagie - Wesenheit bannen" typ="1" subtyp="4" titel="Wesenheit bannen" subtitel="$original$" fusszeile="Antimagie Modifikation">$original$</Karte>
+  <Karte name="Antimagie - Zauber aufheben" typ="1" subtyp="4" titel="Zauber aufheben" subtitel="$original$" fusszeile="Antimagie Modifikation">$original$</Karte>
+  <Karte name="Beschwörungen" typ="1" subtyp="4" titel="$original$" subtitel="$original$" fusszeile="Beschwörungen">$original$</Karte>
+  <Karte name="Beschwörungen - Bindung" typ="1" subtyp="4" titel="Bindung" subtitel="$original$" fusszeile="Beschwörungen">$original$</Karte>
+  <Karte name="Beschwörungen - Chimären" typ="1" subtyp="4" titel="Chimären" subtitel="$original$" fusszeile="Beschwörungen">$original$</Karte>
+  <Karte name="Beschwörungen - Dämonen" typ="1" subtyp="4" titel="Dämonen" subtitel="$original$" fusszeile="Beschwörungen">$original$</Karte>
+  <Karte name="Beschwörungen - Elementare" typ="1" subtyp="4" titel="Elementare" subtitel="$original$" fusszeile="Beschwörungen">$original$</Karte>
+  <Karte name="Beschwörungen - Golems" typ="1" subtyp="4" titel="Golems" subtitel="$original$" fusszeile="Beschwörungen">$original$</Karte>
+  <Karte name="Beschwörungen - Untote" typ="1" subtyp="4" titel="Untote" subtitel="$original$" fusszeile="Beschwörungen">$original$</Karte>
+  <Karte name="Beschwörungen - Zusätzliche Fähigkeiten" typ="1" subtyp="4" titel="Zusätzliche Fähigkeiten" subtitel="$original$" fusszeile="Beschwörungen">$original$</Karte>
+  <Karte name="Allegorische Analyse (passiv)" typ="2" subtyp="0" titel="Allegorische Analyse" subtitel="Passiv" fusszeile="$original$">$original$</Karte>
+  <Karte name="Astralspeicher (passiv)" typ="2" subtyp="0" titel="Astralspeicher" subtitel="Passiv, $original$" fusszeile="$original$">$original$</Karte>
+  <Karte name="Aura des Stabes (passiv)" typ="2" subtyp="0" titel="Aura des Stabes" subtitel="Passiv" fusszeile="$original$">$original$</Karte>
+  <Karte name="Bann der Keule (passiv)" typ="2" subtyp="0" titel="Bann der Keule" subtitel="Passiv" fusszeile="$original$">$original$</Karte>
+  <Karte name="Blut des Dolches (passiv)" typ="2" subtyp="0" titel="Blut des Dolches" subtitel="Passiv" fusszeile="$original$">$original$</Karte>
+  <Karte name="Chymische Hochzeit (passiv)" typ="2" subtyp="0" titel="Chymische Hochzeit" subtitel="Passiv, $original$" fusszeile="$original$">$original$</Karte>
+  <Karte name="Dämon der Keule (passiv)" typ="2" subtyp="0" titel="Dämon der Keule" subtitel="Passiv" fusszeile="$original$">$original$</Karte>
+  <Karte name="Elementar der Keule (passiv)" typ="2" subtyp="0" titel="Elementar der Keule" subtitel="Passiv" fusszeile="$original$">$original$</Karte>
+  <Karte name="Ewige Wegzehrung (passiv)" typ="2" subtyp="0" titel="Ewige Wegzehrung" subtitel="Passiv" fusszeile="$original$">$original$</Karte>
+  <Karte name="Federleichter Beutel (passiv)" typ="2" subtyp="0" titel="Federleichter Beutel" subtitel="Passiv, $original$" fusszeile="$original$">$original$</Karte>
+  <Karte name="Geräumiger Schuppenbeutel (passiv)" typ="2" subtyp="0" titel="Geräumiger Schuppenbeutel" subtitel="Passiv, $original$" fusszeile="$original$">$original$</Karte>
+  <Karte name="Herrschaft über Dämonen (passiv)" typ="2" subtyp="2" titel="Herrschaft über Dämonen" subtitel="Passiv" fusszeile="$original$">$original$</Karte>
+  <Karte name="H‘Szints Auge (passiv)" typ="2" subtyp="0" titel="H‘Szints Auge" subtitel="Passiv" fusszeile="$original$">$original$</Karte>
+  <Karte name="Kristallkraft bündeln (passiv)" typ="2" subtyp="0" titel="Kristallkraft bündeln" subtitel="Passiv" fusszeile="$original$">$original$</Karte>
+  <Karte name="Kugel des Hellsehers (passiv)" typ="2" subtyp="0" titel="Kugel des Hellsehers" subtitel="Passiv" fusszeile="$original$">$original$</Karte>
+  <Karte name="Kugel des Illusionisten (passiv)" typ="2" subtyp="0" titel="Kugel des Illusionisten" subtitel="Passiv" fusszeile="$original$">$original$</Karte>
+  <Karte name="Leib des Dolches (passiv)" typ="2" subtyp="0" titel="Leib des Dolches" subtitel="Passiv" fusszeile="$original$">$original$</Karte>
+  <Karte name="Matrixstabilisierung (passiv)" typ="2" subtyp="0" titel="Matrixstabilisierung" subtitel="Passiv, $original$" fusszeile="$original$">$original$</Karte>
+  <Karte name="Opferdolch (passiv)" typ="2" subtyp="0" titel="Opferdolch" subtitel="Passiv" fusszeile="$original$">$original$</Karte>
+  <Karte name="Sichere Aufbewahrung (passiv)" typ="2" subtyp="0" titel="Sichere Aufbewahrung" subtitel="Passiv" fusszeile="$original$">$original$</Karte>
+  <Karte name="Sicherer Tritt (passiv)" typ="2" subtyp="2" titel="Sicherer Tritt" subtitel="Passiv" fusszeile="$original$">$original$</Karte>
+  <Karte name="Verwandlung des Iama (passiv)" typ="2" subtyp="0" titel="Verwandlung des Iama" subtitel="Passiv" fusszeile="$original$">$original$</Karte>
+  <Karte name="Wasseratmung (passiv)" typ="2" subtyp="2" titel="Wasseratmung" subtitel="Passiv" fusszeile="$original$">$original$</Karte>
+  <Karte name="Zaubertechnik ignorieren" typ="1" subtyp="2" titel="Technik ignorieren" subtitel="$original$" fusszeile="$original$">$original$</Karte>
+  <Karte name="Liturgische Technik ignorieren" typ="1" subtyp="3" titel="Technik ignorieren" subtitel="$original$" fusszeile="$original$">$original$</Karte>
+  <Karte name="Anrufungstechnik ignorieren" typ="1" subtyp="6" titel="Technik ignorieren" subtitel="$original$" fusszeile="$original$">$original$</Karte>
+  <Karte name="3W20 Probenwahrscheinlichkeiten" typ="1" subtyp="-1" titel="Probenwahrscheinlichkeiten" subtitel="mit 3W20" fusszeile="$original$">$original$</Karte>
+  <Karte name="Kopflastig" löschen="1" typ="3" subtyp="-1" titel="$original$" subtitel="$original$" fusszeile="$original$">$original$</Karte>
+  <Karte name="Magazin" löschen="1" typ="3" subtyp="-1" titel="$original$" subtitel="$original$" fusszeile="$original$">$original$</Karte>
+  <Karte name="Niederwerfen (Waffeneigenschaft)" löschen="1" typ="3" subtyp="-1" titel="$original$" subtitel="$original$" fusszeile="$original$">$original$</Karte>
+  <Karte name="Parierwaffe" löschen="1" typ="3" subtyp="-1" titel="$original$" subtitel="$original$" fusszeile="$original$">$original$</Karte>
+  <Karte name="Reittier" löschen="1" typ="3" subtyp="-1" titel="$original$" subtitel="$original$" fusszeile="$original$">$original$</Karte>
+  <Karte name="Rüstungsbrechend" löschen="1" typ="3" subtyp="-1" titel="$original$" subtitel="$original$" fusszeile="$original$">$original$</Karte>
+  <Karte name="Schild" löschen="1" typ="3" subtyp="-1" titel="$original$" subtitel="$original$" fusszeile="$original$">$original$</Karte>
+  <Karte name="Schwer" löschen="1" typ="3" subtyp="-1" titel="$original$" subtitel="$original$" fusszeile="$original$">$original$</Karte>
+  <Karte name="Stumpf" löschen="1" typ="3" subtyp="-1" titel="$original$" subtitel="$original$" fusszeile="$original$">$original$</Karte>
+  <Karte name="Umklammern (Waffeneigenschaft)" löschen="1" typ="3" subtyp="-1" titel="$original$" subtitel="$original$" fusszeile="$original$">$original$</Karte>
+  <Karte name="Unberechenbar" löschen="1" typ="3" subtyp="-1" titel="$original$" subtitel="$original$" fusszeile="$original$">$original$</Karte>
+  <Karte name="Unhandlich" löschen="1" typ="3" subtyp="-1" titel="$original$" subtitel="$original$" fusszeile="$original$">$original$</Karte>
+  <Karte name="Unzerstörbar" löschen="1" typ="3" subtyp="-1" titel="$original$" subtitel="$original$" fusszeile="$original$">$original$</Karte>
+  <Karte name="Vielseitig" löschen="1" typ="3" subtyp="-1" titel="$original$" subtitel="$original$" fusszeile="$original$">$original$</Karte>
+  <Karte name="Wendig" löschen="1" typ="3" subtyp="-1" titel="$original$" subtitel="$original$" fusszeile="$original$">$original$</Karte>
+  <Karte name="Zerbrechlich" löschen="1" typ="3" subtyp="-1" titel="$original$" subtitel="$original$" fusszeile="$original$">$original$</Karte>
+  <Karte name="Zweihändig" löschen="1" typ="3" subtyp="-1" titel="$original$" subtitel="$original$" fusszeile="$original$">$original$</Karte>
+  <Karte name="kein Malus als Nebenwaffe" löschen="1" typ="3" subtyp="-1" titel="$original$" subtitel="$original$" fusszeile="$original$">$original$</Karte>
+  <Karte name="kein Reittier" löschen="1" typ="3" subtyp="-1" titel="$original$" subtitel="$original$" fusszeile="$original$">$original$</Karte>
+  <Karte name="stationär" löschen="1" typ="3" subtyp="-1" titel="$original$" subtitel="$original$" fusszeile="$original$">$original$</Karte>
+  <Karte name="Waffeneigenschaften 1" typ="3" subtyp="-1" titel="$original$" subtitel="" fusszeile="">&lt;ul&gt;&lt;li&gt;&lt;b&gt;Kopflastig:&lt;/b&gt; Der Schadensbonus durch hohe KK zählt für diese Waffe doppelt.&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;Parierwaffe:&lt;/b&gt; Das Führen einer solchen Waffe ist Voraussetzung für den Parierwaffenstil.&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;Reittier:&lt;/b&gt; Ein Reittier ist Voraussetzung für den Reiterkampfstil. Angriffe mit dem Reittier sind um +4 erleichtert, wenn das Reittier in einer höheren Größenklasse als das Ziel ist.&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;Rüstungsbrechend:&lt;/b&gt; Ermöglicht das Manöver Rüstungsbrecher (S.&nbsp;40).&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;Schild:&lt;/b&gt; Ermöglicht den Kampf im Schildkampfstil. Verteidigungen mit einem Schild sind um +4 erleichtert, wenn der Angreifer einer höheren Größenklasse angehört.&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;Schwer:&lt;/b&gt; Du brauchst mindestens die angegebene Körperkraft, um die Waffe ohne Einschränkungen führen zu können. Darunter erleidest du einen Malus von -2.&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;Stumpf:&lt;/b&gt; Ermöglicht das Manöver stumpfer Schlag (S.&nbsp;40).&lt;/li&gt;&lt;/ul&gt;</Karte>
+  <Karte name="Waffeneigenschaften 2" typ="3" subtyp="-1" titel="$original$" subtitel="" fusszeile="">&lt;ul&gt;&lt;li&gt;&lt;b&gt;Unberechenbar:&lt;/b&gt; Die Waffe verursacht auch bei einer 2 einen Patzer. Dafür sind Angriffe gegen Schildträger um +4 erleichtert.&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;Wendig:&lt;/b&gt; Du kannst den 1. Passierschlag zwischen 2 INI-Phasen als freie Reaktion ausführen.&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;Zerbrechlich:&lt;/b&gt; Die Waffe erleidet den vollen Waffenschaden, wenn sie eine nicht-zerbrechliche Waffe erfolgreich verteidigt oder von einer solchen erfolgreich verteidigt wird. Ausweichen vermeidet diesen Schaden&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;Zweihändig:&lt;/b&gt; Die Waffe wird zweihändig geführt. Bei einhändiger Führung erleidest du einen Probenmalus von -2 und die Waffe richtet -4 TP weniger an. Zweihändige Fernkampfwaffen können nicht einhändig benutzt werden.&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;Automatische Manövereffekte:&lt;/b&gt; Bei manchen Waffen haben schon gewöhnliche Angriffe den Effekt eines Manövers. In Klammern befinden sich - falls relevant - die Ansage, der Modifikator der Gegenprobe und deren Schwierigkeit.&lt;/li&gt;&lt;/ul&gt;</Karte>
+  <Karte name="Mirakel" typ="1" subtyp="-1" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="0" voraussetzungen="">&lt;table&gt;&lt;tr&gt;
+&lt;th width="30%"&gt;Fert./Attr.&lt;/th&gt;
+&lt;th width="20%" style="border-right: 1px solid #4A000B;"&gt;PW&lt;/th&gt;
+&lt;th width="30%"&gt;Fert./Attr.&lt;/th&gt;
+&lt;th width="20%"&gt;PW&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+&lt;td style="border-right: 1px solid #4A000B;"&gt;&amp;nbsp;&lt;/td&gt;
+&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+&lt;td style="border-right: 1px solid #4A000B;"&gt;&amp;nbsp;&lt;/td&gt;
+&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+&lt;td style="border-right: 1px solid #4A000B;"&gt;&amp;nbsp;&lt;/td&gt;
+&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+&lt;td style="border-right: 1px solid #4A000B;"&gt;&amp;nbsp;&lt;/td&gt;
+&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+&lt;/tr&gt;&lt;/table&gt;
+$original$</Karte>
+  <Karte name="Dämonische Stärkung" typ="1" subtyp="-1" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="0" voraussetzungen="">&lt;table&gt;&lt;tr&gt;
+&lt;th width="30%"&gt;Fert./Attr.&lt;/th&gt;
+&lt;th width="20%" style="border-right: 1px solid #4A000B;"&gt;PW&lt;/th&gt;
+&lt;th width="30%"&gt;Fert./Attr.&lt;/th&gt;
+&lt;th width="20%"&gt;PW&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+&lt;td style="border-right: 1px solid #4A000B;"&gt;&amp;nbsp;&lt;/td&gt;
+&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+&lt;td style="border-right: 1px solid #4A000B;"&gt;&amp;nbsp;&lt;/td&gt;
+&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+&lt;td style="border-right: 1px solid #4A000B;"&gt;&amp;nbsp;&lt;/td&gt;
+&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+&lt;td style="border-right: 1px solid #4A000B;"&gt;&amp;nbsp;&lt;/td&gt;
+&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+&lt;/tr&gt;&lt;/table&gt;
+$original$</Karte>
+</Datenbank>

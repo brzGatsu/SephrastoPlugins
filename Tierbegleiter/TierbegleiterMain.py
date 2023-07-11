@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'TierbegleiterMain.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.3.1
+## Created by: Qt User Interface Compiler version 6.5.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -26,7 +26,7 @@ class Ui_formMain(object):
         if not formMain.objectName():
             formMain.setObjectName(u"formMain")
         formMain.setWindowModality(Qt.ApplicationModal)
-        formMain.resize(1312, 734)
+        formMain.resize(1312, 810)
         sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -39,7 +39,7 @@ class Ui_formMain(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 1288, 673))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 1288, 749))
         self.gridLayout_4 = QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout_4.setObjectName(u"gridLayout_4")
         self.tabWidget = QTabWidget(self.scrollAreaWidgetContents)
@@ -735,12 +735,56 @@ class Ui_formMain(object):
 
         self.verticalLayout_8.addWidget(self.lblWerte)
 
-        self.verticalSpacer_4 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
-
-        self.verticalLayout_8.addItem(self.verticalSpacer_4)
-
 
         self.verticalLayout_11.addWidget(self.groupBox)
+
+        self.groupBox_5 = QGroupBox(self.scrollAreaWidgetContents)
+        self.groupBox_5.setObjectName(u"groupBox_5")
+        self.gridLayout_7 = QGridLayout(self.groupBox_5)
+        self.gridLayout_7.setObjectName(u"gridLayout_7")
+        self.spinRegelnGroesse = QSpinBox(self.groupBox_5)
+        self.spinRegelnGroesse.setObjectName(u"spinRegelnGroesse")
+        self.spinRegelnGroesse.setMinimumSize(QSize(60, 0))
+        self.spinRegelnGroesse.setMaximumSize(QSize(60, 16777215))
+        self.spinRegelnGroesse.setButtonSymbols(QAbstractSpinBox.PlusMinus)
+        self.spinRegelnGroesse.setMinimum(6)
+        self.spinRegelnGroesse.setMaximum(18)
+        self.spinRegelnGroesse.setValue(8)
+
+        self.gridLayout_7.addWidget(self.spinRegelnGroesse, 2, 1, 1, 1)
+
+        self.label_20 = QLabel(self.groupBox_5)
+        self.label_20.setObjectName(u"label_20")
+
+        self.gridLayout_7.addWidget(self.label_20, 2, 0, 1, 1)
+
+        self.verticalSpacer_4 = QSpacerItem(20, 0, QSizePolicy.Minimum, QSizePolicy.Expanding)
+
+        self.gridLayout_7.addItem(self.verticalSpacer_4, 6, 1, 1, 1)
+
+        self.checkRegeln = QCheckBox(self.groupBox_5)
+        self.checkRegeln.setObjectName(u"checkRegeln")
+        self.checkRegeln.setChecked(True)
+
+        self.gridLayout_7.addWidget(self.checkRegeln, 1, 1, 1, 1)
+
+        self.label_21 = QLabel(self.groupBox_5)
+        self.label_21.setObjectName(u"label_21")
+
+        self.gridLayout_7.addWidget(self.label_21, 1, 0, 1, 1)
+
+        self.label_22 = QLabel(self.groupBox_5)
+        self.label_22.setObjectName(u"label_22")
+
+        self.gridLayout_7.addWidget(self.label_22, 4, 0, 1, 1)
+
+        self.checkEditierbar = QCheckBox(self.groupBox_5)
+        self.checkEditierbar.setObjectName(u"checkEditierbar")
+
+        self.gridLayout_7.addWidget(self.checkEditierbar, 4, 1, 1, 1)
+
+
+        self.verticalLayout_11.addWidget(self.groupBox_5)
 
 
         self.gridLayout_4.addLayout(self.verticalLayout_11, 0, 1, 1, 1)
@@ -866,6 +910,12 @@ class Ui_formMain(object):
 "(wird automatisch angepasst)", None))
         self.groupBox.setTitle(QCoreApplication.translate("formMain", u"Vorschau und Preis", None))
         self.lblWerte.setText(QCoreApplication.translate("formMain", u"<html><head/><body><p><br/></p></body></html>", None))
+        self.groupBox_5.setTitle(QCoreApplication.translate("formMain", u"Einstellungen", None))
+        self.label_20.setText(QCoreApplication.translate("formMain", u"Regelschriftgr\u00f6\u00dfe", None))
+        self.checkRegeln.setText("")
+        self.label_21.setText(QCoreApplication.translate("formMain", u"Relevante Regeln anh\u00e4ngen", None))
+        self.label_22.setText(QCoreApplication.translate("formMain", u"Formularfelder editierbar", None))
+        self.checkEditierbar.setText("")
         self.buttonLoad.setText(QCoreApplication.translate("formMain", u"Laden", None))
         self.buttonQuicksave.setText(QCoreApplication.translate("formMain", u"Speichern", None))
         self.buttonSave.setText(QCoreApplication.translate("formMain", u"Speichern unter...", None))

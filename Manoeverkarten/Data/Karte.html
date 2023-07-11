@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="de-DE">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script src="textfit/textFit.js"></script>
+        <script src="{sephrasto_dir}/Data/Charakterbögen/Regelanhang/hyphen/hyphen.js"></script>
+        <script src="{sephrasto_dir}/Data/Charakterbögen/Regelanhang/hyphen/de-1996.js"></script>
+        <script>
+        window.onload = function(){       
+            //Title (textfit)
+            textFit(document.getElementById('title'), { alignHoriz: true, minFontSize:5, maxFontSize: 12.25, detectMultiLine: false, widthOnly: true });
+            
+            //Subtitle (textfit & remove if subtitle not set & remove according content div)
+            subtitle = document.getElementById('subtitle');
+            content = document.getElementById('content');
+            contentWithSubtitle = document.getElementById('contentWithSubtitle');
+            if (subtitle.innerHTML == "") {
+                contentWithSubtitle.remove();
+                subtitle.remove();
+            }
+            else
+            {
+                content.remove();
+                content = contentWithSubtitle;
+                textFit(subtitle, { alignHoriz: true, alignVert: true, minFontSize:8, maxFontSize: 11, detectMultiLine: false, widthOnly: true });
+            }
+            
+            //Content (hyphenate & textfit)
+            var hyphenateHTMLSync = createHyphenator(hyphenationPatternsDe1996, { html: true });
+            content.innerHTML = hyphenateHTMLSync(content.innerHTML) ;
+            textFit(content, { minFontSize: 1, maxFontSize: 9.5 });    
+            
+            //Footer (remove if not set)
+            footer = document.getElementById('footer');
+            if (footer.innerHTML == "") {
+                footer.remove()
+            }
+        }
+        </script>
+        <style>
+        @font-face {
+            font-family: 'Aniron';
+            src: url('{sephrasto_dir}/Data/Fonts/Aniron/anirb___.ttf') format('truetype');
+        }
+    
+        @font-face {
+            font-family: 'Crimson Pro';
+            src: url('{sephrasto_dir}/Data/Fonts/Crimson Pro/CrimsonPro-Regular.ttf') format('truetype');
+            font-style: normal;
+            font-weight: 400;
+        }
+    
+        @font-face {
+            font-family: 'Crimson Pro';
+            src: url('{sephrasto_dir}/Data/Fonts/Crimson Pro/CrimsonPro-Italic.ttf') format('truetype');
+            font-style: italic;
+            font-weight: 400;
+        }
+    
+        @font-face {
+            font-family: 'Crimson Pro';
+            src: url('{sephrasto_dir}/Data/Fonts/Crimson Pro/CrimsonPro-Bold.ttf') format('truetype');
+            font-style: bold;
+            font-weight: 700;
+        }
+    
+        @font-face {
+            font-family: 'FontAwesome';
+            src: url('{sephrasto_dir}/Data/Fonts/Fontawesome/fa-regular-400.ttf') format('truetype');
+            font-weight: 400;
+        }
+    
+        @font-face {
+            font-family: 'FontAwesome';
+            src: url('{sephrasto_dir}/Data/Fonts/Fontawesome/fa-solid-900.ttf') format('truetype');
+            font-weight: 900;
+        }
+
+        html, body {
+            font-family: 'Minion Pro', 'Crimson Pro';
+            margin: 0;
+            padding: 0;
+            background-color: {card_title_color};
+        }
+        
+        #title {
+            position: fixed;
+            font-family: 'Aniron';
+            color: {card_title_color};
+            width: 180px;
+            height: 30px;
+            top: 14px;
+            left: 26px;
+        }
+        
+        #subtitle {
+            position: fixed;
+            width: 194px;
+            height: 24px;
+            top: 47px;
+            left: 19px;
+            font-weight: bold;
+        }
+        
+        #content {
+            position: fixed;
+            width: 194px;
+            height: 261px;
+            top: 46px;
+            left: 19px;
+            line-height: 1.35;
+            padding: 0;
+        }
+        
+        #contentWithSubtitle {
+            position: fixed;
+            width: 194px;
+            height: 232px;
+            top: 74px;
+            left: 19px;
+            line-height: 1.35;
+            padding: 0;
+        }
+        
+        #footer {
+            font-variant: small-caps;
+            position: fixed;
+            width: 194px;
+            height: 24px;
+            top: 304px;
+            left: 19px;
+            font-size: 9.5px;
+            text-align: center;
+        }
+        
+        #background
+        {
+            position: fixed;
+            top: 4px;
+            right: 4px;
+            bottom: 4px;
+            left: 4px;
+            background-color: white;
+            background-image: {card_backgroundimage};
+            background-size: 100% 100%;
+        }
+        
+        ol {
+            padding: 0;
+            padding-left: 1em;
+            margin: 0;
+            margin-bottom: 2pt;
+        }
+        
+        ol li {
+            padding-left: 0.5em;
+        }
+        
+        ul {
+            padding: 0;
+            padding-left: 0.5em;
+            margin: 0;
+            margin-bottom: 2pt;
+        }
+        
+        ul li {
+            list-style-type: none;
+            position: relative;  /* needed for setting position to absolute in li::before */
+            padding-left: 1em;
+        }
+
+        ul li::before {
+            content: "\2022";
+            font-family: 'FontAwesome';
+            position: absolute;
+            left: -0.4em;
+            top: -0.1em;
+            font-size: 1em;
+            font-weight: 400;
+        }
+        
+        ul ul li::before {
+            content: "\25E6";
+            font-family: 'FontAwesome';
+            position: absolute;
+            left: -0.4em;
+            top: -0.1em;
+            font-size: 1em;
+            font-weight: 400;
+        }
+        
+        ul li.checkbox::before {
+            content: "\f0c8";
+            font-family: 'FontAwesome';
+            position: absolute;
+            left: -0.5em;
+            top: 0.1em;
+            font-size: 0.8em;
+            font-weight: 400;
+        }
+        
+        table {
+            margin-top: 1pt;
+            margin-bottom: 2pt;
+            margin-left: auto;
+            margin-right: auto;
+            border-collapse: collapse;
+            width: 100%;
+            hyphens: none;
+        }
+        
+        th {
+            color: #4A000B;
+            font-variant: small-caps;
+            border-bottom: 1px solid #4A000B;
+            line-height: 70%; /* offsetting a bit for minion pro large descender */
+            padding-top: 0.4em;  /* offsetting a bit for minion pro large descender */
+            white-space: nowrap;
+        }
+        
+        tr:nth-of-type(even) {
+            background-color:#C7946B80;
+        }
+        
+        td {
+            line-height: 90%; /* offsetting a bit for minion pro large descender */
+            padding-top: 0.4em;  /* offsetting a bit for minion pro large descender */
+            vertical-align: middle;
+        }
+
+        img {
+            width:100%;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 2pt;
+            margin-bottom: 2pt;
+        }
+        
+        p {
+            margin-top: 2pt;
+            margin-bottom: 0pt;
+            padding: 0;
+        }
+        
+        p:first-of-type {
+            margin-top: 0pt;
+        }
+        </style>
+    </head>
+    <body>
+        <div id="background"></div>
+        <div id="title">{card_title}</div>
+        <div id="subtitle">{card_subtitle}</div>
+        <div id="content">{card_content}</div>
+        <div id="contentWithSubtitle">{card_content}</div>
+        <div id="footer">{card_footer}</div>
+    </body>
+</html>
