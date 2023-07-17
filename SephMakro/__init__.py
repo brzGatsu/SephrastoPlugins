@@ -16,8 +16,6 @@ class Plugin:
         self.mainWindowButton = QtWidgets.QPushButton()
         self.mainWindowButton.setObjectName("buttonPlugin")
         self.mainWindowButton.setToolTip("SephMakro")
-        buttonSize = Hilfsmethoden.emToPixels(3.2)
-        self.mainWindowButton.setFixedSize(buttonSize, buttonSize)
         self.mainWindowButton.setProperty("class", "icon")
         self.mainWindowButton.setText("\uf120")
         self.mainWindowButton.clicked.connect(self.createSephMakroEditor)

@@ -18,8 +18,6 @@ class Plugin:
         self.mainWindowButton = QtWidgets.QPushButton()
         self.mainWindowButton.setObjectName("buttonPlugin")
         self.mainWindowButton.setToolTip("Tierbegleiter erstellen")
-        buttonSize = Hilfsmethoden.emToPixels(3.2)
-        self.mainWindowButton.setFixedSize(buttonSize, buttonSize)
         self.mainWindowButton.setProperty("class", "icon")
         self.mainWindowButton.setText("\uf6f0")
         self.mainWindowButton.clicked.connect(self.createTierbegleiterEditor) 
