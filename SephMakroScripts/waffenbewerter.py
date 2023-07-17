@@ -2,6 +2,12 @@ import math
 import re
 
 #================= Settings ==================
+# Ob der vom Schwert (Ranking 10, 180S) abgeleitete Waffenpreis berechnet werden soll
+# Der Wert berechnet sich danach gemäß der "Preise von verbesserten Handwerksprodukten" (Ilaris:61).
+# Der Wert gilt als sehr ungefähre Richtung. Einige Preise sind natürlich entsprechend lächerlich
+zeige_preis = False
+base_price = 180
+
 # Die hier konfigurierten Werte werden in der Regel mit den Waffenwerten multipliziert
 # Eine Waffe mit 2W6 Schaden erhält also 2 * ratingTPW6 Bewertungspunkte
 ratingTPW6 = 3.5
@@ -103,4 +109,8 @@ for waffe in waffen:
         else:
             rating += rEig(waffe, list(map(str.strip, match.group(1).split(";"))))
 
-    print(waffe.name + ": " + str(round(rating, 1)))
+    cv = round(rating, 1)
+    if zeige_preis:
+        print(f"{waffe.name+':' :<40}  {cv:<10} Preis: {round(base_price*2**((cv-10)/ratingTPPlus))} Silbertaler")
+    else:
+        print(f"{waffe.name+':':<40} {cv}")
