@@ -104,10 +104,6 @@ Magische Traditionen=Magische Tradition
 Karmale Vorteile=Karmaler Vorteil
 Karmale Traditionen=Karmale Tradition
 Dämonische Traditionen=Dämonische Tradition
-Allgemeine Zauber=Allgemeiner Zauber
-Allgemeine Liturgien=Allgemeine Liturgie
-Traditionsliturgien=Traditionsliturgie
-Anrufungen=Anrufung
 Magische Modifikationen=Spontane Modifikation
 Karmale Modifikationen=Spontane Modifikation
 Weitere Magieregeln=
@@ -120,6 +116,205 @@ Gesundheit=
 Proben=
 Profanes='''
         e.typ = "TextDict"
+        e.separator = "\n"
+        e.strip = False
+        self.db.loadElement(e)
+
+        e = DatenbankEinstellung()
+        e.name = "Manöverkarten Plugin: Zusätzliche Fertigkeiticons"
+        e.beschreibung = "Bei Talenten werden für die Fertigkeiten Icons statt Text eingetragen. Hier kannst du die Pfade zu solchen Icons eintragen oder existierende ändern. "\
+        "Pro Zeile kannst du nach folgendem Format eine Fertigkeit eintragen: FertigkeitName=C://Pfad/Zu/Icon/Icon.png. "\
+        "Falls du eine .svg Datei einfügst, erhält diese automatisch einen Kreis als Hintergrundbild.\n\n"
+        "Du kannst außerdem das Makro $plugins_dir$ verwenden, um deine Bilder in einem eigenen Ordner innerhalb des Pluginordners abzulegen. "\
+        "Beispiel: Feuer=$plugins_dir$/ManoeverkartenBilder/Feuer.png"
+        e.text = ""
+        e.typ = "TextDict"
+        e.separator = "\n"
+        e.strip = True
+        self.db.loadElement(e)
+
+        e = DatenbankEinstellung()
+        e.name = "Manöverkarten Plugin: Talente Schwierigkeit kürzen"
+        e.beschreibung = "Bei Talenten wird die Schwierigkeit in den Untertitel eingetragen. Die Texte können dafür jedoch zu lang sein - hier kannst du Teile davon zum Beispiel durch Abkürzungen oder Icons (bspw. von game-icons.net) ersetzen. "\
+            "FontAwesome icons kannst du innerhalb eines <span>-Tags nutzen (werden hier nicht richtig dargestellt), beliebige andere Icons innerhalb eines <img>-Tags. "\
+            "Du kannst außerdem das Makro $plugins_dir$ verwenden, um deine Bilder in einem eigenen Ordner innerhalb des Pluginordners abzulegen."\
+            "Wichtig: Die Reihenfolge kann eine Rolle Spielen, die Ersetzungen werden von oben nach unten durchgeführt, daher wird Zauberstab beim Ziel beispielsweise vor Zauber ersetzt."
+        e.text = """\
+Magieresistenz=MR
+Probenschwierigkeit bzw. Beschwörungsschwierigkeit=Proben-/Beschwörungsschwierigkeit
+16 bis 28 (nach Mächtigkeit des Geistes)=16 bis 28 (je nach Geist)
+Beschwörungsschwierigkeit des Dämons -4=Beschwörungsschwierigkeit -4
+Probenschwierigkeit -4 bzw. Beschwörungsschwierigkeit -4=Proben-/Beschwörungsschwierigkeit -4
+Herstellungsschwierigkeit des Handwerksstücks=Herstellungsschwierigkeit
+Beschwörungsschwierigkeit des zu bannenden Wesens=Beschwörungsschwierigkeit"""
+        e.typ = "TextDict"
+        e.separator = "\n"
+        e.strip = False
+        self.db.loadElement(e)
+
+        e = DatenbankEinstellung()
+        e.name = "Manöverkarten Plugin: Talente Zeit kürzen"
+        e.beschreibung =  "Bei Talenten werden die Zauberdauer und Wirkungsdauer in die obere Leiste eingetragen. Die Texte können dafür jedoch zu lang sein - hier kannst du Teile davon zum Beispiel durch Abkürzungen oder Icons (bspw. von game-icons.net) ersetzen. "\
+            "FontAwesome icons kannst du innerhalb eines <span>-Tags nutzen (werden hier nicht richtig dargestellt), beliebige andere Icons innerhalb eines <img>-Tags."\
+            "Du kannst außerdem das Makro $plugins_dir$ verwenden, um deine Bilder in einem eigenen Ordner innerhalb des Pluginordners abzulegen."\
+            "Wichtig: 1. Leerzeichen spielen eine Rolle. 2. Die Reihenfolge kann eine Rolle Spielen, die Ersetzungen werden von oben nach unten durchgeführt, daher wird Zauberstab beim Ziel beispielsweise vor Zauber ersetzt."
+        e.text = """\
+ Aktionen=
+ Aktion=
+ Sekunden= s
+ Sekunde= s
+ Minuten= m
+ Minute= m
+ Stunden= h
+ Stunde= h
+ Tage= T
+ Tag= T
+ Wochen= W
+ Woche= W
+ Monate= M
+ Monat= M
+ Jahr= J
+ Jahre= J
+ Initiativephasen=&nbsp;<span>\uf2f9</span>
+ Initiativephase=&nbsp;<span>\uf2f9</span>
+ Lebensjahr=&nbsp;<span>\uf1fd</span>
+augenblicklich=0
+bis die Bindung gelöst wird=<span>\uf127</span>
+solange das Gift wirkt=<img src='../Icons/poison-bottle.svg'><span>\uf254</span>
+bis zur Fertigstellung=<img src='../Icons/toolbox.svg'><span>\uf254</span>
+permanent=<span>\uf534</span>
+frei wählbar=<span>\uf83e</span>
+nach Vorhaben=<span>\uf83e</span>
+nach Projekt=<span>\uf83e</span>
+nach Artefakt=<span>\uf83e</span>
+bis zu =<span style='font-size: 6pt;'>\uf537</span>&nbsp;
+bis zum =<span style='font-size: 6pt;'>\uf537</span>&nbsp;"""
+        e.typ = "TextDict"
+        e.separator = "\n"
+        e.strip = False
+        self.db.loadElement(e)
+
+        e = DatenbankEinstellung()
+        e.name = "Manöverkarten Plugin: Talente Kosten kürzen"
+        e.beschreibung = "Bei Talenten werden die Kosten in die obere Leiste eingetragen. Die Texte können dafür jedoch zu lang sein - hier kannst du Teile davon zum Beispiel durch Abkürzungen oder Icons (bspw. von game-icons.net) ersetzen. "\
+            "FontAwesome icons kannst du innerhalb eines <span>-Tags nutzen (werden hier nicht richtig dargestellt), beliebige andere Icons innerhalb eines <img>-Tags."\
+            "Du kannst außerdem das Makro $plugins_dir$ verwenden, um deine Bilder in einem eigenen Ordner innerhalb des Pluginordners abzulegen."\
+            "Wichtig: 1. Leerzeichen spielen eine Rolle. 2. Die Reihenfolge kann eine Rolle Spielen, die Ersetzungen werden von oben nach unten durchgeführt, daher wird Zauberstab beim Ziel beispielsweise vor Zauber ersetzt."
+        e.text = """\
+nach Projekt=<span>\uf83e</span>
+nach Vorhaben=<span>\uf83e</span>"""
+        e.typ = "TextDict"
+        e.separator = "\n"
+        e.strip = False
+        self.db.loadElement(e)
+
+        e = DatenbankEinstellung()
+        e.name = "Manöverkarten Plugin: Talente Reichweite kürzen"
+        e.beschreibung = "Bei Talenten wird die Reichweite in die obere Leiste eingetragen. Die Texte können dafür jedoch zu lang sein - hier kannst du Teile davon zum Beispiel durch Abkürzungen oder Icons (bspw. von game-icons.net) ersetzen. "\
+            "FontAwesome icons kannst du innerhalb eines <span>-Tags nutzen (werden hier nicht richtig dargestellt), beliebige andere Icons innerhalb eines <img>-Tags."\
+            "Du kannst außerdem das Makro $plugins_dir$ verwenden, um deine Bilder in einem eigenen Ordner innerhalb des Pluginordners abzulegen."\
+            "Wichtig: 1. Leerzeichen spielen eine Rolle. 2. Die Reihenfolge kann eine Rolle Spielen, die Ersetzungen werden von oben nach unten durchgeführt, daher wird Zauberstab beim Ziel beispielsweise vor Zauber ersetzt."
+        e.text = """\
+ Schritt= S
+ Meilen= Mi
+ Meile= Mi
+Berührung=<span>\uf256</span>
+dereweit=<span>\uf0ac</span>
+aventurienweit=<span>\uf0ac</span>"""
+        e.typ = "TextDict"
+        e.separator = "\n"
+        e.strip = False
+        self.db.loadElement(e)
+
+        e = DatenbankEinstellung()
+        e.name = "Manöverkarten Plugin: Talente Ziel kürzen"
+        e.beschreibung = "Bei Talenten wird das Ziel in die obere Leiste eingetragen. Die Texte können dafür jedoch zu lang sein - hier kannst du Teile davon zum Beispiel durch Abkürzungen oder Icons (bspw. von game-icons.net) ersetzen. "\
+            "FontAwesome icons kannst du innerhalb eines <span>-Tags nutzen (werden hier nicht richtig dargestellt), beliebige andere Icons innerhalb eines <img>-Tags."\
+            "Du kannst außerdem das Makro $plugins_dir$ verwenden, um deine Bilder in einem eigenen Ordner innerhalb des Pluginordners abzulegen."\
+            "Wichtig: 1. Leerzeichen spielen eine Rolle. 2. Die Reihenfolge kann eine Rolle Spielen, die Ersetzungen werden von oben nach unten durchgeführt, daher wird Zauberstab beispielsweise vor Zauber ersetzt."
+        e.text = """\
+ / =&nbsp;
+/=&nbsp;
+Einzelperson=<span>\uf183</span>
+zwei Personen=<span>\uf183</span>&nbsp;+&nbsp;<span>\uf183</span>
+Einzelwesen=<span>W</span>
+Einzelobjekt (Hexenbesen)=<span>\uf51a</span>
+Zone=<img src='../Icons/area-floor-size-icon.svg'>
+selbst=<img src='../Icons/noun-me-4660321.svg'>
+Einzelobjekte=<span>\uf468</span>
+Einzelobjekt=<span>\uf466</span>
+Ritualgegenstand=<img src='../Icons/curvy-knife.svg'>
+Schale der Alchemie=<img src='../Icons/cauldron.svg'>
+Zauberstab=<img src='../Icons/wizard-staff.svg'>
+wirkender Zauber=<span>\uf72b</span>
+Zauber=<span>\uf72b</span>
+gebundener Kristall=<span>\uf3a5</span>
+Knochenkeule=<img src='../Icons/bone-mace.svg'>
+Kristallkugel=<img src='../Icons/crystal-ball.svg'>
+zwei Objekte=<span>\uf466</span>&nbsp;+&nbsp;<span>\uf466</span>
+einzelner Geist=<img src='../Icons/spectre.svg'>
+einzelnes Tier=<span>\uf1b0</span>
+Tier=<span>\uf1b0</span>
+einzelne Pflanze=<span>\uf4d8</span>
+Pflanze=<span>\uf4d8</span>
+Vertrautentier=<span>\uf6be</span>
+Bindungspartner=<span>\uf6be</span>
+zwei Elixiere=<span>\uf0c3</span>&nbsp;+&nbsp;<span>\uf0c3</span>
+Elixier=<span>\uf0c3</span>
+Miniatur der Herrschaft=<img src='../Icons/voodoo-doll.svg'>
+einzelner Dämon=<img src='../Icons/daemon-skull.svg'>
+einzelnes Elementar=<img src='../Icons/djinn.svg'>
+Teilobjekt=Teil-<span>\uf466</span>
+Iama=<img src='../Icons/lyre.svg'>
+Schlangenreif=<img src='../Icons/ouroboros.svg'>
+Schuppenbeutel=<img src='../Icons/swap-bag.svg'>
+Material für einen einzelnen Untoten=<img src='../Icons/carrion.svg'>
+Material für einen einzelnen Golem=<img src='../Icons/rock-golem.svg'>
+Material für eine einzelne Chimäre=<img src='../Icons/lion.svg'><img src='../Icons/bird-claw.svg'><img src='../Icons/scorpion-tail.svg'>
+, =&nbsp;|&nbsp;
+,=&nbsp;|&nbsp;
+ oder =&nbsp;|&nbsp;
+ und =&nbsp;+&nbsp;"""
+        e.typ = "TextDict"
+        e.separator = "\n"
+        e.strip = False
+        self.db.loadElement(e)
+
+        e = DatenbankEinstellung()
+        e.name = "Manöverkarten Plugin: Talente Ziel im Text"
+        e.beschreibung = "Bei Talenten wird das Ziel normalerweise in die obere Leiste eingetragen. Falls der Ziel-Text jedoch einen zum Teil aus einem der Einträge hier besteht, verbleibt er im Text."
+        e.text = """\
+Beschworenes Wesen"""
+        e.typ = "TextList"
+        e.separator = "\n"
+        e.strip = False
+        self.db.loadElement(e)
+
+        e = DatenbankEinstellung()
+        e.name = "Manöverkarten Plugin: Talente Kosten im Text"
+        e.beschreibung = "Bei Talenten werden die Kosten normalerweise in die obere Leiste eingetragen. Falls der Kosten-Text jedoch einen zum Teil aus einem der Einträge hier besteht, verbleibt er im Text."
+        e.text = """\
+16/32/64 AsP
+8/16/24/32 AsP
+16/24/32/48/64/80 AsP
+der Basiskosten als gAsP
+halbe Basiskosten"""
+        e.typ = "TextList"
+        e.separator = "\n"
+        e.strip = False
+        self.db.loadElement(e)
+
+        e = DatenbankEinstellung()
+        e.name = "Manöverkarten Plugin: Talente Wirkungsdauer im Text"
+        e.beschreibung = "Bei Talenten wird die WD normalerweise in die obere Leiste eingetragen. Falls der WD-Text jedoch einen zum Teil aus einem der Einträge hier besteht, verbleibt er im Text."
+        e.text = """\
+augenblicklich; der Geist erscheint nach 2W6 Initiativephasen
+bis das Schiff deutlich umgebaut wird
+bis die Unterkunft deutlich umgebaut wird
+8 Stunden oder bis der Fang eingeholt wird
+Bis die Aufgabe gelöst wurde, maximal 1 Monat
+oder bis der Befehl erfüllt ist"""
+        e.typ = "TextList"
         e.separator = "\n"
         e.strip = False
         self.db.loadElement(e)

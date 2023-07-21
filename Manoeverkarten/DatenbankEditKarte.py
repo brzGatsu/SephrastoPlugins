@@ -26,7 +26,7 @@ class Ui_karteDialog(object):
         if not karteDialog.objectName():
             karteDialog.setObjectName(u"karteDialog")
         karteDialog.setWindowModality(Qt.ApplicationModal)
-        karteDialog.resize(1033, 764)
+        karteDialog.resize(1032, 674)
         self.gridLayout_2 = QGridLayout(karteDialog)
         self.gridLayout_2.setObjectName(u"gridLayout_2")
         self.buttonBox = QDialogButtonBox(karteDialog)
@@ -58,6 +58,71 @@ class Ui_karteDialog(object):
         self.gbEditor.setObjectName(u"gbEditor")
         self.gridLayout_4 = QGridLayout(self.gbEditor)
         self.gridLayout_4.setObjectName(u"gridLayout_4")
+        self.leFusszeile = QLineEdit(self.gbEditor)
+        self.leFusszeile.setObjectName(u"leFusszeile")
+
+        self.gridLayout_4.addWidget(self.leFusszeile, 7, 1, 1, 1)
+
+        self.labelUntertitel = QLabel(self.gbEditor)
+        self.labelUntertitel.setObjectName(u"labelUntertitel")
+
+        self.gridLayout_4.addWidget(self.labelUntertitel, 5, 0, 1, 1)
+
+        self.groupNewEditDelete = QWidget(self.gbEditor)
+        self.groupNewEditDelete.setObjectName(u"groupNewEditDelete")
+        self.layoutEditDelete = QHBoxLayout(self.groupNewEditDelete)
+        self.layoutEditDelete.setObjectName(u"layoutEditDelete")
+        self.layoutEditDelete.setContentsMargins(0, 0, 0, 0)
+        self.labelInfo = QLabel(self.groupNewEditDelete)
+        self.labelInfo.setObjectName(u"labelInfo")
+        self.labelInfo.setMinimumSize(QSize(0, 20))
+        self.labelInfo.setMaximumSize(QSize(16777215, 20))
+
+        self.layoutEditDelete.addWidget(self.labelInfo)
+
+        self.radioEdit = QRadioButton(self.groupNewEditDelete)
+        self.radioEdit.setObjectName(u"radioEdit")
+        self.radioEdit.setMinimumSize(QSize(0, 20))
+        self.radioEdit.setMaximumSize(QSize(16777215, 20))
+
+        self.layoutEditDelete.addWidget(self.radioEdit)
+
+        self.radioDelete = QRadioButton(self.groupNewEditDelete)
+        self.radioDelete.setObjectName(u"radioDelete")
+        self.radioDelete.setMinimumSize(QSize(0, 20))
+        self.radioDelete.setMaximumSize(QSize(16777215, 20))
+
+        self.layoutEditDelete.addWidget(self.radioDelete)
+
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.layoutEditDelete.addItem(self.horizontalSpacer)
+
+
+        self.gridLayout_4.addWidget(self.groupNewEditDelete, 2, 1, 1, 1)
+
+        self.label = QLabel(self.gbEditor)
+        self.label.setObjectName(u"label")
+        self.label.setMinimumSize(QSize(140, 0))
+
+        self.gridLayout_4.addWidget(self.label, 0, 0, 1, 1)
+
+        self.labelVoraussetzungen = QLabel(self.gbEditor)
+        self.labelVoraussetzungen.setObjectName(u"labelVoraussetzungen")
+
+        self.gridLayout_4.addWidget(self.labelVoraussetzungen, 3, 0, 1, 1)
+
+        self.labelNewEditDelete = QLabel(self.gbEditor)
+        self.labelNewEditDelete.setObjectName(u"labelNewEditDelete")
+
+        self.gridLayout_4.addWidget(self.labelNewEditDelete, 2, 0, 1, 1)
+
+        self.teVoraussetzungen = QPlainTextEdit(self.gbEditor)
+        self.teVoraussetzungen.setObjectName(u"teVoraussetzungen")
+        self.teVoraussetzungen.setMaximumSize(QSize(16777215, 50))
+
+        self.gridLayout_4.addWidget(self.teVoraussetzungen, 3, 1, 1, 1)
+
         self.gridLayout_3 = QGridLayout()
         self.gridLayout_3.setObjectName(u"gridLayout_3")
         self.gridLayout_3.setHorizontalSpacing(12)
@@ -119,36 +184,35 @@ class Ui_karteDialog(object):
 
         self.gridLayout_4.addLayout(self.gridLayout_3, 1, 1, 1, 1)
 
-        self.leUntertitel = QLineEdit(self.gbEditor)
-        self.leUntertitel.setObjectName(u"leUntertitel")
+        self.leTitel = QLineEdit(self.gbEditor)
+        self.leTitel.setObjectName(u"leTitel")
 
-        self.gridLayout_4.addWidget(self.leUntertitel, 5, 1, 1, 1)
+        self.gridLayout_4.addWidget(self.leTitel, 4, 1, 1, 1)
 
         self.leName = QLineEdit(self.gbEditor)
         self.leName.setObjectName(u"leName")
 
         self.gridLayout_4.addWidget(self.leName, 0, 1, 1, 1)
 
-        self.label = QLabel(self.gbEditor)
-        self.label.setObjectName(u"label")
-        self.label.setMinimumSize(QSize(140, 0))
-
-        self.gridLayout_4.addWidget(self.label, 0, 0, 1, 1)
-
         self.labelText = QLabel(self.gbEditor)
         self.labelText.setObjectName(u"labelText")
 
         self.gridLayout_4.addWidget(self.labelText, 6, 0, 1, 1)
 
-        self.labelUntertitel = QLabel(self.gbEditor)
-        self.labelUntertitel.setObjectName(u"labelUntertitel")
+        self.labelTitel = QLabel(self.gbEditor)
+        self.labelTitel.setObjectName(u"labelTitel")
 
-        self.gridLayout_4.addWidget(self.labelUntertitel, 5, 0, 1, 1)
+        self.gridLayout_4.addWidget(self.labelTitel, 4, 0, 1, 1)
 
-        self.leFusszeile = QLineEdit(self.gbEditor)
-        self.leFusszeile.setObjectName(u"leFusszeile")
+        self.leUntertitel = QLineEdit(self.gbEditor)
+        self.leUntertitel.setObjectName(u"leUntertitel")
 
-        self.gridLayout_4.addWidget(self.leFusszeile, 8, 1, 1, 1)
+        self.gridLayout_4.addWidget(self.leUntertitel, 5, 1, 1, 1)
+
+        self.labelFusszeile = QLabel(self.gbEditor)
+        self.labelFusszeile.setObjectName(u"labelFusszeile")
+
+        self.gridLayout_4.addWidget(self.labelFusszeile, 7, 0, 1, 1)
 
         self.labelTyp = QLabel(self.gbEditor)
         self.labelTyp.setObjectName(u"labelTyp")
@@ -171,70 +235,6 @@ class Ui_karteDialog(object):
 
         self.gridLayout_4.addLayout(self.vlBeschreibung, 6, 1, 1, 1)
 
-        self.labelVoraussetzungen = QLabel(self.gbEditor)
-        self.labelVoraussetzungen.setObjectName(u"labelVoraussetzungen")
-
-        self.gridLayout_4.addWidget(self.labelVoraussetzungen, 3, 0, 1, 1)
-
-        self.leTitel = QLineEdit(self.gbEditor)
-        self.leTitel.setObjectName(u"leTitel")
-
-        self.gridLayout_4.addWidget(self.leTitel, 4, 1, 1, 1)
-
-        self.labelNewEditDelete = QLabel(self.gbEditor)
-        self.labelNewEditDelete.setObjectName(u"labelNewEditDelete")
-
-        self.gridLayout_4.addWidget(self.labelNewEditDelete, 2, 0, 1, 1)
-
-        self.labelFusszeile = QLabel(self.gbEditor)
-        self.labelFusszeile.setObjectName(u"labelFusszeile")
-
-        self.gridLayout_4.addWidget(self.labelFusszeile, 8, 0, 1, 1)
-
-        self.teVoraussetzungen = QPlainTextEdit(self.gbEditor)
-        self.teVoraussetzungen.setObjectName(u"teVoraussetzungen")
-        self.teVoraussetzungen.setMaximumSize(QSize(16777215, 50))
-
-        self.gridLayout_4.addWidget(self.teVoraussetzungen, 3, 1, 1, 1)
-
-        self.groupNewEditDelete = QWidget(self.gbEditor)
-        self.groupNewEditDelete.setObjectName(u"groupNewEditDelete")
-        self.layoutEditDelete = QHBoxLayout(self.groupNewEditDelete)
-        self.layoutEditDelete.setObjectName(u"layoutEditDelete")
-        self.layoutEditDelete.setContentsMargins(0, 0, 0, 0)
-        self.labelInfo = QLabel(self.groupNewEditDelete)
-        self.labelInfo.setObjectName(u"labelInfo")
-        self.labelInfo.setMinimumSize(QSize(0, 20))
-        self.labelInfo.setMaximumSize(QSize(16777215, 20))
-
-        self.layoutEditDelete.addWidget(self.labelInfo)
-
-        self.radioEdit = QRadioButton(self.groupNewEditDelete)
-        self.radioEdit.setObjectName(u"radioEdit")
-        self.radioEdit.setMinimumSize(QSize(0, 20))
-        self.radioEdit.setMaximumSize(QSize(16777215, 20))
-
-        self.layoutEditDelete.addWidget(self.radioEdit)
-
-        self.radioDelete = QRadioButton(self.groupNewEditDelete)
-        self.radioDelete.setObjectName(u"radioDelete")
-        self.radioDelete.setMinimumSize(QSize(0, 20))
-        self.radioDelete.setMaximumSize(QSize(16777215, 20))
-
-        self.layoutEditDelete.addWidget(self.radioDelete)
-
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-
-        self.layoutEditDelete.addItem(self.horizontalSpacer)
-
-
-        self.gridLayout_4.addWidget(self.groupNewEditDelete, 2, 1, 1, 1)
-
-        self.labelTitel = QLabel(self.gbEditor)
-        self.labelTitel.setObjectName(u"labelTitel")
-
-        self.gridLayout_4.addWidget(self.labelTitel, 4, 0, 1, 1)
-
 
         self.gridLayout.addWidget(self.gbEditor, 1, 0, 1, 1)
 
@@ -254,6 +254,17 @@ class Ui_karteDialog(object):
         self.gbPreview.setTitle(QCoreApplication.translate("karteDialog", u"Vorschau", None))
         self.warning.setText(QCoreApplication.translate("karteDialog", u"<html><head/><body><p>Dies ist eine Standard-Man\u00f6verkarte. Sobald du hier etwas ver\u00e4nderst, bekommst du eine pers\u00f6nliche Kopie und das Original wird in den Hausregeln gel\u00f6scht. Damit erh\u00e4ltst du f\u00fcr diese Man\u00f6verkarte keine automatischen Updates mehr mit neuen Man\u00f6verkarten-Plugin-Versionen.</p></body></html>", None))
         self.gbEditor.setTitle(QCoreApplication.translate("karteDialog", u"Editor", None))
+#if QT_CONFIG(tooltip)
+        self.leFusszeile.setToolTip("")
+#endif // QT_CONFIG(tooltip)
+        self.leFusszeile.setText(QCoreApplication.translate("karteDialog", u"$original$", None))
+        self.labelUntertitel.setText(QCoreApplication.translate("karteDialog", u"Untertitel", None))
+        self.labelInfo.setText(QCoreApplication.translate("karteDialog", u"Neue Karte erstellen", None))
+        self.radioEdit.setText(QCoreApplication.translate("karteDialog", u"Generierte Karte bearbeiten", None))
+        self.radioDelete.setText(QCoreApplication.translate("karteDialog", u"Generierte Karte l\u00f6schen", None))
+        self.label.setText(QCoreApplication.translate("karteDialog", u"Name", None))
+        self.labelVoraussetzungen.setText(QCoreApplication.translate("karteDialog", u"<html><head/><body><p>Voraussetzungen</p><p>(nur Charakterexport)</p></body></html>", None))
+        self.labelNewEditDelete.setText(QCoreApplication.translate("karteDialog", u"Aktion", None))
         self.labelFarbe.setText(QCoreApplication.translate("karteDialog", u"Deckfarbe", None))
         self.buttonFarbe.setText(QCoreApplication.translate("karteDialog", u"W\u00e4hlen", None))
         self.buttonFarbe.setProperty("class", QCoreApplication.translate("karteDialog", u"icon", None))
@@ -266,29 +277,18 @@ class Ui_karteDialog(object):
         self.comboTyp.setItemText(5, QCoreApplication.translate("karteDialog", u"Benutzerdefiniert", None))
 
         self.labelFarbeGewaehlt.setText("")
+        self.leTitel.setText(QCoreApplication.translate("karteDialog", u"$original$", None))
+        self.labelText.setText(QCoreApplication.translate("karteDialog", u"Beschreibung", None))
+        self.labelTitel.setText(QCoreApplication.translate("karteDialog", u"Titel", None))
 #if QT_CONFIG(tooltip)
         self.leUntertitel.setToolTip("")
 #endif // QT_CONFIG(tooltip)
         self.leUntertitel.setText(QCoreApplication.translate("karteDialog", u"$original$", None))
-        self.label.setText(QCoreApplication.translate("karteDialog", u"Name", None))
-        self.labelText.setText(QCoreApplication.translate("karteDialog", u"Beschreibung", None))
-        self.labelUntertitel.setText(QCoreApplication.translate("karteDialog", u"Untertitel", None))
-#if QT_CONFIG(tooltip)
-        self.leFusszeile.setToolTip("")
-#endif // QT_CONFIG(tooltip)
-        self.leFusszeile.setText(QCoreApplication.translate("karteDialog", u"$original$", None))
+        self.labelFusszeile.setText(QCoreApplication.translate("karteDialog", u"Fu\u00dfzeile", None))
         self.labelTyp.setText(QCoreApplication.translate("karteDialog", u"Typ", None))
 #if QT_CONFIG(tooltip)
         self.teBeschreibung.setToolTip("")
 #endif // QT_CONFIG(tooltip)
         self.teBeschreibung.setPlainText(QCoreApplication.translate("karteDialog", u"$original$", None))
-        self.labelVoraussetzungen.setText(QCoreApplication.translate("karteDialog", u"<html><head/><body><p>Voraussetzungen</p><p>(nur Charakterexport)</p></body></html>", None))
-        self.leTitel.setText(QCoreApplication.translate("karteDialog", u"$original$", None))
-        self.labelNewEditDelete.setText(QCoreApplication.translate("karteDialog", u"Aktion", None))
-        self.labelFusszeile.setText(QCoreApplication.translate("karteDialog", u"Fu\u00dfzeile", None))
-        self.labelInfo.setText(QCoreApplication.translate("karteDialog", u"Neue Karte erstellen", None))
-        self.radioEdit.setText(QCoreApplication.translate("karteDialog", u"Generierte Karte bearbeiten", None))
-        self.radioDelete.setText(QCoreApplication.translate("karteDialog", u"Generierte Karte l\u00f6schen", None))
-        self.labelTitel.setText(QCoreApplication.translate("karteDialog", u"Titel", None))
     # retranslateUi
 

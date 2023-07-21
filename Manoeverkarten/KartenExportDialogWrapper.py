@@ -101,14 +101,12 @@ class KartenExportDialogWrapper(object):
             self.deaktivierteKategorien = []
             for i in range(root.childCount()):
                 parent = root.child(i)
-                if parent.childCount() == 0:
-                    if parent.checkState(0) == QtCore.Qt.Unchecked:
-                        self.deaktivierteKategorien.append(parent.data(0, QtCore.Qt.UserRole))
-                else:
-                    for j in range(parent.childCount()):
-                        child = parent.child(j)
-                        if child.checkState(0) == QtCore.Qt.Unchecked:
-                            self.deaktivierteKategorien.append(child.data(0, QtCore.Qt.UserRole))
+                if parent.data(0, QtCore.Qt.UserRole) is not None and parent.checkState(0) == QtCore.Qt.Unchecked:
+                    self.deaktivierteKategorien.append(parent.data(0, QtCore.Qt.UserRole))
+                for j in range(parent.childCount()):
+                    child = parent.child(j)
+                    if child.checkState(0) == QtCore.Qt.Unchecked:
+                        self.deaktivierteKategorien.append(child.data(0, QtCore.Qt.UserRole))
             if isDbExport:
                 Wolke.Settings["Manöverkarten_DeaktivierteKategorien"] = self.deaktivierteKategorien
             else:

@@ -2,17 +2,26 @@
 <html lang="de-DE">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <script src="textfit/textFit.js"></script>
+        <script src="../textfit/textFit.js"></script>
         <script src="{sephrasto_dir}/Data/Charakterbögen/Regelanhang/hyphen/hyphen.js"></script>
         <script src="{sephrasto_dir}/Data/Charakterbögen/Regelanhang/hyphen/de-1996.js"></script>
+        <script type="text/javascript" src="qrc:///qtwebchannel/qwebchannel.js"></script>
         <script>
-        window.onload = function(){
+        window.onload = function(){    
             textFit(document.getElementById('title'), { alignHoriz: true, minFontSize:5, maxFontSize: 12.25, detectMultiLine: false, widthOnly: true });
             //Content (hyphenate & textfit)
             content = document.getElementById('content');
             var hyphenateHTMLSync = createHyphenator(hyphenationPatternsDe1996, { html: true });
             content.innerHTML = hyphenateHTMLSync(content.innerHTML) ;
-            textFit(content, { minFontSize: 1, maxFontSize: 9.5 }); 
+            textFit(content, { minFontSize: 1, maxFontSize: 9.5 });
+
+            //Done, callback to Sephrasto
+            new QWebChannel(qt.webChannelTransport,
+                function(channel) {
+                    Bridge = channel.objects.Bridge;
+                    Bridge.htmlLoaded();
+                }
+            );              
         }
         </script>
         <style>
@@ -38,7 +47,6 @@
         @font-face {
             font-family: 'Crimson Pro';
             src: url('{sephrasto_dir}/Data/Fonts/Crimson Pro/CrimsonPro-Bold.ttf') format('truetype');
-            font-style: bold;
             font-weight: 700;
         }
 
@@ -47,6 +55,11 @@
             margin: 0;
             padding: 0;
         }
+        
+        /* 
+           We need to use explicit heights/widths for textfit to work properly.
+           Hence, we can only use two Anchors (left, top etc.). The total card size is 238 x 332 px.
+        */
         
         #title {
             position: fixed;

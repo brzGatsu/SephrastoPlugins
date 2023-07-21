@@ -327,10 +327,10 @@ Du wartest ab und handelst erst, wenn ein bestimmtes Ereignis eintritt. Dazu bes
   <Karte name="Eigenschaft Aufrechterhalten (D)" typ="1" subtyp="10" titel="Aufrechterhalten" subtitel="$original$" fusszeile="Anrufungseigenschaft">$original$</Karte>
   <Karte name="Eigenschaft Konzentration (D)" typ="1" subtyp="10" titel="Konzentration" subtitel="$original$" fusszeile="Anrufungseigenschaft">$original$</Karte>
   <Karte name="Eigenschaft Konterprobe (D)" typ="1" subtyp="10" titel="Konterprobe" subtitel="$original$" fusszeile="Anrufungseigenschaft">$original$</Karte>
-  <Karte name="Antimagie - Gegenzauber" typ="1" subtyp="4" titel="Gegenzauber" subtitel="$original$" fusszeile="Antimagie Modifikation">$original$</Karte>
-  <Karte name="Antimagie - Magie unterdrücken" typ="1" subtyp="4" titel="Magie unterdrücken" subtitel="$original$" fusszeile="Antimagie Modifikation">$original$</Karte>
-  <Karte name="Antimagie - Wesenheit bannen" typ="1" subtyp="4" titel="Wesenheit bannen" subtitel="$original$" fusszeile="Antimagie Modifikation">$original$</Karte>
-  <Karte name="Antimagie - Zauber aufheben" typ="1" subtyp="4" titel="Zauber aufheben" subtitel="$original$" fusszeile="Antimagie Modifikation">$original$</Karte>
+  <Karte name="Antimagie - Gegenzauber" löschen="1" typ="1" subtyp="4" titel="$original$" subtitel="$original$" fusszeile="$original$">$original$</Karte>
+  <Karte name="Antimagie - Magie unterdrücken" löschen="1" typ="1" subtyp="4" titel="$original$" subtitel="$original$" fusszeile="$original$">$original$</Karte>
+  <Karte name="Antimagie - Wesenheit bannen" löschen="1" typ="1" subtyp="4" titel="$original$" subtitel="$original$" fusszeile="$original$">$original$</Karte>
+  <Karte name="Antimagie - Zauber aufheben" löschen="1" typ="1" subtyp="4" titel="$original$" subtitel="$original$" fusszeile="$original$">$original$</Karte>
   <Karte name="Beschwörungen" typ="1" subtyp="4" titel="$original$" subtitel="$original$" fusszeile="Beschwörungen">$original$</Karte>
   <Karte name="Beschwörungen - Bindung" typ="1" subtyp="4" titel="Bindung" subtitel="$original$" fusszeile="Beschwörungen">$original$</Karte>
   <Karte name="Beschwörungen - Chimären" typ="1" subtyp="4" titel="Chimären" subtitel="$original$" fusszeile="Beschwörungen">$original$</Karte>
@@ -365,7 +365,7 @@ Du wartest ab und handelst erst, wenn ein bestimmtes Ereignis eintritt. Dazu bes
   <Karte name="Zaubertechnik ignorieren" typ="1" subtyp="2" titel="Technik ignorieren" subtitel="$original$" fusszeile="$original$">$original$</Karte>
   <Karte name="Liturgische Technik ignorieren" typ="1" subtyp="3" titel="Technik ignorieren" subtitel="$original$" fusszeile="$original$">$original$</Karte>
   <Karte name="Anrufungstechnik ignorieren" typ="1" subtyp="6" titel="Technik ignorieren" subtitel="$original$" fusszeile="$original$">$original$</Karte>
-  <Karte name="3W20 Probenwahrscheinlichkeiten" typ="1" subtyp="-1" titel="Probenwahrscheinlichkeiten" subtitel="mit 3W20" fusszeile="$original$">$original$</Karte>
+  <Karte name="3W20 Probenwahrscheinlichkeiten" typ="1" subtyp="12" titel="Probenwahrscheinlichkeiten" subtitel="mit 3W20" fusszeile="$original$">$original$</Karte>
   <Karte name="Kopflastig" löschen="1" typ="3" subtyp="-1" titel="$original$" subtitel="$original$" fusszeile="$original$">$original$</Karte>
   <Karte name="Magazin" löschen="1" typ="3" subtyp="-1" titel="$original$" subtitel="$original$" fusszeile="$original$">$original$</Karte>
   <Karte name="Niederwerfen (Waffeneigenschaft)" löschen="1" typ="3" subtyp="-1" titel="$original$" subtitel="$original$" fusszeile="$original$">$original$</Karte>
@@ -398,7 +398,7 @@ Du wartest ab und handelst erst, wenn ein bestimmtes Ereignis eintritt. Dazu bes
 &lt;li&gt;&lt;b&gt;Zerbrechlich:&lt;/b&gt; Die Waffe erleidet den vollen Waffenschaden, wenn sie eine nicht-zerbrechliche Waffe erfolgreich verteidigt oder von einer solchen erfolgreich verteidigt wird. Ausweichen vermeidet diesen Schaden&lt;/li&gt;
 &lt;li&gt;&lt;b&gt;Zweihändig:&lt;/b&gt; Die Waffe wird zweihändig geführt. Bei einhändiger Führung erleidest du einen Probenmalus von -2 und die Waffe richtet -4 TP weniger an. Zweihändige Fernkampfwaffen können nicht einhändig benutzt werden.&lt;/li&gt;
 &lt;li&gt;&lt;b&gt;Automatische Manövereffekte:&lt;/b&gt; Bei manchen Waffen haben schon gewöhnliche Angriffe den Effekt eines Manövers. In Klammern befinden sich - falls relevant - die Ansage, der Modifikator der Gegenprobe und deren Schwierigkeit.&lt;/li&gt;&lt;/ul&gt;</Karte>
-  <Karte name="Mirakel" typ="1" subtyp="-1" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="0" voraussetzungen="">&lt;table&gt;&lt;tr&gt;
+  <Karte name="Mirakel" typ="1" subtyp="7" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="0" voraussetzungen="">&lt;table&gt;&lt;tr&gt;
 &lt;th width="30%"&gt;Fert./Attr.&lt;/th&gt;
 &lt;th width="20%" style="border-right: 1px solid #4A000B;"&gt;PW&lt;/th&gt;
 &lt;th width="30%"&gt;Fert./Attr.&lt;/th&gt;
@@ -429,7 +429,7 @@ Du wartest ab und handelst erst, wenn ein bestimmtes Ereignis eintritt. Dazu bes
 &lt;td&gt;&amp;nbsp;&lt;/td&gt;
 &lt;/tr&gt;&lt;/table&gt;
 $original$</Karte>
-  <Karte name="Dämonische Stärkung" typ="1" subtyp="-1" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="0" voraussetzungen="">&lt;table&gt;&lt;tr&gt;
+  <Karte name="Dämonische Stärkung" typ="1" subtyp="10" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="0" voraussetzungen="">&lt;table&gt;&lt;tr&gt;
 &lt;th width="30%"&gt;Fert./Attr.&lt;/th&gt;
 &lt;th width="20%" style="border-right: 1px solid #4A000B;"&gt;PW&lt;/th&gt;
 &lt;th width="30%"&gt;Fert./Attr.&lt;/th&gt;

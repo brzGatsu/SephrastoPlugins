@@ -1,4 +1,4 @@
-from PySide6 import QtWidgets, QtCore, QtGui, QtWebEngineCore
+from PySide6 import QtWidgets, QtCore, QtGui
 from EventBus import EventBus
 from Wolke import Wolke
 import tempfile
@@ -17,21 +17,26 @@ from Core.Talent import TalentDefinition
 from Core.Vorteil import VorteilDefinition
 from Core.Waffeneigenschaft import Waffeneigenschaft
 from Core.Regel import Regel
-from Core.Regel import Regel
-from PySide6.QtWebEngineWidgets import QWebEngineView
 from EventBus import EventBus
 import copy
+import PathHelper
+from QtUtils.WebEngineViewPlus import WebEngineViewPlus
 
 class KartenGenerator:
     def __init__(self, db):
         self.db = db
-        self.htmlBasePath = os.path.join(os.path.dirname(os.path.abspath(__file__)), "Data")
-        self.karteHtmlPath = os.path.join(self.htmlBasePath, "Karte.html")
-        with open(self.karteHtmlPath, 'r', encoding="utf-8") as infile:
-            self.karteHtml = infile.read()
-        self.deckHtmlPath = os.path.join(self.htmlBasePath, "Deck.html")
-        with open(self.deckHtmlPath, 'r', encoding="utf-8") as infile:
-            self.deckHtml = infile.read()
+        self.templates = {}
+
+        self.pluginFolder = os.path.dirname(os.path.abspath(__file__))
+        self.fertImagesFolder = os.path.join(self.pluginFolder, "Data", "Fertigkeiten")
+        templateFolder = os.path.join(self.pluginFolder, "Data", "Templates")
+        for file in PathHelper.listdir(templateFolder):
+            absoluteFilePath = os.path.join(templateFolder, file)
+            if not os.path.isfile(absoluteFilePath) or not file.endswith(".html"):
+                continue
+
+            with open(absoluteFilePath, 'r', encoding="utf-8") as infile:
+                self.templates[os.path.splitext(file)[0]] = [absoluteFilePath, infile.read()]
 
     def getVorteilBedingungen(self, vorteil):
         bedingungen = vorteil.bedingungen
@@ -89,20 +94,170 @@ habe ich mit docsmagic.de gemacht, hier werden Sleeves mit farbigen Rückseiten 
 
         return self.generateZusatzKarte(karte, "#000000")
 
+    def removeLine(self, text, line):
+        res = re.findall(r'^({}.*?)($|\n)'.format(line), text, re.UNICODE|re.MULTILINE)
+        if len(res) == 1:
+            return text.replace(res[0][0] + "\n", "").replace(res[0][0], ""), res[0][0].replace(line, "").strip()
+        return text, ""
+
+    def removeLineHtml(self, text, line):
+        text, extractedLine = self.removeLine(text, f"<b>{line}</b>")
+        if not extractedLine:
+            text, extractedLine = self.removeLine(text, line)
+        return text, extractedLine
+
+    def findLine(self, text, line):
+        res = re.findall(r'^({}.*?)($|\n)'.format(line), text, re.UNICODE|re.MULTILINE)
+        if len(res) == 1:
+            return res[0][0].replace(line, "").strip()
+        return ""
+
+    def findLineHtml(self, text, line):
+        extractedLine = self.findLine(text, f"<b>{line}</b>")
+        if not extractedLine:
+            extractedLine = self.findLine(text, line)
+        return extractedLine
+
+    def shorten(self, line, mapping):
+        for key, value in mapping.items():
+            line = line.replace(key, value)
+        line = line.replace("$plugins_dir$", "file:///" + Wolke.Settings['Pfad-Plugins'].replace('\\', '/'))
+        return line
+
+    def shortenCost(self, line):
+        changed = False
+        for key, value in self.db.einstellungen["Manöverkarten Plugin: Talente Kosten kürzen"].wert.items():
+            if key in line:
+                changed = True
+                line = line.replace(key, value)
+
+        if not changed:
+            kosten = []
+            for match in re.findall(r"\d+", line, re.UNICODE):
+                kosten.append(match)
+            line = "/".join(kosten)
+        line = line.replace("$plugins_dir$", "file:///" + Wolke.Settings['Pfad-Plugins'].replace('\\', '/'))
+        return line
+
+    def shouldRemove(self, line, mapping):
+        for value in mapping:
+            if value in line:
+                return False
+        return True
+
+    def findFertImage(self, fert):
+        if fert in self.db.einstellungen["Manöverkarten Plugin: Zusätzliche Fertigkeiticons"].wert:
+            file = self.db.einstellungen["Manöverkarten Plugin: Zusätzliche Fertigkeiticons"].wert[fert]
+            file = file.replace("$plugins_dir$", "file:///" + Wolke.Settings['Pfad-Plugins'].replace('\\', '/'))
+            if file.endwith(".svg"):
+                return f"<div><img src='{file}'></div>"            
+            else:
+                return f"<img src='{file}'>"
+
+        fertSplit = fert.split(" (")[0] #remove all from paranthesis on
+        file = os.path.join(self.fertImagesFolder, fert + ".png")
+        if os.path.isfile(file):
+            return f"<img src='{file}'>"
+        file = os.path.join(self.fertImagesFolder, fertSplit + ".png")
+        if os.path.isfile(file): 
+            return f"<img src='{file}'>"
+        file = os.path.join(self.fertImagesFolder, fert + ".svg")
+        if os.path.isfile(file): # we expect svg to be icons only
+            return f"<div><img src='{file}'></div>"
+        file = os.path.join(self.fertImagesFolder, fertSplit + ".svg")
+        if os.path.isfile(file):
+            return f"<div><img src='{file}'></div>"
+
+        return f"<div><span>{fert.replace(' ', '<br>', 1)}</span></div>" # just add the name as text with max 1 linebreak
+
+    def postProcessTalent(self, karte, element = None):
+        for data in ["vorbereitungszeiticon", "vorbereitungszeit", "zielicon", "ziel", "reichweiteicon", "reichweite", "wirkungsdauericon", "wirkungsdauer", "kostenicon", "kosten", "erlernen", "fertigkeiten"]:
+            karte.customData[data] = ""
+
+        karte.text, line = self.removeLineHtml(karte.text, "Probenschwierigkeit:")
+        if line:
+            if karte.subtitel:
+                karte.subtitel += " | "
+            karte.subtitel += self.shorten(line, self.db.einstellungen["Manöverkarten Plugin: Talente Schwierigkeit kürzen"].wert)
+
+        karte.text, line = self.removeLineHtml(karte.text, "Vorbereitungszeit:")
+        if line:
+            karte.customData["vorbereitungszeiticon"] = "\uf254"
+            karte.customData["vorbereitungszeit"] = self.shorten(line, self.db.einstellungen["Manöverkarten Plugin: Talente Zeit kürzen"].wert)
+
+        line = self.findLineHtml(karte.text, "Ziel:")
+        if line:
+            karte.customData["zielicon"] = "\uf140"
+            if self.shouldRemove(line, self.db.einstellungen["Manöverkarten Plugin: Talente Ziel im Text"].wert):
+                karte.text, line = self.removeLineHtml(karte.text, "Ziel:")
+                karte.customData["ziel"] = self.shorten(line, self.db.einstellungen["Manöverkarten Plugin: Talente Ziel kürzen"].wert)
+            else:
+                karte.customData["ziel"] = "<span>\uf063</span>"
+
+        karte.text, line = self.removeLineHtml(karte.text, "Reichweite:")
+        if line:
+            karte.customData["reichweiteicon"] = "\uf545"
+            karte.customData["reichweite"] = self.shorten(line, self.db.einstellungen["Manöverkarten Plugin: Talente Reichweite kürzen"].wert)
+
+        line = self.findLineHtml(karte.text, "Wirkungsdauer:")
+        if line:
+            karte.customData["wirkungsdauericon"] = "\uf2f2"
+            if self.shouldRemove(line, self.db.einstellungen["Manöverkarten Plugin: Talente Wirkungsdauer im Text"].wert):
+                karte.text, line = self.removeLineHtml(karte.text, "Wirkungsdauer:")
+                karte.customData["wirkungsdauer"] = self.shorten(line, self.db.einstellungen["Manöverkarten Plugin: Talente Zeit kürzen"].wert)
+            else:
+                karte.customData["wirkungsdauer"] = "<span>\uf063</span>"
+
+        line = self.findLineHtml(karte.text, "Kosten:")
+        if line:
+            karte.customData["kostenicon"] = "\uf0e7"
+            if self.shouldRemove(line, self.db.einstellungen["Manöverkarten Plugin: Talente Kosten im Text"].wert):
+                karte.text, line = self.removeLineHtml(karte.text, "Kosten:")
+                karte.customData["kosten"] = self.shortenCost(line)
+            else:
+                karte.customData["kosten"] = "<span>\uf063</span>"
+
+
+        karte.text, line = self.removeLineHtml(karte.text, "Fertigkeiten:")
+        ferts = []
+        if line:
+            ferts = list(map(str.strip, re.split(",(?![^(]*\))", line, re.UNICODE))) #spells like Hartes schmelze have paranthesis here
+        elif element is not None and element.hauptfertigkeit is not None:
+            ferts.append(element.hauptfertigkeit.name)
+
+        images = []
+        fertFolder = os.path.join(self.pluginFolder, "Data", "Fertigkeiten")
+        for fert in ferts:
+            images.append(self.findFertImage(fert))
+        karte.customData["fertigkeiten"] = "".join(images)
+
+        karte.text, line = self.removeLineHtml(karte.text, "Erlernen:")
+        if line:
+            karte.customData["erlernen"] = line
+
+        karte.text = karte.text.strip()
+
     def generateZusatzKarte(self, k, farbe):
         karte = Karte()
         karte.typ = k.typ
         karte.farbe = farbe
         karte.name = k.name
         karte.titel = k.anzeigename
-        karte.text = k.text
-        karte.subtitel = k.subtitel
+        karte.text = k.text.replace("$original$", "")
+        if k.typ == KartenTyp.Talent:
+            karte.subtitel = k.subtitel.replace("$original$", "PW <u>" + "&nbsp;"*12 + "</u>")
+        else:
+            karte.subtitel = k.subtitel.replace("$original$", "")
         footer = ""
         if k.typ == KartenTyp.Vorteil:
             footer = self.db.einstellungen["Vorteile: Typen"].wert[k.subtyp]
         elif k.typ == KartenTyp.Regel:
             footer = self.db.einstellungen["Regeln: Typen"].wert[k.subtyp]
         karte.fusszeile = k.fusszeile.replace("$original$", footer)
+
+        if k.typ == KartenTyp.Talent:
+            self.postProcessTalent(karte)
+
         return karte
 
     def generateKarte(self, element, farbe, overrideKarte = None):
@@ -110,7 +265,10 @@ habe ich mit docsmagic.de gemacht, hier werden Sleeves mit farbigen Rückseiten 
         karte.farbe = farbe
         karte.name = element.name
         karte.titel = element.name
+
         if isinstance(element, VorteilDefinition):
+            karte.typ = KartenTyp.Vorteil
+            karte.subtyp = element.typ
             #if Wolke.Char:
             #    titel = CharakterPrintUtility.getLinkedName(Wolke.Char, vorteil, True)
             text = self.getVorteilDescription(element)
@@ -138,30 +296,35 @@ habe ich mit docsmagic.de gemacht, hier werden Sleeves mit farbigen Rückseiten 
             karte.fusszeile = self.db.einstellungen["Vorteile: Typen"].wert[element.typ]
             karte.subtitel = ""
             if element.kommentarErlauben:
-                line = "<table width='100%'><tr style='border-bottom: 1px solid black;'><td>&nbsp;</td></tr></table>"
+                line = "<table style='width: 100%; margin-bottom: 4px;'><tr style='border-bottom: 1px solid black;'><td>&nbsp;</td></tr></table>"
                 if "$kommentar$" in karte.text:
                     karte.text = karte.text.replace("$kommentar$.", "$kommentar$").replace("$kommentar$", line)
                 else:
                     karte.subtitel = line
         elif isinstance(element, TalentDefinition):
+            karte.typ = KartenTyp.Talent
+            karte.subtyp = element.spezialTyp
             karte.text = element.text
-            karte.subtitel = "PW ______"
+            karte.subtitel = "PW <u>" + "&nbsp;"*12 + "</u>"
             if element.hauptfertigkeit is not None:
                 karte.fusszeile = self.db.einstellungen["Fertigkeiten: Typen übernatürlich"].wert[element.hauptfertigkeit.typ]
             else:
                 karte.fusszeile = ""
             if element.kommentarErlauben:
-                line = "<table width='100%'><tr style='border-bottom: 1px solid black;'><td>&nbsp;</td></tr></table>"
+                line = "<table style='width: 100%; margin-bottom: 4px;'><tr style='border-bottom: 1px solid black;'><td>&nbsp;</td></tr></table>"
                 if "$kommentar$" in karte.text:
                     karte.text = karte.text.replace("$kommentar$.", "$kommentar$").replace("$kommentar$", line)
                 else:
-                    karte.text = line + "<br>" + karte.text
+                    karte.text = line + karte.text
         elif isinstance(element, Regel):
+            karte.typ = KartenTyp.Regel
+            karte.subtyp = element.typ
             karte.titel = element.anzeigename
             karte.text = element.text
             karte.subtitel = element.probe
             karte.fusszeile = self.db.einstellungen["Regeln: Typen"].wert[element.typ]
         elif isinstance(element, Waffeneigenschaft):
+            karte.typ = KartenTyp.Waffeneigenschaft
             karte.text = element.text
             karte.subtitel = ""
             karte.fusszeile = "Waffeneigenschaft"
@@ -169,10 +332,16 @@ habe ich mit docsmagic.de gemacht, hier werden Sleeves mit farbigen Rückseiten 
         if overrideKarte is not None:
             if overrideKarte.löschen:
                 return None
+
             karte.titel = overrideKarte.titel.replace("$original$", karte.titel)
             karte.subtitel = overrideKarte.subtitel.replace("$original$", karte.subtitel)
             karte.text = overrideKarte.text.replace("$original$", karte.text)
             karte.fusszeile = overrideKarte.fusszeile.replace("$original$", karte.fusszeile)
+            karte.typ = overrideKarte.typ
+            karte.subtyp = overrideKarte.subtyp
+
+        if isinstance(element, TalentDefinition):
+            self.postProcessTalent(karte, element)
 
         if not karte.text:
             return None
@@ -338,52 +507,56 @@ habe ich mit docsmagic.de gemacht, hier werden Sleeves mit farbigen Rückseiten 
     # I/O
     ###########################
 
-    def generateHtml(self, farbe, titel, text, subtitel="", footer = "", typ = KartenTyp.Benutzerdefiniert, forceHintergrund = False):
-        html = ""
-        if typ == KartenTyp.Deck:
-            html = self.deckHtml
-            htmlPath = self.deckHtmlPath
+    def generateHtml(self, karte, forceHintergrund = False):
+        typName = KartenTyp.TypNamen[karte.typ]
+        if typName in self.templates:
+            htmlPath = self.templates[typName][0]
+            html = self.templates[typName][1]
         else:
-            html = self.karteHtml
-            htmlPath = self.karteHtmlPath
+            htmlPath = self.templates["Karte"][0]
+            html = self.templates["Karte"][1]
 
         footerDict = self.db.einstellungen["Manöverkarten Plugin: Automatische Fußzeile ändern"].wert
+        footer = karte.fusszeile
         if footer in footerDict:
             footer = footerDict[footer]
 
-        rules = Hilfsmethoden.fixHtml(text, False)
-        html = html.replace("{card_title}", titel)
-        html = html.replace("{card_title_color}", farbe)
-        html = html.replace("{card_subtitle}", subtitel)
+        text = Hilfsmethoden.fixHtml(karte.text, False)
+        html = html.replace("{card_title}", karte.titel)
+        html = html.replace("{card_title_color}", karte.farbe)
+        html = html.replace("{card_subtitle}", karte.subtitel)
         html = html.replace("{card_footer}", footer)
-        html = html.replace("{card_content}", rules)
+        html = html.replace("{card_content}", text)
         html = html.replace("{sephrasto_dir}", "file:///" + os.getcwd().replace('\\', '/'))
+        for key,value in karte.customData.items():
+            html = html.replace("{" + key + "}", value)
+
         if forceHintergrund or Wolke.Settings["Manöverkarten_Hintergrundbild"]:
-            html = html.replace("{card_backgroundimage}", "url(Hintergrund.jpg)")
+            html = html.replace("{card_backgroundimage}", "url(../Hintergrund.jpg)")
         else:
             html = html.replace("{card_backgroundimage}", "none")
 
         return html, htmlPath
 
-    def __writeTempPDF(self, webEnginePage, farbe, titel, text, subtitel="", footer = "", typ = KartenTyp.Benutzerdefiniert):
-        html, htmlPath = self.generateHtml(farbe, titel, text, subtitel, footer, typ)
+    def __writeTempPDF(self, webEngineView, karte):
+        html, htmlPath = self.generateHtml(karte)
             
         pl = QtGui.QPageLayout()
-        pl.setPageSize(QtGui.QPageSize(QtCore.QSizeF(63, 88), QtGui.QPageSize.Millimeter))
+        pl.setPageSize(QtGui.QPageSize(QtCore.QSizeF(63, 88), QtGui.QPageSize.Millimeter, "", QtGui.QPageSize.ExactMatch))
         pl.setOrientation(QtGui.QPageLayout.Portrait)
         pl.setTopMargin(0)
         pl.setRightMargin(0)
         pl.setBottomMargin(0)
         pl.setLeftMargin(0)
-        pfad = PdfSerializer.convertHtmlToPdf(html, htmlPath, pl, Wolke.Settings["Manöverkarten_ExportVerzögerungMs"], farbe, None, webEnginePage)
-        return [pfad, titel]
+        pfad = PdfSerializer.convertHtmlToPdf(html, htmlPath, pl, Wolke.Settings["Manöverkarten_ExportVerzögerungMs"], karte.farbe, None, webEngineView)
+        return [pfad, karte.titel]
 
     def writeKarten(self, spath, karten, writeEinzeln, nameFormat, progressDlg):
         if len(karten) == 0:
             return
 
         bookmarks = []
-        webEnginePage = QtWebEngineCore.QWebEnginePage()
+        webEngineView = WebEngineViewPlus()
         kartenPdfs = []
         count = 1
         lastFooter = ""
@@ -400,7 +573,7 @@ habe ich mit docsmagic.de gemacht, hier werden Sleeves mit farbigen Rückseiten 
                     bookmarks.append(PdfSerializer.PdfBookmark(karte.fusszeile.replace("$original$", "Allgemein"), count, 2))
                 bookmarks.append(PdfSerializer.PdfBookmark(karte.titel, count, 3 if lastFooter else 2))
             
-            kartenPdfs.append(self.__writeTempPDF(webEnginePage, karte.farbe, karte.titel, karte.text, karte.subtitel, karte.fusszeile, karte.typ))   
+            kartenPdfs.append(self.__writeTempPDF(webEngineView, karte))   
             count += 1
 
             progressDlg.setValue(progressDlg.value()+1)
@@ -453,12 +626,12 @@ habe ich mit docsmagic.de gemacht, hier werden Sleeves mit farbigen Rückseiten 
             htmlBaseUrl = QtCore.QUrl.fromLocalFile(QtCore.QFileInfo(htmlBaseUrl).absoluteFilePath())
 
         if webView is None:
-            webView = QWebEngineView()
+            webView = WebEngineViewPlus()
         webView.setFixedSize(width*scale, height*scale)
         webView.setZoomFactor(scale)
         webView.page().setBackgroundColor(backgroundColor)
         webView.show()
-        with PdfSerializer.waitForSignal(webView.loadFinished):
+        with PdfSerializer.waitForSignal(webView.htmlLoaded):
             webView.setHtml(html, htmlBaseUrl)
 
         if Wolke.Settings["Manöverkarten_ExportVerzögerungMs"] > 0:
@@ -473,7 +646,7 @@ habe ich mit docsmagic.de gemacht, hier werden Sleeves mit farbigen Rückseiten 
         if len(karten) == 0:
             return
         deckName = os.path.splitext(os.path.basename(spath))[0]
-        webView = QWebEngineView()
+        webView = WebEngineViewPlus()
 
         for karte in karten:
             if karte.typ == KartenTyp.Deck:
@@ -488,8 +661,8 @@ habe ich mit docsmagic.de gemacht, hier werden Sleeves mit farbigen Rückseiten 
 
             kartenName = nameFormat.replace("{deckname}", deckName).replace("{titel}", titel)
             path = os.path.join(os.path.dirname(spath), f"{kartenName}.jpg")
-            html, htmlPath = self.generateHtml(karte.farbe, karte.titel, karte.text, karte.subtitel, karte.fusszeile, karte.typ)
-            self.__convertHtmlToJpg(path, html, htmlPath, 238, 332, 3, karte.farbe, webView)
+            html, htmlPath = self.generateHtml(karte)
+            self.__convertHtmlToJpg(path, html, htmlPath, 238, 332, 3, karte.farbe)
             progressDlg.setValue(progressDlg.value()+1)
             if progressDlg.shouldCancel():
                 return

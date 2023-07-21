@@ -2,9 +2,10 @@
 <html lang="de-DE">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <script src="textfit/textFit.js"></script>
+        <script src="../textfit/textFit.js"></script>
         <script src="{sephrasto_dir}/Data/Charakterbögen/Regelanhang/hyphen/hyphen.js"></script>
         <script src="{sephrasto_dir}/Data/Charakterbögen/Regelanhang/hyphen/de-1996.js"></script>
+        <script type="text/javascript" src="qrc:///qtwebchannel/qwebchannel.js"></script>
         <script>
         window.onload = function(){       
             //Title (textfit)
@@ -35,6 +36,14 @@
             if (footer.innerHTML == "") {
                 footer.remove()
             }
+            
+            //Done, callback to Sephrasto            
+            new QWebChannel(qt.webChannelTransport,
+                function(channel) {
+                    Bridge = channel.objects.Bridge;
+                    Bridge.htmlLoaded();
+                }
+            );  
         }
         </script>
         <style>
@@ -60,7 +69,6 @@
         @font-face {
             font-family: 'Crimson Pro';
             src: url('{sephrasto_dir}/Data/Fonts/Crimson Pro/CrimsonPro-Bold.ttf') format('truetype');
-            font-style: bold;
             font-weight: 700;
         }
     
@@ -83,41 +91,47 @@
             background-color: {card_title_color};
         }
         
+        /* 
+           We need to use explicit heights/widths for textfit to work properly.
+           Hence, we can only use two Anchors (left, top etc.). The total card size is 238 x 332 px.
+        */
+
         #title {
             position: fixed;
             font-family: 'Aniron';
             color: {card_title_color};
-            width: 180px;
-            height: 30px;
             top: 14px;
             left: 26px;
+            width: 186px; /*238 - 26 - 26*/
+            height: 30px;
+            text-shadow: 1px 1px 5px #ffffffbb;
         }
         
         #subtitle {
             position: fixed;
-            width: 194px;
+            top: 42px;
+            left: 20px;
+            width: 198px; /*238 - 20 - 20*/
             height: 24px;
-            top: 47px;
-            left: 19px;
             font-weight: bold;
         }
         
         #content {
             position: fixed;
-            width: 194px;
-            height: 261px;
             top: 46px;
-            left: 19px;
+            left: 20px;
+            width: 198px; /*238 - 20 - 20*/
+            height: 258px; /*332 - 46 - 28*/
             line-height: 1.35;
             padding: 0;
         }
         
         #contentWithSubtitle {
             position: fixed;
-            width: 194px;
-            height: 232px;
-            top: 74px;
-            left: 19px;
+            top: 66px;
+            left: 20px;
+            width: 198; /*238 - 20 - 20*/
+            height: 238px; /*332 - 66 - 28*/
             line-height: 1.35;
             padding: 0;
         }

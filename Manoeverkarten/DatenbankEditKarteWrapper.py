@@ -58,13 +58,14 @@ class DatenbankEditKarteWrapper(DatenbankElementEditorBase):
         self.updateTimer.timeout.connect(self.updateWebView)
         self.webView = QWebEngineView()
         self.ui.gbPreview.layout().addWidget(self.webView)
-        zoomFactor = 1.5
+        zoomFactor = 2
         self.webView.setFixedSize(238 * zoomFactor, 332 * zoomFactor)
         self.webView.setZoomFactor(zoomFactor)
         self.webView.setEnabled(False)
 
         for edit in [self.ui.leName, self.ui.leTitel, self.ui.leUntertitel, self.ui.teBeschreibung, self.ui.leFusszeile]:
             edit.textChanged.connect(self.updateWebViewTimer)
+
         self.ui.radioDelete.clicked.connect(self.updateWebViewTimer)
         self.ui.radioEdit.clicked.connect(self.updateWebViewTimer)
         self.ui.comboTyp.currentIndexChanged.connect(self.updateWebViewTimer)
@@ -91,15 +92,17 @@ class DatenbankEditKarteWrapper(DatenbankElementEditorBase):
             karte.löschen = False
             if karte.typ == KartenTyp.Deck:
                 karte.farbe = self.ui.labelFarbeGewaehlt.property("col")
-            elif karte.typ == KartenTyp.Benutzerdefiniert:
-                karte.subtyp = self.ui.comboSubtyp.currentText()
-            elif karte.typ in [KartenTyp.Vorteil, KartenTyp.Regel, KartenTyp.Talent]:
-                karte.subtyp = self.ui.comboSubtyp.currentIndex()
             karte.titel = "$original$"
         else:
             karte.löschen = self.ui.radioDelete.isChecked()
-            karte.subtyp = -1
             karte.titel = self.ui.leTitel.text()
+
+        if karte.typ == KartenTyp.Benutzerdefiniert:
+            karte.subtyp = self.ui.comboSubtyp.currentText()
+        elif karte.typ in [KartenTyp.Vorteil, KartenTyp.Regel, KartenTyp.Talent]:
+            karte.subtyp = self.ui.comboSubtyp.currentIndex()
+        else:
+            karte.subtyp = -1
 
         karte.subtitel = self.ui.leUntertitel.text()
         karte.fusszeile = self.ui.leFusszeile.text()
@@ -164,7 +167,7 @@ class DatenbankEditKarteWrapper(DatenbankElementEditorBase):
             if deckKarte is not None:
                 karte.farbe = deckKarte.farbe
 
-        html, htmlPath = generator.generateHtml(karte.farbe, karte.titel, karte.text, karte.subtitel, karte.fusszeile, karte.typ, forceHintergrund = True)
+        html, htmlPath = generator.generateHtml(karte, forceHintergrund = True)
         self.webView.page().setBackgroundColor(karte.farbe)
         self.webView.setHtml(html, QtCore.QUrl.fromLocalFile(QtCore.QFileInfo(htmlPath).absoluteFilePath()))        
            
@@ -209,26 +212,11 @@ class DatenbankEditKarteWrapper(DatenbankElementEditorBase):
         self.ui.leTitel.setVisible(not isNew)
         self.ui.labelVoraussetzungen.setVisible(isNew)
         self.ui.teVoraussetzungen.setVisible(isNew)
-
-        if isNew and self.ui.leUntertitel.text() == "$original$":
-            self.ui.leUntertitel.setText("")
-        if not isNew and self.ui.leUntertitel.text() == "":
-            self.ui.leUntertitel.setText("$original$")
         
         if isNew:
             self.ui.labelInfo.setText("Neue Karte erstellen")
         else:
-            text = ""
-            if self.ui.comboTyp.currentIndex() == KartenTyp.Vorteil:
-                text = "Vorteil"
-            elif self.ui.comboTyp.currentIndex() == KartenTyp.Regel:
-                text = "Regel"
-            elif self.ui.comboTyp.currentIndex() == KartenTyp.Talent:
-                text = "Talent"
-            elif self.ui.comboTyp.currentIndex() == KartenTyp.Waffeneigenschaft:
-                text = "Waffeneigenschaft"
-
-            self.ui.labelInfo.setText(text + " gefunden:")
+            self.ui.labelInfo.setText(KartenTyp.TypNamen[self.ui.comboTyp.currentIndex()] + " gefunden:")
         self.ui.radioEdit.setVisible(not isNew)
         self.ui.radioDelete.setVisible(not isNew)
         self.deleteChanged()

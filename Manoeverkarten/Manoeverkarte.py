@@ -84,11 +84,12 @@ class Karte:
         self.typ = KartenTyp.Invalid
         self.subtyp = -1
         self.titel = "$original$"
-        self.subtitel = ""
+        self.subtitel = "$original$"
         self.text = "$original$"
         self.fusszeile = "$original$"
         self.löschen = False
         self.voraussetzungen = []
+        self.customData = {}
         self.isUserAdded = True
 
         # Derived properties after deserialization
@@ -102,11 +103,19 @@ class Karte:
         pass
 
     def typname(self, db):
-        if self.typ > KartenTyp.Deck:
-            return self.subtyp if self.subtyp else "n/a"
+        name = "n/a"
         if self.typ != KartenTyp.Invalid:
-            return KartenTyp.TypNamen[self.typ]
-        return "n/a"
+            name = KartenTyp.TypNamen[self.typ]
+        if self.subtyp == -1:
+            return name
+
+        if self.typ == KartenTyp.Vorteil:
+            name += f" ({db.einstellungen['Vorteile: Typen'].wert[self.subtyp]})"
+        elif self.typ == KartenTyp.Regel:
+            name += f" ({db.einstellungen['Regeln: Typen'].wert[self.subtyp]})"
+        elif self.typ == KartenTyp.Talent:
+            name += f" ({list(db.einstellungen['Talente: Spezialtalent Typen'].wert.keys())[self.subtyp]})"
+        return name
 
     def details(self, db):
         if self.löschen:
