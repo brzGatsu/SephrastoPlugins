@@ -36,7 +36,7 @@ class TextEdit(QPlainTextEdit):
         tc = self.textCursor()
         extra = len(completion) - len(self._completer.completionPrefix())
 
-        tc.movePosition(-len(self._completer.completionPrefix()))
+        tc.movePosition(QTextCursor.MoveOperation.Left, QTextCursor.MoveMode.MoveAnchor, len(self._completer.completionPrefix()))
         tc.select(QTextCursor.WordUnderCursor)
         tc.removeSelectedText()
         tc.insertText(completion)

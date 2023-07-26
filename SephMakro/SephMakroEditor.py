@@ -2,7 +2,7 @@ import os
 import sys
 from io import StringIO
 import contextlib
-from PySide6 import QtWidgets, QtCore
+from PySide6 import QtWidgets, QtCore, QtGui
 from PySide6.QtWidgets import QCompleter, QApplication, QStyle
 from PySide6.QtGui import QCursor
 from PySide6.QtCore import Qt, QFile, QStringListModel
@@ -34,7 +34,23 @@ class SephMakroEditor(object):
         self.ui.horizontalLayout.layout().addWidget(self.numbers)
         self.ui.horizontalLayout.layout().addWidget(self.editor)
 
-        self.editor.setStyleSheet(self.stylesheet2())
+        # Just monospace doesn't work, have to specify fonts... seems to be an issue in chromium
+        cssEditor = """\
+        QPlainTextEdit
+        {
+        font-family: Consolas,'Lucida Console','Liberation Mono','DejaVu Sans Mono','Bitstream Vera Sans Mono','Courier New',monospace,sans-serif;
+        background: #E2E2E2;
+        color: #202020;
+        border: 1px solid #1EAE3D;
+        }"""
+        self.editor.setStyleSheet(cssEditor)
+
+        cssOutput = """\
+        QPlainTextEdit
+        {
+        font-family: Consolas,'Lucida Console','Liberation Mono','DejaVu Sans Mono','Bitstream Vera Sans Mono','Courier New',monospace,sans-serif;
+        }"""
+        self.ui.teOutput.setStyleSheet(cssOutput)
 
         self.completer = QCompleter(self.formMain)
         self.completer.setModel(self.modelFromFile(os.path.dirname(os.path.abspath(__file__)) + '/resources/wordlist.txt'))
@@ -75,10 +91,7 @@ class SephMakroEditor(object):
         self.onDbChange()
 
     def onDbChange(self):
-        if self.ui.comboDB.currentText() == "Keine":
-            Wolke.DB = Datenbank.Datenbank(None, True)
-        else:
-            Wolke.DB = Datenbank.Datenbank(self.ui.comboDB.currentText(), True)
+        Wolke.DB = Datenbank.Datenbank(self.ui.comboDB.currentText(), True)
 
     def run(self):
         with stdoutIO() as s:
@@ -94,7 +107,8 @@ class SephMakroEditor(object):
         for i in reversed(range(layout.count())):
             if layout.itemAt(i).widget():
                 layout.itemAt(i).widget().setParent(None)
-            layout.removeItem(layout.itemAt(i))
+            else:
+                layout.removeItem(layout.itemAt(i))
 
         if not os.path.isdir(Wolke.Settings["SephMakro_Pfad"]):
             return
@@ -173,78 +187,3 @@ class SephMakroEditor(object):
         QApplication.restoreOverrideCursor()
 
         return QStringListModel(self.words, self.completer)
-
-    def stylesheet2(self):
-        return """
-QPlainTextEdit
-{
-font-family: Noto Sans;
-font-size: 13px;
-background: #E2E2E2;
-color: #202020;
-border: 1px solid #1EAE3D;
-}
-QTextEdit
-{
-background: #2e3436;
-color: #729fcf;
-font-family: Monospace;
-font-size: 8pt;
-padding-left: 6px;
-border: 1px solid #1EAE3D;
-}
-QStatusBar
-{
-font-family: Noto Sans;
-color: #204a87;
-font-size: 8pt;
-}
-QLabel
-{
-font-family: Noto Sans;
-color: #204a87;
-font-size: 8pt;
-}
-QLineEdit
-{
-background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-    stop: 0 #E1E1E1, stop: 0.4 #e5e5e5,
-    stop: 0.5 #e9e9e9, stop: 1.0 #d2d2d2);
-font-family: Helvetica;
-font-size: 8pt;
-}
-QPushButton
-{
-background: #D8D8D8;
-font-family: Noto Sans;
-font-size: 8pt;
-}
-QComboBox
-{
-background: #D8D8D8;
-font-family: Noto Sans;
-font-size: 8pt;
-}
-QMenuBar
-{
-font-family: Noto Sans;
-font-size: 8pt;
-border: 0px;
-}
-QMenu
-{
-font-family: Noto Sans;
-font-size: 8pt;
-}
-QToolBar
-{
-border: 0px;
-background: transparent;
-}
-QMainWindow
-{
-background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-    stop: 0 #E1E1E1, stop: 0.4 #DDDDDD,
-    stop: 0.5 #D8D8D8, stop: 1.0 #D3D3D3);
-}
-    """ 
