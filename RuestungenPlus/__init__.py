@@ -98,7 +98,7 @@ class Plugin:
 
     def datenbankXmlSchreibenHook(self, root, params):
         for eigenschaft in self.db.ruestungseigenschaften.values():
-            if not self.db.isChangedOrNew(eigenschaft): continue
+            if not params["merge"] and not self.db.isChangedOrNew(eigenschaft): continue
             w = etree.SubElement(root, 'Rüstungseigenschaft')
             w.set('name', eigenschaft.name)
             w.set('scriptOnlyFirst', "1" if eigenschaft.scriptOnlyFirst else "0")
@@ -378,10 +378,12 @@ class Plugin:
                 rüsNode.set('be',str(rüst.be))
                 rüsNode.set('rs',Hilfsmethoden.RsArray2Str(rüst.rs))
                 rüsNode.set('typ',str(rüst.typ))
-                rüsNode.text = ", ".join(rüst.eigenschaften)
+                if Wolke.DB.einstellungen["RüstungenPlus Plugin: Rüstungseigenschaften"].wert:
+                    rüsNode.text = ", ".join(rüst.eigenschaften)
 
-        count = 0
-        for rüs in objekte.findall('Rüstungen/Rüstung'):
-            rüs.text = ", ".join(char.rüstung[count].eigenschaften)
-            count += 1
+        if Wolke.DB.einstellungen["RüstungenPlus Plugin: Rüstungseigenschaften"].wert:
+            count = 0
+            for rüs in objekte.findall('Rüstungen/Rüstung'):
+                rüs.text = ", ".join(char.rüstung[count].eigenschaften)
+                count += 1
         return root

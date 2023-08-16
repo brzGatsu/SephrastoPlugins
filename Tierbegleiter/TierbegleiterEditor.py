@@ -26,7 +26,7 @@ class TierbegleiterEditor(object):
         self.zuchteigenschaftenValid = True
         self.attribute = ["KO", "MU", "GE", "KK", "IN", "KL", "CH", "FF", "WS", "RS", "WS*", "MR", "GS", "GS2", "TP", "INI", "WM"]
         self.charakterbogen = Charakterbogen() # use default settings
-        self.charakterbogen.load(os.path.join(os.path.dirname(os.path.abspath(__file__)), "Data", "Tierbegleiterbogen.pdf"))
+        self.charakterbogen.load(os.path.join(os.path.dirname(os.path.abspath(__file__)), "Data", "Tierbegleiterbogen.ini"))
 
         self.attributModifiers = {}
         self.talentModifiers = {}

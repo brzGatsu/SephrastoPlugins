@@ -7,6 +7,9 @@ by Andrew Doane from <a href="https://thenounproject.com/browse/icons/term/me/" 
 area-floor-size-icon.svg
 https://uxwing.com/area-floor-size-icon/
 
+bee.svg
+by Lorc under CC BY 3.0 https://game-icons.net/1x1/lorc/bee.html
+
 bird-claw.svg
 by Lorc under CC BY 3.0 https://game-icons.net/1x1/lorc/bird-claw.html
 
@@ -31,6 +34,9 @@ by Lorc under CC BY 3.0 https://game-icons.net/1x1/lorc/daemon-skull.html
 Dämonische Hilfe (Cpt).svg
 by Lorc under CC BY 3.0 https://game-icons.net/1x1/lorc/octopus.html
 
+dead-head.svg
+by Delapouite under CC BY 3.0 https://game-icons.net/1x1/delapouite/dead-head.html
+
 djinn.svg
 by Delapouite under CC BY 3.0 https://game-icons.net/1x1/delapouite/djinn.html
 
@@ -39,6 +45,9 @@ by Lorc under CC BY 3.0 https://game-icons.net/1x1/lorc/lion.html
 
 lyre.svg
 by Lorc under CC BY 3.0 https://game-icons.net/1x1/lorc/lyre.html
+
+ogre.svg
+by Delapouite under CC BY 3.0 https://game-icons.net/1x1/delapouite/ogre.html
 
 ouroboros.svg
 by Lorc under CC BY 3.0 https://game-icons.net/1x1/lorc/ouroboros.html
@@ -49,11 +58,20 @@ by Lorc under CC BY 3.0 https://game-icons.net/1x1/lorc/poison-bottle.html
 rock-golem.svg
 by Delapouite under CC BY 3.0https://game-icons.net/1x1/delapouite/rock-golem.html
 
+rune-stone.svg
+by Lorc under CC BY 3.0 https://game-icons.net/1x1/lorc/rune-stone.html
+
 scorpion-tail.svg
 by Lorc under CC BY 3.0 https://game-icons.net/1x1/lorc/scorpion-tail.html
 
 spectre.svg
 by Lorc under CC BY 3.0 https://game-icons.net/1x1/lorc/spectre.html
+
+sundial.svg
+by Lorc under CC BY 3.0 https://game-icons.net/1x1/lorc/sundial.html
+
+sunrise.svg
+by Lorc under CC BY 3.0 https://game-icons.net/1x1/lorc/sunrise.html
 
 swap-bag.svg
 by Lorc under CC BY 3.0 https://game-icons.net/1x1/lorc/swap-bag.html

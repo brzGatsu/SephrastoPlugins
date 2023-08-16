@@ -180,10 +180,14 @@ habe ich mit docsmagic.de gemacht, hier werden Sleeves mit farbigen Rückseiten 
                 karte.subtitel += " | "
             karte.subtitel += self.shorten(line, self.db.einstellungen["Manöverkarten Plugin: Talente Schwierigkeit kürzen"].wert)
 
-        karte.text, line = self.removeLineHtml(karte.text, "Vorbereitungszeit:")
+        line = self.findLineHtml(karte.text, "Vorbereitungszeit:")
         if line:
             karte.customData["vorbereitungszeiticon"] = "\uf254"
-            karte.customData["vorbereitungszeit"] = self.shorten(line, self.db.einstellungen["Manöverkarten Plugin: Talente Zeit kürzen"].wert)
+            if self.shouldRemove(line, self.db.einstellungen["Manöverkarten Plugin: Talente Zeit im Text"].wert):
+                karte.text, line = self.removeLineHtml(karte.text, "Vorbereitungszeit:")
+                karte.customData["vorbereitungszeit"] = self.shorten(line, self.db.einstellungen["Manöverkarten Plugin: Talente Zeit kürzen"].wert)
+            else:
+                karte.customData["vorbereitungszeit"] = "<span>\uf063</span>"
 
         line = self.findLineHtml(karte.text, "Ziel:")
         if line:
@@ -202,7 +206,7 @@ habe ich mit docsmagic.de gemacht, hier werden Sleeves mit farbigen Rückseiten 
         line = self.findLineHtml(karte.text, "Wirkungsdauer:")
         if line:
             karte.customData["wirkungsdauericon"] = "\uf2f2"
-            if self.shouldRemove(line, self.db.einstellungen["Manöverkarten Plugin: Talente Wirkungsdauer im Text"].wert):
+            if self.shouldRemove(line, self.db.einstellungen["Manöverkarten Plugin: Talente Zeit im Text"].wert):
                 karte.text, line = self.removeLineHtml(karte.text, "Wirkungsdauer:")
                 karte.customData["wirkungsdauer"] = self.shorten(line, self.db.einstellungen["Manöverkarten Plugin: Talente Zeit kürzen"].wert)
             else:
@@ -349,7 +353,7 @@ habe ich mit docsmagic.de gemacht, hier werden Sleeves mit farbigen Rückseiten 
         return karte
 
     def generateDBKarten(self, deaktivierteKategorien):
-        talente = [t for t in self.db.talente.values() if t.cheatsheetAuflisten and not t.name.endswith(" (Blutgeist)") and not t.name.endswith(" (Tiergeist)")]
+        talente = [t for t in self.db.talente.values() if t.cheatsheetAuflisten and not t.name.endswith(" (Tiergeist)")]
         return self.generate(deaktivierteKategorien, self.db.vorteile.values(), self.db.regeln.values(), self.db.waffeneigenschaften.values(), talente, self.db.karten.values())
 
     def generateCharKarten(self, deaktivierteKategorien):

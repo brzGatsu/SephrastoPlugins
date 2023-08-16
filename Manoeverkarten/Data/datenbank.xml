@@ -327,17 +327,8 @@ Du wartest ab und handelst erst, wenn ein bestimmtes Ereignis eintritt. Dazu bes
   <Karte name="Eigenschaft Aufrechterhalten (D)" typ="1" subtyp="10" titel="Aufrechterhalten" subtitel="$original$" fusszeile="Anrufungseigenschaft">$original$</Karte>
   <Karte name="Eigenschaft Konzentration (D)" typ="1" subtyp="10" titel="Konzentration" subtitel="$original$" fusszeile="Anrufungseigenschaft">$original$</Karte>
   <Karte name="Eigenschaft Konterprobe (D)" typ="1" subtyp="10" titel="Konterprobe" subtitel="$original$" fusszeile="Anrufungseigenschaft">$original$</Karte>
-  <Karte name="Antimagie - Gegenzauber" löschen="1" typ="1" subtyp="4" titel="$original$" subtitel="$original$" fusszeile="$original$">$original$</Karte>
-  <Karte name="Antimagie - Magie unterdrücken" löschen="1" typ="1" subtyp="4" titel="$original$" subtitel="$original$" fusszeile="$original$">$original$</Karte>
-  <Karte name="Antimagie - Wesenheit bannen" löschen="1" typ="1" subtyp="4" titel="$original$" subtitel="$original$" fusszeile="$original$">$original$</Karte>
-  <Karte name="Antimagie - Zauber aufheben" löschen="1" typ="1" subtyp="4" titel="$original$" subtitel="$original$" fusszeile="$original$">$original$</Karte>
   <Karte name="Beschwörungen" typ="1" subtyp="4" titel="$original$" subtitel="$original$" fusszeile="Beschwörungen">$original$</Karte>
   <Karte name="Beschwörungen - Bindung" typ="1" subtyp="4" titel="Bindung" subtitel="$original$" fusszeile="Beschwörungen">$original$</Karte>
-  <Karte name="Beschwörungen - Chimären" typ="1" subtyp="4" titel="Chimären" subtitel="$original$" fusszeile="Beschwörungen">$original$</Karte>
-  <Karte name="Beschwörungen - Dämonen" typ="1" subtyp="4" titel="Dämonen" subtitel="$original$" fusszeile="Beschwörungen">$original$</Karte>
-  <Karte name="Beschwörungen - Elementare" typ="1" subtyp="4" titel="Elementare" subtitel="$original$" fusszeile="Beschwörungen">$original$</Karte>
-  <Karte name="Beschwörungen - Golems" typ="1" subtyp="4" titel="Golems" subtitel="$original$" fusszeile="Beschwörungen">$original$</Karte>
-  <Karte name="Beschwörungen - Untote" typ="1" subtyp="4" titel="Untote" subtitel="$original$" fusszeile="Beschwörungen">$original$</Karte>
   <Karte name="Beschwörungen - Zusätzliche Fähigkeiten" typ="1" subtyp="4" titel="Zusätzliche Fähigkeiten" subtitel="$original$" fusszeile="Beschwörungen">$original$</Karte>
   <Karte name="Allegorische Analyse (passiv)" typ="2" subtyp="0" titel="Allegorische Analyse" subtitel="Passiv" fusszeile="$original$">$original$</Karte>
   <Karte name="Astralspeicher (passiv)" typ="2" subtyp="0" titel="Astralspeicher" subtitel="Passiv, $original$" fusszeile="$original$">$original$</Karte>

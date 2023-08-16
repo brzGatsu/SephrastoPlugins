@@ -18,9 +18,10 @@ class RSCharakterRuestungWrapper(QtCore.QObject):
 
     @staticmethod
     def applyEigenschaften(r):
-        r.eigenschaften = []
-        if r.definition.text:
-            r.eigenschaften = list(map(str.strip, r.definition.text.split(",")))
+        if Wolke.DB.einstellungen["RüstungenPlus Plugin: Rüstungseigenschaften"].wert:
+            r.eigenschaften = []
+            if r.definition.text:
+                r.eigenschaften = list(map(str.strip, r.definition.text.split(",")))
         return r
 
     def __init__(self, index):
@@ -131,7 +132,7 @@ class RSCharakterRuestungWrapper(QtCore.QObject):
             addR = QtWidgets.QPushButton()
             addR.setText('\u002b')
             addR.setProperty("class", "iconSmall")
-            addR.clicked.connect(partial(self.selectArmor, index = i))
+            addR.clicked.connect(partial(self.selectArmor, index = index))
             self.buttons.append(addR)
             self.ui.Ruestungen.addWidget(addR, row, col, 1, 1)
 

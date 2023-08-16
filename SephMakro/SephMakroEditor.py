@@ -29,6 +29,7 @@ class SephMakroEditor(object):
         EinstellungenWrapper.addSettings({"SephMakro_Pfad" : ""})
 
     def setupMainForm(self):
+        Wolke.DB = Datenbank.Datenbank()
         self.editor = TextEdit()
         self.numbers = NumberBar(self.editor)
         self.ui.horizontalLayout.layout().addWidget(self.numbers)
@@ -91,7 +92,7 @@ class SephMakroEditor(object):
         self.onDbChange()
 
     def onDbChange(self):
-        Wolke.DB = Datenbank.Datenbank(self.ui.comboDB.currentText(), True)
+        Wolke.DB.xmlLaden(hausregeln = self.ui.comboDB.currentText(), isCharakterEditor = True)
 
     def run(self):
         with stdoutIO() as s:

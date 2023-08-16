@@ -178,6 +178,8 @@ Beschwörungsschwierigkeit des zu bannenden Wesens=Beschwörungsschwierigkeit"""
  Initiativephasen=&nbsp;<span>\uf2f9</span>
  Initiativephase=&nbsp;<span>\uf2f9</span>
  Lebensjahr=&nbsp;<span>\uf1fd</span>
+ Nacht=&nbsp;<span>\uf186</span>
+bis zum nächsten Sonnenaufgang=<img src='../Icons/sunrise.svg'>
 augenblicklich=0
 bis die Bindung gelöst wird=<span>\uf127</span>
 solange das Gift wirkt=<img src='../Icons/poison-bottle.svg'><span>\uf254</span>
@@ -187,8 +189,11 @@ frei wählbar=<span>\uf83e</span>
 nach Vorhaben=<span>\uf83e</span>
 nach Projekt=<span>\uf83e</span>
 nach Artefakt=<span>\uf83e</span>
+wie das Ziel-Zeichen=<span>\u003d</span>&nbsp;<img src='../Icons/rune-stone.svg'>
+wie die Ziel-Rune=<span>\u003d</span>&nbsp;<img src='../Icons/rune-stone.svg'>
 bis zu =<span style='font-size: 6pt;'>\uf537</span>&nbsp;
-bis zum =<span style='font-size: 6pt;'>\uf537</span>&nbsp;"""
+bis zum =<span style='font-size: 6pt;'>\uf537</span>&nbsp;
+mindestens =<span style='font-size: 6pt;'>\uf532</span>&nbsp;"""
         e.typ = "TextDict"
         e.separator = "\n"
         e.strip = False
@@ -235,6 +240,7 @@ aventurienweit=<span>\uf0ac</span>"""
         e.text = """\
  / =&nbsp;
 /=&nbsp;
+Einzelpersonen=<span>\uf0c0</span>
 Einzelperson=<span>\uf183</span>
 zwei Personen=<span>\uf183</span>&nbsp;+&nbsp;<span>\uf183</span>
 Einzelwesen=<span>W</span>
@@ -246,8 +252,11 @@ Einzelobjekt=<span>\uf466</span>
 Ritualgegenstand=<img src='../Icons/curvy-knife.svg'>
 Schale der Alchemie=<img src='../Icons/cauldron.svg'>
 Zauberstab=<img src='../Icons/wizard-staff.svg'>
+Zauberrune=<img src='../Icons/rune-stone.svg'>
+Zauberzeichen=<img src='../Icons/rune-stone.svg'>
 wirkender Zauber=<span>\uf72b</span>
 Zauber=<span>\uf72b</span>
+Liturgie=<img src='../Icons/sundial.svg'>
 gebundener Kristall=<span>\uf3a5</span>
 Knochenkeule=<img src='../Icons/bone-mace.svg'>
 Kristallkugel=<img src='../Icons/crystal-ball.svg'>
@@ -258,7 +267,7 @@ Tier=<span>\uf1b0</span>
 einzelne Pflanze=<span>\uf4d8</span>
 Pflanze=<span>\uf4d8</span>
 Vertrautentier=<span>\uf6be</span>
-Bindungspartner=<span>\uf6be</span>
+Bindungspartner=<img src='../Icons/noun-me-4660321.svg'>
 zwei Elixiere=<span>\uf0c3</span>&nbsp;+&nbsp;<span>\uf0c3</span>
 Elixier=<span>\uf0c3</span>
 Miniatur der Herrschaft=<img src='../Icons/voodoo-doll.svg'>
@@ -268,6 +277,11 @@ Teilobjekt=Teil-<span>\uf466</span>
 Iama=<img src='../Icons/lyre.svg'>
 Schlangenreif=<img src='../Icons/ouroboros.svg'>
 Schuppenbeutel=<img src='../Icons/swap-bag.svg'>
+Bienen=<img src='../Icons/bee.svg'>
+Oger=<img src='../Icons/ogre.svg'>
+Pferd=<span>\uf6f0</span>
+Feuermähre=<span>\uf6f0</span>
+Leiche=<img src='../Icons/dead-head.svg'>
 Material für einen einzelnen Untoten=<img src='../Icons/carrion.svg'>
 Material für einen einzelnen Golem=<img src='../Icons/rock-golem.svg'>
 Material für eine einzelne Chimäre=<img src='../Icons/lion.svg'><img src='../Icons/bird-claw.svg'><img src='../Icons/scorpion-tail.svg'>
@@ -284,7 +298,15 @@ Material für eine einzelne Chimäre=<img src='../Icons/lion.svg'><img src='../I
         e.name = "Manöverkarten Plugin: Talente Ziel im Text"
         e.beschreibung = "Bei Talenten wird das Ziel normalerweise in die obere Leiste eingetragen. Falls der Ziel-Text jedoch einen zum Teil aus einem der Einträge hier besteht, verbleibt er im Text."
         e.text = """\
-Beschworenes Wesen"""
+Beschworenes Wesen
+Einzelperson (nur maritime Humanoide)
+Einzelperson von niedrigerem Status
+Einzelpersonen, mit dir zumindest langjährig befreundet
+Einzelobjekt aus (überwiegend) Holz
+Tier der Größenklasse winzig 
+Sippenmitglied
+ganze Sippe
+Mackestopp"""
         e.typ = "TextList"
         e.separator = "\n"
         e.strip = False
@@ -305,15 +327,27 @@ halbe Basiskosten"""
         self.db.loadElement(e)
 
         e = DatenbankEinstellung()
-        e.name = "Manöverkarten Plugin: Talente Wirkungsdauer im Text"
-        e.beschreibung = "Bei Talenten wird die WD normalerweise in die obere Leiste eingetragen. Falls der WD-Text jedoch einen zum Teil aus einem der Einträge hier besteht, verbleibt er im Text."
+        e.name = "Manöverkarten Plugin: Talente Zeit im Text"
+        e.beschreibung = "Bei Talenten wird die Vorbereitungszeit bzw. Wirkungsdauer normalerweise in die obere Leiste eingetragen. Falls der Text jedoch einen zum Teil aus einem der Einträge hier besteht, verbleibt er im Text."
         e.text = """\
 augenblicklich; der Geist erscheint nach 2W6 Initiativephasen
 bis das Schiff deutlich umgebaut wird
 bis die Unterkunft deutlich umgebaut wird
 8 Stunden oder bis der Fang eingeholt wird
 Bis die Aufgabe gelöst wurde, maximal 1 Monat
-oder bis der Befehl erfüllt ist"""
+oder bis der Befehl erfüllt ist
+4 Stunden zzgl. frei wählbare Beschwörungsvorbereitung
+1 Monat lang jede Nacht
+8 Stunden je geprüftem Leben
+bis du aufhörst oder das Opfer stirbt
+bis die Bindung gelöst wird oder der Mackestopp zerbricht
+bis die Bindung gelöst wird, nach Aktivierung noch 4 Minuten
+bis die Bindung gelöst wird oder ein Patzer eingetreten ist
+bis die Bindung gelöst wird, nach Aktivierung noch 1 Stunde
+augenblicklich, der Tiegel bleibt etwa eine Stunde vor Ort
+nach Spielleiterentscheid, monatelang wirkende Magnum Opera sollten eine schwächere Basiswirkung haben
+bis die Bindung gelöst wird oder alle Pfeile ihr Ziel gefunden haben
+32 Minuten oder bis 8 Schritte zurückgelegt wurden"""
         e.typ = "TextList"
         e.separator = "\n"
         e.strip = False
@@ -355,7 +389,7 @@ oder bis der Befehl erfüllt ist"""
 
     def datenbankXmlSchreibenHook(self, root, params):
         for karte in self.db.karten.values():
-            if not self.db.isChangedOrNew(karte): continue
+            if not params["merge"] and not self.db.isChangedOrNew(karte): continue
             k = etree.SubElement(root, 'Karte')
             k.set('name', karte.name)
             k.set('typ', str(karte.typ))
