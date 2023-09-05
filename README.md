@@ -6,7 +6,7 @@ Grundsätzlich unterstützen die Plugins immer die neueste Sephrasto-Version, ä
 Enthält einen Baukasten mit WdH Spezies, Kulturen und Kämpferprofessionen für Ilaris Advanced
 
 ## CharakterToText
-Das Plugin sorgt dafür, dass beim PDF-Export (ab 3.2.2 beim Speichern des Charakters) zusätzlich eine Textdatei im gleichen Ordner angelegt wird. Diese Textdatei enthält alle Charakterwerte in leicht zu kopierendem Format. Ich nutze es beispielsweise, um ein digitales Charaktersheet in Form von Trello-Karten zu befüllen.
+Das Plugin sorgt dafür, dass beim beim Speichern des Charakters zusätzlich eine Textdatei im gleichen Ordner angelegt wird. Diese Textdatei enthält alle Charakterwerte in leicht zu kopierendem Format. Ich nutze es beispielsweise, um ein digitales Charaktersheet in Form von Trello-Karten zu befüllen.
 
 ## DBToText
 Das Plugin kann als Template für Datenbankexporter dienen. Es speichert die Datenbank in einer Textdatei.
@@ -15,9 +15,7 @@ Das Plugin kann als Template für Datenbankexporter dienen. Es speichert die Dat
 Ein Ilaris-Elementarmagier hat nur wenig Motivation weitere Varianten von Hexalogie-Zaubern zu erlernen, der Mehrwert ist zu gering für die Kosten. Ich biete euch hier ein Sephrasto-Plugin, das die EP-Kosten von Talenten aus elementaren Hexalogien halbiert. Der volle EP-Preis muss nur für das teuerste erlernte Talent aus der Hexalogie bezahlt werden. Beinhaltet sind alle bestätigten Hexalogien gemäß https://de.wiki-aventurica.de/wiki/Hexalogie (nicht die vermuteten), zusätzlich noch die Herbeirufung und Macht des <Elements> Zauber. Diese Umsetzung basiert auf der DSA4-Regel, die Hexalogiezauber eine Spalte günstiger steigern lässt, solange man eine Variante auf höherem TaW besitzt.
 
 ## Manoeverkarten
-Das Plugin gibt den PDF-Regelanhang eines Charakters oder gar die ganze Sephrastodatenbank in Manöverkarten aus.
-
-Schaut euch gerne auch die handgemachten Manöverkarten auf dsaforum.de an! Die dort enthaltenen Karten sind in der Regel übersichtlicher und besser formatiert, als der Output von diesem Plugin. Zudem findet ihr dort eine Druckanleitung für der Karten. Das Plugin hat allerdings den Vorteil, dass es auch Hausregeln, Vorteile, Zauber und Liturgien ausgeben kann.
+Das Plugin gibt im Charaktereditor den Regelanhang eines Charakters und im Datenbankeditor die ganze Sephrastodatenbank in Manöverkarten aus. Im Datenbankeditor erscheint außerdem ein zusätzliches Datenbankelement "Manöverkarte" mit dem eigene Karten erstellt und automatisch generierte Karten angepasst werden können.
 
 ## RuestungenPlus
 Dieses Plugin teilt die drei Rüstungen auf jeweils eigene Tabs auf. Dort werden sie nach Slots (wie Arme und Kopf) aufgeteilt, sodass einzelne Rüstungsteile besser verwaltet werden können. Im Charakterbogen erscheinen aus Platzmangel weiterhin nur die berechneten kompletten Rüstungen, die Einzelteile können aber im Regelanhang ausgegeben werden: Hierzu musst du in der Datenbankeinstellung 'Regelanhang: Reihenfolge' an der gewünschten Position (z.B. nach 'W') ein 'R' einfügen.
@@ -39,9 +37,11 @@ Hier findest du einige nützliche scripts für Sephmakro.
 - fertigkeiten_sf: Rechnet bei allen Fertigkeiten für alle Traditionen die Talentkosten zusammen, bildet den Durchschnitt und gibt den Steigerungsfaktor gemäß Ilaris Blog aus. Passive Talente werden ignoriert (da PW-unabhängig) und Traditionen mit 100 oder weniger investierbaren EP werden ignoriert. Es gibt hier einige Einstellungsmöglichkeiten direkt am Anfang des Makros.
 - inselfertigkeiten: Das Makro betrachtet für jede Tradition alle Fertigkeiten, deren Talent-Gesamt-EP unter 121 liegen. Dann inspiziert es jedes Talent dieser Fertigkeiten und prüft, ob es mit einer anderen Fertigkeit oberhalb der EP-Schwelle wirkbar ist. Wird ein Talent gefunden, bei dem das nicht der Fall ist, wird es zusammen mit seiner "Inselfertigkeit" ausgegeben. Passive Talente werden ignoriert (da PW-unabhängig). Es gibt hier einige Einstellungsmöglichkeiten direkt am Anfang des Makros
 - waffenbewerter: Das Makro geht durch alle Waffen in der Datenbank und wendet ein Punkteschema an (ähnlich wie hier: https://dsaforum.de/viewtopic.php?f=180&t=56989&p=2012837#p2012837), wodurch Waffen besser verglichen werden können. Das hilft insbesondere dabei, eigene Waffenkreationen zu balancen. Das Standard-Bewertungsschema habe ich nach bestem Gewissen erstellt, ich erhebe keinen Anspruch auf Richtigkeit, das kann nur Curthan :D. Das Schema ist sehr einfach komplett einstellbar in der Settings-Sektion.
+- zufälligeZauber: Das Makro würfelt auf die Verbreitungsangabe aller Zauber für eine angegebene Tradition. Die Numpy-Variante erfordert
+- zufälligeZauberNumpy: Wie zufälligeZauber mit etwas anderer Wahrscheinlichkeitsverteilung, aber benötigt Python und das Paket Numpy.
 
 ## Tierbegleiter
-Dieses Plugin erlaubt das Erstellen von Tierbegleitern entsprechend des Ilaris Bestiariums und das Exportieren in den Tierbegleiterbogen (bereits enthalten). Optional können in der Regelbasis mittels der Einstellung "Tierbegleiter Plugin: IA Zucht und Ausbildung" die Ilaris Advanced Regeln zu Zucht und Ausbildung aktiviert werden (zusammen mit speziell angepassten Tierwerten).
+Dieses Plugin erlaubt das Erstellen von Tierbegleitern entsprechend des Ilaris Bestiariums und das Exportieren in den enthaltenen Tierbegleiterbogen. Optional können in der Regelbasis mittels der Einstellung "Tierbegleiter Plugin: IA Zucht und Ausbildung" die Ilaris Advanced Regeln zu Zucht und Ausbildung aktiviert werden (zusammen mit speziell angepassten Tierwerten).
 
 ## Tragkraft
 Das Plugin setzt die Tragkraft der Regeln für Reisen von Alrik Normalpaktierer um (https://dsaforum.de/viewtopic.php?f=180&t=55321&hilit=reiseregeln). Die Tragkraft und der resultierende BE-Modifikator werden in der ersten Inventarzeile angezeigt. Der BE-Modifikator wird nicht(!) bei der BE oder den Kampfwerten eingerechnet. Allen anderen Zeilen kann ein Platzbedarf zugewiesen werden.
