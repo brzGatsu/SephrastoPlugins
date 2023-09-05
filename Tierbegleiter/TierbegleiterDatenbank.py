@@ -10,6 +10,7 @@ class DatabaseException(Exception):
 class TierbegleiterDatenbank():
     def __init__(self):
         sephrastoDB = Datenbank()
+        sephrastoDB.xmlLaden(hausregeln = Wolke.Settings['Datenbank'], isCharakterEditor = True)
         self.iaZuchtAusbildung = sephrastoDB.einstellungen["Tierbegleiter Plugin: IA Zucht und Ausbildung"].wert
 
         self.guteZuchteigenschaften = {}
