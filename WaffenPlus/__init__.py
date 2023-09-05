@@ -112,10 +112,14 @@ class Plugin:
                         W.eigenschaften.remove(we)
                         break
                 isEmpty = W.name == ""
+
                 vtVerboten = Wolke.DB.einstellungen["Waffen: Talente VT verboten"].wert
                 self.spinWM2[index].setEnabled(not isEmpty and not (W.name in vtVerboten or W.talent in vtVerboten))
-                self.spinWM2[index].setValue(vtWM if self.spinWM2[index].isEnabled() else 0)
+                self.spinWM2[index].setValue(vtWM)
                 super().loadWeaponIntoFields(W, index)
+                atVerboten = Wolke.DB.einstellungen["Waffen: Talente AT verboten"].wert
+                enable = not isEmpty and not (W.name in atVerboten or W.talent in atVerboten)
+                self.spinWM[index].setEnabled(enable)
 
             def createWaffe(self, index):
                 W = super().createWaffe(index)
@@ -178,7 +182,12 @@ class Plugin:
                 if rwDiff != 0:
                     diff.append("RW " + ("+" if rwDiff >= 0 else "") + str(rwDiff))
                 if atWMDiff != 0 or vtWMDiff != 0:
-                    diff.append("WM " + ("+" if atWMDiff >= 0 else "") + str(atWMDiff))
+                    diff.append("WM ")
+                    atVerboten = Wolke.DB.einstellungen["Waffen: Talente AT verboten"].wert
+                    if waffe.name in atVerboten or waffe.talent in atVerboten:
+                        diff[-1] += "-"
+                    else:
+                        diff[-1] += ("+" if atWMDiff >= 0 else "") + str(atWMDiff)
                     vtVerboten = Wolke.DB.einstellungen["Waffen: Talente VT verboten"].wert
                     if waffe.name in vtVerboten or waffe.talent in vtVerboten:
                         diff[-1] += "/-"
@@ -276,15 +285,21 @@ class Plugin:
 
             #Unhandlich
             if self.db.einstellungen["WaffenPlus Plugin: Separater VT-WM"].wert:
+                atVerboten = waffe.talent in Wolke.DB.einstellungen["Waffen: Talente AT verboten"].wert or waffe.name in Wolke.DB.einstellungen["Waffen: Talente AT verboten"].wert
+                vtVerboten = waffe.talent in Wolke.DB.einstellungen["Waffen: Talente VT verboten"].wert or waffe.name in Wolke.DB.einstellungen["Waffen: Talente VT verboten"].wert
+
                 unhandlich = getEigenschaft(waffe, "Unhandlich")
-                if fields[wmKey] and unhandlich:
+                if not vtVerboten and fields[wmKey] and unhandlich:
                     match = re.search("\(\s*([+-]?\d*)\s*\)", unhandlich)
                     if match:
                         val = int(match.groups()[0])
-                        fields[wmKey] = fields[wmKey] + "/" + str(int(fields[wmKey]) - val)
+                        if atVerboten:
+                            fields[wmKey] = str(int(fields[wmKey]) - val)
+                        else:
+                            fields[wmKey] = fields[wmKey] + "/" + str(int(fields[wmKey]) - val)
                         removeEigenschaft(waffeIndex, unhandlich)
-                elif not hasattr(waffe, 'lz'):
-                    fields[wmKey] = fields[wmKey] + "/" + fields[wmKey]
+                elif waffe.name and waffe.nahkampf and not atVerboten and not vtVerboten:
+                    fields[wmKey] += "/" + fields[wmKey]
 
             #Optionale Eigenschaften
             if self.db.einstellungen["WaffenPlus Plugin: Optionale Waffeneigenschaften"].wert:
