@@ -49,18 +49,45 @@ class KartenGenerator:
 
         return bedingungen.strip()
 
+    def getBasename(self, vorteil):
+        nums = [" VII", " VI", " V", " IV", " III", " II", " I"]
+        basename = ""
+        for n in nums:
+            if vorteil.name.endswith(n):
+                return vorteil.name[:-len(n)]
+        return vorteil.name
+
+    def getHighestLevel(self, vorteil, vorteile):
+        basename = self.getBasename(vorteil)
+        nums = [" VII", " VI", " V", " IV", " III", " II", " I"]
+        for n in nums:
+            if basename + n in vorteile:
+                return vorteile[basename + n]
+        return vorteil
+
+    def getLevel(self, vorteil):
+        nums = [" VII", " VI", " V", " IV", " III", " II", " I"]
+        basename = ""
+        for n in nums:
+            if vorteil.name.endswith(n):
+                return n.strip()
+        return ""
+
+    def isMultiLevel(self, vorteil):
+        return self.getBasename(vorteil) != vorteil.name
+
     def getVorteilDescription(self, vorteil):
         beschreibung = vorteil.cheatsheetBeschreibung.replace("\n\n", "\n")
         if not beschreibung:
             beschreibung = vorteil.text.replace("\n\n", "\n")
 
-        if vorteil.linkKategorie == VorteilLinkKategorie.Vorteil:              
-            beschreibungenErsetzen = self.db.einstellungen["Regelanhang: Vorteilsbeschreibungen ersetzen"].wert
-            namenErsetzen = self.db.einstellungen["Regelanhang: Vorteilsnamen ersetzen"].wert
-            #hacky, we only want to merge descriptions for kampfstile and traditionen
-            if vorteil.typ not in beschreibungenErsetzen and vorteil.typ in namenErsetzen:
+        beschreibung = beschreibung.replace(" (bereits eingerechnet)", "")
+        if self.isMultiLevel(vorteil):
+            beschreibung = self.getLevel(vorteil) + ": " + beschreibung
+            if vorteil.linkKategorie == VorteilLinkKategorie.Vorteil:
                 beschreibung2 = self.getVorteilDescription(self.db.vorteile[vorteil.linkElement])
-                beschreibung = CharakterPrintUtility.mergeDescriptions(beschreibung2, beschreibung)
+                beschreibung = beschreibung2 + "{listitem_separator}" + beschreibung
+
 
         return beschreibung
 
@@ -150,23 +177,23 @@ habe ich mit docsmagic.de gemacht, hier werden Sleeves mit farbigen Rückseiten 
             file = self.db.einstellungen["Manöverkarten Plugin: Zusätzliche Fertigkeiticons"].wert[fert]
             file = file.replace("$plugins_dir$", "file:///" + Wolke.Settings['Pfad-Plugins'].replace('\\', '/'))
             if file.endwith(".svg"):
-                return f"<div><img src='{file}'></div>"            
+                return f"<div><img src=\"{file}\"></div>"            
             else:
-                return f"<img src='{file}'>"
+                return f"<img src=\"{file}\">"
 
         fertSplit = fert.split(" (")[0] #remove all from paranthesis on
         file = os.path.join(self.fertImagesFolder, fert + ".png")
         if os.path.isfile(file):
-            return f"<img src='{file}'>"
+            return f"<img src=\"{file}\">"
         file = os.path.join(self.fertImagesFolder, fertSplit + ".png")
         if os.path.isfile(file): 
-            return f"<img src='{file}'>"
+            return f"<img src=\"{file}\">"
         file = os.path.join(self.fertImagesFolder, fert + ".svg")
         if os.path.isfile(file): # we expect svg to be icons only
-            return f"<div><img src='{file}'></div>"
+            return f"<div><img src=\"{file}\"></div>"
         file = os.path.join(self.fertImagesFolder, fertSplit + ".svg")
         if os.path.isfile(file):
-            return f"<div><img src='{file}'></div>"
+            return f"<div><img src=\"{file}\"></div>"
 
         return f"<div><span>{fert.replace(' ', '<br>', 1)}</span></div>" # just add the name as text with max 1 linebreak
 
@@ -273,29 +300,29 @@ habe ich mit docsmagic.de gemacht, hier werden Sleeves mit farbigen Rückseiten 
         if isinstance(element, VorteilDefinition):
             karte.typ = KartenTyp.Vorteil
             karte.subtyp = element.typ
-            #if Wolke.Char:
-            #    titel = CharakterPrintUtility.getLinkedName(Wolke.Char, vorteil, True)
             text = self.getVorteilDescription(element)
             listified = "<ul" in text or "<ol" in text
-            if not listified and "\n" in text:
-                text = "<ul><li>" + text.replace("\n", "</li><li>") + "</li></ul>"
-                listified = True
 
-            #if not Wolke.Char:
+            if self.isMultiLevel(element):
+                karte.titel = self.getBasename(element)
+                if karte.titel.startswith("Tradition der "):
+                    karte.titel = karte.titel[len("Tradition der "):]
+                    if karte.titel.endswith("geweihten"):
+                        karte.titel = karte.titel[:-1]
+
+                if "{listitem_separator}" in text:
+                    text = "<ul><li class='checkbox'>" + text.replace("{listitem_separator}", "</li><li class='checkbox'>") + "</li></ul>"
+                    listified = True
+            else:
+                if not listified and "\n" in text:
+                    text = text.replace("\n    ", "\n")
+                    text = "<ul><li>" + text.replace("\n", "</li><li>") + "</li></ul>"
+                    listified = True
+
             text = "<i>Wirkung:</i> " + text
             bedingungen = self.getVorteilBedingungen(element)
             if bedingungen:
                 text = f"<i>Bedingungen:</i> {bedingungen}\n{text}"
-
-            voraussetzungen = Hilfsmethoden.VorArray2AnzeigeStr(element.voraussetzungen, self.db)
-            voraussetzungen = (voraussetzungen[:100] + '...') if len(voraussetzungen) > 100 else voraussetzungen
-            if element.variableKosten:
-                voraussetzungen += f"; EP-Kosten variabel"
-            else:
-                voraussetzungen += f"; {element.kosten} EP"
-            if not listified:
-                text += "<br>"
-            text += "<i>Voraussetzungen:</i> " + voraussetzungen + "<br><i>Nachkauf:</i> " + element.nachkauf
             karte.text = text
             karte.fusszeile = self.db.einstellungen["Vorteile: Typen"].wert[element.typ]
             karte.subtitel = ""
@@ -354,16 +381,22 @@ habe ich mit docsmagic.de gemacht, hier werden Sleeves mit farbigen Rückseiten 
 
     def generateDBKarten(self, deaktivierteKategorien):
         talente = [t for t in self.db.talente.values() if t.cheatsheetAuflisten and not t.name.endswith(" (Tiergeist)")]
-        return self.generate(deaktivierteKategorien, self.db.vorteile.values(), self.db.regeln.values(), self.db.waffeneigenschaften.values(), talente, self.db.karten.values())
+        vorteile = [v for v in self.db.vorteile.values() if not self.isMultiLevel(v)]
+        for v in [v for v in self.db.vorteile.values() if self.isMultiLevel(v)]:
+            highest = self.getHighestLevel(v, self.db.vorteile)
+            if v == highest:
+                vorteile.append(v)
+        return self.generate(deaktivierteKategorien, vorteile, self.db.regeln.values(), self.db.waffeneigenschaften.values(), talente, self.db.karten.values())
 
     def generateCharKarten(self, deaktivierteKategorien):
         # Vorteile
-        namenErsetzen = self.db.einstellungen["Regelanhang: Vorteilsnamen ersetzen"].wert
-        isLinkedTo = {}
-        for vorteil in Wolke.Char.vorteile.values():
-            if vorteil.linkKategorie == VorteilLinkKategorie.Vorteil and vorteil.typ in namenErsetzen:
-                isLinkedTo[vorteil.linkElement] = True
-        vorteile = [v.definition for v in Wolke.Char.vorteile.values() if v.cheatsheetAuflisten and not v.name in isLinkedTo]
+        vorteile = [v.definition for v in Wolke.Char.vorteile.values() if v.cheatsheetAuflisten and not self.isMultiLevel(v)]
+        multiLevelVorteile = []
+        for v in [v.definition for v in Wolke.Char.vorteile.values() if v.cheatsheetAuflisten and self.isMultiLevel(v)]:
+            highest = self.getHighestLevel(v, self.db.vorteile)
+            if highest not in multiLevelVorteile:
+                multiLevelVorteile.append(highest)
+        vorteile.extend(multiLevelVorteile) 
 
         # Regeln
         regeln = []
@@ -528,6 +561,8 @@ habe ich mit docsmagic.de gemacht, hier werden Sleeves mit farbigen Rückseiten 
         text = Hilfsmethoden.fixHtml(karte.text, False)
         html = html.replace("{card_title}", karte.titel)
         html = html.replace("{card_title_color}", karte.farbe)
+        html = html.replace("{card_title_font}", Wolke.Settings["Manöverkarten_FontTitle"])
+        html = html.replace("{card_font}", Wolke.Settings["Manöverkarten_Font"])
         html = html.replace("{card_subtitle}", karte.subtitel)
         html = html.replace("{card_footer}", footer)
         html = html.replace("{card_content}", text)
@@ -572,9 +607,12 @@ habe ich mit docsmagic.de gemacht, hier werden Sleeves mit farbigen Rückseiten 
                 bookmarks.append(PdfSerializer.PdfBookmark(karte.titel, count, 1))
                 lastFooter = ""
             else:  
-                if karte.fusszeile and karte.fusszeile != lastFooter and karte.fusszeile != lastDeck:
-                    lastFooter = karte.fusszeile
-                    bookmarks.append(PdfSerializer.PdfBookmark(karte.fusszeile.replace("$original$", "Allgemein"), count, 2))
+                if karte.fusszeile and karte.fusszeile != lastFooter:
+                    if karte.fusszeile == lastDeck:
+                        lastFooter = ""
+                    else:
+                        lastFooter = karte.fusszeile
+                        bookmarks.append(PdfSerializer.PdfBookmark(karte.fusszeile.replace("$original$", "Allgemein"), count, 2))
                 bookmarks.append(PdfSerializer.PdfBookmark(karte.titel, count, 3 if lastFooter else 2))
             
             kartenPdfs.append(self.__writeTempPDF(webEngineView, karte))   

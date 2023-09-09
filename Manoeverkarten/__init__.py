@@ -37,6 +37,8 @@ class Plugin:
                                           "Manöverkarten_PrologAusgeben" : True,
                                           "Manöverkarten_CharaktereditorButton" : True,
                                           "Manöverkarten_ExportVerzögerungMs" : 20,
+                                          "Manöverkarten_FontTitle" : "Aniron",
+                                          "Manöverkarten_Font" : Wolke.DefaultOSFont,
                                           "Manöverkarten_DeaktivierteKategorien" : []})
 
     @staticmethod
@@ -66,6 +68,25 @@ class Plugin:
         spinDelay.setMaximum(9999)
         spinDelay.setSuffix("ms")
         dlg.addSetting("Manöverkarten_ExportVerzögerungMs", "Export-Verzögerung", spinDelay)
+
+        fontFamilies = QtGui.QFontDatabase().families()
+
+        comboFont = QtWidgets.QComboBox()
+        comboFont.addItems(fontFamilies)
+        if Wolke.Settings["Manöverkarten_FontTitle"]in fontFamilies:
+            comboFont.setCurrentText(Wolke.Settings["Manöverkarten_FontTitle"])
+        else:
+            comboFont.setCurrentText(Wolke.DefaultOSFont)
+        dlg.addSetting("Manöverkarten_FontTitle", "Karten Schriftart Titel", comboFont)
+
+        comboFont = QtWidgets.QComboBox()
+        comboFont.addItems(fontFamilies)
+        if Wolke.Settings["Manöverkarten_Font"]in fontFamilies:
+            comboFont.setCurrentText(Wolke.Settings["Manöverkarten_Font"])
+        else:
+            comboFont.setCurrentText(Wolke.DefaultOSFont)
+        dlg.addSetting("Manöverkarten_Font", "Karten Schriftart Text", comboFont)
+
         dlg.show()
 
     def menusErstellen(self, params):

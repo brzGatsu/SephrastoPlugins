@@ -25,8 +25,7 @@ class Plugin:
             "- Zeigt im Waffen-Tab ein VT-WM Feld an. Waffen in der Datenbank kann die Eigenschaft Unhandlich(X) gegeben werden, wobei X von der VT abgezogen wird. Beispiel: ein WM von 2 und Unhandlich (3) bedeutet einen Gesamt-WM von 2/-1.\n" +\
             "- Optionale Waffeneigenschaften, die mit '(*)' am Ende des Namens markiert werden; Beispiel: die Streitaxt erhält die Eigenschaft Rüstungsbrechend (*). Diese Markierung muss im Charaktereditor entfernt werden, ansonsten wird die Eigenschaft nicht auf dem Charakterbogen ausgegeben.\n" +\
             "- In den Hausregeln können bestimmte Waffeneigenschaften via 'WaffenPlus Plugin: Waffeneigenschaften Gruppieren' in der PDF separat gruppiert werden.\n" +\
-            "- Die Waffeneigenschaft Vielseitig gibt Waffen eine Doppelreichweite.\n\n" +\
-            "Diese Features (außer Vielseitig) können in den Hausregeln über diverse 'WaffenPlus Plugin' Einstellungen deaktiviert werden. Vielseitig kann einfach gelöscht werden."
+            "Diese Features können in den Hausregeln über diverse 'WaffenPlus Plugin' Einstellungen deaktiviert werden."
 
     def changesDatabase(self):
         return False
@@ -61,11 +60,6 @@ class Plugin:
         w.name = "Unhandlich"
         w.text = "Diese Waffeneigenschaft sollte nur im Datenbankeditor verwendet werden. Im Charaktereditor wird sie durch das VT-WM Feld ersetzt."
         w.script = "modifyWaffeVT(-int(getEigenschaftParam(1)))"
-        self.db.loadElement(w)
-
-        w = Waffeneigenschaft()
-        w.name = "Vielseitig"
-        w.text = "Die Waffe ist in einer um eine Stufe kürzeren Reichweite ebenso effektiv."
         self.db.loadElement(w)
     
     def provideWaffenWrapperHook(self, base, params):
@@ -276,12 +270,6 @@ class Plugin:
             rwKey = waffeToKey[waffeIndex] + "RW"
             wmKey = waffeToKey[waffeIndex] + "WM"
             tpmKey = waffeToKey[waffeIndex] + "TPm"
-        
-            #Vielseitig
-            vielseitig = getEigenschaft(waffe, "Vielseitig")
-            if vielseitig:
-                fields[rwKey] = str((int(fields[rwKey]) - 1)) + "-" + fields[rwKey]
-                removeEigenschaft(waffeIndex, vielseitig)
 
             #Unhandlich
             if self.db.einstellungen["WaffenPlus Plugin: Separater VT-WM"].wert:

@@ -99,7 +99,7 @@
         }
 
         html, body {
-            font-family: 'Minion Pro', 'Crimson Pro';
+            font-family: '{card_font}';
             margin: 0;
             padding: 0;
             background-color: {card_title_color};
@@ -112,7 +112,7 @@
         
         #title {
             position: fixed;
-            font-family: 'Aniron';
+            font-family: '{card_title_font}';
             color: {card_title_color};
             top: 14px;
             left: 26px;
@@ -143,7 +143,6 @@
             left: 20px;
             width: 198px; /*238 - 20 - 20*/
             height: 264px; /*332 - 46 - 22*/
-            line-height: 1.35;
             padding: 0;
         }
         
@@ -153,7 +152,6 @@
             left: 20px;
             width: 198px; /*238 - 20 - 20*/
             height: 244px; /*332 - 66 - 22*/
-            line-height: 1.35;
             padding: 0;
         }
 
@@ -327,59 +325,28 @@
             -webkit-text-stroke: 0.5px #DED5BFdd; /* improve icon readbility */
         }
   
-        ol {
+        ol, ul {
             padding: 0;
-            padding-left: 1em;
+            padding-left: calc(0.5em + 10px);
             margin: 0;
             margin-bottom: 2pt;
         }
         
         ol li {
-            padding-left: 0.5em;
-        }
-        
-        ul {
-            padding: 0;
-            padding-left: 0.5em;
-            margin: 0;
-            margin-bottom: 2pt;
-        }
-        
-        ul li {
-            list-style-type: none;
-            position: relative;  /* needed for setting position to absolute in li::before */
-            padding-left: 1em;
+            padding-left: 0.4em;
         }
 
-        ul li::before {
-            content: "\2022";
-            font-family: 'FontAwesome';
-            position: absolute;
-            left: -0.4em;
-            top: -0.1em;
-            font-size: 1em;
-            font-weight: 400;
+        ul li {
+            padding-left: 0.4em;
         }
         
-        ul ul li::before {
-            content: "\25E6";
-            font-family: 'FontAwesome';
-            position: absolute;
-            left: -0.4em;
-            top: -0.1em;
-            font-size: 1em;
-            font-weight: 400;
+        ul li.checkbox {
+            padding-left: 0.5em;
+            list-style-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 32 448 448"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc. --><path d="M384 80c8.8 0 16 7.2 16 16V416c0 8.8-7.2 16-16 16H64c-8.8 0-16-7.2-16-16V96c0-8.8 7.2-16 16-16H384zM64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64z"/></svg>');
         }
-        
-        ul li.checkbox::before {
-            content: "\f0c8";
-            font-family: 'FontAwesome';
-            position: absolute;
-            left: -0.5em;
-            top: 0.1em;
-            font-size: 0.8em;
-            font-weight: 400;
-        }
+        ul li.checkbox::marker {
+          font-size: 1.5em;
+        }  
         
         table {
             margin-top: 1pt;
@@ -395,8 +362,6 @@
             color: #4A000B;
             font-variant: small-caps;
             border-bottom: 1px solid #4A000B;
-            line-height: 70%; /* offsetting a bit for minion pro large descender */
-            padding-top: 0.4em;  /* offsetting a bit for minion pro large descender */
             white-space: nowrap;
         }
         
@@ -405,8 +370,6 @@
         }
         
         td {
-            line-height: 90%; /* offsetting a bit for minion pro large descender */
-            padding-top: 0.4em;  /* offsetting a bit for minion pro large descender */
             vertical-align: middle;
         }
 

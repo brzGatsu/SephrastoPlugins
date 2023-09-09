@@ -132,7 +132,7 @@ class Karte:
         return KartenUtility.getAnzeigename(self.name)
 
     def isNew(self, db):
-        return KartenUtility.isNew(db, self.name, self.typ)
+        return not self.löschen and KartenUtility.isNew(db, self.name, self.typ)
 
     def getOriginalElement(self, db):
         return KartenUtility.getOriginalElement(db, self.name, self.typ)

@@ -235,22 +235,22 @@ Diese Zeitspannen gelten, wenn dein Charakter überhaupt kein Wasser oder keine 
 &lt;/tr&gt;
 &lt;tr&gt;
     &lt;td style="border-right: 1px solid #4A000B;"&gt;&lt;/td&gt;
-    &lt;td&gt;&lt;b&gt;Stufe 1&lt;/b&gt;&lt;/td&gt;
+    &lt;td&gt;&lt;b&gt;Stufe&nbsp;1&lt;/b&gt;&lt;/td&gt;
     &lt;td&gt;Proben -2&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
     &lt;td style="border-right: 1px solid #4A000B;"&gt;&lt;/td&gt;
-    &lt;td&gt;&lt;b&gt;Stufe 2&lt;/b&gt;&lt;/td&gt;
+    &lt;td&gt;&lt;b&gt;Stufe&nbsp;2&lt;/b&gt;&lt;/td&gt;
     &lt;td&gt;Proben -4 und wenn möglich Rückzug vor Auslöser&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
     &lt;td style="border-right: 1px solid #4A000B;"&gt;&lt;/td&gt;
-    &lt;td&gt;&lt;b&gt;Stufe 3&lt;/b&gt;&lt;/td&gt;
+    &lt;td&gt;&lt;b&gt;Stufe&nbsp;3&lt;/b&gt;&lt;/td&gt;
     &lt;td&gt;Proben -8 und Flucht, bis Auslöser außer Sicht&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
     &lt;td style="border-right: 1px solid #4A000B;"&gt;&lt;/td&gt;
-    &lt;td&gt;&lt;b&gt;Stufe 4&lt;/b&gt;&lt;/td&gt;
+    &lt;td&gt;&lt;b&gt;Stufe&nbsp;4&lt;/b&gt;&lt;/td&gt;
     &lt;td&gt;Proben -8 und nur noch zur Flucht erlaubt&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/table&gt;
@@ -370,7 +370,6 @@ Du wartest ab und handelst erst, wenn ein bestimmtes Ereignis eintritt. Dazu bes
   <Karte name="Unberechenbar" löschen="1" typ="3" subtyp="-1" titel="$original$" subtitel="$original$" fusszeile="$original$">$original$</Karte>
   <Karte name="Unhandlich" löschen="1" typ="3" subtyp="-1" titel="$original$" subtitel="$original$" fusszeile="$original$">$original$</Karte>
   <Karte name="Unzerstörbar" löschen="1" typ="3" subtyp="-1" titel="$original$" subtitel="$original$" fusszeile="$original$">$original$</Karte>
-  <Karte name="Vielseitig" löschen="1" typ="3" subtyp="-1" titel="$original$" subtitel="$original$" fusszeile="$original$">$original$</Karte>
   <Karte name="Wendig" löschen="1" typ="3" subtyp="-1" titel="$original$" subtitel="$original$" fusszeile="$original$">$original$</Karte>
   <Karte name="Zerbrechlich" löschen="1" typ="3" subtyp="-1" titel="$original$" subtitel="$original$" fusszeile="$original$">$original$</Karte>
   <Karte name="Zweihändig" löschen="1" typ="3" subtyp="-1" titel="$original$" subtitel="$original$" fusszeile="$original$">$original$</Karte>
@@ -389,7 +388,8 @@ Du wartest ab und handelst erst, wenn ein bestimmtes Ereignis eintritt. Dazu bes
 &lt;li&gt;&lt;b&gt;Zerbrechlich:&lt;/b&gt; Die Waffe erleidet den vollen Waffenschaden, wenn sie eine nicht-zerbrechliche Waffe erfolgreich verteidigt oder von einer solchen erfolgreich verteidigt wird. Ausweichen vermeidet diesen Schaden&lt;/li&gt;
 &lt;li&gt;&lt;b&gt;Zweihändig:&lt;/b&gt; Die Waffe wird zweihändig geführt. Bei einhändiger Führung erleidest du einen Probenmalus von -2 und die Waffe richtet -4 TP weniger an. Zweihändige Fernkampfwaffen können nicht einhändig benutzt werden.&lt;/li&gt;
 &lt;li&gt;&lt;b&gt;Automatische Manövereffekte:&lt;/b&gt; Bei manchen Waffen haben schon gewöhnliche Angriffe den Effekt eines Manövers. In Klammern befinden sich - falls relevant - die Ansage, der Modifikator der Gegenprobe und deren Schwierigkeit.&lt;/li&gt;&lt;/ul&gt;</Karte>
-  <Karte name="Mirakel" typ="1" subtyp="7" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="0" voraussetzungen="">&lt;table&gt;&lt;tr&gt;
+  <Karte name="Mirakel" typ="1" subtyp="7" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="0" voraussetzungen="">$original$
+&lt;table&gt;&lt;tr&gt;
 &lt;th width="30%"&gt;Fert./Attr.&lt;/th&gt;
 &lt;th width="20%" style="border-right: 1px solid #4A000B;"&gt;PW&lt;/th&gt;
 &lt;th width="30%"&gt;Fert./Attr.&lt;/th&gt;
@@ -418,9 +418,9 @@ Du wartest ab und handelst erst, wenn ein bestimmtes Ereignis eintritt. Dazu bes
 &lt;td style="border-right: 1px solid #4A000B;"&gt;&amp;nbsp;&lt;/td&gt;
 &lt;td&gt;&amp;nbsp;&lt;/td&gt;
 &lt;td&gt;&amp;nbsp;&lt;/td&gt;
-&lt;/tr&gt;&lt;/table&gt;
-$original$</Karte>
-  <Karte name="Dämonische Stärkung" typ="1" subtyp="10" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="0" voraussetzungen="">&lt;table&gt;&lt;tr&gt;
+&lt;/tr&gt;&lt;/table&gt;</Karte>
+  <Karte name="Dämonische Stärkung" typ="1" subtyp="10" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="0" voraussetzungen="">$original$
+&lt;table&gt;&lt;tr&gt;
 &lt;th width="30%"&gt;Fert./Attr.&lt;/th&gt;
 &lt;th width="20%" style="border-right: 1px solid #4A000B;"&gt;PW&lt;/th&gt;
 &lt;th width="30%"&gt;Fert./Attr.&lt;/th&gt;
@@ -449,6 +449,209 @@ $original$</Karte>
 &lt;td style="border-right: 1px solid #4A000B;"&gt;&amp;nbsp;&lt;/td&gt;
 &lt;td&gt;&amp;nbsp;&lt;/td&gt;
 &lt;td&gt;&amp;nbsp;&lt;/td&gt;
-&lt;/tr&gt;&lt;/table&gt;
-$original$</Karte>
+&lt;/tr&gt;&lt;/table&gt;</Karte>
+<Karte name="Zauberer I" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
+  <Karte name="Zauberer II" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
+  <Karte name="Zauberer III" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
+  <Karte name="Zauberer IV" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
+  <Karte name="Zauberer" typ="0" subtyp="0" titel="$original$" subtitel="" fusszeile="$original$" löschen="0" voraussetzungen="Vorteil Zauberer I">&lt;i&gt;Wirkung:&lt;/i&gt; Du verfügst über ...
+&lt;ul&gt;&lt;li class="checkbox"&gt;I: 8 Astralpunkte&lt;/li&gt;
+&lt;li class="checkbox"&gt;II: 16 Astralpunkte&lt;/li&gt;
+&lt;li class="checkbox"&gt;III: 24 Astralpunkte&lt;/li&gt;
+&lt;li class="checkbox"&gt;IV: 32 Astralpunkte&lt;/li&gt;&lt;/ul&gt;
+... und kannst magische Traditionen erlernen. Dämonen, Elementare oder Hellsichtsmagier können dich magisch wahrnehmen. Zauberer I entspricht dabei einem einfachen Magiedilettanten, Zauberer II einer wenig begabten Alchemistin. Die meisten ausgebildeten Zauberer verfügen dagegen über Zauberer III oder IV.</Karte>
+  <Karte name="Kreis der Verdammnis I" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
+  <Karte name="Kreis der Verdammnis II" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
+  <Karte name="Kreis der Verdammnis III" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
+  <Karte name="Kreis der Verdammnis IV" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
+  <Karte name="Kreis der Verdammnis V" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
+  <Karte name="Kreis der Verdammnis VI" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
+  <Karte name="Kreis der Verdammnis VII" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
+  <Karte name="Kreis der Verdammnis" typ="0" subtyp="0" titel="$original$" subtitel="Stufe &lt;u&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;/u&gt;" fusszeile="$original$" löschen="0" voraussetzungen="Vorteil Kreis der Verdammnis I">&lt;i&gt;Wirkung:&lt;/i&gt; Der Vorteil hat vier Auswirkungen. Erstens erhältst du beim Erwerb der ersten Stufe 400 EP, für jede weitere Stufe 200 EP. Zweitens werden deine Gunstpunkte (S. 93) sofort aufgefüllt. Drittens erhältst du für jede Stufe eine verdorbene Eigenheit (S. 92). Viertens entwickelst du ein Dämonenmal und kannst über die Liturgie Seelenprüfung als Paktierer erkannt werden. Auf geweihtem/heiligen Boden musst du jede Minute eine Willenskraft-­Probe (20/28) ablegen, um nicht durch starke Schmerzen aufzufallen und eine Wunde zu erleiden.</Karte>
+  <Karte name="Einkommen I" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
+  <Karte name="Einkommen II" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
+  <Karte name="Einkommen III" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
+  <Karte name="Einkommen IV" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
+  <Karte name="Einkommen" typ="0" subtyp="0" titel="$original$" subtitel="" fusszeile="$original$" löschen="0" voraussetzungen="Vorteil Einkommen I">&lt;i&gt;Wirkung:&lt;/i&gt; Deine Familie, Organisation oder eine persönliche Mäzenin stellt dir ein monatliches Einkommen von ...
+&lt;ul&gt;&lt;li class="checkbox"&gt;I: 4 Dukaten&lt;/li&gt;
+&lt;li class="checkbox"&gt;II: 16 Dukaten&lt;/li&gt;
+&lt;li class="checkbox"&gt;III: 64 Dukaten&lt;/li&gt;
+&lt;li class="checkbox"&gt;IV: 256 Dukaten&lt;/li&gt;&lt;/ul&gt;
+... zur Verfügung, die du beispielsweise über eine Filiale der Nordlandbank oder ein Ordenshaus beziehen kannst. Fern der Zivilisation kannst du nicht auf dein Einkommen zugreifen. Das Einkommen reicht aus, um die Lebenshaltungskosten eines Angehörigen der Unterschicht/Mittelschicht/Oberschicht/Elite zu decken.</Karte>
+  <Karte name="Geweiht I" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
+  <Karte name="Geweiht III" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
+  <Karte name="Geweiht II" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
+  <Karte name="Geweiht IV" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
+  <Karte name="Geweiht" typ="0" subtyp="0" titel="$original$" subtitel="" fusszeile="$original$" löschen="0" voraussetzungen="Vorteil Geweiht I">&lt;i&gt;Wirkung:&lt;/i&gt; Du verfügst über ...
+&lt;ul&gt;&lt;li class="checkbox"&gt;I: 8 Karmapunkte&lt;/li&gt;
+&lt;li class="checkbox"&gt;II: 16 Karmapunkte&lt;/li&gt;
+&lt;li class="checkbox"&gt;III: 24 Karmapunkte&lt;/li&gt;
+&lt;li class="checkbox"&gt;IV: 32 Karmapunkte&lt;/li&gt;&lt;/ul&gt;
+... und kannst karmale Traditionen erlernen.</Karte>
+  <Karte name="Paktierer I" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
+  <Karte name="Paktierer II" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
+  <Karte name="Paktierer III" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
+  <Karte name="Paktierer IV" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
+  <Karte name="Paktierer (Vorteil)" typ="0" subtyp="0" titel="$original$" subtitel="" fusszeile="$original$" löschen="0" voraussetzungen="Vorteil Paktierer I">&lt;i&gt;Wirkung:&lt;/i&gt; Du verfügst über ...
+&lt;ul&gt;&lt;li class="checkbox"&gt;I: 8 Gunstpunkte&lt;/li&gt;
+&lt;li class="checkbox"&gt;II: 16 Gunstpunkte&lt;/li&gt;
+&lt;li class="checkbox"&gt;III: 24 Gunstpunkte&lt;/li&gt;
+&lt;li class="checkbox"&gt;IV: 32 Gunstpunkte&lt;/li&gt;&lt;/ul&gt;
+... und kannst die dämonische Tradition deines Erzdämons erlernen.</Karte>
+  <Karte name="Angepasst" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="0" voraussetzungen="Vorteil Angepasst I ODER Vorteil Angepasst (Dunkelheit) I ODER Vorteil Angepasst (Wasser) I ODER Vorteil Angepasst (Wald) I ODER Vorteil Angepasst (Schnee) I">&lt;i&gt;Wirkung:&lt;/i&gt; Durch deine Spezies oder langjährige Erfahrung hast du dich an eine bestimmte Umgebung oder Umweltbedingung gewöhnt. Abzüge durch diese Umgebung, insbesondere im Kampf, sinken für dich um eine/zwei Stufen.
+&lt;table&gt;
+&lt;tr&gt;
+&lt;th align="left"&gt;Umgebung / Umweltbedingung&lt;/th&gt;
+&lt;th&gt;Stufe&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr height="24px"&gt;
+&lt;td style="border-right: 1px solid #4A000B;"&gt;Dunkelheit&lt;/td&gt;
+&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr height="24px"&gt;
+&lt;td style="border-right: 1px solid #4A000B;"&gt;Schnee&lt;/td&gt;
+&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr height="24px"&gt;
+&lt;td style="border-right: 1px solid #4A000B;"&gt;Wasser&lt;/td&gt;
+&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr height="24px"&gt;
+&lt;td style="border-right: 1px solid #4A000B;"&gt;Wald&lt;/td&gt;
+&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr height="24px"&gt;
+&lt;td style="border-right: 1px solid #4A000B;"&gt;&amp;nbsp;&lt;/td&gt;
+&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr height="24px"&gt;
+&lt;td style="border-right: 1px solid #4A000B;"&gt;&amp;nbsp;&lt;/td&gt;
+&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr height="24px"&gt;
+&lt;td style="border-right: 1px solid #4A000B;"&gt;&amp;nbsp;&lt;/td&gt;
+&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;</Karte>
+  <Karte name="Angepasst I" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
+  <Karte name="Angepasst II" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
+  <Karte name="Angepasst (Wald) I" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
+  <Karte name="Angepasst (Wald) II" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
+  <Karte name="Angepasst (Dunkelheit) I" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
+  <Karte name="Angepasst (Dunkelheit) II" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
+  <Karte name="Angepasst (Schnee) I" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
+  <Karte name="Angepasst (Schnee) II" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
+  <Karte name="Angepasst (Wasser) I" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
+  <Karte name="Angepasst (Wasser) II" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
+  <Karte name="Glück I" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
+  <Karte name="Glück II" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
+  <Karte name="Glück" typ="0" subtyp="0" titel="$original$" subtitel="" fusszeile="$original$" löschen="0" voraussetzungen="Vorteil Glück I">&lt;i&gt;Wirkung:&lt;/i&gt; Deine maximalen Schicksalspunkte steigen auf ...
+&lt;ul&gt;&lt;li class="checkbox"&gt;I: 5 Schicksalspunkte&lt;/li&gt;
+&lt;li class="checkbox"&gt;II: 6 Schicksalspunkte&lt;/ul&gt;</Karte>
+  <Karte name="Resistenzen und Immunitäten" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="0" voraussetzungen="Vorteil Resistenz gegen Hitze ODER Vorteil Resistenz gegen Kälte ODER Vorteil Resistenz gegen Gifte ODER Vorteil Resistenz gegen Krankheiten">&lt;b&gt;Temperatur&lt;/b&gt;
+&lt;ul&gt;
+&lt;li class="checkbox"&gt;Hitze: Verschiebt die Temperaturstufe (S. 35) bei hohen Temperaturen um eine Stufe in Richtung normal.&lt;/li&gt;
+&lt;li class="checkbox"&gt;Kälte: Verschiebt die Temperaturstufe (S. 35) bei niedrigen Temperaturen um eine Stufe in Richtung normal.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;b&gt;Gifte&lt;/b&gt;
+&lt;ul&gt;
+&lt;li class="checkbox"&gt;Resistenz: Mildert die Auswirkungen von Giften (S. 34)&lt;/li&gt;
+&lt;li class="checkbox"&gt;Immunität: Gifte sind gegen dich wirkungslos.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;b&gt;Krankheiten&lt;/b&gt;
+&lt;ul&gt;
+&lt;li class="checkbox"&gt;Resistenz: Mildert die Auswirkungen von Giften (S. 35)&lt;/li&gt;
+&lt;li class="checkbox"&gt;Immunität: Du erkrankst niemals.&lt;/li&gt;
+&lt;/ul&gt;</Karte>
+  <Karte name="Resistenz gegen Gifte" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
+  <Karte name="Immunität gegen Gifte" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
+  <Karte name="Resistenz gegen Krankheiten" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
+  <Karte name="Immunität gegen Krankheiten" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
+  <Karte name="Resistenz gegen Kälte" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
+  <Karte name="Resistenz gegen Hitze" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
+  <Karte name="Verbindungen" typ="0" subtyp="0" titel="$original$" subtitel="" fusszeile="$original$" löschen="0" voraussetzungen="Vorteil Angepasst I ODER Vorteil Angepasst (Dunkelheit) I ODER Vorteil Angepasst (Wasser) I ODER Vorteil Angepasst (Wald) I ODER Vorteil Angepasst (Schnee) I">$original$
+&lt;table&gt;
+&lt;tr&gt;
+&lt;th align="left"&gt;Verbindung&lt;/th&gt;
+&lt;th&gt;EP&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr height="24px"&gt;
+&lt;td style="border-right: 1px solid #4A000B;"&gt;&amp;nbsp;&lt;/td&gt;
+&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr height="24px"&gt;
+&lt;td style="border-right: 1px solid #4A000B;"&gt;&amp;nbsp;&lt;/td&gt;
+&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr height="24px"&gt;
+&lt;td style="border-right: 1px solid #4A000B;"&gt;&amp;nbsp;&lt;/td&gt;
+&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr height="24px"&gt;
+&lt;td style="border-right: 1px solid #4A000B;"&gt;&amp;nbsp;&lt;/td&gt;
+&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr height="24px"&gt;
+&lt;td style="border-right: 1px solid #4A000B;"&gt;&amp;nbsp;&lt;/td&gt;
+&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr height="24px"&gt;
+&lt;td style="border-right: 1px solid #4A000B;"&gt;&amp;nbsp;&lt;/td&gt;
+&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr height="24px"&gt;
+&lt;td style="border-right: 1px solid #4A000B;"&gt;&amp;nbsp;&lt;/td&gt;
+&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;</Karte>
+  <Karte name="Privilegien" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="0" voraussetzungen="">$original$
+&lt;table&gt;
+&lt;tr&gt;
+&lt;td height="24px"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td height="24px"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td height="24px"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td height="24px"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td height="24px"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td height="24px"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td height="24px"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td height="24px"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;</Karte>
+  <Karte name="Kommandos" typ="0" subtyp="2" titel="$original$" subtitel="" fusszeile="$original$" löschen="0" voraussetzungen="Vorteil Kommando: Haltet Stand! ODER Vorteil Kommando: Formiert Euch! ODER Vorteil Kommando: Keine Gefangenen! ODER Vorteil Kommando: Kennt Keinen Schmerz!">Erfahrene Anführer befehligen ihre Kampfgefährten nicht nur, sie inspirieren sie. Mit den entsprechenden Vorteilen (S. 42) kannst du in einer Aktion Konflikt eine &lt;b&gt;Anführen-Probe&lt;/b&gt; (16, I) ablegen, um bis zu &lt;b&gt;4 Mitstreitern&lt;/b&gt; in Hörweite einen &lt;b&gt;Bonus&lt;/b&gt; für diesen Kampf zu verleihen. Hohe Qualität (S. 7) vervierfacht die Zahl der Mitstreiter. Jeder Kämpfer kann nur von einem Anführen-Effekt gleichzeitig profitieren.
+    Der Effekt endet am Ende des Kampfes, bei Kampfunfähigkeit des Anführers oder wenn dieser neue Befehle ruft. Der Anführer selbst profitiert nicht von Kommandos.
+&lt;ul&gt;&lt;li class="checkbox"&gt;Haltet stand: Furcht-Effekte 1 Stufe gesenkt&lt;/li&gt;
+&lt;li class="checkbox"&gt;Formiert euch: +1 VT&lt;/li&gt;
+&lt;li class="checkbox"&gt;Keine Gefangenen: +2 TP&lt;/li&gt;
+&lt;li class="checkbox"&gt;Kennt keinen Schmerz: +1 WS&lt;/li&gt;&lt;/ul&gt;</Karte>
+  <Karte name="Astrale&amp;nbspRegeneration" typ="0" subtyp="4" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="0" voraussetzungen="Vorteil Astrale Regeneration ODER Vorteil Verbesserte astrale Regeneration ODER Vorteil Meisterliche astrale Regeneration">&lt;i&gt;Wirkung:&lt;/i&gt;
+&lt;ul&gt;&lt;li class="checkbox"&gt;Astrale Regeneration: Du regenerierst 1 zusätzlichen AsP pro Nacht.&lt;/li&gt;
+&lt;li class="checkbox"&gt;Verbesserte astrale Regeneration: Du regenerierst 2 weitere, zusätzliche AsP pro Nacht.&lt;/li&gt;
+&lt;li class="checkbox"&gt;Meisterliche astrale Regeneration: Du regenerierst 3 weitere, zusätzliche AsP pro Nacht.&lt;/li&gt;&lt;/ul&gt;</Karte>
+  <Karte name="Kommandos (Regel)" typ="1" subtyp="8" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
+  <Karte name="Kommando: Haltet Stand!" typ="0" subtyp="2" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
+  <Karte name="Kommando: Keine Gefangenen!" typ="0" subtyp="2" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
+  <Karte name="Kommando: Formiert Euch!" typ="0" subtyp="2" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
+  <Karte name="Kommando: Kennt Keinen Schmerz!" typ="0" subtyp="2" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
+  <Karte name="Rüstungsgew&amp;ouml;hnung" typ="0" subtyp="2" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="0" voraussetzungen="">&lt;i&gt;Wirkung:&lt;/i&gt;
+&lt;ul&gt;&lt;li class="checkbox"&gt;Rüstungsgewöhnung: Die BE aller Rüstungen ist um 1 gesenkt.&lt;/li&gt;
+&lt;li class="checkbox"&gt;Verbesserte Rüstungsgewöhnung: Die BE aller Rüstungen ist um weitere 2 gesenkt.&lt;/li&gt;&lt;/ul&gt;</Karte>
+  <Karte name="Rüstungsgewöhnung" typ="0" subtyp="2" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
+  <Karte name="Verbesserte Rüstungsgewöhnung" typ="0" subtyp="2" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
+  <Karte name="Astrale Regeneration" typ="0" subtyp="4" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
+  <Karte name="Verbesserte astrale Regeneration" typ="0" subtyp="4" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
+  <Karte name="Meisterliche astrale Regeneration" typ="0" subtyp="4" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
 </Datenbank>
