@@ -7,23 +7,9 @@ class Plugin:
         EventBus.addFilter("talent_kosten", self.talentKostenHook)
         EventBus.addAction("basisdatenbank_geladen", self.basisDatenbankGeladenHandler)
 
-    hexalogien = [
-        #Feuer, Luft, Erz, Eis, Wasser, Humus
-        ["Feuerlauf", "", "", "Firnlauf", "Wellenlauf", "Wipfellauf"],
-        ["Leib des Feuers", "Leib des Windes", "Leib des Erzes", "Leib des Eises", "Leib der Wogen", "Leib der Erde"],
-        ["Ignifaxius Flammenstrahl", "Orcanofaxius", "Archofaxius", "Frigifaxius", "Aquafaxius", "Humofaxius"],
-        ["Ignisphaero", "Orcanosphaero", "Archosphaero", "Frigisphaero", "Aquasphaero", "Humosphaero"],
-        ["Wand aus Flammen", "Orkanwand", "Wand aus Erz", "Gletscherwand", "Wasserwand", "Wand aus Dornen"],
-        ["Feuersturm", "Windhose", "Malmkreis", "Eiswirbel", "Mahlstrom", "Sumpfstrudel"],
-        ["Ignimorpho Feuerform", "Aeromorpho Wirbelform", "Metamorpho Felsenform", "Metamorpho Gletscherform", "Aquamorpho Wasserform", "Metamorpho Eisenholz"],
-        ["Weisheit der Flammen", "Weisheit der Wolken", "Weisheit der Steine", "Weisheit des Eises", "Weisheit des Teiches", "Weisheit der Bäume"],
-        ["Pfeil des Feuers", "Pfeil der Luft", "Pfeil des Erzes", "Pfeil des Eises", "Pfeil des Wassers", "Pfeil des Humus"],
-        ["Herbeirufung des Feuers", "Herbeirufung der Luft", "Herbeirufung des Erzes", "Herbeirufung des Eises", "Herbeirufung des Wassers", "Herbeirufung des Humus", "Macht des Feuers", "Macht der Luft", "Macht des Erzes", "Macht des Eises", "Macht des Wassers", "Macht des Humus"]
-    ]
-
     @staticmethod
     def getDescription():
-        return "Dieses Plugin halbiert die EP-Kosten von Talenten aus elementaren Hexalogien. Der volle EP-Preis muss nur für das teuerste erlernte Talent aus der Hexalogie bezahlt werden.\nBeinhaltet sind alle bestätigten Hexalogien gemäß https://de.wiki-aventurica.de/wiki/Hexalogie (nicht die vermuteten), zusätzlich noch die Herbeirufung und Macht des <Elements> Zauber."
+        return "Dieses Plugin halbiert die EP-Kosten von Talenten aus elementaren Hexalogien über die Einstellung 'Hexalogien Plugin: Talente'. Der volle EP-Preis muss nur für das teuerste erlernte Talent aus der Hexalogie bezahlt werden.\nPrinzipiell kann das Plugin auch für andere Talentverbilligungen verwendet werden, beispielsweise um den Arachnea Krabbeltier für Besitzer des Reptilea Natternnest zu vergünstigen."
 
     def changesCharacter(self):
         return self.db.einstellungen["Hexalogien Plugin: Aktivieren"].wert
@@ -36,6 +22,24 @@ class Plugin:
         e.beschreibung = Plugin.getDescription()
         e.text = "True"
         e.typ = "Bool"
+        self.db.loadElement(e)
+
+        e = DatenbankEinstellung()
+        e.name = "Hexalogien Plugin: Talente"
+        e.beschreibung = "Jede Zeile wird als eigene kommaseparierte Liste behandelt. Wenn ein Charakter mehrere Talente einer Liste beherrscht, bezahlt er die vollen Kosten nur für das teuerste Talent - alle anderen kosten nur die Hälfte. Standardmäßig beinhaltet die Einstellung alle bestätigten Hexalogien gemäß https://de.wiki-aventurica.de/wiki/Hexalogie (nicht die vermuteten), zusätzlich noch die Herbeirufung und Macht des <Elements> Zauber."
+        e.text = """Feuerlauf, Firnlauf, Wellenlauf, Wipfellauf
+Leib des Feuers, Leib des Windes, Leib des Erzes, Leib des Eises, Leib der Wogen, Leib der Erde
+Ignifaxius Flammenstrahl, Orcanofaxius, Archofaxius, Frigifaxius, Aquafaxius, Humofaxius
+Ignisphaero, Orcanosphaero, Archosphaero, Frigisphaero, Aquasphaero, Humosphaero
+Wand aus Flammen, Orkanwand, Wand aus Erz, Gletscherwand, Wasserwand, Wand aus Dornen
+Feuersturm, Windhose, Malmkreis, Eiswirbel, Mahlstrom, Sumpfstrudel
+Ignimorpho Feuerform, Aeromorpho Wirbelform, Metamorpho Felsenform, Metamorpho Gletscherform, Aquamorpho Wasserform, Metamorpho Eisenholz
+Weisheit der Flammen, Weisheit der Wolken, Weisheit der Steine, Weisheit des Eises, Weisheit des Teiches, Weisheit der Bäume
+Pfeil des Feuers, Pfeil der Luft, Pfeil des Erzes, Pfeil des Eises, Pfeil des Wassers, Pfeil des Humus
+Herbeirufung des Feuers, Herbeirufung der Luft, Herbeirufung des Erzes, Herbeirufung des Eises, Herbeirufung des Wassers, Herbeirufung des Humus, Macht des Feuers, Macht der Luft, Macht des Erzes, Macht des Eises, Macht des Wassers, Macht des Humus"""
+        e.typ = "TextList"
+        e.separator = "\n"
+        e.strip = True
         self.db.loadElement(e)
 
     def talentKostenHook(self, val, params):
@@ -55,7 +59,7 @@ class Plugin:
 
         talHexalogie = None
 
-        for hexalogie in Plugin.hexalogien:
+        for hexalogie in self.db.einstellungen["Hexalogien Plugin: Talente"].wert:
             if talent in hexalogie:
                 talHexalogie = hexalogie
                 break
@@ -64,7 +68,7 @@ class Plugin:
             return val
 
         mostExpensivePaid = talent
-        for tal in talHexalogie:
+        for tal in [t.strip() for t in talHexalogie.split(",")]:
             if tal in char.talente:
                 if Wolke.DB.talente[tal].kosten >= Wolke.DB.talente[mostExpensivePaid].kosten:
                     mostExpensivePaid = tal
