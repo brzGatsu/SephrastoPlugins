@@ -196,36 +196,6 @@ Die Verzögerungszeit beginnt von vorne, wenn dein Charakter so lange rastet, wi
 &lt;/tr&gt;
 &lt;/table&gt;
 Diese Zeitspannen gelten, wenn dein Charakter überhaupt kein Wasser oder keine Nahrung zur Verfügung hat. Muss er mit der halben benötigten Menge auskommen, verdreifachen sich Verzögerung und Intervall. Die Verzögerung beginnt von vorne, wenn dein Charakter mindestens eine Woche ausreichend Nahrung bzw. Wasser zu sich nimmt.</Karte>
-  <Karte name="Kommandos" typ="1" subtyp="8" titel="$original$" subtitel="" fusszeile="$original$">Erfahrene Anführer befehligen ihre Kampfgefährten nicht nur, sie inspirieren sie. Mit den entsprechenden Vorteilen (S.&nbsp;42) kannst du in einer Aktion Konflikt eine &lt;b&gt;Anführen-Probe&lt;/b&gt; (16, I) ablegen, um bis zu &lt;b&gt;4 Mitstreitern&lt;/b&gt; in Hörweite einen &lt;b&gt;Bonus&lt;/b&gt; für diesen Kampf zu verleihen. Hohe Qualität (S.&nbsp;7) vervierfacht die Zahl der Mitstreiter. Jeder Kämpfer kann nur von einem Anführen-Effekt gleichzeitig profitieren.
-    Der Effekt endet am Ende des Kampfes, bei Kampfunfähigkeit des Anführers oder wenn dieser neue Befehle ruft. Der Anführer selbst profitiert nicht von Kommandos.
-&lt;table&gt;
-&lt;tr&gt;
-    &lt;th style="border-right: 1px solid #4A000B; width: 12px;"&gt;&lt;/th&gt;
-    &lt;th align="left"&gt;Kommando&lt;/th&gt;
-    &lt;th align="left"&gt;Wirkung&lt;/th&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-    &lt;td style="border-right: 1px solid #4A000B;"&gt;&lt;/td&gt;
-    &lt;td&gt;&lt;b&gt;Haltet stand!&lt;/b&gt;&lt;/td&gt;
-    &lt;td&gt;Furcht-Effekte 1 Stufe gesenkt&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-    &lt;td style="border-right: 1px solid #4A000B;"&gt;&lt;/td&gt;
-    &lt;td&gt;&lt;b&gt;Formiert euch!&lt;/b&gt;&lt;/td&gt;
-    &lt;td&gt;+1 VT&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-    &lt;td style="border-right: 1px solid #4A000B;"&gt;&lt;/td&gt;
-    &lt;td&gt;&lt;b&gt;Keine Gefangenen!&lt;/b&gt;&lt;/td&gt;
-    &lt;td&gt;+2 TP&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-    &lt;td style="border-right: 1px solid #4A000B;"&gt;&lt;/td&gt;
-    &lt;td&gt;&lt;b&gt;Kennt keinen Schmerz!&lt;/b&gt;&lt;/td&gt;
-    &lt;td&gt;+1 WS&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/table&gt;
-&lt;i&gt;&lt;b&gt;Lege diese Karte vor dir ab&lt;/b&gt; und markiere die entsprechende Zeile, &lt;b&gt;wenn du einen Kommandoeffekt erhältst&lt;/b&gt;.&lt;/i&gt;</Karte>
   <Karte name="Einschüchtern &amp; Furcht" typ="1" subtyp="8" titel="$original$" subtitel="$original$" fusszeile="$original$">Du kannst eine Aktion Konflikt aufwenden und eine &lt;b&gt;Einschüchtern&lt;/b&gt;-Probe gegen den &lt;b&gt;MU&lt;/b&gt; deines Gegners ablegen. Eine misslungene Probe kann nicht wiederholt werden. Gelingt die Probe, erleidet dein Gegner einen Furcht-Effekt Stufe 1 (Hohe Qualität: +1 Stufe oder 2x Zahl der Ziele – dann eine MU-Gruppenprobe, wenn die Mutigste flieht, fliehen alle). Der Effekt endet am Ende des Kampfes, bei Kampfunfähigkeit des Einschüchternden oder wenn der eingeschüchterte Gegner weit genug geflohen ist.
 &lt;table&gt;
 &lt;tr&gt;
@@ -266,16 +236,16 @@ Diese Zeitspannen gelten, wenn dein Charakter überhaupt kein Wasser oder keine 
   <Karte name="Blutungen und Tod" typ="1" subtyp="11" titel="$original$" subtitel="$original$" fusszeile="$original$">$original$
 
 &lt;i&gt;&lt;b&gt;Lege diese Karte vor dir ab, wenn du blutest.&lt;/b&gt;&lt;/i&gt;</Karte>
-  <Karte name="Aktionen 1" typ="1" subtyp="5" titel="$original$" subtitel="" fusszeile="" löschen="0">&lt;p&gt;Du kannst &lt;b&gt;eine volle&lt;/b&gt; oder &lt;b&gt;bis zu zwei verschiedene einfache Aktionen&lt;/b&gt; ausführen – wenn du zwei einfache Aktionen nutzt, sind alle Proben in diesen Aktionen um -4 erschwert. Proben außerhalb dieser Aktionen sind von dem Malus nicht betroffen.&lt;/p&gt;
+  <Karte name="Aktionen 1" typ="1" subtyp="5" titel="$original$" subtitel="" fusszeile="" löschen="0" voraussetzungen="">&lt;p&gt;Du kannst &lt;b&gt;eine volle&lt;/b&gt; oder &lt;b&gt;bis zu zwei verschiedene einfache Aktionen&lt;/b&gt; ausführen – wenn du zwei einfache Aktionen nutzt, sind alle Proben in diesen Aktionen um -4 erschwert. Proben außerhalb dieser Aktionen sind von dem Malus nicht betroffen.&lt;/p&gt;
 &lt;p&gt;&lt;b&gt;Konflikt (einfach)&lt;/b&gt;
 Du kannst deinen Gegner angreifen, vorbereitete Zauber ausführen oder dein Gegenüber einschüchtern. Fast jede vergleichende Probe ist ein Konflikt.
     Auch das &lt;b&gt;Aufstehen&lt;/b&gt; kostet eine Aktion Konflikt. Allerdings kann ein Kontrahent versuchen, das mit einer Reaktion zu verhindern, dann muss dir zusätzlich eine vergleichende GE-Probe (I) gelingen. Um nur von der liegenden in eine kniende oder von der knienden in eine stehende Position zu kommen, ist keine Probe nötig – wohl aber die Aktion.&lt;/p&gt;
 &lt;p&gt;&lt;b&gt;Volle Defensive (voll)&lt;/b&gt;
-Alle Verteidigungen bis zu deiner nächsten Initiativephase sind um +4 erleichtert. Mit Defensiver Kampfstil wird dies zu einer einfachen Aktion.&lt;/p&gt;</Karte>
-  <Karte name="Aktionen 2" typ="1" subtyp="5" titel="$original$" subtitel="" fusszeile="" löschen="0">&lt;p&gt;&lt;b&gt;Volle Offensive (voll)&lt;/b&gt;
+$regel:Aktion Volle Defensive (voll)$&lt;/p&gt;</Karte>
+  <Karte name="Aktionen 2" typ="1" subtyp="5" titel="$original$" subtitel="" fusszeile="" löschen="0" voraussetzungen="">&lt;p&gt;&lt;b&gt;Volle Offensive (voll)&lt;/b&gt;
 Alle Nahkampfangriffe in deiner Initiativephase sind um +4 erleichtert, alle Verteidigungen bis zu deiner nächsten Initiativephase um -8 erschwert.&lt;/p&gt;
 &lt;p&gt;&lt;b&gt;Bereit machen (einfach)&lt;/b&gt;
-Du ziehst eine Waffe (1 Aktion), kramst einen Heiltrank hervor (je nach Aufbewahrungsort 2-4 Aktionen) oder führst andere Handlungen aus, die nicht deine volle Aufmerksamkeit benötigen.&lt;/p&gt;
+$regel:Aktion Bereit machen (einfach)$&lt;/p&gt;
 &lt;p&gt;&lt;b&gt;Bewegung (einfach)&lt;/b&gt;
 Du läufst, reitest oder schwingst an einem Seil.&lt;/p&gt;
 &lt;table&gt;
@@ -304,10 +274,10 @@ Du läufst, reitest oder schwingst an einem Seil.&lt;/p&gt;
     &lt;td align="center"&gt;GS x 4&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/table&gt;</Karte>
-  <Karte name="Aktionen 3" typ="1" subtyp="5" titel="$original$" subtitel="" fusszeile="" löschen="0">&lt;p&gt;&lt;b&gt;Konzentration (voll)&lt;/b&gt;
-Du führst eine Handlung aus, die deine volle Konzentration erfordert. Dazu gehört das Vorbereiten eines Zaubers oder Fernkampfangriffes sowie das Entschärfen einer Falle. Du kannst bis zu deiner nächsten Initiativephase keine Freien Aktionen oder Reaktionen ausführen und musst bei Störungen eine Willenskraft-Probe (16, I) ablegen. Erleidest du Schaden, steigt die Schwierigkeit der Probe um +4 Punkte pro soeben erlittener Wunde. Bei Misslingen verfallen alle bereits aufgewendeten Aktionen.&lt;/p&gt;
+  <Karte name="Aktionen 3" typ="1" subtyp="5" titel="$original$" subtitel="" fusszeile="" löschen="0" voraussetzungen="">&lt;p&gt;&lt;b&gt;Konzentration (voll)&lt;/b&gt;
+$regel:Aktion Konzentration (voll)$&lt;/p&gt;
 &lt;p&gt;&lt;b&gt;Verzögern (voll)&lt;/b&gt;
-Du wartest ab und handelst erst, wenn ein bestimmtes Ereignis eintritt. Dazu bestimmst du das Ereignis und die genaue Handlung, die du ausführen möchtest. Diese Handlung kann direkt vor oder nach dem Ereignis stattfinden, muss aber eine einfache Aktion sein; Proben sind um -4 erschwert. Sollte das Ereignis bis zu deiner nächsten Initiativephase nicht eintreten, verfällt die Aktion.&lt;/p&gt;</Karte>
+$regel:Aktion Verzögern (voll)$&lt;/p&gt;</Karte>
   <Karte name="Aktion Bereit machen (einfach)" löschen="1" typ="1" subtyp="5" titel="Bereit machen" subtitel="$original$" fusszeile="Aktion (einfach)">$original$</Karte>
   <Karte name="Aktion Bewegung (einfach)" löschen="1" typ="1" subtyp="5" titel="Bewegung" subtitel="$original$" fusszeile="Aktion (einfach)">$original$</Karte>
   <Karte name="Aktion Konflikt (einfach)" löschen="1" typ="1" subtyp="5" titel="Konflikt" subtitel="$original$" fusszeile="Aktion (einfach)">$original$</Karte>
@@ -376,18 +346,19 @@ Du wartest ab und handelst erst, wenn ein bestimmtes Ereignis eintritt. Dazu bes
   <Karte name="kein Malus als Nebenwaffe" löschen="1" typ="3" subtyp="-1" titel="$original$" subtitel="$original$" fusszeile="$original$">$original$</Karte>
   <Karte name="kein Reittier" löschen="1" typ="3" subtyp="-1" titel="$original$" subtitel="$original$" fusszeile="$original$">$original$</Karte>
   <Karte name="stationär" löschen="1" typ="3" subtyp="-1" titel="$original$" subtitel="$original$" fusszeile="$original$">$original$</Karte>
-  <Karte name="Waffeneigenschaften 1" typ="3" subtyp="-1" titel="$original$" subtitel="" fusszeile="">&lt;ul&gt;&lt;li&gt;&lt;b&gt;Kopflastig:&lt;/b&gt; Der Schadensbonus durch hohe KK zählt für diese Waffe doppelt.&lt;/li&gt;
-&lt;li&gt;&lt;b&gt;Parierwaffe:&lt;/b&gt; Das Führen einer solchen Waffe ist Voraussetzung für den Parierwaffenstil.&lt;/li&gt;
-&lt;li&gt;&lt;b&gt;Reittier:&lt;/b&gt; Ein Reittier ist Voraussetzung für den Reiterkampfstil. Angriffe mit dem Reittier sind um +4 erleichtert, wenn das Reittier in einer höheren Größenklasse als das Ziel ist.&lt;/li&gt;
-&lt;li&gt;&lt;b&gt;Rüstungsbrechend:&lt;/b&gt; Ermöglicht das Manöver Rüstungsbrecher (S.&nbsp;40).&lt;/li&gt;
-&lt;li&gt;&lt;b&gt;Schild:&lt;/b&gt; Ermöglicht den Kampf im Schildkampfstil. Verteidigungen mit einem Schild sind um +4 erleichtert, wenn der Angreifer einer höheren Größenklasse angehört.&lt;/li&gt;
-&lt;li&gt;&lt;b&gt;Schwer:&lt;/b&gt; Du brauchst mindestens die angegebene Körperkraft, um die Waffe ohne Einschränkungen führen zu können. Darunter erleidest du einen Malus von -2.&lt;/li&gt;
-&lt;li&gt;&lt;b&gt;Stumpf:&lt;/b&gt; Ermöglicht das Manöver stumpfer Schlag (S.&nbsp;40).&lt;/li&gt;&lt;/ul&gt;</Karte>
-  <Karte name="Waffeneigenschaften 2" typ="3" subtyp="-1" titel="$original$" subtitel="" fusszeile="">&lt;ul&gt;&lt;li&gt;&lt;b&gt;Unberechenbar:&lt;/b&gt; Die Waffe verursacht auch bei einer 2 einen Patzer. Dafür sind Angriffe gegen Schildträger um +4 erleichtert.&lt;/li&gt;
-&lt;li&gt;&lt;b&gt;Wendig:&lt;/b&gt; Du kannst den 1. Passierschlag zwischen 2 INI-Phasen als freie Reaktion ausführen.&lt;/li&gt;
-&lt;li&gt;&lt;b&gt;Zerbrechlich:&lt;/b&gt; Die Waffe erleidet den vollen Waffenschaden, wenn sie eine nicht-zerbrechliche Waffe erfolgreich verteidigt oder von einer solchen erfolgreich verteidigt wird. Ausweichen vermeidet diesen Schaden&lt;/li&gt;
+  <Karte name="Waffeneigenschaften 1" typ="3" subtyp="-1" titel="$original$" subtitel="" fusszeile="" löschen="0" voraussetzungen="">&lt;ul&gt;&lt;li&gt;&lt;b&gt;Kopflastig:&lt;/b&gt; Der Schadensbonus durch hohe KK zählt für diese Waffe doppelt.&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;Parierwaffe:&lt;/b&gt; $waffeneigenschaft:Parierwaffe$&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;Reittier:&lt;/b&gt; $waffeneigenschaft:Reittier$&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;Rüstungsbrechend:&lt;/b&gt; Ermöglicht das Manöver Rüstungsbrecher (S. 40).&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;Schild:&lt;/b&gt; $waffeneigenschaft:Schild$&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;Schwer:&lt;/b&gt; $waffeneigenschaft:Schwer$&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;Stumpf:&lt;/b&gt; Ermöglicht das Manöver stumpfer Schlag (S. 40).&lt;/li&gt;&lt;/ul&gt;</Karte>
+  <Karte name="Waffeneigenschaften 2" typ="3" subtyp="-1" titel="$original$" subtitel="" fusszeile="" löschen="0" voraussetzungen="">&lt;ul&gt;&lt;li&gt;&lt;b&gt;Unberechenbar:&lt;/b&gt; Die Waffe verursacht auch bei einer 2 einen Patzer. Dafür sind Angriffe gegen Schildträger um +4 erleichtert.&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;Wendig:&lt;/b&gt; $waffeneigenschaft:Wendig$&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;Zerbrechlich:&lt;/b&gt; $waffeneigenschaft:Zerbrechlich$&lt;/li&gt;
 &lt;li&gt;&lt;b&gt;Zweihändig:&lt;/b&gt; Die Waffe wird zweihändig geführt. Bei einhändiger Führung erleidest du einen Probenmalus von -2 und die Waffe richtet -4 TP weniger an. Zweihändige Fernkampfwaffen können nicht einhändig benutzt werden.&lt;/li&gt;
-&lt;li&gt;&lt;b&gt;Automatische Manövereffekte:&lt;/b&gt; Bei manchen Waffen haben schon gewöhnliche Angriffe den Effekt eines Manövers. In Klammern befinden sich - falls relevant - die Ansage, der Modifikator der Gegenprobe und deren Schwierigkeit.&lt;/li&gt;&lt;/ul&gt;</Karte>
+&lt;li&gt;&lt;b&gt;Automatische Manövereffekte:&lt;/b&gt; Bei manchen Waffen haben schon gewöhnliche Angriffe den Effekt eines Manövers. In Klammern befinden sich - falls relevant - die Ansage, der Modifikator der Gegenprobe und deren Schwierigkeit.&lt;/li&gt;&lt;/ul&gt;
+</Karte>
   <Karte name="Mirakel" typ="1" subtyp="7" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="0" voraussetzungen="">$original$
 &lt;table&gt;&lt;tr&gt;
 &lt;th width="30%"&gt;Fert./Attr.&lt;/th&gt;
@@ -395,25 +366,25 @@ Du wartest ab und handelst erst, wenn ein bestimmtes Ereignis eintritt. Dazu bes
 &lt;th width="30%"&gt;Fert./Attr.&lt;/th&gt;
 &lt;th width="20%"&gt;PW&lt;/th&gt;
 &lt;/tr&gt;
-&lt;tr&gt;
+&lt;tr height="22px"&gt;
 &lt;td&gt;&amp;nbsp;&lt;/td&gt;
 &lt;td style="border-right: 1px solid #4A000B;"&gt;&amp;nbsp;&lt;/td&gt;
 &lt;td&gt;&amp;nbsp;&lt;/td&gt;
 &lt;td&gt;&amp;nbsp;&lt;/td&gt;
 &lt;/tr&gt;
-&lt;tr&gt;
+&lt;tr height="22px"&gt;
 &lt;td&gt;&amp;nbsp;&lt;/td&gt;
 &lt;td style="border-right: 1px solid #4A000B;"&gt;&amp;nbsp;&lt;/td&gt;
 &lt;td&gt;&amp;nbsp;&lt;/td&gt;
 &lt;td&gt;&amp;nbsp;&lt;/td&gt;
 &lt;/tr&gt;
-&lt;tr&gt;
+&lt;tr height="22px"&gt;
 &lt;td&gt;&amp;nbsp;&lt;/td&gt;
 &lt;td style="border-right: 1px solid #4A000B;"&gt;&amp;nbsp;&lt;/td&gt;
 &lt;td&gt;&amp;nbsp;&lt;/td&gt;
 &lt;td&gt;&amp;nbsp;&lt;/td&gt;
 &lt;/tr&gt;
-&lt;tr&gt;
+&lt;tr height="22px"&gt;
 &lt;td&gt;&amp;nbsp;&lt;/td&gt;
 &lt;td style="border-right: 1px solid #4A000B;"&gt;&amp;nbsp;&lt;/td&gt;
 &lt;td&gt;&amp;nbsp;&lt;/td&gt;
@@ -426,25 +397,25 @@ Du wartest ab und handelst erst, wenn ein bestimmtes Ereignis eintritt. Dazu bes
 &lt;th width="30%"&gt;Fert./Attr.&lt;/th&gt;
 &lt;th width="20%"&gt;PW&lt;/th&gt;
 &lt;/tr&gt;
-&lt;tr&gt;
+&lt;tr height="22px"&gt;
 &lt;td&gt;&amp;nbsp;&lt;/td&gt;
 &lt;td style="border-right: 1px solid #4A000B;"&gt;&amp;nbsp;&lt;/td&gt;
 &lt;td&gt;&amp;nbsp;&lt;/td&gt;
 &lt;td&gt;&amp;nbsp;&lt;/td&gt;
 &lt;/tr&gt;
-&lt;tr&gt;
+&lt;tr height="22px"&gt;
 &lt;td&gt;&amp;nbsp;&lt;/td&gt;
 &lt;td style="border-right: 1px solid #4A000B;"&gt;&amp;nbsp;&lt;/td&gt;
 &lt;td&gt;&amp;nbsp;&lt;/td&gt;
 &lt;td&gt;&amp;nbsp;&lt;/td&gt;
 &lt;/tr&gt;
-&lt;tr&gt;
+&lt;tr height="22px"&gt;
 &lt;td&gt;&amp;nbsp;&lt;/td&gt;
 &lt;td style="border-right: 1px solid #4A000B;"&gt;&amp;nbsp;&lt;/td&gt;
 &lt;td&gt;&amp;nbsp;&lt;/td&gt;
 &lt;td&gt;&amp;nbsp;&lt;/td&gt;
 &lt;/tr&gt;
-&lt;tr&gt;
+&lt;tr height="22px"&gt;
 &lt;td&gt;&amp;nbsp;&lt;/td&gt;
 &lt;td style="border-right: 1px solid #4A000B;"&gt;&amp;nbsp;&lt;/td&gt;
 &lt;td&gt;&amp;nbsp;&lt;/td&gt;
@@ -467,7 +438,7 @@ Du wartest ab und handelst erst, wenn ein bestimmtes Ereignis eintritt. Dazu bes
   <Karte name="Kreis der Verdammnis V" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
   <Karte name="Kreis der Verdammnis VI" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
   <Karte name="Kreis der Verdammnis VII" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
-  <Karte name="Kreis der Verdammnis" typ="0" subtyp="0" titel="$original$" subtitel="Stufe &lt;u&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;/u&gt;" fusszeile="$original$" löschen="0" voraussetzungen="Vorteil Kreis der Verdammnis I">&lt;i&gt;Wirkung:&lt;/i&gt; Der Vorteil hat vier Auswirkungen. Erstens erhältst du beim Erwerb der ersten Stufe 400 EP, für jede weitere Stufe 200 EP. Zweitens werden deine Gunstpunkte (S. 93) sofort aufgefüllt. Drittens erhältst du für jede Stufe eine verdorbene Eigenheit (S. 92). Viertens entwickelst du ein Dämonenmal und kannst über die Liturgie Seelenprüfung als Paktierer erkannt werden. Auf geweihtem/heiligen Boden musst du jede Minute eine Willenskraft-­Probe (20/28) ablegen, um nicht durch starke Schmerzen aufzufallen und eine Wunde zu erleiden.</Karte>
+  <Karte name="Kreis der Verdammnis" typ="0" subtyp="0" titel="$original$" subtitel="Stufe &lt;u&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;/u&gt;" fusszeile="$original$" löschen="0" voraussetzungen="Vorteil Kreis der Verdammnis I">&lt;i&gt;Wirkung:&lt;/i&gt; $vorteil:Kreis der Verdammnis I$</Karte>
   <Karte name="Einkommen I" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
   <Karte name="Einkommen II" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
   <Karte name="Einkommen III" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
@@ -550,18 +521,18 @@ Du wartest ab und handelst erst, wenn ein bestimmtes Ereignis eintritt. Dazu bes
 &lt;li class="checkbox"&gt;II: 6 Schicksalspunkte&lt;/ul&gt;</Karte>
   <Karte name="Resistenzen und Immunitäten" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="0" voraussetzungen="Vorteil Resistenz gegen Hitze ODER Vorteil Resistenz gegen Kälte ODER Vorteil Resistenz gegen Gifte ODER Vorteil Resistenz gegen Krankheiten">&lt;b&gt;Temperatur&lt;/b&gt;
 &lt;ul&gt;
-&lt;li class="checkbox"&gt;Hitze: Verschiebt die Temperaturstufe (S. 35) bei hohen Temperaturen um eine Stufe in Richtung normal.&lt;/li&gt;
-&lt;li class="checkbox"&gt;Kälte: Verschiebt die Temperaturstufe (S. 35) bei niedrigen Temperaturen um eine Stufe in Richtung normal.&lt;/li&gt;
+&lt;li class="checkbox"&gt;Hitze: $vorteil:Resistenz gegen Hitze$&lt;/li&gt;
+&lt;li class="checkbox"&gt;Kälte: $vorteil:Resistenz gegen Kälte$&lt;/li&gt;
 &lt;/ul&gt;
 &lt;b&gt;Gifte&lt;/b&gt;
 &lt;ul&gt;
-&lt;li class="checkbox"&gt;Resistenz: Mildert die Auswirkungen von Giften (S. 34)&lt;/li&gt;
-&lt;li class="checkbox"&gt;Immunität: Gifte sind gegen dich wirkungslos.&lt;/li&gt;
+&lt;li class="checkbox"&gt;Resistenz: $vorteil:Resistenz gegen Gifte$&lt;/li&gt;
+&lt;li class="checkbox"&gt;Immunität: $vorteil:Immunität gegen Gifte$&lt;/li&gt;
 &lt;/ul&gt;
 &lt;b&gt;Krankheiten&lt;/b&gt;
 &lt;ul&gt;
-&lt;li class="checkbox"&gt;Resistenz: Mildert die Auswirkungen von Giften (S. 35)&lt;/li&gt;
-&lt;li class="checkbox"&gt;Immunität: Du erkrankst niemals.&lt;/li&gt;
+&lt;li class="checkbox"&gt;Resistenz: $vorteil:Resistenz gegen Krankheiten$&lt;/li&gt;
+&lt;li class="checkbox"&gt;Immunität: $vorteil:Immunität gegen Krankheiten$&lt;/li&gt;
 &lt;/ul&gt;</Karte>
   <Karte name="Resistenz gegen Gifte" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
   <Karte name="Immunität gegen Gifte" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
@@ -633,22 +604,22 @@ Du wartest ab und handelst erst, wenn ein bestimmtes Ereignis eintritt. Dazu bes
 &lt;/table&gt;</Karte>
   <Karte name="Kommandos" typ="0" subtyp="2" titel="$original$" subtitel="" fusszeile="$original$" löschen="0" voraussetzungen="Vorteil Kommando: Haltet Stand! ODER Vorteil Kommando: Formiert Euch! ODER Vorteil Kommando: Keine Gefangenen! ODER Vorteil Kommando: Kennt Keinen Schmerz!">Erfahrene Anführer befehligen ihre Kampfgefährten nicht nur, sie inspirieren sie. Mit den entsprechenden Vorteilen (S. 42) kannst du in einer Aktion Konflikt eine &lt;b&gt;Anführen-Probe&lt;/b&gt; (16, I) ablegen, um bis zu &lt;b&gt;4 Mitstreitern&lt;/b&gt; in Hörweite einen &lt;b&gt;Bonus&lt;/b&gt; für diesen Kampf zu verleihen. Hohe Qualität (S. 7) vervierfacht die Zahl der Mitstreiter. Jeder Kämpfer kann nur von einem Anführen-Effekt gleichzeitig profitieren.
     Der Effekt endet am Ende des Kampfes, bei Kampfunfähigkeit des Anführers oder wenn dieser neue Befehle ruft. Der Anführer selbst profitiert nicht von Kommandos.
-&lt;ul&gt;&lt;li class="checkbox"&gt;Haltet stand: Furcht-Effekte 1 Stufe gesenkt&lt;/li&gt;
-&lt;li class="checkbox"&gt;Formiert euch: +1 VT&lt;/li&gt;
-&lt;li class="checkbox"&gt;Keine Gefangenen: +2 TP&lt;/li&gt;
-&lt;li class="checkbox"&gt;Kennt keinen Schmerz: +1 WS&lt;/li&gt;&lt;/ul&gt;</Karte>
+&lt;ul&gt;&lt;li class="checkbox"&gt;Haltet stand: $vorteil:Kommando: Haltet Stand!$&lt;/li&gt;
+&lt;li class="checkbox"&gt;Formiert euch: $vorteil:Kommando: Formiert Euch!$&lt;/li&gt;
+&lt;li class="checkbox"&gt;Keine Gefangenen: $vorteil:Kommando: Keine Gefangenen!$&lt;/li&gt;
+&lt;li class="checkbox"&gt;Kennt keinen Schmerz: $vorteil:Kommando: Kennt Keinen Schmerz!$&lt;/li&gt;&lt;/ul&gt;</Karte>
   <Karte name="Astrale&amp;nbspRegeneration" typ="0" subtyp="4" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="0" voraussetzungen="Vorteil Astrale Regeneration ODER Vorteil Verbesserte astrale Regeneration ODER Vorteil Meisterliche astrale Regeneration">&lt;i&gt;Wirkung:&lt;/i&gt;
-&lt;ul&gt;&lt;li class="checkbox"&gt;Astrale Regeneration: Du regenerierst 1 zusätzlichen AsP pro Nacht.&lt;/li&gt;
-&lt;li class="checkbox"&gt;Verbesserte astrale Regeneration: Du regenerierst 2 weitere, zusätzliche AsP pro Nacht.&lt;/li&gt;
-&lt;li class="checkbox"&gt;Meisterliche astrale Regeneration: Du regenerierst 3 weitere, zusätzliche AsP pro Nacht.&lt;/li&gt;&lt;/ul&gt;</Karte>
+&lt;ul&gt;&lt;li class="checkbox"&gt;Astrale Regeneration: $vorteil:Astrale Regeneration$&lt;/li&gt;
+&lt;li class="checkbox"&gt;Verbesserte astrale Regeneration: $vorteil:Verbesserte astrale Regeneration$&lt;/li&gt;
+&lt;li class="checkbox"&gt;Meisterliche astrale Regeneration: $vorteil:Meisterliche astrale Regeneration$&lt;/li&gt;&lt;/ul&gt;</Karte>
   <Karte name="Kommandos (Regel)" typ="1" subtyp="8" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
   <Karte name="Kommando: Haltet Stand!" typ="0" subtyp="2" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
   <Karte name="Kommando: Keine Gefangenen!" typ="0" subtyp="2" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
   <Karte name="Kommando: Formiert Euch!" typ="0" subtyp="2" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
   <Karte name="Kommando: Kennt Keinen Schmerz!" typ="0" subtyp="2" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
   <Karte name="Rüstungsgew&amp;ouml;hnung" typ="0" subtyp="2" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="0" voraussetzungen="">&lt;i&gt;Wirkung:&lt;/i&gt;
-&lt;ul&gt;&lt;li class="checkbox"&gt;Rüstungsgewöhnung: Die BE aller Rüstungen ist um 1 gesenkt.&lt;/li&gt;
-&lt;li class="checkbox"&gt;Verbesserte Rüstungsgewöhnung: Die BE aller Rüstungen ist um weitere 2 gesenkt.&lt;/li&gt;&lt;/ul&gt;</Karte>
+&lt;ul&gt;&lt;li class="checkbox"&gt;Rüstungsgewöhnung: $vorteil:Rüstungsgewöhnung$&lt;/li&gt;
+&lt;li class="checkbox"&gt;Verbesserte Rüstungsgewöhnung: $vorteil:Verbesserte Rüstungsgewöhnung$&lt;/li&gt;&lt;/ul&gt;</Karte>
   <Karte name="Rüstungsgewöhnung" typ="0" subtyp="2" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
   <Karte name="Verbesserte Rüstungsgewöhnung" typ="0" subtyp="2" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
   <Karte name="Astrale Regeneration" typ="0" subtyp="4" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>

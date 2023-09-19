@@ -198,7 +198,7 @@ habe ich mit docsmagic.de gemacht, hier werden Sleeves mit farbigen Rückseiten 
         return f"<div><span>{fert.replace(' ', '<br>', 1)}</span></div>" # just add the name as text with max 1 linebreak
 
     def postProcessTalent(self, karte, element = None):
-        for data in ["vorbereitungszeiticon", "vorbereitungszeit", "zielicon", "ziel", "reichweiteicon", "reichweite", "wirkungsdauericon", "wirkungsdauer", "kostenicon", "kosten", "erlernen", "fertigkeiten"]:
+        for data in ["vorbereitungszeiticon", "vorbereitungszeit", "zielicon", "ziel", "reichweiteicon", "reichweite", "wirkungsdauericon", "wirkungsdauer", "kostenicon", "kosten", "erlernen", "fertigkeiten", "fertigkeitenicon"]:
             karte.customData[data] = ""
 
         karte.text, line = self.removeLineHtml(karte.text, "Probenschwierigkeit:")
@@ -262,11 +262,33 @@ habe ich mit docsmagic.de gemacht, hier werden Sleeves mit farbigen Rückseiten 
             images.append(self.findFertImage(fert))
         karte.customData["fertigkeiten"] = "".join(images)
 
+        karte.customData["fertigkeitenicon"] = "../Fertigkeiten/Zauber.png"
+        if element is not None:
+            karte.customData["fertigkeitenicon"] = f"../Fertigkeiten/{list(self.db.einstellungen['Talente: Spezialtalent Typen'].wert.values())[element.spezialTyp]}.png"
+
         karte.text, line = self.removeLineHtml(karte.text, "Erlernen:")
         if line:
             karte.customData["erlernen"] = line
 
         karte.text = karte.text.strip()
+
+    def insertCrossreferences(self, text):
+        def repl(m):
+            return self.db.vorteile[m.group(1)].text if m.group(1) in self.db.vorteile else "$vorteil: nicht gefunden$"
+        text = re.sub("\$vorteil:([^\$]*)\$", repl, text)
+
+        def repl(m):
+            return self.db.talente[m.group(1)].text if m.group(1) in self.db.talente else "talent: nicht gefunden$"
+        text = re.sub("\$talent:([^\$]*)\$", repl, text)
+        
+        def repl(m):
+            return self.db.waffeneigenschaften[m.group(1)].text if m.group(1) in self.db.waffeneigenschaften else "waffeneigenschaft: nicht gefunden$"
+        text = re.sub("\$waffeneigenschaft:([^\$]*)\$", repl, text)
+        
+        def repl(m):
+            return self.db.regeln[m.group(1)].text if m.group(1) in self.db.regeln else "regel: nicht gefunden$"
+        text = re.sub("\$regel:([^\$]*)\$", repl, text)
+        return text
 
     def generateZusatzKarte(self, k, farbe):
         karte = Karte()
@@ -274,7 +296,7 @@ habe ich mit docsmagic.de gemacht, hier werden Sleeves mit farbigen Rückseiten 
         karte.farbe = farbe
         karte.name = k.name
         karte.titel = k.anzeigename
-        karte.text = k.text.replace("$original$", "")
+        karte.text = self.insertCrossreferences(k.text.replace("$original$", ""))
         if k.typ == KartenTyp.Talent:
             karte.subtitel = k.subtitel.replace("$original$", "PW <u>" + "&nbsp;"*12 + "</u>")
         else:
@@ -366,7 +388,7 @@ habe ich mit docsmagic.de gemacht, hier werden Sleeves mit farbigen Rückseiten 
 
             karte.titel = overrideKarte.titel.replace("$original$", karte.titel)
             karte.subtitel = overrideKarte.subtitel.replace("$original$", karte.subtitel)
-            karte.text = overrideKarte.text.replace("$original$", karte.text)
+            karte.text = self.insertCrossreferences(overrideKarte.text.replace("$original$", karte.text))
             karte.fusszeile = overrideKarte.fusszeile.replace("$original$", karte.fusszeile)
             karte.typ = overrideKarte.typ
             karte.subtyp = overrideKarte.subtyp

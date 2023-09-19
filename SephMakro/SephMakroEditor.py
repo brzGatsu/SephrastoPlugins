@@ -14,6 +14,7 @@ from Wolke import Wolke
 from EinstellungenWrapper import EinstellungenWrapper
 import PathHelper
 from Hilfsmethoden import Hilfsmethoden
+import traceback
 
 @contextlib.contextmanager
 def stdoutIO(stdout=None):
@@ -98,8 +99,11 @@ class SephMakroEditor(object):
         with stdoutIO() as s:
             try:
                 exec(self.editor.toPlainText(), {"datenbank" : Wolke.DB})
-            except Exception as e:
+            except SyntaxError as e:
                 print("Error: " + str(e))
+            except Exception as e:
+                cl, exc, tb = sys.exc_info()
+                print("Error: " + str(e) + " (line " + str(traceback.extract_tb(tb)[-1][1]) + ")")
         self.ui.teOutput.setPlainText(s.getvalue())
 
     def updateButtons(self):

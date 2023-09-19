@@ -324,10 +324,11 @@ Einzelperson (nur maritime Humanoide)
 Einzelperson von niedrigerem Status
 Einzelpersonen, mit dir zumindest langjährig befreundet
 Einzelobjekt aus (überwiegend) Holz
-Tier der Größenklasse winzig 
+Tier der Größenklasse winzig
 Sippenmitglied
 ganze Sippe
-Mackestopp"""
+Mackestopp
+Bann- oder Schutzkreis"""
         e.typ = "TextList"
         e.separator = "\n"
         e.strip = False

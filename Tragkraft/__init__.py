@@ -72,8 +72,8 @@ class Plugin:
         char = params["charakter"]
 
         pb = 0
-        if len(Wolke.Char.ausrüstungPlatzbedarf) > 0:
-            pb = Wolke.Char.ausrüstungPlatzbedarf[0]
+        if len(char.ausrüstungPlatzbedarf) > 0:
+            pb = char.ausrüstungPlatzbedarf[0]
 
         scriptAPI = {
             'getAttribut' : lambda attribut: char.attribute[attribut].wert,
