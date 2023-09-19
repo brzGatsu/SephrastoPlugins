@@ -315,18 +315,18 @@ def ai_chooseAttackStyles(attacker, defender, attackType):
         elif Todesstoß.isUsable(attacker) and attackType.isAllowed(attacker, Todesstoß):
             attackStyles += [Todesstoß]
         else:
-            if Rüstungsbrecher.isUsable(attacker) and rs >= 4:
+            if Rüstungsbrecher.isUsable(attacker) and attackType.isAllowed(attacker, Rüstungsbrecher) and rs >= 4:
                 attackStyles += [Rüstungsbrecher]
                 attackStyles += [Wuchtschlag4]
             else:
                 attackStyles += [Wuchtschlag8]
     elif statDiff >= 12 or wsDiff >= 4:
-        if Rüstungsbrecher.isUsable(attacker) and rs >= 6:
+        if Rüstungsbrecher.isUsable(attacker) and attackType.isAllowed(attacker, Rüstungsbrecher) and rs >= 6:
             attackStyles += [Rüstungsbrecher]
         else:
             attackStyles += [Wuchtschlag6]
     elif statDiff >= 10 or wsDiff >= 2:
-        if Rüstungsbrecher.isUsable(attacker) and rs >= 4:
+        if Rüstungsbrecher.isUsable(attacker) and attackType.isAllowed(attacker, Rüstungsbrecher) and rs >= 4:
             attackStyles += [Rüstungsbrecher]
         else:
             attackStyles += [Wuchtschlag4]
