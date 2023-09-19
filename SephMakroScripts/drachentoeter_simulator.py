@@ -623,14 +623,12 @@ class Fighter:
             if logFights: print(self.name + "s", attackType.name, "trifft nicht mit", atRoll.str(), "gegen", vtRoll.str(), "| Manöver:", ", ".join([s.name for s in attackStyles]) if len(attackStyles) > 0 else "keine")
             
             # trigger_onVTSuccess
-            for attackStyle in attackStyles:
-                if hasattr(attackStyle, "trigger_onVTSuccess"):
-                    attackStyle.trigger_onVTSuccess(self, defender, atRoll, vtRoll)
-
             for defenseStyle in defenseStyles:
                 if hasattr(defenseStyle, "trigger_onVTSuccess"):
                     defenseStyle.trigger_onVTSuccess(self, defender, atRoll, vtRoll)
-
+            for attackStyle in attackStyles:
+                if hasattr(attackStyle, "trigger_onVTSuccess"):
+                    attackStyle.trigger_onVTSuccess(self, defender, atRoll, vtRoll)
             if atRoll.isCritFail():
                 if logFights: print("Patzer für", self.name)
                 if "Unberechenbar" in self.waffenEigenschaften:
