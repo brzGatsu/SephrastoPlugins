@@ -251,7 +251,7 @@ class Sturmangriff:
             return
         if not "Zweihändig" in attacker.char.waffen[attacker.waffeIndex].eigenschaften:
             return
-        if "Schneller Kampf II" in attacker.char.vorteile:
+        if "Schneller Kampf II" in attacker.char.vorteile and attacker.kampfstil == "Schneller Kampf":
             return
 
         attacker.useAction(Action.Aktion)
