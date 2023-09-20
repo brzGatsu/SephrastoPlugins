@@ -16,7 +16,7 @@ from PySide6 import QtWidgets
 # - Fernkampf wird nicht unterstützt
 # - Aktionen: es wird IMMER die Aktion Angriff durchgeführt und immer ohne volle Offensive.
 # - Kampfstile: alle außer Reiterkampf werden unterstützt (ohne Stufe IV). KVKIII, SKII und BKII sind (abseits passiver Bonusse) nicht implementiert, da nicht relevant in Duellen.
-# - Vorteile: Nur Todesstoß, Hammerschlag, Waffenloser Kampf, Kampfreflexe, (verb.) Rüstungsgewöhnung, Kalte Wut, Präzision, Gegenhalten, Unaufhaltsam (es wird automatisch ausgewichen, wenn die VT hoch genug ist NACH dem AT Wurf)
+# - Vorteile: Nur Todesstoß, Hammerschlag, Waffenloser Kampf, Kampfreflexe, (verb.) Rüstungsgewöhnung, Kalte Wut, Präzision, Gegenhalten, Unaufhaltsam (es wird automatisch ausgewichen, wenn die VT hoch genug ist NACH dem AT Wurf), Körperbeherrschung
 # - Manöver: Nur Wuchtschlag, Todesstoß, Hammerschlag und Rüstungsbrecher (werden automatisch eingesetzt auf basis einer simplen AI)
 # - Waffeneigenschaften: Alles außer Reittier, Stumpf und Zerbrechlich
 
@@ -643,6 +643,14 @@ class Fighter:
                 self.switchWeapons()
                 self.attack(defender, NebenhandAngriff)
                 self.switchWeapons()
+
+        if Gegenhalten in self.feats and not defender.isInReach(self.position):
+            print(self.name, "bewegt sich weg von", defender.name, "für", Gegenhalten.name)
+            if defender.position > self.position:
+                self.position -= 1
+            else:
+                self.position += 1
+
         self.pruneAdvantageDisadvantage(Fighter.DurationEndPhase)
         self.pruneAdvantageDisadvantage(Fighter.DurationEndPhaseOneRoll)
         self.myTurn = False
