@@ -105,6 +105,7 @@ class SephMakroEditor(object):
                 cl, exc, tb = sys.exc_info()
                 print("Error: " + str(e) + " (line " + str(traceback.extract_tb(tb)[-1][1]) + ")")
         self.ui.teOutput.setPlainText(s.getvalue())
+        self.formMain.activateWindow()
 
     def updateButtons(self):
         self.buttonRefs = []

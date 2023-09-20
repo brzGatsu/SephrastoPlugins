@@ -102,6 +102,7 @@ class Passierschlag:
 # if at > vt:
 #     trigger_onVTFailing (defender)
 # if still at > vt:
+#     trigger_onVTFailed (defender)
 #     trigger_onATSuccess (attacker)
 #     trigger_onDealWounds (attacker)
 #     trigger_onDamageReceived (defender)
@@ -115,64 +116,64 @@ class Passierschlag:
 class Wuchtschlag2:
     name = "Wuchtschlag +2"
     def isUsable(fighter): return True
-    def trigger_onAT(attacker, defender, atRoll):
+    def trigger_onAT(attacker, defender, atRoll, maneuvers):
         atRoll.modify(-2)
-    def trigger_onATSuccess(attacker, defender, atRoll, vtRoll, tpRoll):
+    def trigger_onATSuccess(attacker, defender, atRoll, vtRoll, tpRoll, maneuvers):
         tpRoll.modify(2)
 
 class Wuchtschlag4:
     name = "Wuchtschlag +4"
     def isUsable(fighter): return True
-    def trigger_onAT(attacker, defender, atRoll):
+    def trigger_onAT(attacker, defender, atRoll, maneuvers):
         atRoll.modify(-4)
-    def trigger_onATSuccess(attacker, defender, atRoll, vtRoll, tpRoll):
+    def trigger_onATSuccess(attacker, defender, atRoll, vtRoll, tpRoll, maneuvers):
         tpRoll.modify(4)
 
 class Wuchtschlag6:
     name = "Wuchtschlag +6"
     def isUsable(fighter): return True
-    def trigger_onAT(attacker, defender, atRoll):
+    def trigger_onAT(attacker, defender, atRoll, maneuvers):
         atRoll.modify(-6)
-    def trigger_onATSuccess(attacker, defender, atRoll, vtRoll, tpRoll):
+    def trigger_onATSuccess(attacker, defender, atRoll, vtRoll, tpRoll, maneuvers):
         tpRoll.modify(6)
 
 class Wuchtschlag8:
     name = "Wuchtschlag +8"
     def isUsable(fighter): return True
-    def trigger_onAT(attacker, defender, atRoll):
+    def trigger_onAT(attacker, defender, atRoll, maneuvers):
         atRoll.modify(-8)
-    def trigger_onATSuccess(attacker, defender, atRoll, vtRoll, tpRoll):
+    def trigger_onATSuccess(attacker, defender, atRoll, vtRoll, tpRoll, maneuvers):
         tpRoll.modify(8)
 
 class Hammerschlag:
     name = "Hammerschlag"
     def isUsable(fighter): return "Hammerschlag" in fighter.char.vorteile
-    def trigger_onAT(attacker, defender, atRoll):
+    def trigger_onAT(attacker, defender, atRoll, maneuvers):
         atRoll.modify(-8)
-    def trigger_onATSuccess(attacker, defender, atRoll, vtRoll, tpRoll):
+    def trigger_onATSuccess(attacker, defender, atRoll, vtRoll, tpRoll, maneuvers):
         tpRoll.multiplier = 2
 
 class Todesstoß:
     name = "Todesstoß"
     def isUsable(fighter): return "Todesstoß" in fighter.char.vorteile
-    def trigger_onAT(attacker, defender, atRoll):
+    def trigger_onAT(attacker, defender, atRoll, maneuvers):
         atRoll.modify(-8)
-    def trigger_onDealWounds(fighter, wounds):
+    def trigger_onDealWounds(fighter, wounds, maneuvers):
         return wounds+2
 
 class Rüstungsbrecher:
     name = "Rüstungsbrecher"
     def isUsable(fighter): return "Rüstungsbrechend" in fighter.waffenEigenschaften
-    def trigger_onAT(attacker, defender, atRoll):
+    def trigger_onAT(attacker, defender, atRoll, maneuvers):
         atRoll.modify(-4)
-    def trigger_onATSuccess(attacker, defender, atRoll, vtRoll, tpRoll):
+    def trigger_onATSuccess(attacker, defender, atRoll, vtRoll, tpRoll, maneuvers):
         tpRoll.isSP = True
 
 # Feats (offensive)
 class SNKII:
     name = "Finte"
     def isUsable(fighter): return "Schneller Kampf II" in fighter.char.vorteile and fighter.kampfstil == "Schneller Kampf"
-    def trigger_onAT(attacker, defender, atRoll):
+    def trigger_onAT(attacker, defender, atRoll, maneuvers):
         if not attacker.actionUsable(Action.Bonusaktion) or not attacker.myTurn:
             return
         if not atRoll.couldProfitFromAdvantage:
@@ -184,7 +185,7 @@ class SNKII:
 class SNKIII:
     name = "Unterlaufen"
     def isUsable(fighter): return "Schneller Kampf III" in fighter.char.vorteile and fighter.kampfstil == "Schneller Kampf"
-    def trigger_onDamageDealt(attacker, defender, atRoll, vtRoll, tpRoll):
+    def trigger_onDamageDealt(attacker, defender, atRoll, vtRoll, tpRoll, maneuvers):
         if not defender.isAlive() or not ExtraAngriff.isUsable(attacker) or not attacker.myTurn:
             return
         if logFights: print(">", attacker.name, "macht einen weiteren Angriff durch", SNKIII.name)
@@ -193,7 +194,7 @@ class SNKIII:
 class KVKII:
     name = "Durchbrechen"
     def isUsable(fighter): return "Kraftvoller Kampf II" in fighter.char.vorteile and fighter.kampfstil == "Kraftvoller Kampf"
-    def trigger_onDamageDealt(attacker, defender, atRoll, vtRoll, tpRoll):
+    def trigger_onDamageDealt(attacker, defender, atRoll, vtRoll, tpRoll, maneuvers):
         if not atRoll.isCrit() or not defender.isAlive() or not BonusAngriff.isUsable(attacker) or not attacker.myTurn:
             return
         if logFights: print(">", attacker.name, "macht als Bonusaktion einen weiteren Angriff durch", KVKII.name)
@@ -202,7 +203,7 @@ class KVKII:
 class BHKIII:
     name = "BHK III"
     def isUsable(fighter): return "Beidhändiger Kampf III" in fighter.char.vorteile and fighter.kampfstil == "Beidhändiger Kampf"
-    def trigger_onATDone(attacker, defender, atRoll, vtRoll):
+    def trigger_onATDone(attacker, defender, atRoll, vtRoll, maneuvers):
         if not defender.isAlive() or not ExtraAngriff.isUsable(attacker) or not attacker.myTurn:
             return
         if logFights: print(attacker.name, "macht einen weiteren Angriff durch", BHKIII.name)
@@ -211,7 +212,7 @@ class BHKIII:
 class PWKII:
     name = "Tückische Klinge"
     def isUsable(fighter): return "Parierwaffenkampf II" in fighter.char.vorteile and fighter.kampfstil == "Parierwaffenkampf"
-    def trigger_onATSuccess(attacker, defender, atRoll, vtRoll, tpRoll):
+    def trigger_onATSuccess(attacker, defender, atRoll, vtRoll, tpRoll, maneuvers):
         if not atRoll.advantage or not attacker.actionUsable(Action.TückischeKlinge):
             return
         attacker.useAction(Action.TückischeKlinge)
@@ -222,7 +223,7 @@ class PWKII:
 class Präzision:
     name = "Präzision"
     def isUsable(fighter): return "Präzision" in fighter.char.vorteile
-    def trigger_onATSuccess(attacker, defender, atRoll, vtRoll, tpRoll):
+    def trigger_onATSuccess(attacker, defender, atRoll, vtRoll, tpRoll, maneuvers):
         if atRoll.lastRoll >= 16:
             tpRoll.modify(attacker.char.attribute["GE"].wert)
             if logFights: print(">", attacker.name, "verursacht +", attacker.char.attribute["GE"].wert, "TP durch", Präzision.name)
@@ -230,19 +231,21 @@ class Präzision:
 class Unaufhaltsam:
     name = "Unaufhaltsam"
     def isUsable(fighter): return "Unaufhaltsam" in fighter.char.vorteile
-    def trigger_onATFailed(attacker, defender, atRoll, vtRoll):
+    def trigger_onATFailed(attacker, defender, atRoll, vtRoll, maneuvers):
         ausweichen = (vtRoll.result() - defender.modVT()) + defender.modAusweichen()        
         if ausweichen < atRoll.result():
             if logFights: print(">", attacker.name, "verursacht dennoch halben Schaden durch", Unaufhaltsam.name)
             tpRoll = attacker.rollTP()
             tpRoll.multiplier = 0.5
             defender.takeDamage(tpRoll, [Unaufhaltsam])
+        else:
+            if logFights: print(">", attacker.name + "s", Unaufhaltsam.name, "wirkt nicht, da der AT mit", ausweichen, "ausgewichen wurde")
 
 # Feats (defensive)
 class Schild:
     name = "Schildwall (ohne SK)"
     def isUsable(fighter): return "Schildkampf I" not in fighter.char.vorteile and "Schild" in fighter.char.waffen[fighter.nebenhandIndex].eigenschaften
-    def trigger_onVTFailing(attacker, defender, atRoll, vtRoll):
+    def trigger_onVTFailing(attacker, defender, atRoll, vtRoll, maneuvers):
         if "Unberechenbar" in attacker.waffenEigenschaften:
             return
         if not defender.actionUsable(Action.Reaktion):
@@ -257,7 +260,7 @@ class Schild:
 class SK:
     name = "Verbesserter Schildwall"
     def isUsable(fighter): return "Schildkampf I" in fighter.char.vorteile and fighter.kampfstil == "Schildkampf"
-    def trigger_onVTFailing(attacker, defender, atRoll, vtRoll):
+    def trigger_onVTFailing(attacker, defender, atRoll, vtRoll, maneuvers):
         if "Unberechenbar" in attacker.waffenEigenschaften:
             return
         if not defender.actionUsable(SK.__getActionType(defender)):
@@ -278,7 +281,7 @@ class SK:
 class PWKI:
     name = "Binden"
     def isUsable(fighter): return "Parierwaffenkampf I" in fighter.char.vorteile and fighter.kampfstil == "Parierwaffenkampf"
-    def trigger_onVTSuccess(attacker, defender, atRoll, vtRoll):
+    def trigger_onVTSuccess(attacker, defender, atRoll, vtRoll, maneuvers):
         if not defender.actionUsable(Action.Reaktion):
             return
         defender.useAction(Action.Reaktion)
@@ -288,7 +291,7 @@ class PWKI:
 class PWKIII:
     name = "Kreuzblock"
     def isUsable(fighter): return "Parierwaffenkampf III" in fighter.char.vorteile and fighter.kampfstil == "Parierwaffenkampf"
-    def trigger_onVTFailing(attacker, defender, atRoll, vtRoll):
+    def trigger_onVTFailing(attacker, defender, atRoll, vtRoll, maneuvers):
         if "Unberechenbar" in attacker.waffenEigenschaften:
             return
         if not defender.actionUsable(Action.Reaktion):
@@ -303,7 +306,7 @@ class PWKIII:
 class BKIII:
     name = "Vergeltung"
     def isUsable(fighter): return "Berserkerkampf III" in fighter.char.vorteile and fighter.kampfstil == "Berserkerkampf"
-    def trigger_onDamageReceived(attacker, defender, atRoll, vtRoll, tpRoll):
+    def trigger_onDamageReceived(attacker, defender, atRoll, vtRoll, tpRoll, maneuvers):
         if not defender.isAlive() or not Passierschlag.isUsable(defender):
             return
         if logFights: print(">", defender.name, "macht als Reaktion einen Angriff durch", BKIII.name)
@@ -318,7 +321,29 @@ class Gegenhalten:
         if logFights: print(defender.name, "führt Passierschlag aus durch", Gegenhalten.name)
         defender.attack(attacker, Passierschlag)
 
-Feats = [SNKII, SNKIII, KVKII, BHKIII, PWKII, Präzision, Unaufhaltsam, Schild, SK, PWKI, PWKIII, BKIII, Gegenhalten]
+class Körperbeherrschung:
+    name = "Körperbeherrschung"
+    def isUsable(fighter): return "Körperbeherrschung" in fighter.char.vorteile
+    def trigger_onVTFailed(attacker, defender, atRoll, vtRoll, maneuvers):
+        gePW = defender.char.attribute["GE"].probenwert + defender.wundmalus()
+        ws = defender.wsStern
+        if Rüstungsbrecher in maneuvers:
+            ws = defender.ws
+        estimatedWounds = math.floor((attacker.averageDamage - 1) / ws)
+        if estimatedWounds < 2:
+            return
+        if gePW + 8 + min(estimatedWounds * 2, 12) < atRoll.result():
+            return
+        roll = random.randint(1,20) + gePW
+        defender.wunden += 1
+        if roll >= atRoll.result():
+            if logFights: print(">", defender.name, "nutzt", Körperbeherrschung.name + " (+1 Wunde), um dem Angriff zu entgehen")
+            vtRoll.modify(999) #fishy
+        else:
+            if logFights: print(">", defender.name, "nutzt", Körperbeherrschung.name + "(+1 Wunde), um dem Angriff zu entgehen, schafft die Gegenprobe aber nicht")
+
+
+Feats = [SNKII, SNKIII, KVKII, BHKIII, PWKII, Präzision, Unaufhaltsam, Schild, SK, PWKI, PWKIII, BKIII, Gegenhalten, Körperbeherrschung]
 
 # "AI"
 
@@ -434,7 +459,7 @@ class Fighter:
         self.char = Char()
         self.char.xmlLesen(charPath)
         self.char.aktualisieren()
-        self.name = self.char.name
+        self.name = self.char.name or os.path.splitext(os.path.basename(charPath))[0]
         self.wunden = 0
         self.ws = self.char.abgeleiteteWerte["WS"].wert
         self.wsStern = self.char.abgeleiteteWerte["WS"].finalwert
@@ -472,6 +497,7 @@ class Fighter:
         self.ausweichenIndex = ausweichenIndex
         self.equip(waffeIndex, log=True)
         self.highestVT = self.vt
+        self.highestRW = self.rw
         self.ausweichen = 0
         if "Zweihändig" in self.waffenEigenschaften:
             self.nebenhandIndex = self.waffeIndex
@@ -479,6 +505,8 @@ class Fighter:
             self.equip(nebenhandIndex, log=True)
             if self.vt > self.highestVT:
                 self.highestVT = self.vt
+            if self.rw > self.highestRW:
+                self.highestRW = self.rw
         if self.ausweichenIndex != -1:
             self.equip(self.ausweichenIndex, log=True)
             self.ausweichen = self.vt
@@ -554,7 +582,7 @@ class Fighter:
         self.averageDamage = (waffenwerte.würfel * ((waffe.würfelSeiten / 2) + 0.5)) + self.tpPlus
         self.maxDamage = (waffenwerte.würfel * waffe.würfelSeiten) + self.tpPlus
         if log:
-            print(self.name, "verwendet", waffe.name, "mit", waffe.kampfstil or "keinem Kampfstil", "AT", self.at, "VT", self.vt, "TP", str(self.tpWürfel) + "W" + str(self.tpSeiten) + ("+" if self.tpPlus >= 0 else "") + str(self.tpPlus), ", ".join(waffe.eigenschaften))
+            print(waffe.name, "mit", waffe.kampfstil or "keinem Kampfstil", "RW", self.rw, "AT", self.at, "VT", self.vt, "TP", str(self.tpWürfel) + "W" + str(self.tpSeiten) + ("+" if self.tpPlus >= 0 else "") + str(self.tpPlus), ", ".join(waffe.eigenschaften))
 
     def switchWeapons(self):
         if self.waffeAktiv == self.waffeIndex:
@@ -583,19 +611,31 @@ class Fighter:
         if self.wunden < 5: return False
         return random.randint(1,20) + self.zähigkeitPW + self.wundmalus() < 12
 
+    def isInReach(self, position):
+        return abs(position - self.position) <= self.highestRW
+
+    def moveInReach(self, position):
+        if position > self.position:
+            self.position = position - self.highestRW
+        else:
+            self.position = position + self.highestRW
+
     def onIniphase(self, defender):
         self.myTurn = True
         self.usedActions = {}
         self.pruneAdvantageDisadvantage(Fighter.DurationStartNextPhase)
         self.pruneAdvantageDisadvantage(Fighter.DurationStartNextPhaseOneRoll)
 
-        if self.position != defender.position:
-            # todo: movement and reach rules, not so relevant for the simulation...
-            self.position = defender.position
+        if not self.isInReach(defender.position):
+            print(self.name, "bewegt sich zu", defender.name, "auf Distanz", self.highestRW)
+            # todo: movement rules...
+            wasInDefenderReach = defender.isInReach(self.position)
+            self.moveInReach(defender.position)
             # trigger_onEnemyEnterReach
-            for feat in defender.feats:
-                if hasattr(feat, "trigger_onEnemyEnterReach"):
-                    feat.trigger_onEnemyEnterReach(self, defender)
+            if not wasInDefenderReach and defender.isInReach(self.position):
+                for feat in defender.feats:
+                    if hasattr(feat, "trigger_onEnemyEnterReach"):
+                        feat.trigger_onEnemyEnterReach(self, defender)
 
         if NormalerAngriff.isUsable(self):
             self.attack(defender, NormalerAngriff)
@@ -618,7 +658,7 @@ class Fighter:
         atRoll.setAdvantageDisadvantage(self.hasAdvantage() or defender.enemyHasAdvantage(), self.hasDisadvantage() or defender.enemyHasDisadvantage())
         for feat in featsAndManeuvers:
             if hasattr(feat, "trigger_onAT"):
-                feat.trigger_onAT(self, defender, atRoll)
+                feat.trigger_onAT(self, defender, atRoll, maneuvers)
         # Feats may give advantage onAT, so set again
         atRoll.setAdvantageDisadvantage(self.hasAdvantage() or defender.enemyHasAdvantage(), self.hasDisadvantage() or defender.enemyHasDisadvantage())
         at = atRoll.result()
@@ -633,7 +673,7 @@ class Fighter:
         if at > vt:
             for feat in defender.feats:
                 if hasattr(feat, "trigger_onVTFailing"):
-                    feat.trigger_onVTFailing(self, defender, atRoll, vtRoll)
+                    feat.trigger_onVTFailing(self, defender, atRoll, vtRoll, maneuvers)
         at = atRoll.result()
         vt = vtRoll.result()
 
@@ -641,34 +681,40 @@ class Fighter:
         if at > vt:
             if logFights: print(self.name + "s", attackType.name, "trifft mit", atRoll.str(), "gegen", vtRoll.str(), "| Manöver:", ", ".join([s.name for s in maneuvers]) if len(maneuvers) > 0 else "keine")
             
-            # trigger_onATSucess
-            if atRoll.isCrit():
-                ai_addCritManeuvers(self, defender, attackType, featsAndManeuvers)     
-            tpRoll = self.rollTP()
-            for feat in featsAndManeuvers:
-                if hasattr(feat, "trigger_onATSuccess"):
-                    feat.trigger_onATSuccess(self, defender, atRoll, vtRoll, tpRoll)  
-            defender.takeDamage(tpRoll, featsAndManeuvers)
-
-            # trigger_onDamageReceived
+            # trigger_onVTFailed
             for feat in defender.feats:
-                if hasattr(feat, "trigger_onDamageReceived"):
-                    feat.trigger_onDamageReceived(self, defender, atRoll, vtRoll, tpRoll)
-            # trigger_onDamageDealt
-            for feat in featsAndManeuvers:
-                if hasattr(feat, "trigger_onDamageDealt"):
-                    feat.trigger_onDamageDealt(self, defender, atRoll, vtRoll, tpRoll)
+                if hasattr(feat, "trigger_onVTFailed"):
+                    feat.trigger_onVTFailed(self, defender, atRoll, vtRoll, maneuvers)
+
+            if atRoll.result() > vtRoll.result(): #fishy for körperbeherrschung
+                # trigger_onATSucess
+                if atRoll.isCrit():
+                    ai_addCritManeuvers(self, defender, attackType, featsAndManeuvers)     
+                tpRoll = self.rollTP()
+                for feat in featsAndManeuvers:
+                    if hasattr(feat, "trigger_onATSuccess"):
+                        feat.trigger_onATSuccess(self, defender, atRoll, vtRoll, tpRoll, maneuvers)  
+                defender.takeDamage(tpRoll, featsAndManeuvers)
+
+                # trigger_onDamageReceived
+                for feat in defender.feats:
+                    if hasattr(feat, "trigger_onDamageReceived"):
+                        feat.trigger_onDamageReceived(self, defender, atRoll, vtRoll, tpRoll, maneuvers)
+                # trigger_onDamageDealt
+                for feat in featsAndManeuvers:
+                    if hasattr(feat, "trigger_onDamageDealt"):
+                        feat.trigger_onDamageDealt(self, defender, atRoll, vtRoll, tpRoll, maneuvers)
         else:
             if logFights: print(self.name + "s", attackType.name, "trifft nicht mit", atRoll.str(), "gegen", vtRoll.str(), "| Manöver:", ", ".join([s.name for s in maneuvers]) if len(maneuvers) > 0 else "keine")
             
             # trigger_onVTSuccess
             for feat in defender.feats:
                 if hasattr(feat, "trigger_onVTSuccess"):
-                    feat.trigger_onVTSuccess(self, defender, atRoll, vtRoll)
+                    feat.trigger_onVTSuccess(self, defender, atRoll, vtRoll, maneuvers)
             # trigger_onATFailed
             for feat in featsAndManeuvers:
                 if hasattr(feat, "trigger_onATFailed"):
-                    feat.trigger_onATFailed(self, defender, atRoll, vtRoll)
+                    feat.trigger_onATFailed(self, defender, atRoll, vtRoll, maneuvers)
             if atRoll.isCritFail():
                 if logFights: print("Patzer für", self.name)
                 if "Unberechenbar" in self.waffenEigenschaften:
@@ -684,7 +730,7 @@ class Fighter:
         # trigger_onATDone
         for feat in featsAndManeuvers:
             if hasattr(feat, "trigger_onATDone"):
-                feat.trigger_onATDone(self, defender, atRoll, vtRoll)
+                feat.trigger_onATDone(self, defender, atRoll, vtRoll, maneuvers)
 
     def takeDamage(self, tpRoll, featsAndManeuvers):
         ws = self.wsStern
@@ -695,7 +741,7 @@ class Fighter:
         # trigger_onDealWounds
         for feat in featsAndManeuvers:
             if hasattr(feat, "trigger_onDealWounds"):
-                wundenNeu = feat.trigger_onDealWounds(self, wundenNeu)
+                wundenNeu = feat.trigger_onDealWounds(self, wundenNeu, featsAndManeuvers)
 
         if wundenNeu == 0:
             if logFights: print(">", self.name, "erleidet", tpRoll.str(), ", es reicht nicht für eine Wunde", "(WS " + str(ws) + ")")
