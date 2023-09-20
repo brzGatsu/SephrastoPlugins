@@ -56,7 +56,7 @@ class NormalerAngriff:
     name = "Normaler Angriff"
     def isUsable(fighter): return fighter.actionUsable(Action.Aktion) and fighter.myTurn
     def mod(fighter): return 0
-    def isManveuverAllowed(fighter, maneuver): return True    
+    def isManeuverAllowed(fighter, maneuver): return True    
     def use(attacker, defender): attacker.useAction(Action.Aktion)
 
 class NebenhandAngriff:
@@ -69,7 +69,7 @@ class NebenhandAngriff:
         if fighter.kampfstil == "Beidhändiger Kampf" and "Beidhändiger Kampf II" in fighter.char.vorteile:
             return 0
         return -4
-    def isManveuverAllowed(fighter, maneuver): return maneuver.name.startswith("Wuchtschlag")
+    def isManeuverAllowed(fighter, maneuver): return maneuver.name.startswith("Wuchtschlag")
     def use(attacker, defender): attacker.useAction(NebenhandAngriff.__getActionType(attacker))
     def __getActionType(fighter):
         if fighter.kampfstil == "Beidhändiger Kampf" and "Beidhändiger Kampf II" in fighter.char.vorteile and fighter.char.waffen[fighter.waffeIndex].name == fighter.char.waffen[fighter.nebenhandIndex].name:
@@ -81,21 +81,21 @@ class BonusAngriff:
     name = "Normaler Angriff (Bonusaktion)"
     def isUsable(fighter): fighter.actionUsable(Action.Bonusaktion) and fighter.myTurn
     def mod(fighter): return 0
-    def isManveuverAllowed(fighter, maneuver): return True    
+    def isManeuverAllowed(fighter, maneuver): return True    
     def use(attacker, defender): attacker.useAction(Action.Bonusaktion)
 
 class ExtraAngriff:
     name = "Extra Angriff"
     def isUsable(fighter): return fighter.actionUsable(Action.ExtraAngriff) and fighter.myTurn
     def mod(fighter): return 0
-    def isManveuverAllowed(fighter, maneuver): return True    
+    def isManeuverAllowed(fighter, maneuver): return True    
     def use(attacker, defender): attacker.useAction(Action.ExtraAngriff)
 
 class Passierschlag:
     name = "Passierschlag"
     def isUsable(fighter): return fighter.actionUsable(Action.Reaktion)
     def mod(fighter): return 0
-    def isManveuverAllowed(fighter, maneuver): return True    
+    def isManeuverAllowed(fighter, maneuver): return True    
     def use(attacker, defender): attacker.useAction(Action.Reaktion)
 
 # Maneuvers and Feats trigger order
@@ -330,23 +330,23 @@ def ai_chooseManeuvers(attacker, defender, attackType):
     wsDiff = defender.wsStern - attacker.maxDamage
     rs = defender.wsStern - defender.ws
     if (statDiff >= 14 and defender.wunden <= 4) or wsDiff >= 6:
-        if Hammerschlag.isUsable(attacker) and attackType.isManveuverAllowed(attacker, Hammerschlag) and attacker.averageDamage > 8:
+        if Hammerschlag.isUsable(attacker) and attackType.isManeuverAllowed(attacker, Hammerschlag) and attacker.averageDamage > 8:
             maneuvers += [Hammerschlag]
-        elif Todesstoß.isUsable(attacker) and attackType.isManveuverAllowed(attacker, Todesstoß):
+        elif Todesstoß.isUsable(attacker) and attackType.isManeuverAllowed(attacker, Todesstoß):
             maneuvers += [Todesstoß]
         else:
-            if Rüstungsbrecher.isUsable(attacker) and attackType.isManveuverAllowed(attacker, Rüstungsbrecher) and rs >= 4:
+            if Rüstungsbrecher.isUsable(attacker) and attackType.isManeuverAllowed(attacker, Rüstungsbrecher) and rs >= 4:
                 maneuvers += [Rüstungsbrecher]
                 maneuvers += [Wuchtschlag4]
             else:
                 maneuvers += [Wuchtschlag8]
     elif statDiff >= 12 or wsDiff >= 4:
-        if Rüstungsbrecher.isUsable(attacker) and attackType.isManveuverAllowed(attacker, Rüstungsbrecher) and rs >= 6:
+        if Rüstungsbrecher.isUsable(attacker) and attackType.isManeuverAllowed(attacker, Rüstungsbrecher) and rs >= 6:
             maneuvers += [Rüstungsbrecher]
         else:
             maneuvers += [Wuchtschlag6]
     elif statDiff >= 10 or wsDiff >= 2:
-        if Rüstungsbrecher.isUsable(attacker) and attackType.isManveuverAllowed(attacker, Rüstungsbrecher) and rs >= 4:
+        if Rüstungsbrecher.isUsable(attacker) and attackType.isManeuverAllowed(attacker, Rüstungsbrecher) and rs >= 4:
             maneuvers += [Rüstungsbrecher]
         else:
             maneuvers += [Wuchtschlag4]
@@ -356,13 +356,13 @@ def ai_chooseManeuvers(attacker, defender, attackType):
 
 def ai_addCritManeuvers(attacker, defender, attackType, maneuvers):
     if logFights: print("Triumph für", attacker.name)
-    if Hammerschlag.isUsable(attacker) and attackType.isManveuverAllowed(attacker, Hammerschlag) and Hammerschlag not in maneuvers:
+    if Hammerschlag.isUsable(attacker) and attackType.isManeuverAllowed(attacker, Hammerschlag) and Hammerschlag not in maneuvers and attacker.averageDamage > 4:
         maneuvers.append(Hammerschlag)
         if logFights: print(">", Hammerschlag.name)
-    elif Todesstoß.isUsable(attacker) and attackType.isManveuverAllowed(attacker, Todesstoß) and Todesstoß not in maneuvers:
+    elif Todesstoß.isUsable(attacker) and attackType.isManeuverAllowed(attacker, Todesstoß) and Todesstoß not in maneuvers:
         maneuvers.append(Todesstoß)
         if logFights: print(">", Todesstoß.name)
-    elif Rüstungsbrecher.isUsable(attacker) and attackType.isManveuverAllowed(attacker, Rüstungsbrecher) and Rüstungsbrecher not in maneuvers and (defender.wsStern - defender.ws >= 4):
+    elif Rüstungsbrecher.isUsable(attacker) and attackType.isManeuverAllowed(attacker, Rüstungsbrecher) and Rüstungsbrecher not in maneuvers and (defender.wsStern - defender.ws >= 4):
         maneuvers.append(Rüstungsbrecher)
         if logFights: print(">", Rüstungsbrecher.name)
     elif Wuchtschlag4 not in maneuvers:
