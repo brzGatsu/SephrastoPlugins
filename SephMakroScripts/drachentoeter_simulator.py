@@ -16,7 +16,7 @@ from PySide6 import QtWidgets
 # - Fernkampf wird nicht unterstützt
 # - Aktionen: es wird IMMER die Aktion Angriff durchgeführt und immer ohne volle Offensive.
 # - Kampfstile: alle außer Reiterkampf werden unterstützt (ohne Stufe IV). KVKIII, SKII und BKII sind (abseits passiver Bonusse) nicht implementiert, da nicht relevant in Duellen.
-# - Vorteile: Nur Todesstoß, Hammerschlag, Waffenloser Kampf, Kampfreflexe, (verb.) Rüstungsgewöhnung, Kalte Wut, Präzision, Gegenhalten, Unaufhaltsam (es wird automatisch ausgewichen, wenn die VT hoch genug ist NACH dem AT Wurf), Körperbeherrschung
+# - Vorteile: Nur Todesstoß, Hammerschlag, Waffenloser Kampf, Kampfreflexe, (verb.) Rüstungsgewöhnung, Kalte Wut, Präzision, Gegenhalten, Unaufhaltsam (es wird automatisch ausgewichen, wenn die VT hoch genug ist NACH dem AT Wurf), Körperbeherrschung, Sturmangriff (wird nur mit zweihändigen Waffen genutzt und nur wenn kein SNK II)
 # - Manöver: Nur Wuchtschlag, Todesstoß, Hammerschlag und Rüstungsbrecher (werden automatisch eingesetzt auf basis einer simplen AI)
 # - Waffeneigenschaften: Alles außer Reittier, Stumpf und Zerbrechlich
 
@@ -48,6 +48,7 @@ class Action:
     NebenhandAngriffKostenlos = "Kostenloser Nebenhand Angriff"
     SchildwallKostenlos = "Kostenloser Schildwall"
     TückischeKlinge = "Tückische Klinge"
+    Sturmangriff = "Sturmangriff"
 
 # Attack Types
 class NormalerAngriff:
@@ -77,7 +78,7 @@ class NebenhandAngriff:
 
 class BonusAngriff:
     name = "Normaler Angriff (Bonusaktion)"
-    def isUsable(fighter): fighter.actionUsable(Action.Bonusaktion) and fighter.myTurn
+    def isUsable(fighter): return fighter.actionUsable(Action.Bonusaktion) and fighter.myTurn
     def mod(fighter): return 0
     def isManeuverAllowed(fighter, maneuver): return True    
     def use(attacker, defender): attacker.useAction(Action.Bonusaktion)
@@ -97,7 +98,8 @@ class Passierschlag:
     def use(attacker, defender): attacker.useAction(Action.Reaktion)
 
 # Maneuvers and Feats trigger order
-# trigger_onEnemyEnterReach (defender, only first iniphase)
+# trigger_onEnemyMoveIntoReach (defender, only first iniphase)
+# trigger_onMoveIntoReach (attacker, only first iniphase)
 # trigger_onAT (attacker)
 # if at > vt:
 #     trigger_onVTFailing (defender)
@@ -241,6 +243,22 @@ class Unaufhaltsam:
         else:
             if logFights: print(">", attacker.name + "s", Unaufhaltsam.name, "wirkt nicht, da der AT mit", ausweichen, "ausgewichen wurde")
 
+class Sturmangriff:
+    name = "Sturmangriff"
+    def isUsable(fighter): return "Sturmangriff" in fighter.char.vorteile
+    def trigger_onMoveIntoReach(attacker, defender):
+        if not attacker.actionUsable(Action.Aktion) or not BonusAngriff.isUsable(attacker):
+            return
+        if not "Zweihändig" in attacker.char.waffen[attacker.waffeIndex].eigenschaften:
+            return
+        if "Schneller Kampf II" in attacker.char.vorteile:
+            return
+
+        attacker.useAction(Action.Aktion)
+        bonusTP = min(abs(attacker.deltaPosition), attacker.char.abgeleiteteWerte["GS"].finalwert)
+        print(attacker.name, "nutzt", Sturmangriff.name, "für +" + str(bonusTP), "TP")
+        attacker.attack(defender, BonusAngriff, bonusTP)
+
 # Feats (defensive)
 class Schild:
     name = "Schildwall (ohne SK)"
@@ -315,7 +333,7 @@ class BKIII:
 class Gegenhalten:
     name = "Gegenhalten"
     def isUsable(fighter): return "Gegenhalten" in fighter.char.vorteile
-    def trigger_onEnemyEnterReach(attacker, defender):
+    def trigger_onEnemyMoveIntoReach(attacker, defender):
         if not defender.isAlive() or not Passierschlag.isUsable(defender):
             return
         if logFights: print(defender.name, "führt Passierschlag aus durch", Gegenhalten.name)
@@ -343,7 +361,7 @@ class Körperbeherrschung:
             if logFights: print(">", defender.name, "nutzt", Körperbeherrschung.name + "(+1 Wunde), um dem Angriff zu entgehen, schafft die Gegenprobe aber nicht")
 
 
-Feats = [SNKII, SNKIII, KVKII, BHKIII, PWKII, Präzision, Unaufhaltsam, Schild, SK, PWKI, PWKIII, BKIII, Gegenhalten, Körperbeherrschung]
+Feats = [SNKII, SNKIII, KVKII, BHKIII, PWKII, Präzision, Unaufhaltsam, Sturmangriff, Schild, SK, PWKI, PWKIII, BKIII, Gegenhalten, Körperbeherrschung]
 
 # "AI"
 
@@ -460,18 +478,11 @@ class Fighter:
         self.char.xmlLesen(charPath)
         self.char.aktualisieren()
         self.name = self.char.name or os.path.splitext(os.path.basename(charPath))[0]
-        self.wunden = 0
         self.ws = self.char.abgeleiteteWerte["WS"].wert
         self.wsStern = self.char.abgeleiteteWerte["WS"].finalwert
         self.ini = self.char.abgeleiteteWerte["INI"].finalwert
-        self.usedActions = {}
-        self.advantage = []
-        self.disadvantage = []
-        self.advantageForEnemy = []
-        self.disadvantageForEnemy = []
-        self.myTurn = False
         self.startPositionX = startPositionX
-        self.position = self.startPositionX
+        self.reset()
 
         print("\n=====", self.name, "=====")
         attribute = "Attribute: "
@@ -554,6 +565,7 @@ class Fighter:
         self.disadvantageForEnemy = []
         self.myTurn = False
         self.position = self.startPositionX
+        self.deltaPosition = 0
 
     def actionUsable(self, action):
         return action not in self.usedActions
@@ -614,11 +626,15 @@ class Fighter:
     def isInReach(self, position):
         return abs(position - self.position) <= self.highestRW
 
+    def move(self, position):
+        self.deltaPosition = self.position - position
+        self.position = position
+
     def moveInReach(self, position):
         if position > self.position:
-            self.position = position - self.highestRW
+            self.move(position - self.highestRW)
         else:
-            self.position = position + self.highestRW
+            self.move(position + self.highestRW)
 
     def onIniphase(self, defender):
         self.myTurn = True
@@ -628,14 +644,19 @@ class Fighter:
 
         if not self.isInReach(defender.position):
             print(self.name, "bewegt sich zu", defender.name, "auf Distanz", self.highestRW)
-            # todo: movement rules...
             wasInDefenderReach = defender.isInReach(self.position)
             self.moveInReach(defender.position)
+
             # trigger_onEnemyEnterReach
             if not wasInDefenderReach and defender.isInReach(self.position):
                 for feat in defender.feats:
-                    if hasattr(feat, "trigger_onEnemyEnterReach"):
-                        feat.trigger_onEnemyEnterReach(self, defender)
+                    if hasattr(feat, "trigger_onEnemyMoveIntoReach"):
+                        feat.trigger_onEnemyMoveIntoReach(self, defender)
+
+            # trigger_onMoveIntoReach
+            for feat in self.feats:
+                if hasattr(feat, "trigger_onMoveIntoReach"):
+                    feat.trigger_onMoveIntoReach(self, defender)
 
         if NormalerAngriff.isUsable(self):
             self.attack(defender, NormalerAngriff)
@@ -647,15 +668,15 @@ class Fighter:
         if Gegenhalten in self.feats and not defender.isInReach(self.position):
             print(self.name, "bewegt sich weg von", defender.name, "für", Gegenhalten.name)
             if defender.position > self.position:
-                self.position -= 1
+                self.move(self.position - 1)
             else:
-                self.position += 1
+                self.move(self.position + 1)
 
         self.pruneAdvantageDisadvantage(Fighter.DurationEndPhase)
         self.pruneAdvantageDisadvantage(Fighter.DurationEndPhaseOneRoll)
         self.myTurn = False
 
-    def attack(self, defender, attackType):
+    def attack(self, defender, attackType, bonusTP = 0):
         attackType.use(self, defender)
         maneuvers = ai_chooseManeuvers(self, defender, attackType)
         featsAndManeuvers = self.feats + maneuvers
@@ -699,6 +720,7 @@ class Fighter:
                 if atRoll.isCrit():
                     ai_addCritManeuvers(self, defender, attackType, featsAndManeuvers)     
                 tpRoll = self.rollTP()
+                tpRoll.modify(bonusTP)
                 for feat in featsAndManeuvers:
                     if hasattr(feat, "trigger_onATSuccess"):
                         feat.trigger_onATSuccess(self, defender, atRoll, vtRoll, tpRoll, maneuvers)  
@@ -777,6 +799,7 @@ def simulate(fighter1, fighter2):
         if logFights: print("\n==== Neuer Kampf ====")
         fighter1.reset()
         fighter2.reset()
+        if logFights: print(fighter1.name, "und", fighter2.name, "treten in", abs(fighter1.position - fighter2.position), "Schritt Distanz zueinander an")
         rounds = 0       
         while fighter1.isAlive() and fighter2.isAlive():
             if not fighter2First:
