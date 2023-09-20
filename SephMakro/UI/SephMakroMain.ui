@@ -42,6 +42,9 @@
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
       <widget class="QToolButton" name="buttonRun">
+       <property name="toolTip">
+        <string>Makro ausführen</string>
+       </property>
        <property name="text">
         <string>...</string>
        </property>
@@ -55,6 +58,9 @@
      </item>
      <item>
       <widget class="QToolButton" name="buttonLoad">
+       <property name="toolTip">
+        <string>Makro laden</string>
+       </property>
        <property name="text">
         <string>...</string>
        </property>
@@ -68,11 +74,30 @@
      </item>
      <item>
       <widget class="QToolButton" name="buttonSave">
+       <property name="toolTip">
+        <string>Makro speichern</string>
+       </property>
        <property name="text">
         <string>...</string>
        </property>
        <property name="shortcut">
         <string>Ctrl+S</string>
+       </property>
+       <property name="class" stdset="0">
+        <string>icon</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="buttonNew">
+       <property name="toolTip">
+        <string>Neues Makro</string>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="shortcut">
+        <string>Ctrl+N</string>
        </property>
        <property name="class" stdset="0">
         <string>icon</string>

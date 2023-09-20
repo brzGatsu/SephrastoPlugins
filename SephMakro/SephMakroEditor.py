@@ -63,10 +63,16 @@ class SephMakroEditor(object):
 
         self.highlighter = Highlighter(self.editor.document())
 
+        self.loadedText = ""
+
         buttonSize = Hilfsmethoden.emToPixels(3.2)
         self.ui.buttonRun.setFixedSize(buttonSize, buttonSize)
         self.ui.buttonRun.setText("\uf04b")
         self.ui.buttonRun.clicked.connect(self.run)
+
+        self.ui.buttonNew.setFixedSize(buttonSize, buttonSize)
+        self.ui.buttonNew.setText("\uf15b")
+        self.ui.buttonNew.clicked.connect(self.new)
 
         self.ui.buttonLoad.setFixedSize(buttonSize, buttonSize)
         self.ui.buttonLoad.setText("\uf07c")
@@ -79,9 +85,11 @@ class SephMakroEditor(object):
         self.ui.buttonSaveOutput.clicked.connect(self.saveOutput)
 
         self.savePath = ""
+        self.updateWindowTitle()
+        self.editor.textChanged.connect(self.updateWindowTitle)
 
         self.editor.setFocus()
-
+        self.formMain.activateWindow()
         self.buttonRefs = []
         self.updateButtons()
 
@@ -91,9 +99,18 @@ class SephMakroEditor(object):
             self.ui.comboDB.setCurrentText(Wolke.Settings['Datenbank'])
         self.ui.comboDB.currentIndexChanged.connect(self.onDbChange)
         self.onDbChange()
+        self.formMain.closeEvent = self.closeEvent
 
     def onDbChange(self):
         Wolke.DB.xmlLaden(hausregeln = self.ui.comboDB.currentText(), isCharakterEditor = True)
+
+    def updateWindowTitle(self):
+        if self.savePath == "":
+            self.formMain.setWindowTitle("SephMakro - Neues Makro")
+        elif self.loadedText != self.editor.toPlainText():
+            self.formMain.setWindowTitle("SephMakro - " + os.path.basename(self.savePath) + "*")
+        else:
+            self.formMain.setWindowTitle("SephMakro - " + os.path.basename(self.savePath))
 
     def run(self):
         with stdoutIO() as s:
@@ -130,7 +147,30 @@ class SephMakroEditor(object):
 
         layout.addStretch()
 
+    def cancelDueToPendingChanges(self, action):
+        if self.loadedText != self.editor.toPlainText():
+            messagebox = QtWidgets.QMessageBox()
+            messagebox.setWindowTitle(action)
+            messagebox.setText("Sollen die ausstehenden Änderungen gespeichert werden?")
+            messagebox.setIcon(QtWidgets.QMessageBox.Question)
+            messagebox.addButton("Ja", QtWidgets.QMessageBox.YesRole)
+            messagebox.addButton("Nein", QtWidgets.QMessageBox.NoRole)
+            messagebox.addButton("Abbrechen", QtWidgets.QMessageBox.RejectRole)
+            result = messagebox.exec()
+            if result == 0:
+                self.save()
+            elif result == 2:
+                return True
+        return False
+
+    def closeEvent(self,event):
+        self.formMain.setFocus() #make sure editingfinished is called on potential line edits in focus
+        if self.cancelDueToPendingChanges("Beenden"):
+            event.ignore()
+
     def loadFile(self, path):
+        if self.cancelDueToPendingChanges("Makro laden"):
+            return
         dir = os.path.dirname(path)
         if dir != Wolke.Settings["SephMakro_Pfad"]:
             Wolke.Settings["SephMakro_Pfad"] = dir
@@ -140,7 +180,17 @@ class SephMakroEditor(object):
         self.savePath = path
 
         with open(path, 'r', encoding="utf-8") as file:
-            self.editor.setPlainText(file.read())
+            self.loadedText = file.read()
+            self.editor.setPlainText(self.loadedText)
+        self.updateWindowTitle()
+
+    def new(self):
+        if self.cancelDueToPendingChanges("Neues Makro"):
+            return
+        self.savePath = ""
+        self.editor.setPlainText("")
+        self.loadedText = ""
+        self.updateWindowTitle()
 
     def load(self):
         startDir = Wolke.Settings["SephMakro_Pfad"]

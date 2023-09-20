@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'SephMakroMain.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.5.1
+## Created by: Qt User Interface Compiler version 6.5.2
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -66,6 +66,11 @@ class Ui_formMain(object):
 
         self.horizontalLayout_2.addWidget(self.buttonSave)
 
+        self.buttonNew = QToolButton(formMain)
+        self.buttonNew.setObjectName(u"buttonNew")
+
+        self.horizontalLayout_2.addWidget(self.buttonNew)
+
         self.label = QLabel(formMain)
         self.label.setObjectName(u"label")
 
@@ -104,21 +109,38 @@ class Ui_formMain(object):
 
     def retranslateUi(self, formMain):
         formMain.setWindowTitle(QCoreApplication.translate("formMain", u"SephMakro", None))
+#if QT_CONFIG(tooltip)
+        self.buttonRun.setToolTip(QCoreApplication.translate("formMain", u"Makro ausf\u00fchren", None))
+#endif // QT_CONFIG(tooltip)
         self.buttonRun.setText(QCoreApplication.translate("formMain", u"...", None))
 #if QT_CONFIG(shortcut)
         self.buttonRun.setShortcut(QCoreApplication.translate("formMain", u"F5", None))
 #endif // QT_CONFIG(shortcut)
         self.buttonRun.setProperty("class", QCoreApplication.translate("formMain", u"icon", None))
+#if QT_CONFIG(tooltip)
+        self.buttonLoad.setToolTip(QCoreApplication.translate("formMain", u"Makro laden", None))
+#endif // QT_CONFIG(tooltip)
         self.buttonLoad.setText(QCoreApplication.translate("formMain", u"...", None))
 #if QT_CONFIG(shortcut)
         self.buttonLoad.setShortcut(QCoreApplication.translate("formMain", u"Ctrl+O", None))
 #endif // QT_CONFIG(shortcut)
         self.buttonLoad.setProperty("class", QCoreApplication.translate("formMain", u"icon", None))
+#if QT_CONFIG(tooltip)
+        self.buttonSave.setToolTip(QCoreApplication.translate("formMain", u"Makro speichern", None))
+#endif // QT_CONFIG(tooltip)
         self.buttonSave.setText(QCoreApplication.translate("formMain", u"...", None))
 #if QT_CONFIG(shortcut)
         self.buttonSave.setShortcut(QCoreApplication.translate("formMain", u"Ctrl+S", None))
 #endif // QT_CONFIG(shortcut)
         self.buttonSave.setProperty("class", QCoreApplication.translate("formMain", u"icon", None))
+#if QT_CONFIG(tooltip)
+        self.buttonNew.setToolTip(QCoreApplication.translate("formMain", u"Neues Makro", None))
+#endif // QT_CONFIG(tooltip)
+        self.buttonNew.setText(QCoreApplication.translate("formMain", u"...", None))
+#if QT_CONFIG(shortcut)
+        self.buttonNew.setShortcut(QCoreApplication.translate("formMain", u"Ctrl+N", None))
+#endif // QT_CONFIG(shortcut)
+        self.buttonNew.setProperty("class", QCoreApplication.translate("formMain", u"icon", None))
         self.label.setText(QCoreApplication.translate("formMain", u"Hausregeln:", None))
         self.buttonSaveOutput.setText(QCoreApplication.translate("formMain", u"Ausgabe speichern", None))
         self.makroListLayout.setTitle(QCoreApplication.translate("formMain", u"Makros", None))
