@@ -212,6 +212,9 @@ class SephMakroEditor(object):
         with open(self.savePath, "w", encoding="utf-8") as file:
             file.write(self.editor.toPlainText())
 
+        self.loadedText = self.editor.toPlainText()
+        self.updateWindowTitle()
+
     def saveOutput(self):
         spath, _ = QtWidgets.QFileDialog.getSaveFileName(None,"Ausgabe speichern...","","Textdatei (*.txt)")
         if spath == "":

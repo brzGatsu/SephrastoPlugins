@@ -358,7 +358,7 @@ class RSCharakterRuestungWrapper(QtCore.QObject):
                 self.updateRuestungen()
         else:
             self.currentlyLoading = True
-            self.loadArmorIntoFields(RSCharakterRuestungWrapper.applyEigenschaften(Ruestung(picker.ruestung)), index)
+            self.loadArmorIntoFields(RSCharakterRuestungWrapper.applyEigenschaften(Ruestung(RuestungDefinition())), index)
             self.currentlyLoading = False
             self.updateRuestungen()
 
