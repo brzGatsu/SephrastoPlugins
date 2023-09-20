@@ -336,13 +336,12 @@ def ai_chooseManeuvers(attacker, defender, attackType):
             maneuvers += [Todesstoß]
         else:
             if Rüstungsbrecher.isUsable(attacker) and attackType.isManeuverAllowed(attacker, Rüstungsbrecher) and rs >= 4:
-                maneuvers += [Rüstungsbrecher]
-                maneuvers += [Wuchtschlag4]
+                maneuvers += [Rüstungsbrecher, Wuchtschlag4]
             else:
                 maneuvers += [Wuchtschlag8]
     elif statDiff >= 12 or wsDiff >= 4:
         if Rüstungsbrecher.isUsable(attacker) and attackType.isManeuverAllowed(attacker, Rüstungsbrecher) and rs >= 6:
-            maneuvers += [Rüstungsbrecher]
+            maneuvers += [Rüstungsbrecher, Wuchtschlag2]
         else:
             maneuvers += [Wuchtschlag6]
     elif statDiff >= 10 or wsDiff >= 2:
