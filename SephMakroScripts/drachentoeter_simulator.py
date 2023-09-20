@@ -27,13 +27,11 @@ samples = 1000 # wieviele Kämpfe sollen simuliert werden
 logFights = True # sollen die Kampfwürfe ausgegeben werden
 
 fighter1Path = "" # pfad für charakter xml von Kämpfer 1 - falls leer, geht ein Datei-Auswahldialog auf
-fighter1Name = "Alrik"
 fighter1WaffeIndex = 2 # welche Waffe soll Kämpfer 1 verwenden - entspricht der Position im Waffen Tab, beginnend bei 0
 fighter1NebenhandIndex = 3 # wird ignoriert, wenn fighter2WaffeIndex zweihändig ist
 fighter1AusweichenIndex = 1 # bei -1 wird ausweichen nicht verwendet
 
 fighter2Path = "" # pfad für charakter xml von Kämpfer 2 - falls leer, geht ein Datei-Auswahldialog auf
-fighter2Name = "Elissa"
 fighter2WaffeIndex = 2 # welche Waffe soll Kämpfer 2 verwenden - entspricht der Position im Waffen Tab, beginnend bei 0
 fighter2NebenhandIndex = 3 # wird ignoriert, wenn fighter2WaffeIndex zweihändig ist
 fighter2AusweichenIndex = 1 # bei -1 wird ausweichen nicht verwendet
@@ -432,11 +430,11 @@ class Fighter:
     DurationEndPhaseOneRoll = 4
     DurationEndNextPhaseOneRoll = 5
 
-    def __init__(self, name, charPath, startPositionX, waffeIndex, nebenhandIndex, ausweichenIndex):
-        self.name = name
+    def __init__(self, charPath, startPositionX, waffeIndex, nebenhandIndex, ausweichenIndex):
         self.char = Char()
         self.char.xmlLesen(charPath)
         self.char.aktualisieren()
+        self.name = self.char.name
         self.wunden = 0
         self.ws = self.char.abgeleiteteWerte["WS"].wert
         self.wsStern = self.char.abgeleiteteWerte["WS"].finalwert
@@ -765,6 +763,6 @@ if not fighter2Path:
         print("Du hast keine Charakterdatei gewählt.")
  
 if fighter1Path and fighter2Path:
-    fighter1 = Fighter(fighter1Name, fighter1Path, 0, fighter1WaffeIndex, fighter1NebenhandIndex, fighter1AusweichenIndex)
-    fighter2 = Fighter(fighter2Name, fighter2Path, 6, fighter2WaffeIndex, fighter2NebenhandIndex, fighter2AusweichenIndex)
+    fighter1 = Fighter(fighter1Path, 0, fighter1WaffeIndex, fighter1NebenhandIndex, fighter1AusweichenIndex)
+    fighter2 = Fighter(fighter2Path, 6, fighter2WaffeIndex, fighter2NebenhandIndex, fighter2AusweichenIndex)
     simulate(fighter1, fighter2)
