@@ -38,6 +38,11 @@ fighter2AusweichenIndex = 1 # bei -1 wird ausweichen nicht verwendet
 
 zähigkeitOverride = 10 # setzt die Zähigkeit bie allen Kämpfern auf den angegebenen Wert, falls nicht -1
 
+maneuver_Min_AT_VT_Diff = 8 # ab was für einer AT - VT Differenz sollen Manöver genutzt werden ODER...
+maneuver_Min_WS_MaxDamage_Diff = 0 # ... ab was für einer WS - Maximalschaden Differenz sollen Manöver genutzt werden
+maneuver_Max_Wounds_For_Plus8 = 4 # Ansagen mit +8 werden auf Basis der AT/VT Differenz nur bis zu dieser gegnerischen Wundzahl gemacht
+rüstungsbrecher_Min_RS = 3 # ab was für einem RS soll Rüstungsbrecher statt Manövern genutzt werden
+
 #========== Implementation ===========
 
 class Action:
@@ -48,7 +53,6 @@ class Action:
     NebenhandAngriffKostenlos = "Kostenloser Nebenhand Angriff"
     SchildwallKostenlos = "Kostenloser Schildwall"
     TückischeKlinge = "Tückische Klinge"
-    Sturmangriff = "Sturmangriff"
 
 # Attack Types
 class NormalerAngriff:
@@ -249,7 +253,7 @@ class Sturmangriff:
     def trigger_onMoveIntoReach(attacker, defender):
         if not attacker.actionUsable(Action.Aktion) or not BonusAngriff.isUsable(attacker):
             return
-        if not "Zweihändig" in attacker.char.waffen[attacker.waffeIndex].eigenschaften:
+        if "Zweihändig" not in attacker.char.waffen[attacker.waffeIndex].eigenschaften:
             return
         if "Schneller Kampf II" in attacker.char.vorteile and attacker.kampfstil == "Schneller Kampf":
             return
@@ -370,27 +374,27 @@ def ai_chooseManeuvers(attacker, defender, attackType):
     statDiff = (attackType.mod(attacker) + attacker.modAT()) - defender.modVT()
     wsDiff = defender.wsStern - attacker.maxDamage
     rs = defender.wsStern - defender.ws
-    if (statDiff >= 14 and defender.wunden <= 4) or wsDiff >= 6:
+    if (statDiff >= maneuver_Min_AT_VT_Diff+6 and defender.wunden <= maneuver_Max_Wounds_For_Plus8) or wsDiff >= maneuver_Min_WS_MaxDamage_Diff+6:
         if Hammerschlag.isUsable(attacker) and attackType.isManeuverAllowed(attacker, Hammerschlag) and attacker.averageDamage > 8:
             maneuvers += [Hammerschlag]
         elif Todesstoß.isUsable(attacker) and attackType.isManeuverAllowed(attacker, Todesstoß):
             maneuvers += [Todesstoß]
         else:
-            if Rüstungsbrecher.isUsable(attacker) and attackType.isManeuverAllowed(attacker, Rüstungsbrecher) and rs >= 4:
+            if Rüstungsbrecher.isUsable(attacker) and attackType.isManeuverAllowed(attacker, Rüstungsbrecher) and rs >= rüstungsbrecher_Min_RS:
                 maneuvers += [Rüstungsbrecher, Wuchtschlag4]
             else:
                 maneuvers += [Wuchtschlag8]
-    elif statDiff >= 12 or wsDiff >= 4:
-        if Rüstungsbrecher.isUsable(attacker) and attackType.isManeuverAllowed(attacker, Rüstungsbrecher) and rs >= 6:
+    elif statDiff >= maneuver_Min_AT_VT_Diff+4 or wsDiff >= maneuver_Min_WS_MaxDamage_Diff+4:
+        if Rüstungsbrecher.isUsable(attacker) and attackType.isManeuverAllowed(attacker, Rüstungsbrecher) and rs >= rüstungsbrecher_Min_RS:
             maneuvers += [Rüstungsbrecher, Wuchtschlag2]
         else:
             maneuvers += [Wuchtschlag6]
-    elif statDiff >= 10 or wsDiff >= 2:
-        if Rüstungsbrecher.isUsable(attacker) and attackType.isManeuverAllowed(attacker, Rüstungsbrecher) and rs >= 4:
+    elif statDiff >= maneuver_Min_AT_VT_Diff+2 or wsDiff >= maneuver_Min_WS_MaxDamage_Diff+2:
+        if Rüstungsbrecher.isUsable(attacker) and attackType.isManeuverAllowed(attacker, Rüstungsbrecher) and rs >= rüstungsbrecher_Min_RS:
             maneuvers += [Rüstungsbrecher]
         else:
             maneuvers += [Wuchtschlag4]
-    elif statDiff >= 8 or wsDiff >= 0:
+    elif statDiff >= maneuver_Min_AT_VT_Diff or wsDiff >= maneuver_Min_WS_MaxDamage_Diff:
         maneuvers += [Wuchtschlag2]
     return maneuvers
 
@@ -402,7 +406,7 @@ def ai_addCritManeuvers(attacker, defender, attackType, maneuvers):
     elif Todesstoß.isUsable(attacker) and attackType.isManeuverAllowed(attacker, Todesstoß) and Todesstoß not in maneuvers:
         maneuvers.append(Todesstoß)
         if logFights: print(">", Todesstoß.name)
-    elif Rüstungsbrecher.isUsable(attacker) and attackType.isManeuverAllowed(attacker, Rüstungsbrecher) and Rüstungsbrecher not in maneuvers and (defender.wsStern - defender.ws >= 4):
+    elif Rüstungsbrecher.isUsable(attacker) and attackType.isManeuverAllowed(attacker, Rüstungsbrecher) and Rüstungsbrecher not in maneuvers and (defender.wsStern - defender.ws >= rüstungsbrecher_Min_RS):
         maneuvers.append(Rüstungsbrecher)
         if logFights: print(">", Rüstungsbrecher.name)
     elif Wuchtschlag4 not in maneuvers:
