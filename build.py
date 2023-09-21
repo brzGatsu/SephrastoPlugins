@@ -1,6 +1,5 @@
 import os
 import shutil
-import zipfile
 
 version = "4.1.0"
 dir_path = os.path.dirname(os.path.realpath(__file__))
