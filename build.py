@@ -45,7 +45,4 @@ zipfilename = f"Plugins_v{version}"
 shutil.make_archive(zipfilename, 'zip', build_path)
 zipfilename += ".zip"
 shutil.move(zipfilename, os.path.join(build_path, zipfilename))
-
-#with zipfile.ZipFile(os.path.join(build_path, f"Plugins_v{version}.zip"), mode="w") as archive:
-
-    #archive.write("hello.txt")
+print("Done")
