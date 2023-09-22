@@ -16,29 +16,39 @@ from PySide6 import QtWidgets
 # - Fernkampf wird nicht unterstützt
 # - Aktionen: es wird IMMER die Aktion Angriff durchgeführt und immer ohne volle Offensive.
 # - Kampfstile: alle außer Reiterkampf werden unterstützt (ohne Stufe IV). KVKIII, SKII und BKII sind (abseits passiver Bonusse) nicht implementiert, da nicht relevant in Duellen.
-# - Vorteile: Nur Todesstoß, Hammerschlag, Waffenloser Kampf, Kampfreflexe, (verb.) Rüstungsgewöhnung, Kalte Wut, Präzision, Gegenhalten, Unaufhaltsam (es wird automatisch ausgewichen, wenn die VT hoch genug ist NACH dem AT Wurf), Körperbeherrschung, Sturmangriff (wird nur mit zweihändigen Waffen genutzt und nur wenn kein SNK II)
+# - Vorteile: Nur Todesstoß, Hammerschlag, Waffenloser Kampf, Kampfreflexe, (verb.) Rüstungsgewöhnung, Kalte Wut, Präzision, Gegenhalten, Unaufhaltsam (es wird automatisch ausgewichen, wenn die VT hoch genug ist NACH dem AT Wurf), Körperbeherrschung, Sturmangriff (wird nur mit zweihändigen Waffen genutzt und nur wenn kein SNK II), Aufmerksamkeit, Klingentanz
 # - Manöver: Nur Wuchtschlag, Todesstoß, Hammerschlag und Rüstungsbrecher (werden automatisch eingesetzt auf basis einer simplen AI)
 # - Waffeneigenschaften: Alles außer Reittier, Stumpf und Zerbrechlich
 
+# Global
 vtPassiv = True # falls True wird kein W20 sondern 10 zur VT addiert
 vtPassivMod = -10 # wieviel soll von der VT abgezogen werden bei vtPassiv = True (z.b. weil die 10 schon in Sephrasto hinzugefügt wird)
 wundschmerz = False # sollen die Wundschmerzregeln verwendet werden? Betäubt wird mit Kampf verloren gleichgesetzt
 nat20AutoHit = True # Soll eine 20 immer treffen? Triumphe gibt es weiterhin nur, wenn die VT übetroffen wurde.
 samples = 1000 # wieviele Kämpfe sollen simuliert werden
+
+simulate_all = [] # Hiermit können mehrere Simulaitonen nacheinander durchgeführt werden, dabei tritt jeder einmal gegen jeden an.
+                  # Angabe als kommagetrennte Dateinamen ohne Dateiendung, die im Charakter-Ordner liegen,
+                  # z. B. ["bhk_s3", "bsk_s3", "kvk_s3", "pwk_s3", "sk_s3", "snk_s3"].
+logFighters = True # sollen die Charakterwerte einmal am Anfang ausgegeben werden.
 logFights = True # sollen die Kampfwürfe ausgegeben werden
 
-fighter1Path = "" # pfad für charakter xml von Kämpfer 1 - falls leer, geht ein Datei-Auswahldialog auf
+fighter1Path = "" # Wird nur verwendet, wenn simulate_all leer ist. Pfad für charakter xml von Kämpfer 1 - falls leer, geht ein Datei-Auswahldialog auf
 fighter1WaffeIndex = 2 # welche Waffe soll Kämpfer 1 verwenden - entspricht der Position im Waffen Tab, beginnend bei 0
 fighter1NebenhandIndex = 3 # wird ignoriert, wenn fighter2WaffeIndex zweihändig ist
 fighter1AusweichenIndex = 1 # bei -1 wird ausweichen nicht verwendet
 
-fighter2Path = "" # pfad für charakter xml von Kämpfer 2 - falls leer, geht ein Datei-Auswahldialog auf
+fighter2Path = "" # Wird nur verwendet, wenn simulate_all leer ist. Pfad für charakter xml von Kämpfer 2 - falls leer, geht ein Datei-Auswahldialog auf
 fighter2WaffeIndex = 2 # welche Waffe soll Kämpfer 2 verwenden - entspricht der Position im Waffen Tab, beginnend bei 0
 fighter2NebenhandIndex = 3 # wird ignoriert, wenn fighter2WaffeIndex zweihändig ist
 fighter2AusweichenIndex = 1 # bei -1 wird ausweichen nicht verwendet
 
-zähigkeitOverride = 10 # setzt die Zähigkeit bie allen Kämpfern auf den angegebenen Wert, falls nicht -1
+# Stats
+fighter1Mods = {"AT" : 0, "VT" : 0, "TP" : 0, "WS" : 0}
+fighter2Mods = {"AT" : 0, "VT" : 0, "TP" : 0, "WS" : 0}
+zähigkeitOverride = 10 # setzt die Zähigkeit bie allen Kämpfern auf den angegebenen Wert; setze es auf -1, um den Wert aus der Charakterdatei zu nehmen
 
+# "AI"
 maneuver_Min_AT_VT_Diff = 8 # ab was für einer AT - VT Differenz sollen Manöver genutzt werden ODER...
 maneuver_Min_WS_MaxDamage_Diff = 0 # ... ab was für einer WS - Maximalschaden Differenz sollen Manöver genutzt werden
 maneuver_Max_Wounds_For_Plus8 = 4 # Ansagen mit +8 werden auf Basis der AT/VT Differenz nur bis zu dieser gegnerischen Wundzahl gemacht
@@ -54,6 +64,7 @@ class Action:
     NebenhandAngriffKostenlos = "Kostenloser Nebenhand Angriff"
     SchildwallKostenlos = "Kostenloser Schildwall"
     TückischeKlinge = "Tückische Klinge"
+    Aufmerksamkeit = "Aufmerksamkeit"
 
 # Attack Types
 class NormalerAngriff:
@@ -68,18 +79,13 @@ class NebenhandAngriff:
     def isUsable(attacker, defender):
         if attacker.waffeIndex == attacker.nebenhandIndex:
             return False
-        return attacker.isAlive() and defender.isAlive() and attacker.actionUsable(NebenhandAngriff.__getActionType(attacker)) and attacker.myTurn
+        return attacker.isAlive() and defender.isAlive() and attacker.actionUsable(Action.Bonusaktion) and attacker.myTurn
     def mod(fighter):
-        if fighter.kampfstil == "Beidhändiger Kampf" and "Beidhändiger Kampf II" in fighter.char.vorteile:
+        if fighter.kampfstil == "Beidhändiger Kampf" and "Beidhändiger Kampf II" in fighter.char.vorteile and fighter.char.waffen[fighter.waffeIndex].definition == fighter.char.waffen[fighter.nebenhandIndex].definition:
             return 0
         return -4
     def isManeuverAllowed(fighter, maneuver): return maneuver.name.startswith("Wuchtschlag")
-    def use(attacker, defender): attacker.useAction(NebenhandAngriff.__getActionType(attacker))
-    def __getActionType(fighter):
-        if fighter.kampfstil == "Beidhändiger Kampf" and "Beidhändiger Kampf II" in fighter.char.vorteile and fighter.char.waffen[fighter.waffeIndex].name == fighter.char.waffen[fighter.nebenhandIndex].name:
-            return Action.NebenhandAngriffKostenlos
-        else:
-            return Action.Bonusaktion
+    def use(attacker, defender): attacker.useAction(Action.Bonusaktion)
 
 class BonusAngriff:
     name = "Normaler Angriff (Bonusaktion)"
@@ -97,12 +103,17 @@ class ExtraAngriff:
 
 class Passierschlag:
     name = "Passierschlag"
-    def isUsable(attacker, defender): return attacker.isAlive() and defender.isAlive() and attacker.actionUsable(Action.Reaktion)
+    def isUsable(attacker, defender): return attacker.isAlive() and defender.isAlive() and attacker.actionUsable(Passierschlag.__getActionType(attacker))
     def mod(fighter): return 0
     def isManeuverAllowed(fighter, maneuver): return True    
-    def use(attacker, defender): attacker.useAction(Action.Reaktion)
+    def use(attacker, defender): attacker.useAction(Passierschlag.__getActionType(attacker))
+    def __getActionType(fighter):
+        if "Aufmerksamkeit" in fighter.char.vorteile and fighter.actionUsable(Action.Aufmerksamkeit):
+            return Action.Aufmerksamkeit
+        return Action.Reaktion
 
 # Maneuvers and Feats trigger order
+# trigger_onMove (attacker)
 # trigger_onEnemyMoveIntoReach (defender, only first iniphase)
 # trigger_onMoveIntoReach (attacker, only first iniphase)
 # trigger_onAT (attacker)
@@ -210,7 +221,9 @@ class KVKII:
 class BHKIII:
     name = "BHK III"
     def isUnlocked(fighter): return "Beidhändiger Kampf III" in fighter.char.vorteile and fighter.kampfstil == "Beidhändiger Kampf"
-    def trigger_onATDone(attacker, defender, atRoll, vtRoll, maneuvers):
+    #def trigger_onATDone(attacker, defender, atRoll, vtRoll, maneuvers):
+    #def trigger_onDamageDealt(attacker, defender, atRoll, vtRoll, tpRoll, maneuvers):
+    def trigger_onATFailed(attacker, defender, atRoll, vtRoll, maneuvers):
         if not ExtraAngriff.isUsable(attacker, defender):
             return
         if logFights: print(attacker.name, "macht einen weiteren Angriff durch", BHKIII.name)
@@ -264,6 +277,26 @@ class Sturmangriff:
         print(attacker.name, "nutzt", Sturmangriff.name, "für +" + str(bonusTP), "TP")
         attacker.attack(defender, BonusAngriff, bonusTP)
 
+class Klingentanz:
+    name = "Klingentanz"
+    def isUnlocked(fighter): return "Klingentanz" in fighter.char.vorteile
+    def trigger_onMove(attacker, defender):
+        # Wenn der Gegner Gegenhalten hat, Lösen sofort einsetzen
+        if "Gegenhalten" not in defender.char.vorteile or "Klingentanz" in defender.char.vorteile or defender.isInReach(attacker):
+            return
+        if not attacker.actionUsable(Action.Bonusaktion):
+            return
+        if logFights: print(attacker.name, "nutzt Lösen als Bonusaktion durch", Klingentanz.name, "da der Gegner Gegenhalten hat")
+        attacker.useAction(Action.Bonusaktion)
+        attacker.lösen = True
+    def trigger_onATDone(attacker, defender, atRoll, vtRoll, maneuvers):
+        # Wenn ich Gegenhalten habe und der Gegner kein Klingentanz, am ende der Iniphase einsetzen und dann wegbewegen
+        if "Gegenhalten" not in attacker.char.vorteile or "Klingentanz" in defender.char.vorteile or not attacker.actionUsable(Action.Bonusaktion):
+            return
+        if logFights: print(attacker.name, "nutzt Lösen als Bonusaktion durch", Klingentanz.name)
+        attacker.useAction(Action.Bonusaktion)
+        attacker.lösen = True
+
 # Feats (defensive)
 class Schild:
     name = "Schildwall (ohne SK)"
@@ -303,7 +336,7 @@ class SK:
 
 class PWKI:
     name = "Binden"
-    def isUnlocked(fighter): return "Parierwaffenkampf I" in fighter.char.vorteile and fighter.kampfstil == "Parierwaffenkampf"
+    def isUnlocked(fighter): return "Parierwaffenkampf I" in fighter.char.vorteile and fighter.kampfstil == "Parierwaffenkampf" and "Parierwaffenkampf III" not in fighter.char.vorteile 
     def trigger_onVTSuccess(attacker, defender, atRoll, vtRoll, maneuvers):
         if not defender.actionUsable(Action.Reaktion):
             return
@@ -369,7 +402,7 @@ class Körperbeherrschung:
 
 
 # Important: Körpebeherrschung needs to be evaluated last, so keep it at the end of the list
-Feats = [SNKII, SNKIII, KVKII, BHKIII, PWKII, Präzision, Unaufhaltsam, Sturmangriff, Schild, SK, PWKI, PWKIII, BKIII, Gegenhalten, Körperbeherrschung]
+Feats = [SNKII, SNKIII, KVKII, BHKIII, PWKII, Präzision, Unaufhaltsam, Sturmangriff, Schild, SK, PWKI, PWKIII, BKIII, Gegenhalten, Körperbeherrschung, Klingentanz]
 
 # "AI"
 
@@ -484,28 +517,29 @@ class Fighter:
     DurationEndPhaseOneRoll = 4
     DurationEndNextPhaseOneRoll = 5
 
-    def __init__(self, charPath, startPositionX, waffeIndex, nebenhandIndex, ausweichenIndex):
+    def __init__(self, charPath, startPositionX, waffeIndex, nebenhandIndex, ausweichenIndex, mods):
         self.char = Char()
         self.char.xmlLesen(charPath)
         self.char.aktualisieren()
         self.name = self.char.name or os.path.splitext(os.path.basename(charPath))[0]
-        self.ws = self.char.abgeleiteteWerte["WS"].wert
-        self.wsStern = self.char.abgeleiteteWerte["WS"].finalwert
+        self.mods = mods
+        self.ws = self.char.abgeleiteteWerte["WS"].wert + self.mods["WS"]
+        self.wsStern = self.char.abgeleiteteWerte["WS"].finalwert + self.mods["WS"]
         self.ini = self.char.abgeleiteteWerte["INI"].finalwert
         self.startPositionX = startPositionX
         self.reset()
 
-        print("\n=====", self.name, "=====")
+        if logFighters: print("\n=====", self.name, "=====")
         attribute = "Attribute: "
         for attr in self.char.attribute.values():
             attribute += attr.name + " " + str(attr.probenwert) + " | "
         attribute = attribute[:-3]
-        print(attribute)
+        if logFighters: print(attribute)
         abgeleiteteWerte = "Abgeleitete Werte: "
         for aw in self.char.abgeleiteteWerte.values():
             abgeleiteteWerte += aw.name + " " + str(aw.finalwert) + " | "
         abgeleiteteWerte = abgeleiteteWerte[:-3]
-        print(abgeleiteteWerte)
+        if logFighters: print(abgeleiteteWerte)
 
         self.zähigkeitPW = self.char.fertigkeiten["Selbstbeherrschung"].probenwert
         if "Zähigkeit" in self.char.talente:
@@ -513,24 +547,25 @@ class Fighter:
         if zähigkeitOverride != -1:
             self.zähigkeitPW = zähigkeitOverride
 
-        print("Talente: Zähigkeit", self.zähigkeitPW)
+        if logFighters: print("Talente: Zähigkeit", self.zähigkeitPW)
         self.waffeIndex = waffeIndex
         self.nebenhandIndex = nebenhandIndex
         self.ausweichenIndex = ausweichenIndex
-        self.equip(waffeIndex, log=True)
+        self.equip(waffeIndex, log=logFighters)
         self.highestVT = self.vt
         self.highestRW = self.rw
         self.ausweichen = 0
+        self.lösen = False
         if "Zweihändig" in self.waffenEigenschaften:
             self.nebenhandIndex = self.waffeIndex
         if self.waffeIndex != self.nebenhandIndex:
-            self.equip(nebenhandIndex, log=True)
+            self.equip(nebenhandIndex, log=logFighters)
             if self.vt > self.highestVT:
                 self.highestVT = self.vt
             if self.rw > self.highestRW:
                 self.highestRW = self.rw
         if self.ausweichenIndex != -1:
-            self.equip(self.ausweichenIndex, log=True)
+            self.equip(self.ausweichenIndex, log=logFighters)
             self.ausweichen = self.vt
             if self.vt > self.highestVT:
                 self.highestVT = self.vt
@@ -540,7 +575,7 @@ class Fighter:
         for feat in Feats:
             if feat.isUnlocked(self):
                 self.feats.append(feat)
-        print("Vorteile:", ", ".join(self.char.vorteile.keys()))
+        if logFighters: print("Vorteile:", ", ".join(self.char.vorteile.keys()))
 
     def pruneAdvantageDisadvantage(self, duration, enemyRoll = False):
         def filterDuration(d):
@@ -577,6 +612,7 @@ class Fighter:
         self.myTurn = False
         self.position = self.startPositionX
         self.deltaPosition = 0
+        self.lösen = False
 
     def actionUsable(self, action):
         return action not in self.usedActions
@@ -595,15 +631,15 @@ class Fighter:
         waffe = self.char.waffen[index]
         waffenwerte = self.char.waffenwerte[index]
         self.kampfstil = waffenwerte.kampfstil
-        self.at = waffenwerte.at
-        self.vt = waffenwerte.vt
+        self.at = waffenwerte.at + self.mods["AT"]
+        self.vt = waffenwerte.vt + self.mods["VT"]
         self.rw = waffenwerte.rw
         self.tpWürfel = waffenwerte.würfel
         self.tpSeiten = waffe.würfelSeiten
-        self.tpPlus = waffenwerte.plus
+        self.tpPlus = waffenwerte.plus + self.mods["TP"]
         self.waffenEigenschaften = waffe.eigenschaften
-        self.averageDamage = (waffenwerte.würfel * ((waffe.würfelSeiten / 2) + 0.5)) + self.tpPlus
-        self.maxDamage = (waffenwerte.würfel * waffe.würfelSeiten) + self.tpPlus
+        self.averageDamage = (self.tpWürfel* ((self.tpSeiten / 2) + 0.5)) + self.tpPlus
+        self.maxDamage = (self.tpWürfel * self.tpSeiten) + self.tpPlus
         if log:
             print(waffe.name, "mit", waffe.kampfstil or "keinem Kampfstil", "RW", self.rw, "AT", self.at, "VT", self.vt, "TP", str(self.tpWürfel) + "W" + str(self.tpSeiten) + ("+" if self.tpPlus >= 0 else "") + str(self.tpPlus), ", ".join(waffe.eigenschaften))
 
@@ -649,12 +685,17 @@ class Fighter:
 
     def onIniphase(self, defender):
         self.myTurn = True
+        self.lösen = False
         self.usedActions = {}
         self.pruneAdvantageDisadvantage(Fighter.DurationStartNextPhase)
         self.pruneAdvantageDisadvantage(Fighter.DurationStartNextPhaseOneRoll)
 
         if not self.isInReach(defender.position):
-            print(self.name, "bewegt sich zu", defender.name, "auf Distanz", self.highestRW)
+            for feat in self.feats:
+                if hasattr(feat, "trigger_onMove"):
+                    feat.trigger_onMove(self, defender)
+
+            if logFights: print(self.name, "bewegt sich zu", defender.name, "auf Distanz", self.highestRW)
             wasInDefenderReach = defender.isInReach(self.position)
             self.moveInReach(defender.position)
 
@@ -676,8 +717,8 @@ class Fighter:
                 self.attack(defender, NebenhandAngriff)
                 self.switchWeapons()
 
-        if self.isAlive() and Gegenhalten in self.feats and not defender.isInReach(self.position):
-            print(self.name, "bewegt sich weg von", defender.name, "für", Gegenhalten.name)
+        if self.isAlive() and Gegenhalten in self.feats and (self.lösen or not defender.isInReach(self.position)):
+            if logFights: print(self.name, "bewegt sich weg von", defender.name, "für", Gegenhalten.name)
             if defender.position > self.position:
                 self.move(self.position - 1)
             else:
@@ -793,7 +834,7 @@ class Fighter:
 # Simulation
 
 def simulate(fighter1, fighter2):
-    print("\n==== Starte Simulation ====")
+    if logFights: print("\n==== Starte Simulation ====")
     totalRounds = 0
     fighter1Wins = 0
     fighter2Wins = 0
@@ -825,24 +866,33 @@ def simulate(fighter1, fighter2):
         totalRounds += rounds
         if fighter1.ini == fighter2.ini:
             fighter2First = not fighter2First
-    print("\n==== Simulation beendet ====")
-    print("\nDurchschnittliche Anzahl Initiativephasen:", totalRounds/samples)
-    print("Win-Ratio", fighter1.name, "vs", fighter2.name, ":", fighter1Wins/samples * 100, "zu", fighter2Wins/samples * 100)
-     
-if os.path.isdir(Wolke.Settings['Pfad-Chars']):
-    startDir = Wolke.Settings['Pfad-Chars']
-else:
-    startDir = ""
-if not fighter1Path:
-    fighter1Path, _ = QtWidgets.QFileDialog.getOpenFileName(None,"Charakterdatei für Kämpfer 1...", startDir, "XML Datei (*.xml)")
-    if not fighter1Path:
-        print("Du hast keine Charakterdatei gewählt.")
-if not fighter2Path:
-    fighter2Path, _ = QtWidgets.QFileDialog.getOpenFileName(None,"Charakterdatei für Kämpfer 2...", startDir, "XML Datei (*.xml)")
-    if not fighter2Path:
-        print("Du hast keine Charakterdatei gewählt.")
+    if logFights: print("\n==== Simulation beendet ====")
+    print("\nWin-Ratio", fighter1.name, "vs", fighter2.name, ":", round(fighter1Wins/samples * 100, 1), "zu", round(fighter2Wins/samples * 100, 1))
+    print("Durchschnittliche Anzahl Initiativephasen:", round(totalRounds/samples, 1))
  
-if fighter1Path and fighter2Path:
-    fighter1 = Fighter(fighter1Path, 0, fighter1WaffeIndex, fighter1NebenhandIndex, fighter1AusweichenIndex)
-    fighter2 = Fighter(fighter2Path, 6, fighter2WaffeIndex, fighter2NebenhandIndex, fighter2AusweichenIndex)
-    simulate(fighter1, fighter2)
+if len(simulate_all) > 0:
+    index = 0
+    for i in range(len(simulate_all)-1):
+        for j in range(i+1, len(simulate_all)):
+            fighter1 = Fighter(os.path.join(Wolke.Settings['Pfad-Chars'], simulate_all[i] + ".xml"), 0, fighter1WaffeIndex, fighter1NebenhandIndex, fighter1AusweichenIndex, fighter1Mods)
+            fighter2 = Fighter(os.path.join(Wolke.Settings['Pfad-Chars'], simulate_all[j] + ".xml"), 6, fighter2WaffeIndex, fighter2NebenhandIndex, fighter2AusweichenIndex, fighter2Mods)
+            simulate(fighter1, fighter2)
+else:    
+    if os.path.isdir(Wolke.Settings['Pfad-Chars']):
+        startDir = Wolke.Settings['Pfad-Chars']
+    else:
+        startDir = ""
+    if not fighter1Path:
+        fighter1Path, _ = QtWidgets.QFileDialog.getOpenFileName(None,"Charakterdatei für Kämpfer 1...", startDir, "XML Datei (*.xml)")
+        if not fighter1Path:
+            print("Du hast keine Charakterdatei gewählt.")
+    if fighter1Path and not fighter2Path:
+        fighter2Path, _ = QtWidgets.QFileDialog.getOpenFileName(None,"Charakterdatei für Kämpfer 2...", startDir, "XML Datei (*.xml)")
+        if not fighter2Path:
+            print("Du hast keine Charakterdatei gewählt.")
+ 
+
+    if fighter1Path and fighter2Path:
+        fighter1 = Fighter(fighter1Path, 0, fighter1WaffeIndex, fighter1NebenhandIndex, fighter1AusweichenIndex, fighter1Mods)
+        fighter2 = Fighter(fighter2Path, 6, fighter2WaffeIndex, fighter2NebenhandIndex, fighter2AusweichenIndex, fighter2Mods)
+        simulate(fighter1, fighter2)
