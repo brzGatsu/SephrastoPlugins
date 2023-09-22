@@ -224,7 +224,7 @@ class BHKIII:
     #def trigger_onATDone(attacker, defender, atRoll, vtRoll, maneuvers):
     #def trigger_onDamageDealt(attacker, defender, atRoll, vtRoll, tpRoll, maneuvers):
     def trigger_onATFailed(attacker, defender, atRoll, vtRoll, maneuvers):
-        if not ExtraAngriff.isUsable(attacker, defender):
+        if not ExtraAngriff.isUsable(attacker, defender) or not attacker.actionUsable(Action.Bonusaktion):
             return
         if logFights: print(attacker.name, "macht einen weiteren Angriff durch", BHKIII.name)
         attacker.attack(defender, ExtraAngriff)
