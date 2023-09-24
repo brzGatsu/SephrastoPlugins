@@ -27,11 +27,11 @@ wundschmerz = False # sollen die Wundschmerzregeln verwendet werden? Betäubt wi
 nat20AutoHit = True # Soll eine 20 immer treffen? Triumphe gibt es weiterhin nur, wenn die VT übetroffen wurde.
 samples = 1000 # wieviele Kämpfe sollen simuliert werden
 
-simulate_all = ["kvk_s3", "bhk_s3", "bsk_s3", "pwk_s3", "sk_s3", "snk_s3"] # Hiermit können mehrere Simulaitonen nacheinander durchgeführt werden, dabei tritt jeder einmal gegen jeden an.
+simulate_all = [] # Hiermit können mehrere Simulaitonen nacheinander durchgeführt werden, dabei tritt jeder einmal gegen jeden an.
                   # Angabe als kommagetrennte Dateinamen ohne Dateiendung, die im Charakter-Ordner liegen,
                   # z. B. ["bhk_s3", "bsk_s3", "kvk_s3", "pwk_s3", "sk_s3", "snk_s3"].
-logFighters = False # sollen die Charakterwerte einmal am Anfang ausgegeben werden.
-logFights = False # sollen die Kampfwürfe ausgegeben werden
+logFighters = True # sollen die Charakterwerte einmal am Anfang ausgegeben werden.
+logFights = True # sollen die Kampfwürfe ausgegeben werden
 
 fighter1Path = "" # Wird nur verwendet, wenn simulate_all leer ist. Pfad für charakter xml von Kämpfer 1 - falls leer, geht ein Datei-Auswahldialog auf
 fighter1WaffeIndex = 2 # welche Waffe soll Kämpfer 1 verwenden - entspricht der Position im Waffen Tab, beginnend bei 0
