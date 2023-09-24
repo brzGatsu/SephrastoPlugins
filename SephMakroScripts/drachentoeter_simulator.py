@@ -27,11 +27,11 @@ wundschmerz = False # sollen die Wundschmerzregeln verwendet werden? Betäubt wi
 nat20AutoHit = True # Soll eine 20 immer treffen? Triumphe gibt es weiterhin nur, wenn die VT übetroffen wurde.
 samples = 1000 # wieviele Kämpfe sollen simuliert werden
 
-simulate_all = [] # Hiermit können mehrere Simulaitonen nacheinander durchgeführt werden, dabei tritt jeder einmal gegen jeden an.
+simulate_all = ["kvk_s3", "bhk_s3", "bsk_s3", "pwk_s3", "sk_s3", "snk_s3"] # Hiermit können mehrere Simulaitonen nacheinander durchgeführt werden, dabei tritt jeder einmal gegen jeden an.
                   # Angabe als kommagetrennte Dateinamen ohne Dateiendung, die im Charakter-Ordner liegen,
                   # z. B. ["bhk_s3", "bsk_s3", "kvk_s3", "pwk_s3", "sk_s3", "snk_s3"].
-logFighters = True # sollen die Charakterwerte einmal am Anfang ausgegeben werden.
-logFights = True # sollen die Kampfwürfe ausgegeben werden
+logFighters = False # sollen die Charakterwerte einmal am Anfang ausgegeben werden.
+logFights = False # sollen die Kampfwürfe ausgegeben werden
 
 fighter1Path = "" # Wird nur verwendet, wenn simulate_all leer ist. Pfad für charakter xml von Kämpfer 1 - falls leer, geht ein Datei-Auswahldialog auf
 fighter1WaffeIndex = 2 # welche Waffe soll Kämpfer 1 verwenden - entspricht der Position im Waffen Tab, beginnend bei 0
@@ -212,6 +212,8 @@ class SNKIII:
 class KVKII:
     name = "Durchbrechen"
     def isUnlocked(fighter): return "Kraftvoller Kampf II" in fighter.char.vorteile and fighter.kampfstil == "Kraftvoller Kampf"
+    def trigger_onAT(attacker, defender, atRoll, maneuvers):
+        atRoll.modifyCrit(-1)
     def trigger_onDamageDealt(attacker, defender, atRoll, vtRoll, tpRoll, maneuvers):
         if not atRoll.isCrit(vtRoll.result()+1) or not BonusAngriff.isUsable(attacker, defender):
             return
@@ -479,6 +481,7 @@ class D20Roll:
         self.disadvantage = False
         self.couldProfitFromAdvantage = True
         self.superPower = False # i. e. Körperbeherrschung
+        self.critChance = 20
         self.roll()
 
     def setAdvantageDisadvantage(self, advantage, disadvantage):
@@ -499,9 +502,10 @@ class D20Roll:
         elif self.disadvantage:
             self.lastRoll = min(self.lastRoll, random.randint(1,20))
 
+    def modifyCrit(self, mod): self.critChance += mod
     def result(self): return self.lastRoll + self.mod
     def isNat1(self): return self.lastRoll == 1
-    def isNat20(self): return self.lastRoll == 20
+    def isNat20(self): return self.lastRoll >= self.critChance
     def isCrit(self, difficulty): return self.isNat20() and self.result() >= difficulty
     def isCritFail(self, difficulty): return self.isNat1() and self.result() < difficulty
     def modify(self, value): self.mod += value
