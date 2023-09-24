@@ -354,12 +354,11 @@ class PWKIII:
             return
         if not defender.actionUsable(Action.Reaktion):
             return
-        if atRoll.result() <= vtRoll.result():
+        if atRoll.result() - vtRoll.result() > 4:
             return
         defender.useAction(Action.Reaktion)
-        oldRoll = atRoll.result()
-        atRoll.roll()
-        if logFights: print(defender.name, "lässt als Reaktion die gegnerischen AT neu würfeln von" , oldRoll, "zu",  atRoll.result(), "durch", PWKIII.name)
+        vtRoll.modify(4)
+        if logFights: print(defender.name, "verbessert als Reaktion die VT nachträglich um 4 durch",  PWKIII.name)
 
 class BKIII:
     name = "Vergeltung"
