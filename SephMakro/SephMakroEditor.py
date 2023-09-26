@@ -113,6 +113,9 @@ class SephMakroEditor(object):
             self.formMain.setWindowTitle("SephMakro - " + os.path.basename(self.savePath))
 
     def run(self):
+        prevText = self.ui.buttonRun.text()
+        self.ui.buttonRun.setText("\uf254")
+        QtWidgets.QApplication.processEvents()
         with stdoutIO() as s:
             try:
                 exec(self.editor.toPlainText(), {"datenbank" : Wolke.DB})
@@ -122,6 +125,7 @@ class SephMakroEditor(object):
                 cl, exc, tb = sys.exc_info()
                 print("Error: " + str(e) + " (line " + str(traceback.extract_tb(tb)[-1][1]) + ")")
         self.ui.teOutput.setPlainText(s.getvalue())
+        self.ui.buttonRun.setText(prevText)
         self.formMain.activateWindow()
 
     def updateButtons(self):
