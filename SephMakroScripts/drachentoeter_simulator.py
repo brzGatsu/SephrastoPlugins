@@ -71,6 +71,7 @@ class Action:
     SchildwallKostenlos = "Kostenloser Schildwall"
     TückischeKlinge = "Tückische Klinge"
     Aufmerksamkeit = "Aufmerksamkeit"
+    Präzision = "Präzision"
 
 # Attack Types
 class NormalerAngriff:
@@ -227,8 +228,7 @@ class Umreißen:
     def trigger_onATSuccess(attacker, defender, attackType, atRoll, vtRoll, tpRoll, maneuvers):
         tpRoll.noDamage = True
         gegenprobe = D20Roll(defender.modAttribut("GE"))
-        if "Standfest" in defender.char.vorteile:
-            gegenprobe.setAdvantageDisadvantage(True, False)
+        gegenprobe.setAdvantageDisadvantage("Standfest" in defender.char.vorteile, False)
         gegenprobe.roll()
         if gegenprobe.result() >= atRoll.result():
             if logFights: print(">", defender.name, "hat die Umreißen-Gegenprobe geschafft mit einer", gegenprobe.str())
@@ -244,8 +244,7 @@ class Niederwerfen:
         atRoll.modify(-4)
     def trigger_onATSuccess(attacker, defender, attackType, atRoll, vtRoll, tpRoll, maneuvers):
         gegenprobe = D20Roll(defender.modAttribut("KK"))
-        if "Standfest" in defender.char.vorteile:
-            gegenprobe.setAdvantageDisadvantage(True, False)
+        gegenprobe.setAdvantageDisadvantage("Standfest" in defender.char.vorteile, False)
         gegenprobe.roll()
         if gegenprobe.result() >= atRoll.result():
             if logFights: print(">", defender.name, "hat die Niederwerfen-Gegenprobe geschafft mit einer", gegenprobe.str())
@@ -314,9 +313,12 @@ class Präzision:
     name = "Präzision"
     def isUnlocked(fighter): return "Präzision" in fighter.char.vorteile
     def trigger_onATSuccess(attacker, defender, attackType, atRoll, vtRoll, tpRoll, maneuvers):
-        if atRoll.lastRoll >= 16:
-            tpRoll.modify(attacker.char.attribute["GE"].wert)
-            if logFights: print(">", attacker.name, "verursacht +", attacker.char.attribute["GE"].wert, "TP durch", Präzision.name)
+        if not atRoll.advantage or not attacker.actionUsable(Action.Präzision):
+            return
+        attacker.useAction(Action.Präzision)
+        bonus = random.randint(1,6) + random.randint(1,6)
+        tpRoll.modify(bonus)
+        if logFights: print(">", attacker.name, "verursacht +", bonus, "TP durch", Präzision.name)
 
 class Unaufhaltsam:
     name = "Unaufhaltsam"
@@ -697,6 +699,8 @@ class Fighter:
 
     def reset(self):
         self.wunden = 0
+        if "Kalte Wut" in self.char.vorteile:
+            self.wunden = 1
         self.usedActions = {}
         self.advantage = []
         self.disadvantage = []
