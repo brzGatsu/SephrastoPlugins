@@ -936,14 +936,16 @@ class Fighter:
         if wundenNeu == 0:
             if logFights: print(">", self.name, "erleidet", tpRoll.str(), ", es reicht nicht für eine Wunde", "(WS " + str(ws) + ")")
             return
-        if logFights: print(">", self.name, "erleidet", tpRoll.str(), "und", wundenNeu, "Wunde" if wundenNeu == 1 else "Wunden",  "(WS " + str(ws) + ")")
+
         self.wunden += wundenNeu
+        if logFights: print(">", self.name, "erleidet", tpRoll.str(), "und", wundenNeu, "Wunde" if wundenNeu == 1 else "Wunden",  "(WS " + str(ws) + "), insgesamt", self.wunden, "Wunden")
+
         betäubt = self.rollWundschmerz(wundenNeu)
         kampfunfähig = self.rollKampfunfähig()
         if betäubt:
             if logFights: print(">", self.name, "ist betäubt und verliert dadurch")
             self.wunden = 9
-        if kampfunfähig:
+        elif self.wunden > 8 or kampfunfähig:
             if logFights: print(">", self.name, "ist kampfunfähig")
             self.wunden = 9
 
