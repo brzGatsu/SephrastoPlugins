@@ -16,8 +16,9 @@ from PySide6 import QtWidgets
 # - Fernkampf wird nicht unterstützt
 # - Aktionen: es wird IMMER die Aktion Angriff durchgeführt und immer ohne volle Offensive.
 # - Kampfstile: alle außer Reiterkampf werden unterstützt (ohne Stufe IV). KVKIII, SKII und BKII sind (abseits passiver Bonusse) nicht implementiert, da nicht relevant in Duellen.
-# - Vorteile: Nur Todesstoß, Hammerschlag, Waffenloser Kampf, Kampfreflexe, (verb.) Rüstungsgewöhnung, Kalte Wut, Präzision, Gegenhalten, Unaufhaltsam (es wird automatisch ausgewichen, wenn die VT hoch genug ist NACH dem AT Wurf), Körperbeherrschung, Sturmangriff (wird nur mit zweihändigen Waffen genutzt und nur wenn kein SNK II), Aufmerksamkeit, Klingentanz
-# - Manöver: Nur Wuchtschlag, Todesstoß, Hammerschlag und Rüstungsbrecher (werden automatisch eingesetzt auf basis einer simplen AI)
+# - Profane Vorteile: Körperbeherrschung
+# - Vorteile: Alles außer Kommandos, Durchatmen, Atemtechnik, Ausfall. Sturmangriff wird nur mit zweihändigen Waffen genutzt und nur wenn kein SNK II. Mit Defensiver/Offensiver Kampfstil werden die entsprechenden Aktionen IMMER genutzt.
+# - Manöver: Alle, außer Halten, Schildspalter, Ausfall (werden automatisch eingesetzt auf basis einer simplen AI)
 # - Waffeneigenschaften: Alles außer Reittier, Stumpf und Zerbrechlich
 
 # Global
@@ -96,7 +97,10 @@ class NebenhandAngriff:
             fighter.char.waffen[fighter.waffeIndex].definition == fighter.char.waffen[fighter.nebenhandIndex].definition:
             mod = 0
         return mod
-    def isManeuverAllowed(fighter, maneuver): return maneuver.name.startswith("Wuchtschlag")
+    def isManeuverAllowed(fighter, maneuver):
+        if "Schildkampf II" in fighter.char.vorteile and fighter.kampfstil == "Schildkampf":
+            return maneuver.name.startswith("Wuchtschlag") or maneuver == Niederwerfen or maneuver == Umreißen
+        return maneuver.name.startswith("Wuchtschlag")
     def use(attacker, defender, tpMod = 0):
         attacker.useAction(Action.Bonusaktion)
         attacker.attack(defender, NebenhandAngriff, tpMod)
@@ -113,6 +117,15 @@ class BonusAngriff:
 class ExtraAngriff:
     name = "Extra Angriff"
     def isUsable(attacker, defender): return attacker.isAlive() and defender.isAlive() and attacker.actionUsable(Action.ExtraAngriff) and attacker.myTurn
+    def mod(fighter): return 0
+    def isManeuverAllowed(fighter, maneuver): return True    
+    def use(attacker, defender, tpMod = 0):
+        attacker.useAction(Action.ExtraAngriff)
+        attacker.attack(defender, ExtraAngriff, tpMod)
+
+class ExtraAngriffBHK:
+    name = "Extra Angriff (BHK)"
+    def isUsable(attacker, defender): return attacker.isAlive() and defender.isAlive() and attacker.actionUsable(Action.ExtraAngriff)
     def mod(fighter): return 0
     def isManeuverAllowed(fighter, maneuver): return True    
     def use(attacker, defender, tpMod = 0):
@@ -208,6 +221,39 @@ class Rüstungsbrecher:
     def trigger_onATSuccess(attacker, defender, attackType, atRoll, vtRoll, tpRoll, maneuvers):
         tpRoll.isSP = True
 
+class Umreißen:
+    name = "Umreißen"
+    def isUnlocked(fighter): return True
+    def trigger_onATSuccess(attacker, defender, attackType, atRoll, vtRoll, tpRoll, maneuvers):
+        tpRoll.noDamage = True
+        gegenprobe = D20Roll(defender.modAttribut("GE"))
+        if "Standfest" in defender.char.vorteile:
+            gegenprobe.setAdvantageDisadvantage(True, False)
+        gegenprobe.roll()
+        if gegenprobe.result() >= atRoll.result():
+            if logFights: print(">", defender.name, "hat die Umreißen-Gegenprobe geschafft mit einer", gegenprobe.str())
+            return
+        defender.disadvantage.append(Fighter.DurationEndNextPhase)
+        defender.advantageForEnemy.append(Fighter.DurationStartNextPhase)
+        if logFights: print(">", defender.name, "hat die Umreißen-Gegenprobe nicht geschafft mit einer", gegenprobe.str(), "und liegt am Boden")
+
+class Niederwerfen:
+    name = "Niederwerfen"
+    def isUnlocked(fighter): return "Niederwerfen" in fighter.char.vorteile
+    def trigger_onAT(attacker, defender, attackType, atRoll, maneuvers):
+        atRoll.modify(-4)
+    def trigger_onATSuccess(attacker, defender, attackType, atRoll, vtRoll, tpRoll, maneuvers):
+        gegenprobe = D20Roll(defender.modAttribut("KK"))
+        if "Standfest" in defender.char.vorteile:
+            gegenprobe.setAdvantageDisadvantage(True, False)
+        gegenprobe.roll()
+        if gegenprobe.result() >= atRoll.result():
+            if logFights: print(">", defender.name, "hat die Niederwerfen-Gegenprobe geschafft mit einer", gegenprobe.str())
+            return
+        defender.disadvantage.append(Fighter.DurationEndNextPhase)
+        defender.advantageForEnemy.append(Fighter.DurationStartNextPhase)
+        if logFights: print(">", defender.name, "hat die Niederwerfen-Gegenprobe nicht geschafft mit einer", gegenprobe.str(), "und liegt am Boden")
+
 # Feats (offensive)
 class SNKII:
     name = "Finte"
@@ -243,17 +289,15 @@ class KVKII:
 
 class BHKIII:
     name = "BHK III"
-    def isUnlocked(fighter): return "Beidhändiger Kampf III" in fighter.char.vorteile and fighter.kampfstil == "Beidhändiger Kampf"
-    def trigger_onAT(attacker, defender, attackType, atRoll, maneuvers):
-        if attacker.hasDisadvantage() or defender.enemyHasDisadvantage():
-            attacker.useAction(Action.ExtraAngriff)
-            
+    def isUnlocked(fighter): return "Beidhändiger Kampf III" in fighter.char.vorteile and fighter.kampfstil == "Beidhändiger Kampf"           
     def trigger_onATDone(attacker, defender, attackType, atRoll, vtRoll, maneuvers):
-        if not ExtraAngriff.isUsable(attacker, defender):
+        if not ExtraAngriffBHK.isUsable(attacker, defender):
+            return
+        if atRoll.disadvantage:
             return
         if logFights: print(attacker.name, "macht einen weiteren Angriff durch", BHKIII.name)
         attacker.disadvantage.append(Fighter.DurationEndPhaseOneRoll)
-        ExtraAngriff.use(attacker, defender)
+        ExtraAngriffBHK.use(attacker, defender)
 
 class PWKII:
     name = "Tückische Klinge"
@@ -277,15 +321,15 @@ class Präzision:
 class Unaufhaltsam:
     name = "Unaufhaltsam"
     def isUnlocked(fighter): return "Unaufhaltsam" in fighter.char.vorteile
+    def trigger_onAT(attacker, defender, attackType, atRoll, maneuvers):
+        atRoll.modifyCrit(-1)
     def trigger_onATFailed(attacker, defender, attackType, atRoll, vtRoll, maneuvers):
-        ausweichen = (vtRoll.result() - defender.modVT()) + defender.modAusweichen()        
-        if ausweichen < atRoll.result():
-            if logFights: print(">", attacker.name, "verursacht dennoch halben Schaden durch", Unaufhaltsam.name)
-            tpRoll = attacker.rollTP()
-            tpRoll.multiplier = 0.5
-            defender.takeDamage(tpRoll, [Unaufhaltsam])
-        else:
-            if logFights: print(">", attacker.name + "s", Unaufhaltsam.name, "wirkt nicht, da der AT mit", ausweichen, "ausgewichen wurde")
+        if Niederwerfen in maneuvers:
+            if logFights: print("Der Effekt von Niederwerfen wirkt dennoch durch", Unaufhaltsam.name)
+            Niederwerfen.trigger_onATSuccess(attacker, defender, attackType, atRoll, vtRoll, attacker.rollTP(), maneuvers)
+        if Umreißen in maneuvers:
+            if logFights: print("Der Effekt von Umreißen wirkt dennoch durch", Unaufhaltsam.name)
+            Umreißen.trigger_onATSuccess(attacker, defender, attackType, atRoll, vtRoll, attacker.rollTP(), maneuvers)
 
 class Sturmangriff:
     name = "Sturmangriff"
@@ -397,7 +441,7 @@ class Körperbeherrschung:
     def trigger_onVTFailing(attacker, defender, attackType, atRoll, vtRoll, maneuvers):
         if atRoll.result() <= vtRoll.result():
             return # i. e. shieldwall could cause this
-        gePW = defender.char.attribute["GE"].probenwert + defender.wundmalus()
+        gePW = defender.modAttribut("GE")
         ws = defender.wsStern
         if Rüstungsbrecher in maneuvers:
             ws = defender.ws
@@ -422,9 +466,31 @@ Feats = [SNKII, SNKIII, KVKII, BHKIII, PWKII, Präzision, Unaufhaltsam, Sturmang
 
 def ai_chooseManeuvers(attacker, defender, attackType):
     maneuvers = []
-    statDiff = (attackType.mod(attacker) + attacker.modAT()) - defender.modVT()
+    atMod = attackType.mod(attacker) + attacker.modATEstimation(defender)
+    statDiff = atMod - defender.modVT()
     wsDiff = defender.wsStern - attacker.maxDamage
     rs = defender.wsStern - defender.ws
+
+    if not defender.enemyHasAdvantage():
+        makeProne = False
+        if attackType == NormalerAngriff:
+            makeProne = (attacker.kampfstil == "Schneller Kampf" and "Schneller Kampf III" in attacker.char.vorteile) or\
+                (attacker.kampfstil == "Beidhändiger Kampf" and "Beidhändiger Kampf III" in attacker.char.vorteile)
+        elif attackType == NebenhandAngriff:
+            makeProne = attacker.kampfstil == "Schildkampf" and "Schildkampf II" in attacker.char.vorteile
+
+        if makeProne:
+            unaufhaltsamMod = 8 if "Unaufhaltsam" in attacker.char.vorteile else 0
+            standfestMod = 4 if "Standfest" in defender.char.vorteile else 0
+            if statDiff + unaufhaltsamMod >= 4 and Niederwerfen.isUnlocked(attacker) and (unaufhaltsamMod + atMod - defender.modAttribut("KK") > 4 + standfestMod):
+                maneuvers.append(Niederwerfen)
+                statDiff -= 4
+                wsDiff = -999
+            elif attacker.kampfstil == "Schildkampf" and attackType == NebenhandAngriff and \
+                    (unaufhaltsamMod + atMod - defender.modAttribut("GE") > 0 + standfestMod):
+                maneuvers.append(Umreißen)  
+                return maneuvers      
+
     if (statDiff >= maneuver_Min_AT_VT_Diff+6 and defender.wunden <= maneuver_Max_Wounds_For_Plus8) or wsDiff >= maneuver_Min_WS_MaxDamage_Diff+6:
         if Hammerschlag.isUnlocked(attacker) and attackType.isManeuverAllowed(attacker, Hammerschlag) and attacker.averageDamage > 8:
             maneuvers += [Hammerschlag]
@@ -460,6 +526,9 @@ def ai_addCritManeuvers(attacker, defender, attackType, maneuvers):
     elif Rüstungsbrecher.isUnlocked(attacker) and attackType.isManeuverAllowed(attacker, Rüstungsbrecher) and Rüstungsbrecher not in maneuvers and (defender.wsStern - defender.ws >= rüstungsbrecher_Min_RS):
         maneuvers.append(Rüstungsbrecher)
         if logFights: print(">", Rüstungsbrecher.name)
+    elif Niederwerfen.isUnlocked(attacker) and attackType.isManeuverAllowed(attacker, Niederwerfen) and Niederwerfen not in maneuvers:
+        maneuvers.append(Niederwerfen)
+        if logFights: print(">", Niederwerfen.name)
     elif Wuchtschlag4 not in maneuvers:
         maneuvers.append(Wuchtschlag4)
         if logFights: print(">", Wuchtschlag4.name)
@@ -478,6 +547,7 @@ class TPRoll():
         self.mod = 0
         self.multiplier = 1
         self.isSP = False
+        self.noDamage = False
         self.roll()
 
     def roll(self): self.lastRoll = self.würfel * random.randint(1,self.würfelSeiten) + self.plus
@@ -513,6 +583,13 @@ class D20Roll:
             self.lastRoll = max(self.lastRoll, random.randint(1,20))
         elif self.disadvantage:
             self.lastRoll = min(self.lastRoll, random.randint(1,20))
+
+    def modEstimation(self):
+        if self.advantage:
+            return self.mod + 4
+        elif self.disadvantage:
+            return self.mod - 4
+        return self.mod
 
     def modifyCrit(self, mod): self.critChance += mod
     def result(self): return self.lastRoll + self.mod
@@ -664,9 +741,17 @@ class Fighter:
             self.equip(self.nebenhandIndex)
         else:
             self.equip(self.waffeIndex)
+
+    def modAttribut(self, attribut):
+        return self.char.attribute[attribut].probenwert + self.wundmalus()
         
     def modAT(self):
         return self.at + self.wundmalus()
+
+    def modATEstimation(self, defender):
+        roll = D20Roll(self.modAT())
+        roll.setAdvantageDisadvantage(self.hasAdvantage() or defender.enemyHasAdvantage(), self.hasDisadvantage() or defender.enemyHasDisadvantage())
+        return roll.modEstimation()
         
     def modVT(self):
         return self.highestVT + self.wundmalus() + (vtPassivMod if vtPassiv else 0)
@@ -791,7 +876,8 @@ class Fighter:
                 tpRoll.modify(tpMod)
                 for feat in featsAndManeuvers:
                     if hasattr(feat, "trigger_onATSuccess"):
-                        feat.trigger_onATSuccess(self, defender, attackType, atRoll, vtRoll, tpRoll, maneuvers)  
+                        feat.trigger_onATSuccess(self, defender, attackType, atRoll, vtRoll, tpRoll, maneuvers)
+  
                 defender.takeDamage(tpRoll, featsAndManeuvers)
 
                 # trigger_onDamageReceived
@@ -830,6 +916,9 @@ class Fighter:
                 feat.trigger_onATDone(self, defender, attackType, atRoll, vtRoll, maneuvers)
 
     def takeDamage(self, tpRoll, featsAndManeuvers):
+        if tpRoll.noDamage:
+            return
+
         ws = self.wsStern
         if tpRoll.isSP:
             ws = self.ws
