@@ -27,6 +27,7 @@ vtPassivMod = -10 # wieviel soll von der VT abgezogen werden bei vtPassiv = True
 wundschmerz = False # sollen die Wundschmerzregeln verwendet werden? Betäubt wird mit Kampf verloren gleichgesetzt
 nat20AutoHit = True # Soll eine 20 immer treffen? Triumphe gibt es weiterhin nur, wenn die VT übetroffen wurde.
 samples = 1000 # wieviele Kämpfe sollen simuliert werden
+useSchildspalter = False
 
 logFighters = True # sollen die Charakterwerte einmal am Anfang ausgegeben werden.
 logFights = True # sollen die Kampfwürfe ausgegeben werden
@@ -218,10 +219,17 @@ class Todesstoß:
 
 class Schildspalter:
     name = "Schildspalter"
-    def isUnlocked(fighter): return True
+    def isUnlocked(fighter): return useSchildspalter
     def trigger_onAT(attacker, defender, attackType, atRoll, maneuvers):
-        atRoll.modify(4)
+        atRoll.modify(Schildspalter.getMod(attacker))
         atRoll.special = "Schildspalter"
+    def getMod(fighter):
+        mod = 4
+        if "Zerstörerisch I" in fighter.char.vorteile:
+            mod += 4
+        if "Zerstörerisch II" in fighter.char.vorteile:
+            mod += 4
+        return mod
 
 class Rüstungsbrecher:
     name = "Rüstungsbrecher"
@@ -383,7 +391,7 @@ class SK:
     name = "Schildwall"
     def isUnlocked(fighter): return "Schildkampf I" in fighter.char.vorteile and fighter.kampfstil == "Schildkampf"
     def trigger_onVTFailing(attacker, defender, attackType, atRoll, vtRoll, maneuvers):
-        if "Unberechenbar" in attacker.waffenEigenschaften:
+        if "Unberechenbar" in attacker.waffenEigenschaften or Schildspalter in maneuvers:
             return
         if defender.isShieldBroken():
             return
@@ -484,10 +492,10 @@ def ai_chooseManeuvers(attacker, defender, attackType):
     wsDiff = defender.wsStern - attacker.maxDamage
     rs = defender.wsStern - defender.ws
 
-    #if defender.kampfstil == "Schildkampf" and not defender.isShieldBroken():
-    #    maneuvers += [Schildspalter]
-    #    statDiff += 4
-    if not defender.enemyHasAdvantage():
+    if Schildspalter.isUnlocked(attacker) and defender.kampfstil == "Schildkampf" and not defender.isShieldBroken():
+        maneuvers += [Schildspalter]
+        statDiff += Schildspalter.getMod(attacker)
+    elif not defender.enemyHasAdvantage():
         makeProne = False
         if attackType == NormalerAngriff:
             makeProne = (attacker.kampfstil == "Schneller Kampf" and "Schneller Kampf III" in attacker.char.vorteile) or\
