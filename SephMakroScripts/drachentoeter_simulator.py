@@ -91,6 +91,8 @@ class NebenhandAngriff:
     def isUsable(attacker, defender):
         if attacker.waffeIndex == attacker.nebenhandIndex:
             return False
+        if attacker.isShieldBroken():
+            return False
         return attacker.isAlive() and defender.isAlive() and attacker.actionUsable(Action.Bonusaktion) and attacker.myTurn
     def mod(fighter):
         mod = -4
@@ -213,6 +215,13 @@ class Todesstoß:
         atRoll.modify(-8)
     def trigger_onDealWounds(fighter, wounds, maneuvers):
         return wounds+2
+
+class Schildspalter:
+    name = "Schildspalter"
+    def isUnlocked(fighter): return True
+    def trigger_onAT(attacker, defender, attackType, atRoll, maneuvers):
+        atRoll.modify(4)
+        atRoll.special = "Schildspalter"
 
 class Rüstungsbrecher:
     name = "Rüstungsbrecher"
@@ -376,6 +385,8 @@ class SK:
     def trigger_onVTFailing(attacker, defender, attackType, atRoll, vtRoll, maneuvers):
         if "Unberechenbar" in attacker.waffenEigenschaften:
             return
+        if defender.isShieldBroken():
+            return
         if not defender.actionUsable(SK.__getActionType(defender)):
             return
         sides = 3
@@ -456,7 +467,7 @@ class Körperbeherrschung:
         defender.wunden += 1
         if roll >= atRoll.result():
             if logFights: print(">", defender.name, "nutzt", Körperbeherrschung.name + " (+1 Wunde), um dem Angriff zu entgehen")
-            vtRoll.superPower = True
+            vtRoll.special = "Körperbeherrschung"
         else:
             if logFights: print(">", defender.name, "nutzt", Körperbeherrschung.name + "(+1 Wunde), um dem Angriff zu entgehen, schafft die Gegenprobe aber nicht")
 
@@ -473,6 +484,9 @@ def ai_chooseManeuvers(attacker, defender, attackType):
     wsDiff = defender.wsStern - attacker.maxDamage
     rs = defender.wsStern - defender.ws
 
+    #if defender.kampfstil == "Schildkampf" and not defender.isShieldBroken():
+    #    maneuvers += [Schildspalter]
+    #    statDiff += 4
     if not defender.enemyHasAdvantage():
         makeProne = False
         if attackType == NormalerAngriff:
@@ -564,7 +578,7 @@ class D20Roll:
         self.advantage = False
         self.disadvantage = False
         self.couldProfitFromAdvantage = True
-        self.superPower = False # i. e. Körperbeherrschung
+        self.special = "" # i. e. Schildspalter, Körperbeherrschung
         self.critChance = 20
         self.roll()
 
@@ -647,7 +661,8 @@ class Fighter:
         self.nebenhandIndex = nebenhandIndex
         self.ausweichenIndex = ausweichenIndex
         self.equip(waffeIndex, log=logFighters)
-        self.highestVT = self.vt
+        self.vtWaffe = self.vt
+        self.vtNebenhand = self.vt
         self.highestRW = self.rw
         self.ausweichen = 0
         self.lösen = False
@@ -655,15 +670,12 @@ class Fighter:
             self.nebenhandIndex = self.waffeIndex
         if self.waffeIndex != self.nebenhandIndex:
             self.equip(nebenhandIndex, log=logFighters)
-            if self.vt > self.highestVT:
-                self.highestVT = self.vt
+            self.vtNebenhand = self.vt
             if self.rw > self.highestRW:
                 self.highestRW = self.rw
         if self.ausweichenIndex != -1:
             self.equip(self.ausweichenIndex, log=logFighters)
             self.ausweichen = self.vt
-            if self.vt > self.highestVT:
-                self.highestVT = self.vt
         self.equip(waffeIndex)
 
         self.feats = []
@@ -699,6 +711,7 @@ class Fighter:
 
     def reset(self):
         self.wunden = 0
+        self.schildWunden = 0
         if "Kalte Wut" in self.char.vorteile:
             self.wunden = 1
         self.usedActions = {}
@@ -722,7 +735,13 @@ class Fighter:
 
     def wundmalus(self):
         return 0 if "Kalte Wut" in self.char.vorteile else -(max(self.wunden -2, 0))*2
-        
+
+    def shieldmalus(self):
+        return -(max(self.schildWunden -2, 0))*2
+
+    def isShieldBroken(self):
+        return self.schildWunden > 4
+
     def equip(self, index, log = False):
         self.waffeAktiv = index
         waffe = self.char.waffen[index]
@@ -750,7 +769,10 @@ class Fighter:
         return self.char.attribute[attribut].probenwert + self.wundmalus()
         
     def modAT(self):
-        return self.at + self.wundmalus()
+        at = self.at + self.wundmalus()
+        if self.waffeAktiv == self.nebenhandIndex:
+            at += self.shieldmalus()
+        return at
 
     def modATEstimation(self, defender):
         roll = D20Roll(self.modAT())
@@ -758,7 +780,13 @@ class Fighter:
         return roll.modEstimation()
         
     def modVT(self):
-        return self.highestVT + self.wundmalus() + (vtPassivMod if vtPassiv else 0)
+        vt = self.vtWaffe
+        if not self.isShieldBroken():
+            if self.vtNebenhand + self.shieldmalus() > vt:
+                vt = self.vtNebenhand + self.shieldmalus()
+        if self.ausweichen > vt:
+            vt = self.ausweichen
+        return vt + self.wundmalus() + (vtPassivMod if vtPassiv else 0)
 
     def modAusweichen(self):
         return self.ausweichen + self.wundmalus() + (vtPassivMod if vtPassiv else 0)
@@ -869,7 +897,7 @@ class Fighter:
                     feat.trigger_onVTFailing(self, defender, attackType, atRoll, vtRoll, maneuvers)
 
         # evaluate
-        if not vtRoll.superPower:
+        if not vtRoll.special == "Körperbeherrschung":
             if (nat20AutoHit and atRoll.isNat20()) or atRoll.result() > vtRoll.result():
                 if logFights: print(self.name + "s", attackType.name, "trifft mit", atRoll.str(), "gegen", vtRoll.str(), "| Manöver:", ", ".join([s.name for s in maneuvers]) if len(maneuvers) > 0 else "keine")
                 
@@ -882,7 +910,10 @@ class Fighter:
                     if hasattr(feat, "trigger_onATSuccess"):
                         feat.trigger_onATSuccess(self, defender, attackType, atRoll, vtRoll, tpRoll, maneuvers)
   
-                defender.takeDamage(tpRoll, featsAndManeuvers)
+                if atRoll.special == "Schildspalter":
+                    defender.takeShieldDamage(tpRoll, featsAndManeuvers)
+                else:
+                    defender.takeDamage(tpRoll, featsAndManeuvers)
 
                 # trigger_onDamageReceived
                 for feat in defender.feats:
@@ -918,6 +949,17 @@ class Fighter:
         for feat in featsAndManeuvers:
             if hasattr(feat, "trigger_onATDone"):
                 feat.trigger_onATDone(self, defender, attackType, atRoll, vtRoll, maneuvers)
+
+    def takeShieldDamage(self, tpRoll, featsAndManeuvers):
+        schild = self.char.waffen[self.nebenhandIndex]
+        if "Schild" not in schild.eigenschaften:
+            return
+        wundenNeu = math.floor((tpRoll.result() - 1) / schild.härte)
+        if wundenNeu == 0:
+            if logFights: print(">", self.name + "s", "Schild erleidet", tpRoll.str(), ", es reicht nicht für eine Beschädigung", "(Härte " + str(schild.härte) + ")")
+            return
+        self.schildWunden += wundenNeu
+        if logFights: print(">", self.name + "s", "Schild erleidet", tpRoll.str(), "und", wundenNeu, "Beschädigung" if wundenNeu == 1 else "Beschädigungen",  "(Härte " + str(schild.härte) + "), insgesamt", self.schildWunden, "Beschädigungen")
 
     def takeDamage(self, tpRoll, featsAndManeuvers):
         if tpRoll.noDamage:
