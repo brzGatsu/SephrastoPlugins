@@ -395,7 +395,7 @@ class SK:
 
 class PWKI:
     name = "Binden"
-    def isUnlocked(fighter): return "Parierwaffenkampf I" in fighter.char.vorteile and fighter.kampfstil == "Parierwaffenkampf" and "Parierwaffenkampf III" not in fighter.char.vorteile 
+    def isUnlocked(fighter): return "Parierwaffenkampf I" in fighter.char.vorteile and fighter.kampfstil == "Parierwaffenkampf"
     def trigger_onVTSuccess(attacker, defender, attackType, atRoll, vtRoll, maneuvers):
         if not defender.actionUsable(Action.Reaktion):
             return
