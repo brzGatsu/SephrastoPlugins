@@ -1034,14 +1034,26 @@ def simulate(fighter1, fighter2):
             fighter2First = not fighter2First
     if logFights: print("\n==== Simulation beendet ====")
     print(fighter1.name, "vs", fighter2.name + ":", "Winratio", round(fighter1Wins/samples * 100, 1), "zu", round(fighter2Wins/samples * 100, 1), "| Ø", round(totalRounds/samples, 1), "INI-Phasen")
+    return fighter1Wins, fighter2Wins
 
 if len(simulate_all) > 0:
     index = 0
+    leaderboard = {}
+    for fighter in simulate_all:
+        leaderboard[fighter] = []
+
     for i in range(len(simulate_all)-1):
         for j in range(i+1, len(simulate_all)):
             fighter1 = Fighter(os.path.join(Wolke.Settings['Pfad-Chars'], simulate_all[i] + ".xml"), 0, fighter1WaffeIndex, fighter1NebenhandIndex, fighter1AusweichenIndex, fighter1Mods)
             fighter2 = Fighter(os.path.join(Wolke.Settings['Pfad-Chars'], simulate_all[j] + ".xml"), 6, fighter2WaffeIndex, fighter2NebenhandIndex, fighter2AusweichenIndex, fighter2Mods)
-            simulate(fighter1, fighter2)
+            fighter1Wins, fighter2Wins = simulate(fighter1, fighter2)
+            leaderboard[simulate_all[i]].append(fighter1Wins)
+            leaderboard[simulate_all[j]].append(fighter2Wins)
+
+    print("==== Ø Win vs all ====")
+    for fighter in leaderboard:
+        avgWins = sum(leaderboard[fighter]) / len(leaderboard[fighter])
+        print(fighter, round(avgWins/samples * 100, 1), "%")
 else:    
     if os.path.isdir(Wolke.Settings['Pfad-Chars']):
         startDir = Wolke.Settings['Pfad-Chars']
