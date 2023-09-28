@@ -127,15 +127,6 @@ class ExtraAngriff:
         attacker.useAction(Action.ExtraAngriff)
         attacker.attack(defender, ExtraAngriff, tpMod)
 
-class ExtraAngriffBHK:
-    name = "Extra Angriff (BHK)"
-    def isUsable(attacker, defender): return attacker.isAlive() and defender.isAlive() and attacker.actionUsable(Action.ExtraAngriff)
-    def mod(fighter): return 0
-    def isManeuverAllowed(fighter, maneuver): return True    
-    def use(attacker, defender, tpMod = 0):
-        attacker.useAction(Action.ExtraAngriff)
-        attacker.attack(defender, ExtraAngriff, tpMod)
-
 class Passierschlag:
     name = "Passierschlag"
     def isUsable(attacker, defender): return attacker.isAlive() and defender.isAlive() and attacker.actionUsable(Passierschlag.__getActionType(attacker))
@@ -279,6 +270,8 @@ class SNKII:
             return
         if not atRoll.couldProfitFromAdvantage:
             return
+        if atRoll.disadvantage:
+            return
         attacker.useAction(Action.Bonusaktion)
         attacker.advantage.append(Fighter.DurationEndPhaseOneRoll)
         if logFights: print(attacker.name, "gibt sich als Bonusaktion Vorteil durch", SNKII.name)
@@ -307,13 +300,10 @@ class BHKIII:
     name = "BHK III"
     def isUnlocked(fighter): return "Beidhändiger Kampf III" in fighter.char.vorteile and fighter.kampfstil == "Beidhändiger Kampf"           
     def trigger_onATDone(attacker, defender, attackType, atRoll, vtRoll, maneuvers):
-        if not ExtraAngriffBHK.isUsable(attacker, defender):
-            return
-        if atRoll.disadvantage:
+        if not ExtraAngriff.isUsable(attacker, defender):
             return
         if logFights: print(attacker.name, "macht einen weiteren Angriff durch", BHKIII.name)
-        attacker.disadvantage.append(Fighter.DurationEndPhaseOneRoll)
-        ExtraAngriffBHK.use(attacker, defender)
+        ExtraAngriff.use(attacker, defender)
 
 class PWKII:
     name = "Tückische Klinge"
@@ -362,6 +352,7 @@ class Sturmangriff:
             return
 
         attacker.useAction(Action.Aktion)
+        attacker.useAction(Action.ExtraAngriff)
         bonusTP = min(abs(attacker.deltaPosition), attacker.char.abgeleiteteWerte["GS"].finalwert)
         print(attacker.name, "nutzt", Sturmangriff.name, "für +" + str(bonusTP), "TP")
         BonusAngriff.use(attacker, defender, bonusTP)
@@ -861,6 +852,7 @@ class Fighter:
             self.useAction(Action.Aktion)
             self.disadvantageForEnemy.append(Fighter.DurationStartNextPhase)
             self.disadvantage.append(Fighter.DurationEndPhaseOneRoll)
+            self.useAction(Action.ExtraAngriff)
             BonusAngriff.use(self, defender)
         elif NormalerAngriff.isUsable(self, defender):
             if "Offensiver Kampfstil" in self.char.vorteile:
