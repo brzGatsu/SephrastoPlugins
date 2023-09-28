@@ -102,7 +102,7 @@ class NebenhandAngriff:
             mod = 0
         return mod
     def isManeuverAllowed(fighter, maneuver):
-        if "Schildkampf II" in fighter.char.vorteile and fighter.kampfstil == "Schildkampf":
+        if "Schild" in fighter.waffenEigenschaften:
             return maneuver.name.startswith("Wuchtschlag") or maneuver == Niederwerfen or maneuver == Umreißen
         return maneuver.name.startswith("Wuchtschlag")
     def use(attacker, defender, tpMod = 0):
