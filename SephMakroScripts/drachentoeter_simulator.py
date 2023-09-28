@@ -40,12 +40,12 @@ if len(simulate_all) > 0:
     logFighters = False
     logFights = False
 
-fighter1Path = "" # Wird nur verwendet, wenn simulate_all leer ist. Pfad für charakter xml von Kämpfer 1 - falls leer, geht ein Datei-Auswahldialog auf
+fighter1Path = "" # Wird nur verwendet, wenn simulate_all leer ist. Pfad für charakter xml von Kämpfer 1 im Charakterordner ohne .xml Endung - falls leer, geht ein Datei-Auswahldialog auf
 fighter1WaffeIndex = 2 # welche Waffe soll Kämpfer 1 verwenden - entspricht der Position im Waffen Tab, beginnend bei 0
 fighter1NebenhandIndex = 3 # wird ignoriert, wenn fighter2WaffeIndex zweihändig ist
 fighter1AusweichenIndex = 1 # bei -1 wird ausweichen nicht verwendet
 
-fighter2Path = "" # Wird nur verwendet, wenn simulate_all leer ist. Pfad für charakter xml von Kämpfer 2 - falls leer, geht ein Datei-Auswahldialog auf
+fighter2Path = "" # Wird nur verwendet, wenn simulate_all leer ist. Pfad für charakter xml von Kämpfer 2 im Charakterordner ohne .xml Endung - falls leer, geht ein Datei-Auswahldialog auf
 fighter2WaffeIndex = 2 # welche Waffe soll Kämpfer 2 verwenden - entspricht der Position im Waffen Tab, beginnend bei 0
 fighter2NebenhandIndex = 3 # wird ignoriert, wenn fighter2WaffeIndex zweihändig ist
 fighter2AusweichenIndex = 1 # bei -1 wird ausweichen nicht verwendet
@@ -572,11 +572,13 @@ class TPRoll():
         self.multiplier = 1
         self.isSP = False
         self.noDamage = False
-        self.roll()
+        self.lastRoll = -1
 
     def roll(self): self.lastRoll = self.würfel * random.randint(1,self.würfelSeiten) + self.plus
     def modify(self, value): self.mod += value
-    def result(self): return round(self.lastRoll * self.multiplier) + self.mod
+    def result(self):
+        assert(self.lastRoll != -1)
+        return round(self.lastRoll * self.multiplier) + self.mod
     def str(self): return str(self.result()) + (" SP" if self.isSP else " TP")
 
 class D20Roll:
@@ -588,7 +590,7 @@ class D20Roll:
         self.couldProfitFromAdvantage = True
         self.special = "" # i. e. Schildspalter, Körperbeherrschung
         self.critChance = 20
-        self.roll()
+        self.lastRoll = -1
 
     def setAdvantageDisadvantage(self, advantage, disadvantage):
         self.advantage = advantage
@@ -616,7 +618,9 @@ class D20Roll:
         return self.mod
 
     def modifyCrit(self, mod): self.critChance += mod
-    def result(self): return self.lastRoll + self.mod
+    def result(self):
+        assert(self.lastRoll != -1)
+        return self.lastRoll + self.mod
     def isNat1(self): return self.lastRoll == 1
     def isNat20(self): return self.lastRoll >= self.critChance
     def isCrit(self, difficulty): return self.isNat20() and self.result() >= difficulty
@@ -800,8 +804,10 @@ class Fighter:
         return self.ausweichen + self.wundmalus() + (vtPassivMod if vtPassiv else 0)
 
     def rollTP(self):
-        return TPRoll(self.tpWürfel, self.tpSeiten, self.tpPlus)
-        
+        tp = TPRoll(self.tpWürfel, self.tpSeiten, self.tpPlus)
+        tp.roll()
+        return tp
+            
     def rollWundschmerz(self, wundenNeu):
         if not wundschmerz: return False
         if wundenNeu < 2: return False
@@ -890,16 +896,16 @@ class Fighter:
                 feat.trigger_onAT(self, defender, attackType, atRoll, maneuvers)
         # Feats may give advantage onAT, so set again
         atRoll.setAdvantageDisadvantage(self.hasAdvantage() or defender.enemyHasAdvantage(), self.hasDisadvantage() or defender.enemyHasDisadvantage())
-        at = atRoll.result()
+        atRoll.roll()
         for duration in [Fighter.DurationStartNextPhaseOneRoll, Fighter.DurationEndPhaseOneRoll, Fighter.DurationEndNextPhaseOneRoll]:
             self.pruneAdvantageDisadvantage(duration)
             defender.pruneAdvantageDisadvantage(duration, enemyRoll=True)
 
         vtRoll = D20Roll(defender.modVT(), passive=vtPassiv) 
-        vt = vtRoll.result()
+        vtRoll.roll()
 
         # trigger_onVTFailing
-        if at > vt:
+        if atRoll.result() > vtRoll.result():
             for feat in defender.feats:
                 if hasattr(feat, "trigger_onVTFailing"):
                     feat.trigger_onVTFailing(self, defender, attackType, atRoll, vtRoll, maneuvers)
@@ -1053,10 +1059,14 @@ else:
         fighter1Path, _ = QtWidgets.QFileDialog.getOpenFileName(None,"Charakterdatei für Kämpfer 1...", startDir, "XML Datei (*.xml)")
         if not fighter1Path:
             print("Du hast keine Charakterdatei gewählt.")
+    else:
+         fighter1Path = os.path.join(startDir, fighter1Path + ".xml")
     if fighter1Path and not fighter2Path:
         fighter2Path, _ = QtWidgets.QFileDialog.getOpenFileName(None,"Charakterdatei für Kämpfer 2...", startDir, "XML Datei (*.xml)")
         if not fighter2Path:
             print("Du hast keine Charakterdatei gewählt.")
+    elif fighter2Path:
+        fighter2Path = os.path.join(startDir, fighter2Path + ".xml")
  
 
     if fighter1Path and fighter2Path:
