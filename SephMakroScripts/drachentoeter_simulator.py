@@ -28,6 +28,7 @@ wundschmerz = False # sollen die Wundschmerzregeln verwendet werden? Betäubt wi
 nat20AutoHit = True # Soll eine 20 immer treffen? Triumphe gibt es weiterhin nur, wenn die VT übetroffen wurde.
 samples = 1000 # wieviele Kämpfe sollen simuliert werden
 useSchildspalter = False
+testManeuvers = False # Der Kampf wird einmal für jedes Manöver durchgeführt. Das Manöver wird bei jedem Angriff genutzt, aber nur von Kämpfer 1. Kämpfer 2 nutzt keine Manöver. Die Einstellung wird in Vebrindung mit simulate_all (s. u.) nicht verwendet
 
 logFighters = True # sollen die Charakterwerte einmal am Anfang ausgegeben werden.
 logFights = True # sollen die Kampfwürfe ausgegeben werden
@@ -541,11 +542,20 @@ class Körperbeherrschung:
 
 
 # Important: Körpebeherrschung needs to be evaluated last, so keep it at the end of the list
-Feats = [SNKII, SNKIII, KVKII, BHKIII, PWKII, Präzision, Unaufhaltsam, Sturmangriff, SK, PWKI, PWKIII, BKIII, Gegenhalten, Körperbeherrschung, Klingentanz]
+Feats = [SNKII, SNKIII, KVKII, BHKIII, PWKII, Präzision, Unaufhaltsam, Sturmangriff, SK, PWKI, PWKIII, BKIII, Gegenhalten, Klingentanz, Körperbeherrschung]
 
 # "AI"
-
+currentTestManeuver = None
 def ai_chooseManeuvers(attacker, defender, attackType):
+    if currentTestManeuver is not None:
+        if attacker.index == 0:
+            if currentTestManeuver in [Ausfall, Niederwerfen, Umreißen]:
+                return [currentTestManeuver] if not defender.hasDisadvantage() else []
+            else:
+                return [currentTestManeuver]
+        else:
+            return []
+
     atMod = attackType.mod(attacker) + attacker.modATEstimation(defender)
     budget = atMod - defender.modVT() - 4
     budget = max(budget, defender.wsStern * 1.5 - attacker.maxDamage) #increase budget if our damage is too low
@@ -656,7 +666,9 @@ class Fighter:
     DurationEndPhaseOneRoll = 4
     DurationEndNextPhaseOneRoll = 5
 
-    def __init__(self, charPath, startPositionX, waffeIndex, nebenhandIndex, ausweichenIndex, mods):
+    def __init__(self, index, startPositionX, waffeIndex, nebenhandIndex, ausweichenIndex, mods):
+        self.index = index
+        charPath = fighter1Path if index == 0 else fighter2Path
         self.char = Char()
         self.char.xmlLesen(charPath)
         self.char.aktualisieren()
@@ -1099,6 +1111,12 @@ else:
  
 
     if fighter1Path and fighter2Path:
-        fighter1 = Fighter(fighter1Path, 0, fighter1WaffeIndex, fighter1NebenhandIndex, fighter1AusweichenIndex, fighter1Mods)
-        fighter2 = Fighter(fighter2Path, 6, fighter2WaffeIndex, fighter2NebenhandIndex, fighter2AusweichenIndex, fighter2Mods)
-        simulate(fighter1, fighter2)
+        fighter1 = Fighter(0, 0, fighter1WaffeIndex, fighter1NebenhandIndex, fighter1AusweichenIndex, fighter1Mods)
+        fighter2 = Fighter(1, 6, fighter2WaffeIndex, fighter2NebenhandIndex, fighter2AusweichenIndex, fighter2Mods)
+        if testManeuvers:
+            for m in CombatManeuvers:
+                print("\n==== Teste", m.name,"====")
+                currentTestManeuver = m
+                simulate(fighter1, fighter2)
+        else:
+            simulate(fighter1, fighter2)
