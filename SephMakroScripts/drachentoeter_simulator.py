@@ -555,7 +555,7 @@ def ai_chooseManeuvers(attacker, defender, attackType):
     maneuversAvailable = [m for m in CombatManeuvers if m.isUnlocked(attacker) and m.score(attacker, defender, attackType, atMod) != -1 and attackType.isManeuverAllowed(attacker, m)]
     maneuversAvailable.sort(key = lambda m: m.score(attacker, defender, attackType, atMod))
     maneuvers = []
-    while budget > 1 and len(maneuversAvailable) > 0:
+    while len(maneuversAvailable) > 0:
         maneuver = maneuversAvailable.pop()
         ignoreBudget = False
         if hasattr(maneuver, "score_ignorebudget"):
