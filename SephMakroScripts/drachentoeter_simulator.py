@@ -666,9 +666,8 @@ class Fighter:
     DurationEndPhaseOneRoll = 4
     DurationEndNextPhaseOneRoll = 5
 
-    def __init__(self, index, startPositionX, waffeIndex, nebenhandIndex, ausweichenIndex, mods):
+    def __init__(self, charPath, index, startPositionX, waffeIndex, nebenhandIndex, ausweichenIndex, mods):
         self.index = index
-        charPath = fighter1Path if index == 0 else fighter2Path
         self.char = Char()
         self.char.xmlLesen(charPath)
         self.char.aktualisieren()
@@ -1081,8 +1080,8 @@ if len(simulate_all) > 0:
 
     for i in range(len(simulate_all)-1):
         for j in range(i+1, len(simulate_all)):
-            fighter1 = Fighter(os.path.join(Wolke.Settings['Pfad-Chars'], simulate_all[i] + ".xml"), 0, fighter1WaffeIndex, fighter1NebenhandIndex, fighter1AusweichenIndex, fighter1Mods)
-            fighter2 = Fighter(os.path.join(Wolke.Settings['Pfad-Chars'], simulate_all[j] + ".xml"), 6, fighter2WaffeIndex, fighter2NebenhandIndex, fighter2AusweichenIndex, fighter2Mods)
+            fighter1 = Fighter(os.path.join(Wolke.Settings['Pfad-Chars'], simulate_all[i] + ".xml"), 0, 0, fighter1WaffeIndex, fighter1NebenhandIndex, fighter1AusweichenIndex, fighter1Mods)
+            fighter2 = Fighter(os.path.join(Wolke.Settings['Pfad-Chars'], simulate_all[j] + ".xml"), 1, 6, fighter2WaffeIndex, fighter2NebenhandIndex, fighter2AusweichenIndex, fighter2Mods)
             fighter1Wins, fighter2Wins = simulate(fighter1, fighter2)
             leaderboard[simulate_all[i]].append(fighter1Wins)
             leaderboard[simulate_all[j]].append(fighter2Wins)
@@ -1111,8 +1110,8 @@ else:
  
 
     if fighter1Path and fighter2Path:
-        fighter1 = Fighter(0, 0, fighter1WaffeIndex, fighter1NebenhandIndex, fighter1AusweichenIndex, fighter1Mods)
-        fighter2 = Fighter(1, 6, fighter2WaffeIndex, fighter2NebenhandIndex, fighter2AusweichenIndex, fighter2Mods)
+        fighter1 = Fighter(fighter1Path, 0, 0, fighter1WaffeIndex, fighter1NebenhandIndex, fighter1AusweichenIndex, fighter1Mods)
+        fighter2 = Fighter(fighter2Path, 1, 6, fighter2WaffeIndex, fighter2NebenhandIndex, fighter2AusweichenIndex, fighter2Mods)
         if testManeuvers:
             for m in CombatManeuvers:
                 print("\n==== Teste", m.name,"====")
