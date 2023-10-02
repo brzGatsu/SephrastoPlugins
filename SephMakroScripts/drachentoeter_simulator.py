@@ -220,7 +220,8 @@ class Schildspalter:
     name = "Schildspalter"
     def isUnlocked(fighter): return True
     def mod(): return -2
-    def score(attacker, defender, attackType, atMod): return 2 if defender.kampfstil == "Schildkampf" and not defender.isShieldBroken() else -1
+    def score(attacker, defender, attackType, atMod): return 5 if defender.kampfstil == "Schildkampf" and not defender.isShieldBroken() else -1
+    def score_ignorebudget(attacker, defender, attackType, atMod): return defender.kampfstil == "Schildkampf" and not defender.isShieldBroken() and "Zerstörerisch I" in attacker.char.vorteile and "Zerstörerisch II" in attacker.char.vorteile
     def trigger_onAT(attacker, defender, attackType, atRoll, maneuvers):
         atRoll.modify(Schildspalter.mod())
     def trigger_onATFailed(attacker, defender, attackType, atRoll, vtRoll, maneuvers):
@@ -261,7 +262,7 @@ class Umreißen:
         if attackType != NebenhandAngriff or attacker.kampfstil != "Schildkampf":
             return -1
         score = 0
-        if "Unaufhaltsam" in attacker.char.vorteile:
+        if "Unaufhaltsam" in attacker.char.vorteile and attackType != NebenhandAngriff:
             score += 8
         standfestMod = 4 if "Standfest" in defender.char.vorteile else 0
         fertMod = 4 if attacker.fertigkeit == "Stangenwaffen" else 0
@@ -293,7 +294,7 @@ class Niederwerfen:
         if defender.amBoden:
             return -1 
         score = 2
-        if "Unaufhaltsam" in attacker.char.vorteile:
+        if "Unaufhaltsam" in attacker.char.vorteile and attackType != NebenhandAngriff:
             score += 8
         standfestMod = 4 if "Standfest" in defender.char.vorteile else 0
         fertMod = 4 if attacker.fertigkeit == "Hiebwaffen" else 0
@@ -420,6 +421,8 @@ class Unaufhaltsam:
     def trigger_onAT(attacker, defender, attackType, atRoll, maneuvers):
         atRoll.modifyCrit(-1)
     def trigger_onATFailed(attacker, defender, attackType, atRoll, vtRoll, maneuvers):
+        if attackType == NebenhandAngriff:
+            return
         if Niederwerfen in maneuvers:
             if logFights: print("Der Effekt von Niederwerfen wirkt dennoch durch", Unaufhaltsam.name)
             Niederwerfen.trigger_onATSuccess(attacker, defender, attackType, atRoll, vtRoll, attacker.rollTP(), maneuvers)
@@ -473,7 +476,7 @@ class SK:
             return
         if defender.isShieldBroken():
             return
-        if not defender.actionUsable(SK.__getActionType(defender)):
+        if not defender.actionUsable(Action.Reaktion):
             return
 
         sides = 3
@@ -482,16 +485,10 @@ class SK:
 
         if atRoll.result() - vtRoll.result() > sides:
             return
-        defender.useAction(SK.__getActionType(defender))
+        defender.useAction(Action.Reaktion)
         bonus = random.randint(1,sides)
         vtRoll.modify(bonus)
         if logFights: print(defender.name, "verbessert als Reaktion die VT nachträglich um", bonus, "durch",  SK.name)
-
-    def __getActionType(fighter):
-        if "Schildkampf III" in fighter.char.vorteile and fighter.actionUsable(Action.SchildwallKostenlos):
-            return Action.SchildwallKostenlos
-        else:
-            return Action.Reaktion
 
 class PWKI:
     name = "Binden"
