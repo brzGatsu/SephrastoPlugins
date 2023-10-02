@@ -33,7 +33,7 @@ class SephMakroEditor(object):
         windowSize = Wolke.Settings["WindowSize-SephMakro"]
         self.formMain.resize(windowSize[0], windowSize[1])
 
-        self.db = Datenbank.Datenbank()
+        Wolke.DB = Datenbank.Datenbank()
         self.editor = TextEdit()
         self.numbers = NumberBar(self.editor)
         self.ui.horizontalLayout.layout().addWidget(self.numbers)
@@ -105,7 +105,7 @@ class SephMakroEditor(object):
         self.formMain.closeEvent = self.closeEvent
 
     def onDbChange(self):
-        self.db.xmlLaden(hausregeln = self.ui.comboDB.currentText(), isCharakterEditor = True)
+        Wolke.DB.xmlLaden(hausregeln = self.ui.comboDB.currentText(), isCharakterEditor = True)
 
     def updateWindowTitle(self):
         if self.savePath == "":
@@ -121,7 +121,7 @@ class SephMakroEditor(object):
         QtWidgets.QApplication.processEvents()
         with stdoutIO() as s:
             try:
-                exec(self.editor.toPlainText(), {"datenbank" : self.db})
+                exec(self.editor.toPlainText(), {"datenbank" : Wolke.DB})
             except SyntaxError as e:
                 print("Error: " + str(e))
             except Exception as e:
@@ -176,6 +176,7 @@ class SephMakroEditor(object):
             event.ignore()
         else:
             Wolke.Settings["WindowSize-SephMakro"] = [self.formMain.size().width(), self.formMain.size().height()]
+            Wolke.DB = None
 
     def loadFile(self, path):
         if self.cancelDueToPendingChanges("Makro laden"):
