@@ -27,5 +27,4 @@ class Plugin:
         self.ed.ui = SephMakroMain.Ui_formMain()
         self.ed.ui.setupUi(self.ed.formMain)
         self.ed.setupMainForm()
-        self.ed.formMain.setWindowTitle
         self.ed.formMain.show()

@@ -27,10 +27,13 @@ def stdoutIO(stdout=None):
 
 class SephMakroEditor(object):
     def __init__(self):
-        EinstellungenWrapper.addSettings({"SephMakro_Pfad" : ""})
+        EinstellungenWrapper.addSettings({"SephMakro_Pfad" : "", "WindowSize-SephMakro" : [1000, 800]})
 
     def setupMainForm(self):
-        Wolke.DB = Datenbank.Datenbank()
+        windowSize = Wolke.Settings["WindowSize-SephMakro"]
+        self.formMain.resize(windowSize[0], windowSize[1])
+
+        self.db = Datenbank.Datenbank()
         self.editor = TextEdit()
         self.numbers = NumberBar(self.editor)
         self.ui.horizontalLayout.layout().addWidget(self.numbers)
@@ -102,7 +105,7 @@ class SephMakroEditor(object):
         self.formMain.closeEvent = self.closeEvent
 
     def onDbChange(self):
-        Wolke.DB.xmlLaden(hausregeln = self.ui.comboDB.currentText(), isCharakterEditor = True)
+        self.db.xmlLaden(hausregeln = self.ui.comboDB.currentText(), isCharakterEditor = True)
 
     def updateWindowTitle(self):
         if self.savePath == "":
@@ -118,7 +121,7 @@ class SephMakroEditor(object):
         QtWidgets.QApplication.processEvents()
         with stdoutIO() as s:
             try:
-                exec(self.editor.toPlainText(), {"datenbank" : Wolke.DB})
+                exec(self.editor.toPlainText(), {"datenbank" : self.db})
             except SyntaxError as e:
                 print("Error: " + str(e))
             except Exception as e:
@@ -171,6 +174,8 @@ class SephMakroEditor(object):
         self.formMain.setFocus() #make sure editingfinished is called on potential line edits in focus
         if self.cancelDueToPendingChanges("Beenden"):
             event.ignore()
+        else:
+            Wolke.Settings["WindowSize-SephMakro"] = [self.formMain.size().width(), self.formMain.size().height()]
 
     def loadFile(self, path):
         if self.cancelDueToPendingChanges("Makro laden"):
