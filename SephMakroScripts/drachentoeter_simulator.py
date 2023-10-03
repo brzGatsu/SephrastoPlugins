@@ -28,6 +28,7 @@ wundschmerz = False # sollen die Wundschmerzregeln verwendet werden? Betäubt wi
 nat20AutoHit = True # Soll eine 20 immer treffen? Triumphe gibt es weiterhin nur, wenn die VT übetroffen wurde.
 samples = 1000 # wieviele Kämpfe sollen simuliert werden
 useSchildspalter = False
+kvk3ExtraAttack = True # behandelt kvk3 wie snk3 für eine bessere vergleichbarkeit
 testManeuvers = False # Der Kampf wird einmal für jedes Manöver durchgeführt. Das Manöver wird bei jedem Angriff genutzt, aber nur von Kämpfer 1. Kämpfer 2 nutzt keine Manöver. Die Einstellung wird in Vebrindung mit simulate_all (s. u.) nicht verwendet
 
 logFighters = True # sollen die Charakterwerte einmal am Anfang ausgegeben werden.
@@ -97,7 +98,7 @@ class NebenhandAngriff:
             mod = 0
         return mod
     def isManeuverAllowed(fighter, maneuver):
-        if "Schild" in fighter.waffenEigenschaften:
+        if fighter.kampfstil == "Schildkampf" and "Schildkampf II" in fighter.char.vorteile:
             return maneuver.name.startswith("Wuchtschlag") or maneuver == Niederwerfen or maneuver == Umreißen
         return maneuver.name.startswith("Wuchtschlag")
     def use(attacker, defender, tpMod = 0):
@@ -219,20 +220,17 @@ class Todesstoß:
 class Schildspalter:
     name = "Schildspalter"
     def isUnlocked(fighter): return True
-    def mod(): return -2
-    def score(attacker, defender, attackType, atMod): return 5 if defender.kampfstil == "Schildkampf" and not defender.isShieldBroken() else -1
-    def score_ignorebudget(attacker, defender, attackType, atMod): return defender.kampfstil == "Schildkampf" and not defender.isShieldBroken() and "Zerstörerisch I" in attacker.char.vorteile and "Zerstörerisch II" in attacker.char.vorteile
+    def mod(): return 0
+    def score(attacker, defender, attackType, atMod): return 5 if defender.kampfstil == "Schildkampf" and not defender.isShieldBroken() and attacker.fertigkeit == "Hiebwaffen" else -1
     def trigger_onAT(attacker, defender, attackType, atRoll, maneuvers):
         atRoll.modify(Schildspalter.mod())
     def trigger_onATFailed(attacker, defender, attackType, atRoll, vtRoll, maneuvers):
+        if attacker.fertigkeit != "Hiebwaffen":
+            return
         if atRoll.result() <= defender.ausweichen + defender.wundmalus():
             if logFights: print(">", defender.name, "ist dem Schildspalter mit einer", defender.ausweichen, "ausgewichen")
             return
         tpRoll = attacker.rollTP()
-        if "Zerstörerisch I" in attacker.char.vorteile:
-            tpRoll.modify(4)
-        if "Zerstörerisch II" in attacker.char.vorteile:
-            tpRoll.modify(4)
         for feat in maneuvers:
             if feat in [Wuchtschlag2, Wuchtschlag4, Wuchtschlag6, Wuchtschlag8, Hammerschlag]:
                 feat.trigger_onATSuccess(attacker, defender, attackType, atRoll, vtRoll, tpRoll, maneuvers)
@@ -272,9 +270,10 @@ class Umreißen:
             return -1
         return score
     def score_iscombinable(): return False
-    def score_ignorebudget(attacker, defender, attackType, atMod): return True
     def trigger_onATSuccess(attacker, defender, attackType, atRoll, vtRoll, tpRoll, maneuvers):
         tpRoll.noDamage = True
+        if atRoll.result() <= defender.ausweichen:
+            return
         gegenprobe = D20Roll(defender.modAttribut("GE"))
         gegenprobe.setAdvantageDisadvantage("Standfest" in defender.char.vorteile, attacker.fertigkeit == "Stangenwaffen")
         gegenprobe.roll()
@@ -308,6 +307,8 @@ class Niederwerfen:
     def trigger_onAT(attacker, defender, attackType, atRoll, maneuvers):
         atRoll.modify(Niederwerfen.mod())
     def trigger_onATSuccess(attacker, defender, attackType, atRoll, vtRoll, tpRoll, maneuvers):
+        if atRoll.result() <= defender.ausweichen:
+            return
         gegenprobe = D20Roll(defender.modAttribut("KK"))
         gegenprobe.setAdvantageDisadvantage("Standfest" in defender.char.vorteile, attacker.fertigkeit == "Hiebwaffen")
         gegenprobe.roll()
@@ -327,8 +328,6 @@ class Ausfall:
         if defender.bedrängt:
             return -1
         score = 2
-        if defender.kampfstil == "Schneller Kampf" or defender.kampfstil == "Parierwaffenkampf" or "Präzision" in defender.char.vorteile:
-            score = 7
         fertMod = 4 if attacker.fertigkeit == "Klingenwaffen" else 0
         gegenprobeMod = defender.modAttribut("MU") - fertMod
         score += (atMod - gegenprobeMod)
@@ -356,13 +355,10 @@ class SNKII:
     def trigger_onAT(attacker, defender, attackType, atRoll, maneuvers):
         if not attacker.actionUsable(Action.Bonusaktion) or not attacker.myTurn:
             return
-        if not atRoll.couldProfitFromAdvantage:
-            return
-        if atRoll.disadvantage:
-            return
         attacker.useAction(Action.Bonusaktion)
-        attacker.advantage.append(Fighter.DurationEndPhaseOneRoll)
-        if logFights: print(attacker.name, "gibt sich als Bonusaktion Vorteil durch", SNKII.name)
+        bonus = random.randint(1,6)
+        atRoll.modify(bonus)
+        if logFights: print(attacker.name, "gibt sich als Bonusaktion AT +", bonus, "durch", SNKII.name)
 
 class SNKIII:
     name = "Unterlaufen"
@@ -383,6 +379,15 @@ class KVKII:
             return
         if logFights: print(">", attacker.name, "macht als Bonusaktion einen weiteren Angriff durch", KVKII.name)
         BonusAngriff.use(attacker, defender)
+
+class KVKIII:
+    name = "KVKIII (SNK III variante)"
+    def isUnlocked(fighter): return "Kraftvoller Kampf III" in fighter.char.vorteile and fighter.kampfstil == "Kraftvoller Kampf"
+    def trigger_onDamageDealt(attacker, defender, attackType, atRoll, vtRoll, tpRoll, maneuvers):
+        if not ExtraAngriff.isUsable(attacker, defender):
+            return
+        if logFights: print(">", attacker.name, "macht einen weiteren Angriff durch", KVKIII.name)
+        ExtraAngriff.use(attacker, defender)
 
 class BHKIII:
     name = "BHK III"
@@ -407,13 +412,14 @@ class PWKII:
 class Präzision:
     name = "Präzision"
     def isUnlocked(fighter): return "Präzision" in fighter.char.vorteile
+
     def trigger_onATSuccess(attacker, defender, attackType, atRoll, vtRoll, tpRoll, maneuvers):
-        if not atRoll.advantage or not attacker.actionUsable(Action.Präzision):
+        if not atRoll.lastRoll >= 16 or not attacker.actionUsable(Action.Präzision):
             return
-        attacker.useAction(Action.Präzision)
-        bonus = random.randint(1,6) + random.randint(1,6)
+        bonus = attacker.char.attribute["GE"].wert
         tpRoll.modify(bonus)
-        if logFights: print(">", attacker.name, "verursacht +", bonus, "TP durch", Präzision.name)
+        attacker.useAction(Action.Präzision)
+        if logFights: print(">", attacker.name, "erhält TP +", bonus, "durch", Präzision.name)        
 
 class Unaufhaltsam:
     name = "Unaufhaltsam"
@@ -421,8 +427,6 @@ class Unaufhaltsam:
     def trigger_onAT(attacker, defender, attackType, atRoll, maneuvers):
         atRoll.modifyCrit(-1)
     def trigger_onATFailed(attacker, defender, attackType, atRoll, vtRoll, maneuvers):
-        if attackType == NebenhandAngriff:
-            return
         if Niederwerfen in maneuvers:
             if logFights: print("Der Effekt von Niederwerfen wirkt dennoch durch", Unaufhaltsam.name)
             Niederwerfen.trigger_onATSuccess(attacker, defender, attackType, atRoll, vtRoll, attacker.rollTP(), maneuvers)
@@ -557,7 +561,7 @@ class Körperbeherrschung:
 
 
 # Important: Körpebeherrschung needs to be evaluated last, so keep it at the end of the list
-Feats = [SNKII, SNKIII, KVKII, BHKIII, PWKII, Präzision, Unaufhaltsam, Sturmangriff, SK, PWKI, PWKIII, BKIII, Gegenhalten, Klingentanz, Körperbeherrschung]
+Feats = [SNKII, SNKIII, KVKII, KVKIII, BHKIII, PWKII, Präzision, Unaufhaltsam, Sturmangriff, SK, PWKI, PWKIII, BKIII, Gegenhalten, Klingentanz, Körperbeherrschung]
 
 # "AI"
 currentTestManeuver = None
@@ -582,7 +586,7 @@ def ai_chooseManeuvers(attacker, defender, attackType):
     maneuvers = []
     while len(maneuversAvailable) > 0:
         maneuver = maneuversAvailable.pop()
-        ignoreBudget = False
+        ignoreBudget = maneuver.mod() == 0
         if hasattr(maneuver, "score_ignorebudget"):
             ignoreBudget = maneuver.score_ignorebudget(attacker, defender, attackType, atMod)
         if not ignoreBudget and budget + maneuver.mod() < 0:
@@ -965,7 +969,6 @@ class Fighter:
             for feat in defender.feats:
                 if hasattr(feat, "trigger_onVTFailing"):
                     feat.trigger_onVTFailing(self, defender, attackType, atRoll, vtRoll, maneuvers)
-
         # evaluate
         if not vtRoll.special == "Körperbeherrschung":
             autoHit = nat20AutoHit and atRoll.isNat20()
