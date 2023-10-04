@@ -355,10 +355,13 @@ class SNKII:
     def trigger_onAT(attacker, defender, attackType, atRoll, maneuvers):
         if not attacker.actionUsable(Action.Bonusaktion) or not attacker.myTurn:
             return
+        if not atRoll.couldProfitFromAdvantage:
+            return
+        if atRoll.disadvantage:
+            return
         attacker.useAction(Action.Bonusaktion)
-        bonus = random.randint(1,6)
-        atRoll.modify(bonus)
-        if logFights: print(attacker.name, "gibt sich als Bonusaktion AT +", bonus, "durch", SNKII.name)
+        attacker.advantage.append(Fighter.DurationEndPhaseOneRoll)
+        if logFights: print(attacker.name, "gibt sich als Bonusaktion Vorteil durch", SNKII.name)
 
 class SNKIII:
     name = "Unterlaufen"
