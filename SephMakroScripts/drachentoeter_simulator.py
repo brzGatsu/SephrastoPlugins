@@ -53,10 +53,10 @@ fighter2NebenhandIndex = 3 # wird ignoriert, wenn fighter2WaffeIndex zweihändig
 fighter2AusweichenIndex = 1 # bei -1 wird ausweichen nicht verwendet
 
 # Stats
-fighter1Mods = {"AT" : 0, "VT" : 0, "TP" : 0, "WS" : 0}
-fighter2Mods = {"AT" : 0, "VT" : 0, "TP" : 0, "WS" : 0}
-zähigkeitOverride = 10 # setzt die Zähigkeit bie allen Kämpfern auf den angegebenen Wert; setze es auf -1, um den Wert aus der Charakterdatei zu nehmen
-
+fighter1Mods = {"AT" : 0, "VT" : 0, "TP" : 0, "WS" : 0, "RS" : 0 }
+fighter2Mods = {"AT" : 0, "VT" : 0, "TP" : 0, "WS" : 0, "RS" : 0 }
+zähigkeitOverride = 18 # setzt die Zähigkeit bei allen Kämpfern auf den angegebenen Wert; setze es auf -1, um den Wert aus der Charakterdatei zu nehmen
+iniOverride = 0 # setzt die INI bei allen Kämpfern auf den angegebenen Wert; setze es auf -1, um den Wert aus der Charakterdatei zu nehmen
 
 #========== Implementation ===========
 
@@ -696,8 +696,10 @@ class Fighter:
         self.name = self.char.name or os.path.splitext(os.path.basename(charPath))[0]
         self.mods = mods
         self.ws = self.char.abgeleiteteWerte["WS"].wert + self.mods["WS"]
-        self.wsStern = self.char.abgeleiteteWerte["WS"].finalwert + self.mods["WS"]
+        self.wsStern = self.char.abgeleiteteWerte["WS"].finalwert + self.mods["WS"]  + self.mods["RS"]
         self.ini = self.char.abgeleiteteWerte["INI"].finalwert
+        if iniOverride != -1:
+            self.ini = iniOverride
         self.startPositionX = startPositionX
         self.reset()
 
@@ -861,6 +863,12 @@ class Fighter:
         tp = TPRoll(self.tpWürfel, self.tpSeiten, self.tpPlus)
         tp.roll()
         return tp
+
+    def rollINI(self):
+        ini = D20Roll(self.ini)
+        ini.setAdvantageDisadvantage("Klingentanz" in self.char.vorteile, False)
+        ini.roll()
+        return ini.result()
             
     def rollWundschmerz(self, wundenNeu):
         if not wundschmerz: return False
@@ -1077,15 +1085,24 @@ def simulate(fighter1, fighter2):
     totalRounds = 0
     fighter1Wins = 0
     fighter2Wins = 0
-    fighter2First = fighter2.ini > fighter1.ini
+
+    # Start
     for i in range(samples):
         if logFights: print("\n==== Neuer Kampf ====")
         fighter1.reset()
         fighter2.reset()
-        if logFights: print(fighter1.name, "und", fighter2.name, "treten in", abs(fighter1.position - fighter2.position), "Schritt Distanz zueinander an")
+
+        ini1 = fighter1.rollINI()
+        ini2 = fighter2.rollINI()
+        while(ini1 == ini2):
+            ini2 = fighter2.rollINI()
+        fighter2First = ini2 > ini1
+
+        if logFights: print("INI:", fighter1.name, ini1, ",", fighter2.name, ini2)
+        if logFights: print(fighter1.name, "und", fighter2.name, "treten in", abs(fighter1.position - fighter2.position), "Schritt Distanz zueinander an.")
         rounds = 0       
         while fighter1.isAlive() and fighter2.isAlive():
-            if not fighter2First:
+            if ini1 > ini2:
                 fighter1.onIniphase(fighter2)
                 if fighter2.isAlive():
                     fighter2.onIniphase(fighter1)
@@ -1103,8 +1120,6 @@ def simulate(fighter1, fighter2):
         else:
             fighter2Wins += 1
         totalRounds += rounds
-        if fighter1.ini == fighter2.ini:
-            fighter2First = not fighter2First
     if logFights: print("\n==== Simulation beendet ====")
     print(fighter1.name, "vs", fighter2.name + ":", "Winratio", round(fighter1Wins/samples * 100, 1), "zu", round(fighter2Wins/samples * 100, 1), "| Ø", round(totalRounds/samples, 1), "INI-Phasen")
     return fighter1Wins, fighter2Wins
