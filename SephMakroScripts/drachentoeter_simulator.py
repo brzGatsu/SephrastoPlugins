@@ -378,7 +378,7 @@ class KVKII:
     def trigger_onAT(attacker, defender, attackType, atRoll, maneuvers):
         atRoll.modifyCrit(-1)
     def trigger_onDamageDealt(attacker, defender, attackType, atRoll, vtRoll, tpRoll, maneuvers):
-        if not atRoll.isCrit(vtRoll.result()+1) or not BonusAngriff.isUsable(attacker, defender):
+        if not atRoll.isNat20() or not BonusAngriff.isUsable(attacker, defender):
             return
         if logFights: print(">", attacker.name, "macht als Bonusaktion einen weiteren Angriff durch", KVKII.name)
         BonusAngriff.use(attacker, defender)
