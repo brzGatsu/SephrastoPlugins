@@ -98,7 +98,7 @@ class NebenhandAngriff:
             mod = 0
         return mod
     def isManeuverAllowed(fighter, maneuver):
-        if fighter.kampfstil == "Schildkampf" and "Schildkampf II" in fighter.char.vorteile:
+        if fighter.kampfstil == "Schildkampf":
             return maneuver.name.startswith("Wuchtschlag") or maneuver == Niederwerfen or maneuver == Umreißen
         return maneuver.name.startswith("Wuchtschlag")
     def use(attacker, defender, tpMod = 0):
@@ -399,6 +399,8 @@ class BHKIII:
         if not ExtraAngriff.isUsable(attacker, defender):
             return
         if logFights: print(attacker.name, "macht einen weiteren Angriff durch", BHKIII.name)
+        if attacker.char.waffen[attacker.waffeIndex].definition != attacker.char.waffen[attacker.nebenhandIndex].definition:
+            attacker.disadvantage.append(Fighter.DurationEndPhaseOneRoll)
         ExtraAngriff.use(attacker, defender)
 
 class PWKII:
