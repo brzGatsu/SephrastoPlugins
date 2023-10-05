@@ -224,18 +224,26 @@ Diese Zeitspannen gelten, wenn dein Charakter überhaupt kein Wasser oder keine 
     &lt;td&gt;Proben -8 und nur noch zur Flucht erlaubt&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/table&gt;
-&lt;i&gt;&lt;b&gt;Lege diese Karte vor dir ab&lt;/b&gt; und markiere die entsprechende Zeile, &lt;b&gt;wenn du Furcht erleidest&lt;/b&gt;.&lt;/i&gt;</Karte>
+&lt;br&gt;&lt;br&gt;&lt;br&gt;
+&lt;div id="infobox"&gt;&lt;p&gt;&lt;b&gt;Abgelegt:&lt;/b&gt; Du leidest an einem Furcht-Effekt. Markiere die entsprechende Zeile.&lt;/p&gt;&lt;/div&gt;</Karte>
   <Karte name="Reaktion" typ="1" subtyp="5" titel="$original$" subtitel="$original$" fusszeile="$original$">$original$
-
-&lt;i&gt;&lt;b&gt;Lege diese Karte vor dir ab, wenn du eine Reaktion aufsparst.&lt;/b&gt;&lt;/i&gt;</Karte>
+&lt;div id="infobox"&gt;&lt;p&gt;&lt;b&gt;Abgelegt:&lt;/b&gt; Du sparst dir eine Reaktion auf.&lt;/p&gt;&lt;/div&gt;</Karte>
+  <Karte name="Entwaffnen" typ="1" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$">$original$
+&lt;div id="infobox"&gt;&lt;p&gt;&lt;b&gt;Abgelegt:&lt;/b&gt; Du bist entwaffnet.&lt;/p&gt;&lt;/div&gt;</Karte>
+  <Karte name="Binden" typ="1" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$">$original$
+&lt;div id="infobox"&gt;&lt;p&gt;&lt;b&gt;Abgelegt:&lt;/b&gt; Du bist gebunden.&lt;/p&gt;&lt;/div&gt;</Karte>
+  <Karte name="Umklammern" typ="1" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$">$original$
+&lt;div id="infobox"&gt;&lt;p&gt;&lt;b&gt;Abgelegt:&lt;/b&gt; Du bist umklammert.&lt;/p&gt;&lt;/div&gt;</Karte>
+  <Karte name="Ausfall" typ="1" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$">$original$
+&lt;div id="infobox"&gt;&lt;p&gt;&lt;b&gt;Abgelegt:&lt;/b&gt; Du bist Ziel eines Ausfalls.&lt;/p&gt;&lt;/div&gt;</Karte>
+  <Karte name="Unterlaufen" typ="1" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$">$original$
+&lt;div id="infobox"&gt;&lt;p&gt;&lt;b&gt;Abgelegt:&lt;/b&gt; Du hast deinen Gegner erfolgreich unterlaufen.&lt;/p&gt;&lt;/div&gt;</Karte>
   <Karte name="Wundschmerz" typ="1" subtyp="11" titel="$original$" subtitel="$original$" fusszeile="$original$">$original$
-&lt;i&gt;&lt;b&gt;Lege diese Karte vor dir ab, wenn du betäubt bist.&lt;/b&gt;&lt;/i&gt;</Karte>
+&lt;div id="infobox"&gt;&lt;p&gt;&lt;b&gt;Abgelegt:&lt;/b&gt; Du bist betäubt.&lt;/p&gt;&lt;/div&gt;</Karte>
   <Karte name="Kampfunfähigkeit" typ="1" subtyp="11" titel="$original$" subtitel="$original$" fusszeile="$original$">$original$
-
-&lt;i&gt;&lt;b&gt;Lege diese Karte vor dir ab, wenn du kampfunfähig bist.&lt;/b&gt;&lt;/i&gt;</Karte>
+&lt;div id="infobox"&gt;&lt;p&gt;&lt;b&gt;Abgelegt:&lt;/b&gt; Du bist kampfunfähig.&lt;/p&gt;&lt;/div&gt;</Karte>
   <Karte name="Blutungen und Tod" typ="1" subtyp="11" titel="$original$" subtitel="$original$" fusszeile="$original$">$original$
-
-&lt;i&gt;&lt;b&gt;Lege diese Karte vor dir ab, wenn du blutest.&lt;/b&gt;&lt;/i&gt;</Karte>
+&lt;div id="infobox"&gt;&lt;p&gt;&lt;b&gt;Abgelegt:&lt;/b&gt; Du blutest.&lt;/p&gt;&lt;/div&gt;</Karte>
   <Karte name="Aktionen 1" typ="1" subtyp="5" titel="$original$" subtitel="" fusszeile="" löschen="0" voraussetzungen="">&lt;p&gt;Du kannst &lt;b&gt;eine volle&lt;/b&gt; oder &lt;b&gt;bis zu zwei verschiedene einfache Aktionen&lt;/b&gt; ausführen – wenn du zwei einfache Aktionen nutzt, sind alle Proben in diesen Aktionen um -4 erschwert. Proben außerhalb dieser Aktionen sind von dem Malus nicht betroffen.&lt;/p&gt;
 &lt;p&gt;&lt;b&gt;Konflikt (einfach)&lt;/b&gt;
 Du kannst deinen Gegner angreifen, vorbereitete Zauber ausführen oder dein Gegenüber einschüchtern. Fast jede vergleichende Probe ist ein Konflikt.
@@ -421,7 +429,29 @@ $regel:Aktion Verzögern (voll)$&lt;/p&gt;</Karte>
 &lt;td&gt;&amp;nbsp;&lt;/td&gt;
 &lt;td&gt;&amp;nbsp;&lt;/td&gt;
 &lt;/tr&gt;&lt;/table&gt;</Karte>
-<Karte name="Zauberer I" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
+  <Karte name="Durchatmen" typ="0" subtyp="2" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="0" voraussetzungen="">$original$
+&lt;div id="infobox"&gt;&lt;p&gt;&lt;b&gt;Abgelegt:&lt;/b&gt; Du kannst Durchatmen aktuell nicht verwenden.&lt;/p&gt;&lt;/div&gt;</Karte>
+  <Karte name="Atemtechnik" typ="0" subtyp="2" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="0" voraussetzungen="">$original$
+&lt;div id="infobox"&gt;&lt;p&gt;&lt;b&gt;Abgelegt:&lt;/b&gt; Atemtechnik ist aktiv.&lt;/p&gt;&lt;/div&gt;</Karte>
+  <Karte name="Vorbereitendes Zaubern" typ="0" subtyp="4" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="0" voraussetzungen="">$original$
+&lt;div id="infobox"&gt;&lt;p&gt;&lt;b&gt;Abgelegt:&lt;/b&gt; Du hast einen Zauber vorbereitet.&lt;/p&gt;&lt;/div&gt;</Karte>
+  <Karte name="Aura der Heiligkeit" typ="0" subtyp="6" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="0" voraussetzungen="">$original$
+&lt;table&gt;
+&lt;tr&gt;
+&lt;td height="24px"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td height="24px"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td height="24px"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td height="24px"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;
+&lt;div id="infobox"&gt;&lt;p&gt;&lt;b&gt;Abgelegt:&lt;/b&gt; Du bist im Radius der Aura.&lt;/p&gt;&lt;/div&gt;</Karte>
+  <Karte name="Zauberer I" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
   <Karte name="Zauberer II" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
   <Karte name="Zauberer III" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
   <Karte name="Zauberer IV" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
@@ -602,12 +632,13 @@ $regel:Aktion Verzögern (voll)$&lt;/p&gt;</Karte>
 &lt;td height="24px"&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/table&gt;</Karte>
-  <Karte name="Kommandos" typ="0" subtyp="2" titel="$original$" subtitel="" fusszeile="$original$" löschen="0" voraussetzungen="Vorteil Kommando: Haltet Stand! ODER Vorteil Kommando: Formiert Euch! ODER Vorteil Kommando: Keine Gefangenen! ODER Vorteil Kommando: Kennt Keinen Schmerz!">Erfahrene Anführer befehligen ihre Kampfgefährten nicht nur, sie inspirieren sie. Mit den entsprechenden Vorteilen (S. 42) kannst du in einer Aktion Konflikt eine &lt;b&gt;Anführen-Probe&lt;/b&gt; (16, I) ablegen, um bis zu &lt;b&gt;4 Mitstreitern&lt;/b&gt; in Hörweite einen &lt;b&gt;Bonus&lt;/b&gt; für diesen Kampf zu verleihen. Hohe Qualität (S. 7) vervierfacht die Zahl der Mitstreiter. Jeder Kämpfer kann nur von einem Anführen-Effekt gleichzeitig profitieren.
+  <Karte name="Kommandos" typ="0" subtyp="2" titel="$original$" subtitel="" fusszeile="$original$" löschen="0" voraussetzungen="Vorteil Kommando: Haltet Stand! ODER Vorteil Kommando: Formiert Euch! ODER Vorteil Kommando: Keine Gefangenen! ODER Vorteil Kommando: Kennt Keinen Schmerz!">Mit den entsprechenden Vorteilen (S. 42) kannst du in einer Aktion Konflikt eine &lt;b&gt;Anführen-Probe&lt;/b&gt; (16, I) ablegen, um bis zu &lt;b&gt;4 Mitstreitern&lt;/b&gt; in Hörweite einen &lt;b&gt;Bonus&lt;/b&gt; für diesen Kampf zu verleihen. Hohe Qualität vervierfacht die Zahl der Mitstreiter. Jeder Kämpfer kann nur von einem Anführen-Effekt gleichzeitig profitieren.
     Der Effekt endet am Ende des Kampfes, bei Kampfunfähigkeit des Anführers oder wenn dieser neue Befehle ruft. Der Anführer selbst profitiert nicht von Kommandos.
 &lt;ul&gt;&lt;li class="checkbox"&gt;Haltet stand: $vorteil:Kommando: Haltet Stand!$&lt;/li&gt;
 &lt;li class="checkbox"&gt;Formiert euch: $vorteil:Kommando: Formiert Euch!$&lt;/li&gt;
 &lt;li class="checkbox"&gt;Keine Gefangenen: $vorteil:Kommando: Keine Gefangenen!$&lt;/li&gt;
-&lt;li class="checkbox"&gt;Kennt keinen Schmerz: $vorteil:Kommando: Kennt Keinen Schmerz!$&lt;/li&gt;&lt;/ul&gt;</Karte>
+&lt;li class="checkbox"&gt;Kennt keinen Schmerz: $vorteil:Kommando: Kennt Keinen Schmerz!$&lt;/li&gt;&lt;/ul&gt;
+&lt;div id="infobox"&gt;&lt;p&gt;&lt;b&gt;Abgelegt:&lt;/b&gt; Du profitierst von einem Kommando.&lt;/p&gt;&lt;/div&gt;</Karte>
   <Karte name="Astrale&amp;nbspRegeneration" typ="0" subtyp="4" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="0" voraussetzungen="Vorteil Astrale Regeneration ODER Vorteil Verbesserte astrale Regeneration ODER Vorteil Meisterliche astrale Regeneration">&lt;i&gt;Wirkung:&lt;/i&gt;
 &lt;ul&gt;&lt;li class="checkbox"&gt;Astrale Regeneration: $vorteil:Astrale Regeneration$&lt;/li&gt;
 &lt;li class="checkbox"&gt;Verbesserte astrale Regeneration: $vorteil:Verbesserte astrale Regeneration$&lt;/li&gt;

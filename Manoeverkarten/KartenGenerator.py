@@ -612,6 +612,9 @@ habe ich mit docsmagic.de gemacht, hier werden Sleeves mit farbigen Rückseiten 
         pfad = PdfSerializer.convertHtmlToPdf(html, htmlPath, pl, Wolke.Settings["Manöverkarten_ExportVerzögerungMs"], karte.farbe, None, webEngineView)
         return [pfad, karte.titel]
 
+    def cleanBookmarkName(self, name):
+        return name.replace("&ouml;", "ö").replace("&auml;", "ä").replace("&uuml;", "ü").replace("&amp;", "&").replace("&nbsp;", " ")
+
     def writeKarten(self, spath, karten, writeEinzeln, nameFormat, progressDlg):
         if len(karten) == 0:
             return
@@ -626,7 +629,7 @@ habe ich mit docsmagic.de gemacht, hier werden Sleeves mit farbigen Rückseiten 
             if karte.typ == KartenTyp.Deck:
                 lastDeck = karte.titel
                 progressDlg.setLabelText("Exportiere " + karte.titel + "-Deck...")
-                bookmarks.append(PdfSerializer.PdfBookmark(karte.titel, count, 1))
+                bookmarks.append(PdfSerializer.PdfBookmark(self.cleanBookmarkName(karte.titel), count, 1))
                 lastFooter = ""
             else:  
                 if karte.fusszeile and karte.fusszeile != lastFooter:
@@ -634,8 +637,8 @@ habe ich mit docsmagic.de gemacht, hier werden Sleeves mit farbigen Rückseiten 
                         lastFooter = ""
                     else:
                         lastFooter = karte.fusszeile
-                        bookmarks.append(PdfSerializer.PdfBookmark(karte.fusszeile.replace("$original$", "Allgemein"), count, 2))
-                bookmarks.append(PdfSerializer.PdfBookmark(karte.titel, count, 3 if lastFooter else 2))
+                        bookmarks.append(PdfSerializer.PdfBookmark(self.cleanBookmarkName(karte.fusszeile.replace("$original$", "Allgemein")), count, 2))
+                bookmarks.append(PdfSerializer.PdfBookmark(self.cleanBookmarkName(karte.titel), count, 3 if lastFooter else 2))
             
             kartenPdfs.append(self.__writeTempPDF(webEngineView, karte))   
             count += 1
