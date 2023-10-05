@@ -227,7 +227,7 @@ Diese Zeitspannen gelten, wenn dein Charakter überhaupt kein Wasser oder keine 
 &lt;br&gt;&lt;br&gt;&lt;br&gt;
 &lt;div id="infobox"&gt;&lt;p&gt;&lt;b&gt;Abgelegt:&lt;/b&gt; Du leidest an einem Furcht-Effekt. Markiere die entsprechende Zeile.&lt;/p&gt;&lt;/div&gt;</Karte>
   <Karte name="Reaktion" typ="1" subtyp="5" titel="$original$" subtitel="$original$" fusszeile="$original$">$original$
-&lt;div id="infobox"&gt;&lt;p&gt;&lt;b&gt;Abgelegt:&lt;/b&gt; Du sparst dir eine Reaktion auf.&lt;/p&gt;&lt;/div&gt;</Karte>
+&lt;div id="infobox"&gt;&lt;p&gt;&lt;b&gt;Abgelegt:&lt;/b&gt; Du hast eine Reaktion aufgewendet. Drehe die Karte um 90° für jede weitere Reaktion.&lt;/p&gt;&lt;/div&gt;</Karte>
   <Karte name="Entwaffnen" typ="1" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$">$original$
 &lt;div id="infobox"&gt;&lt;p&gt;&lt;b&gt;Abgelegt:&lt;/b&gt; Du bist entwaffnet.&lt;/p&gt;&lt;/div&gt;</Karte>
   <Karte name="Binden" typ="1" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$">$original$
