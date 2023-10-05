@@ -47,6 +47,9 @@ class Plugin:
             "Alternativ kann damit im Datenbankeditor auch die gesamte Regelbasis auf Karten ausgegeben werden.\n" \
             "Die Karten können dann z.B. im 3x3 Format auf dickes Papier gedruckt und dann ausgeschnitten werden."
 
+    def changesDatabase(self):
+        return True
+
     def createCharakterButtons(self):
         if not Wolke.Settings["Manöverkarten_CharaktereditorButton"]:
            return []
