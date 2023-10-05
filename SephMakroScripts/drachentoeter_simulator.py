@@ -479,7 +479,7 @@ class Klingentanz:
 # Feats (defensive)
 class SK:
     name = "Schildwall"
-    def isUnlocked(fighter): return "Schildkampf I" in fighter.char.vorteile and fighter.kampfstil == "Schildkampf"
+    def isUnlocked(fighter): return "Schildkampf II" in fighter.char.vorteile and fighter.kampfstil == "Schildkampf"
     def trigger_onVTFailing(attacker, defender, attackType, atRoll, vtRoll, maneuvers):
         if "Unberechenbar" in attacker.waffenEigenschaften:
             return
@@ -487,15 +487,10 @@ class SK:
             return
         if not defender.actionUsable(Action.Reaktion):
             return
-
-        sides = 3
-        if "Schildkampf II" in defender.char.vorteile:
-            sides = 6
-
-        if atRoll.result() - vtRoll.result() > sides:
+        if atRoll.result() - vtRoll.result() > 6:
             return
         defender.useAction(Action.Reaktion)
-        bonus = random.randint(1,sides)
+        bonus = random.randint(1,6)
         vtRoll.modify(bonus)
         if logFights: print(defender.name, "verbessert als Reaktion die VT nachträglich um", bonus, "durch",  SK.name)
 
