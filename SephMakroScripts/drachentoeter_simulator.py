@@ -11,15 +11,13 @@ from PySide6 import QtWidgets
 # Besonderheiten:
 # - Betäubt durch Wundschmerz beendet den Kampf
 # - AT gelingen nur wenn sie HÖHER als die VT sind (also keine Sonderbehandlungen bei Gleichstand)
-# - Bei gleicher INI wechseln der Start-Kämpfer sich ab in jedem neuen Kampf
 # - Für den VT Wert wird immer der hächste Werte aus Haupthand, Nebenhand und Ausweichen genommen
 # - Fernkampf wird nicht unterstützt
-# - Aktionen: es wird IMMER die Aktion Angriff durchgeführt und immer ohne volle Offensive.
-# - Kampfstile: alle außer Reiterkampf werden unterstützt (ohne Stufe IV). KVKIII, SKII und BKII sind (abseits passiver Bonusse) nicht implementiert, da nicht relevant in Duellen.
+# - Kampfstile: Alle außer Reiterkampf werden unterstützt (ohne Stufe IV). KVKIII, SKIII und BKII sind nicht implementiert, da nicht relevant in Duellen.
 # - Profane Vorteile: Körperbeherrschung
-# - Vorteile: Alles außer Kommandos, Durchatmen, Atemtechnik, Ausfall. Sturmangriff wird nur mit zweihändigen Waffen genutzt und nur wenn kein SNK II. Mit Defensiver/Offensiver Kampfstil werden die entsprechenden Aktionen IMMER genutzt.
-# - Manöver: Alle, außer Halten, Schildspalter, Ausfall (werden automatisch eingesetzt auf basis einer simplen AI)
-# - Waffeneigenschaften: Alles außer Reittier, Stumpf und Zerbrechlich
+# - Vorteile: Alle, außer Kommandos, Durchatmen, Atemtechnik. Sturmangriff wird nur mit zweihändigen Waffen genutzt und nur wenn kein SNK II. Mit Defensiver/Offensiver Kampfstil werden die entsprechenden Aktionen IMMER genutzt.
+# - Manöver: Alle, außer Halten (werden automatisch eingesetzt auf basis einer simplen AI)
+# - Waffeneigenschaften: Alle, außer Reittier, Stumpf und Zerbrechlich
 
 # Global
 vtPassiv = True # falls True wird kein W20 sondern 10 zur VT addiert
