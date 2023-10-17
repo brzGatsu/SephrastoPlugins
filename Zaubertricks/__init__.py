@@ -66,12 +66,13 @@ class Plugin:
                 self.ui.spinFW.setVisible(self.currentFertName != "Zaubertricks")
                 self.ui.spinPW.setVisible(self.currentFertName != "Zaubertricks")
                 self.ui.labelKategorie.setVisible(self.currentFertName != "Zaubertricks")
+                self.ui.line.setVisible(self.currentFertName != "Zaubertricks")
 
                 if self.currentFertName == "Zaubertricks":
                     self.currentlyLoading = True
                     fert = Wolke.DB.übernatürlicheFertigkeiten["Zaubertricks"]
                     self.ui.labelFertigkeit.setText(fert.name)
-                    self.ui.plainText.setPlainText(fert.text)
+                    self.ui.plainText.setText(Hilfsmethoden.fixHtml(fert.text))
                     self.model.clear()
                     self.updateTalents()
                     self.currentlyLoading = False
