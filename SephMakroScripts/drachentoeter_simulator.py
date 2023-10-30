@@ -36,6 +36,8 @@ simulate_all = [] # Hiermit können mehrere Simulaitonen nacheinander durchgefü
                   # Angabe als kommagetrennte Dateinamen ohne Dateiendung, die im Charakter-Ordner liegen,
                   # z. B. ["bhk_s3", "bsk_s3", "kvk_s3", "pwk_s3", "sk_s3", "snk_s3"].
 
+if testManeuvers:
+    logFights = False
 if len(simulate_all) > 0:
     logFighters = False
     logFights = False
@@ -158,76 +160,78 @@ class Passierschlag:
 class Wuchtschlag2:
     name = "Wuchtschlag +2"
     def isUnlocked(fighter): return True
-    def mod(): return -2
+    def mod(fighter): return -2
     def score(attacker, defender, attackType, atMod): return 2
     def trigger_onAT(attacker, defender, attackType, atRoll, maneuvers):
-        atRoll.modify(Wuchtschlag2.mod())
+        atRoll.modify(Wuchtschlag2.mod(attacker))
     def trigger_onATSuccess(attacker, defender, attackType, atRoll, vtRoll, tpRoll, maneuvers):
         tpRoll.modify(2)
 
 class Wuchtschlag4:
     name = "Wuchtschlag +4"
     def isUnlocked(fighter): return True
-    def mod(): return -4
+    def mod(fighter): return -4
     def score(attacker, defender, attackType, atMod): return 4
     def trigger_onAT(attacker, defender, attackType, atRoll, maneuvers):
-        atRoll.modify(Wuchtschlag4.mod())
+        atRoll.modify(Wuchtschlag4.mod(attacker))
     def trigger_onATSuccess(attacker, defender, attackType, atRoll, vtRoll, tpRoll, maneuvers):
         tpRoll.modify(4)
 
 class Wuchtschlag6:
     name = "Wuchtschlag +6"
     def isUnlocked(fighter): return True
-    def mod(): return -6
+    def mod(fighter): return -6
     def score(attacker, defender, attackType, atMod): return 6
     def trigger_onAT(attacker, defender, attackType, atRoll, maneuvers):
-        atRoll.modify(Wuchtschlag6.mod())
+        atRoll.modify(Wuchtschlag6.mod(attacker))
     def trigger_onATSuccess(attacker, defender, attackType, atRoll, vtRoll, tpRoll, maneuvers):
         tpRoll.modify(6)
 
 class Wuchtschlag8:
     name = "Wuchtschlag +8"
     def isUnlocked(fighter): return True
-    def mod(): return -8
+    def mod(fighter): return -8
     def score(attacker, defender, attackType, atMod): return 8   
     def trigger_onAT(attacker, defender, attackType, atRoll, maneuvers):
-        atRoll.modify(Wuchtschlag8.mod())
+        atRoll.modify(Wuchtschlag8.mod(attacker))
     def trigger_onATSuccess(attacker, defender, attackType, atRoll, vtRoll, tpRoll, maneuvers):
         tpRoll.modify(8)
 
 class Hammerschlag:
     name = "Hammerschlag"
     def isUnlocked(fighter): return "Hammerschlag" in fighter.char.vorteile
-    def mod(): return -8
+    def mod(fighter): return -8
     def score(attacker, defender, attackType, atMod): return 10
     def trigger_onAT(attacker, defender, attackType, atRoll, maneuvers):
-        atRoll.modify(Hammerschlag.mod())
+        atRoll.modify(Hammerschlag.mod(attacker))
     def trigger_onATSuccess(attacker, defender, attackType, atRoll, vtRoll, tpRoll, maneuvers):
         tpRoll.multiplier = 2
 
 class Todesstoß:
     name = "Todesstoß"
     def isUnlocked(fighter): return "Todesstoß" in fighter.char.vorteile
-    def mod(): return -8
+    def mod(fighter): return -8
     def score(attacker, defender, attackType, atMod): return 10
     def trigger_onAT(attacker, defender, attackType, atRoll, maneuvers):
-        atRoll.modify(Todesstoß.mod())
+        atRoll.modify(Todesstoß.mod(attacker))
     def trigger_onDealWounds(fighter, wounds, maneuvers):
         return wounds+2
 
 class Schildspalter:
     name = "Schildspalter"
     def isUnlocked(fighter): return True
-    def mod(): return 0
-    def score(attacker, defender, attackType, atMod): return 5 if defender.kampfstil == "Schildkampf" and not defender.isShieldBroken() and attacker.fertigkeit == "Hiebwaffen" else -1
+    def mod(fighter):
+        mod = 2
+        if "Zerstörerisch I"  in fighter.char.vorteile:
+            mod += 4
+        if "Zerstörerisch II"  in fighter.char.vorteile:
+            mod += 4
+        return mod
+    def score(attacker, defender, attackType, atMod): return 5 if useSchildspalter and defender.kampfstil == "Schildkampf" and not defender.isShieldBroken() else -1
     def trigger_onAT(attacker, defender, attackType, atRoll, maneuvers):
-        atRoll.modify(Schildspalter.mod())
-    def trigger_onATFailed(attacker, defender, attackType, atRoll, vtRoll, maneuvers):
-        if attacker.fertigkeit != "Hiebwaffen":
-            return
-        if atRoll.result() <= defender.ausweichen + defender.wundmalus():
-            if logFights: print(">", defender.name, "ist dem Schildspalter mit einer", defender.ausweichen, "ausgewichen")
-            return
+        atRoll.modify(Schildspalter.mod(attacker))
+    def trigger_onATSuccess(attacker, defender, attackType, atRoll, vtRoll, tpRoll, maneuvers):
+        tpRoll.noDamage = True
         tpRoll = attacker.rollTP()
         for feat in maneuvers:
             if feat in [Wuchtschlag2, Wuchtschlag4, Wuchtschlag6, Wuchtschlag8, Hammerschlag]:
@@ -237,43 +241,40 @@ class Schildspalter:
 class Rüstungsbrecher:
     name = "Rüstungsbrecher"
     def isUnlocked(fighter): return "Rüstungsbrechend" in fighter.waffenEigenschaften
-    def mod(): return -4
+    def mod(fighter): return -4
     def score(attacker, defender, attackType, atMod):
         rs = defender.wsStern - defender.ws
         if rs <= 2:
             return -1
         return rs
     def trigger_onAT(attacker, defender, attackType, atRoll, maneuvers):
-        atRoll.modify(Rüstungsbrecher.mod())
+        atRoll.modify(Rüstungsbrecher.mod(attacker))
     def trigger_onATSuccess(attacker, defender, attackType, atRoll, vtRoll, tpRoll, maneuvers):
         tpRoll.isSP = True
 
 class Umreißen:
     name = "Umreißen"
     def isUnlocked(fighter): return True
-    def mod(): return 0
+    def mod(fighter): return 0
     def score(attacker, defender, attackType, atMod):
         if defender.amBoden:
             return -1
         if attackType != NebenhandAngriff or attacker.kampfstil != "Schildkampf":
             return -1
         score = 0
-        if "Unaufhaltsam" in attacker.char.vorteile and attackType != NebenhandAngriff:
-            score += 8
         standfestMod = 4 if "Standfest" in defender.char.vorteile else 0
-        fertMod = 4 if attacker.fertigkeit == "Stangenwaffen" else 0
-        gegenprobeMod = defender.modAttribut("GE") + standfestMod - fertMod
+        gegenprobeMod = defender.modAttribut("GE") + standfestMod
         score += (atMod - gegenprobeMod)
         if score < 0:
             return -1
         return score
     def score_iscombinable(): return False
+    def trigger_onAT(attacker, defender, attackType, atRoll, maneuvers):
+        atRoll.modify(Umreißen.mod(attacker))
     def trigger_onATSuccess(attacker, defender, attackType, atRoll, vtRoll, tpRoll, maneuvers):
         tpRoll.noDamage = True
-        if atRoll.result() <= defender.ausweichen:
-            return
         gegenprobe = D20Roll(defender.modAttribut("GE"))
-        gegenprobe.setAdvantageDisadvantage("Standfest" in defender.char.vorteile, attacker.fertigkeit == "Stangenwaffen")
+        gegenprobe.setAdvantageDisadvantage("Standfest" in defender.char.vorteile, False)
         gegenprobe.roll()
         if gegenprobe.result() >= atRoll.result():
             if logFights: print(">", defender.name, "hat die Umreißen-Gegenprobe geschafft mit einer", gegenprobe.str())
@@ -286,29 +287,22 @@ class Umreißen:
 class Niederwerfen:
     name = "Niederwerfen"
     def isUnlocked(fighter): return "Niederwerfen" in fighter.char.vorteile
-    def mod(): return -4
+    def mod(fighter): return -2
     def score(attacker, defender, attackType, atMod):
         if defender.amBoden:
             return -1 
         score = 2
-        if "Unaufhaltsam" in attacker.char.vorteile and attackType != NebenhandAngriff:
-            score += 8
         standfestMod = 4 if "Standfest" in defender.char.vorteile else 0
-        fertMod = 4 if attacker.fertigkeit == "Hiebwaffen" else 0
-        gegenprobeMod = defender.modAttribut("KK") + standfestMod - fertMod
+        gegenprobeMod = defender.modAttribut("KK") + standfestMod
         score += (atMod - gegenprobeMod)
         if score < 0:
             return -1
         return score
-    def score_ignorebudget(attacker, defender, attackType, atMod):
-        return "Unaufhaltsam" in attacker.char.vorteile and Niederwerfen.score(attacker, defender, attackType, atMod) > 4
     def trigger_onAT(attacker, defender, attackType, atRoll, maneuvers):
-        atRoll.modify(Niederwerfen.mod())
+        atRoll.modify(Niederwerfen.mod(attacker))
     def trigger_onATSuccess(attacker, defender, attackType, atRoll, vtRoll, tpRoll, maneuvers):
-        if atRoll.result() <= defender.ausweichen:
-            return
         gegenprobe = D20Roll(defender.modAttribut("KK"))
-        gegenprobe.setAdvantageDisadvantage("Standfest" in defender.char.vorteile, attacker.fertigkeit == "Hiebwaffen")
+        gegenprobe.setAdvantageDisadvantage("Standfest" in defender.char.vorteile, False)
         gegenprobe.roll()
         if gegenprobe.result() >= atRoll.result():
             if logFights: print(">", defender.name, "hat die Niederwerfen-Gegenprobe geschafft mit einer", gegenprobe.str())
@@ -321,22 +315,20 @@ class Niederwerfen:
 class Ausfall:
     name = "Ausfall"
     def isUnlocked(fighter): return "Ausfall" in fighter.char.vorteile
-    def mod(): return -2
+    def mod(fighter): return -2
     def score(attacker, defender, attackType, atMod):
         if defender.bedrängt:
             return -1
         score = 2
-        fertMod = 4 if attacker.fertigkeit == "Klingenwaffen" else 0
-        gegenprobeMod = defender.modAttribut("MU") - fertMod
+        gegenprobeMod = defender.modAttribut("MU")
         score += (atMod - gegenprobeMod)
         if score < 0:
             return -1
         return score
     def trigger_onAT(attacker, defender, attackType, atRoll, maneuvers):
-        atRoll.modify(Ausfall.mod())
+        atRoll.modify(Ausfall.mod(attacker))
     def trigger_onATSuccess(attacker, defender, attackType, atRoll, vtRoll, tpRoll, maneuvers):
         gegenprobe = D20Roll(defender.modAttribut("MU"))
-        gegenprobe.setAdvantageDisadvantage(False, attacker.fertigkeit == "Klingenwaffen")
         gegenprobe.roll()
         if gegenprobe.result() >= atRoll.result():
             if logFights: print(">", defender.name, "hat die Ausfall-Gegenprobe geschafft mit einer", gegenprobe.str())
@@ -397,8 +389,6 @@ class BHKIII:
         if not ExtraAngriff.isUsable(attacker, defender):
             return
         if logFights: print(attacker.name, "macht einen weiteren Angriff durch", BHKIII.name)
-        if attacker.char.waffen[attacker.waffeIndex].definition != attacker.char.waffen[attacker.nebenhandIndex].definition:
-            attacker.disadvantage.append(Fighter.DurationEndPhaseOneRoll)
         ExtraAngriff.use(attacker, defender)
 
 class PWKII:
@@ -428,14 +418,7 @@ class Unaufhaltsam:
     name = "Unaufhaltsam"
     def isUnlocked(fighter): return "Unaufhaltsam" in fighter.char.vorteile
     def trigger_onAT(attacker, defender, attackType, atRoll, maneuvers):
-        atRoll.modifyCrit(-1)
-    def trigger_onATFailed(attacker, defender, attackType, atRoll, vtRoll, maneuvers):
-        if Niederwerfen in maneuvers:
-            if logFights: print("Der Effekt von Niederwerfen wirkt dennoch durch", Unaufhaltsam.name)
-            Niederwerfen.trigger_onATSuccess(attacker, defender, attackType, atRoll, vtRoll, attacker.rollTP(), maneuvers)
-        if Umreißen in maneuvers:
-            if logFights: print("Der Effekt von Umreißen wirkt dennoch durch", Unaufhaltsam.name)
-            Umreißen.trigger_onATSuccess(attacker, defender, attackType, atRoll, vtRoll, attacker.rollTP(), maneuvers)
+        atRoll.modifyCrit(-2)
 
 class Sturmangriff:
     name = "Sturmangriff"
@@ -479,8 +462,6 @@ class SK:
     name = "Schildwall"
     def isUnlocked(fighter): return "Schildkampf II" in fighter.char.vorteile and fighter.kampfstil == "Schildkampf"
     def trigger_onVTFailing(attacker, defender, attackType, atRoll, vtRoll, maneuvers):
-        if "Unberechenbar" in attacker.waffenEigenschaften:
-            return
         if defender.isShieldBroken():
             return
         if not defender.actionUsable(Action.Reaktion):
@@ -506,8 +487,6 @@ class PWKIII:
     name = "Kreuzblock"
     def isUnlocked(fighter): return "Parierwaffenkampf III" in fighter.char.vorteile and fighter.kampfstil == "Parierwaffenkampf"
     def trigger_onVTFailing(attacker, defender, attackType, atRoll, vtRoll, maneuvers):
-        if "Unberechenbar" in attacker.waffenEigenschaften:
-            return
         if not defender.actionUsable(Action.Reaktion):
             return
         if atRoll.result() - vtRoll.result() > 4:
@@ -584,16 +563,16 @@ def ai_chooseManeuvers(attacker, defender, attackType):
     maneuvers = []
     while len(maneuversAvailable) > 0:
         maneuver = maneuversAvailable.pop()
-        ignoreBudget = maneuver.mod() == 0
+        ignoreBudget = maneuver.mod(attacker) == 0
         if hasattr(maneuver, "score_ignorebudget"):
             ignoreBudget = maneuver.score_ignorebudget(attacker, defender, attackType, atMod)
-        if not ignoreBudget and budget + maneuver.mod() < 0:
+        if not ignoreBudget and budget + maneuver.mod(attacker) < 0:
             continue
         if hasattr(maneuver, "score_iscombinable") and not maneuver.score_iscombinable():
             return [maneuver]
         if maneuver.name.startswith("Wuchtschlag"):
             maneuversAvailable = [m for m in maneuversAvailable if not m.name.startswith("Wuchtschlag")]
-        budget += maneuver.mod()
+        budget += maneuver.mod(attacker)
         maneuvers.append(maneuver)
     return maneuvers
 
@@ -894,6 +873,10 @@ class Fighter:
         self.pruneAdvantageDisadvantage(Fighter.DurationStartNextPhase)
         self.pruneAdvantageDisadvantage(Fighter.DurationStartNextPhaseOneRoll)
 
+        if self.amBoden:
+            if logFights: print(self.name, "steht auf")
+            self.amBoden = False
+
         if not self.isInReach(defender.position):
             for feat in self.feats:
                 if hasattr(feat, "trigger_onMove"):
@@ -914,11 +897,7 @@ class Fighter:
                 if hasattr(feat, "trigger_onMoveIntoReach"):
                     feat.trigger_onMoveIntoReach(self, defender)
 
-        if self.amBoden:
-            if logFights: print(self.name, "steht auf")
-            self.amBoden = False
-            self.useAction(Action.Aktion)
-        elif self.bedrängt or "Defensiver Kampfstil" in self.char.vorteile:
+        if self.bedrängt or "Defensiver Kampfstil" in self.char.vorteile:
             if logFights: print(self.name, "nutzt volle Defensive")
             self.useAction(Action.Aktion)
             self.disadvantageForEnemy.append(Fighter.DurationStartNextPhase)
