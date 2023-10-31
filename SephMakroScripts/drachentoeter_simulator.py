@@ -410,6 +410,7 @@ class Präzision:
         if not atRoll.lastRoll >= 16 or not attacker.actionUsable(Action.Präzision):
             return
         bonus = attacker.char.attribute["GE"].wert
+        bonus = random.randint(1,6) + random.randint(1,6)
         tpRoll.modify(bonus)
         attacker.useAction(Action.Präzision)
         if logFights: print(">", attacker.name, "erhält TP +", bonus, "durch", Präzision.name)        
@@ -419,6 +420,17 @@ class Unaufhaltsam:
     def isUnlocked(fighter): return "Unaufhaltsam" in fighter.char.vorteile
     def trigger_onAT(attacker, defender, attackType, atRoll, maneuvers):
         atRoll.modifyCrit(-2)
+
+class KalteWut:
+    name = "Kalte Wut"
+    def isUnlocked(fighter): return "Kalte Wut" in fighter.char.vorteile
+    def trigger_onFirstIniphase(attacker, defender):
+        if attacker.wundenIgnorieren:
+            return False
+        attacker.wunden += 1
+        attacker.wundenIgnorieren = True
+        attacker.useAction(Action.Bonusaktion)
+        if logFights: print(attacker.name, "nutzt Kalte Wut.")   
 
 class Sturmangriff:
     name = "Sturmangriff"
@@ -538,7 +550,7 @@ class Körperbeherrschung:
 
 
 # Important: Körpebeherrschung needs to be evaluated last, so keep it at the end of the list
-Feats = [SNKII, SNKIII, KVKII, KVKIII, BHKIII, PWKII, Präzision, Unaufhaltsam, Sturmangriff, SK, PWKI, PWKIII, BKIII, Gegenhalten, Klingentanz, Körperbeherrschung]
+Feats = [SNKII, SNKIII, KVKII, KVKIII, BHKIII, PWKII, Präzision, KalteWut, Unaufhaltsam, Sturmangriff, SK, PWKI, PWKIII, BKIII, Gegenhalten, Klingentanz, Körperbeherrschung]
 
 # "AI"
 currentTestManeuver = None
@@ -704,7 +716,6 @@ class Fighter:
         self.vtNebenhand = self.vt
         self.highestRW = self.rw
         self.ausweichen = 0
-        self.lösen = False
         if "Zweihändig" in self.waffenEigenschaften:
             self.nebenhandIndex = self.waffeIndex
         if self.waffeIndex != self.nebenhandIndex:
@@ -751,8 +762,6 @@ class Fighter:
     def reset(self):
         self.wunden = 0
         self.schildWunden = 0
-        if "Kalte Wut" in self.char.vorteile:
-            self.wunden = 1
         self.usedActions = {}
         self.advantage = []
         self.disadvantage = []
@@ -764,6 +773,8 @@ class Fighter:
         self.lösen = False
         self.bedrängt = False
         self.amBoden = False
+        self.wundenIgnorieren = False
+        self.iniphase = 0
 
     def actionUsable(self, action):
         return action not in self.usedActions
@@ -775,7 +786,7 @@ class Fighter:
         return self.wunden < 9
 
     def wundmalus(self):
-        return 0 if "Kalte Wut" in self.char.vorteile else -(max(self.wunden -2, 0))*2
+        return 0 if self.wundenIgnorieren else -(max(self.wunden -2, 0))*2
 
     def shieldmalus(self):
         return -(max(self.schildWunden -2, 0))*2
@@ -867,11 +878,16 @@ class Fighter:
             self.move(position + self.highestRW)
 
     def onIniphase(self, defender):
+        self.iniphase += 1
         self.myTurn = True
         self.lösen = False
         self.usedActions = {}
         self.pruneAdvantageDisadvantage(Fighter.DurationStartNextPhase)
         self.pruneAdvantageDisadvantage(Fighter.DurationStartNextPhaseOneRoll)
+        if self.iniphase == 1:
+            for feat in self.feats:
+                if hasattr(feat, "trigger_onFirstIniphase"):
+                    feat.trigger_onFirstIniphase(self, defender)
 
         if self.amBoden:
             if logFights: print(self.name, "steht auf")
@@ -931,16 +947,17 @@ class Fighter:
     def attack(self, defender, attackType, tpMod = 0):
         maneuvers = ai_chooseManeuvers(self, defender, attackType)
         featsAndManeuvers = self.feats + maneuvers
-
+        unberechenbar = "Unberechenbar" in self.waffenEigenschaften
+        defenderShield = "Schild" in defender.char.waffen[self.nebenhandIndex].eigenschaften
         # trigger_onAT
         atRoll = D20Roll(self.modAT())
         atRoll.modify(attackType.mod(self))
-        atRoll.setAdvantageDisadvantage(self.hasAdvantage() or defender.enemyHasAdvantage(), self.hasDisadvantage() or defender.enemyHasDisadvantage())
+        atRoll.setAdvantageDisadvantage(self.hasAdvantage() or defender.enemyHasAdvantage() or (unberechenbar and defenderShield), self.hasDisadvantage() or defender.enemyHasDisadvantage())
         for feat in featsAndManeuvers:
             if hasattr(feat, "trigger_onAT"):
                 feat.trigger_onAT(self, defender, attackType, atRoll, maneuvers)
         # Feats may give advantage onAT, so set again
-        atRoll.setAdvantageDisadvantage(self.hasAdvantage() or defender.enemyHasAdvantage(), self.hasDisadvantage() or defender.enemyHasDisadvantage())
+        atRoll.setAdvantageDisadvantage(self.hasAdvantage() or defender.enemyHasAdvantage() or (unberechenbar and defenderShield), self.hasDisadvantage() or defender.enemyHasDisadvantage())
         atRoll.roll()
         for duration in [Fighter.DurationStartNextPhaseOneRoll, Fighter.DurationEndPhaseOneRoll, Fighter.DurationEndNextPhaseOneRoll]:
             self.pruneAdvantageDisadvantage(duration)
@@ -957,11 +974,13 @@ class Fighter:
         # evaluate
         if not vtRoll.special == "Körperbeherrschung":
             autoHit = nat20AutoHit and atRoll.isNat20()
+            autoFail = atRoll.isNat1() or unberechenbar and atRoll.lastRoll == 2
+
             if autoHit and atRoll.result() <= vtRoll.result():
                 if logFights: print(self.name + "s", attackType.name, "landet einen automatischen Treffer, allerdings ohne eventuelle Manöver:", ", ".join([s.name for s in maneuvers]) if len(maneuvers) > 0 else "keine")
                 maneuvers = []
                 featsAndManeuvers = self.feats
-            if autoHit or atRoll.result() > vtRoll.result():
+            if not autoFail and (autoHit or atRoll.result() > vtRoll.result()):
                 if logFights: print(self.name + "s", attackType.name, "trifft mit", atRoll.str(), "gegen", vtRoll.str(), "| Manöver:", ", ".join([s.name for s in maneuvers]) if len(maneuvers) > 0 else "keine")
                 
                 # trigger_onATSucess
@@ -995,9 +1014,9 @@ class Fighter:
                     if hasattr(feat, "trigger_onATFailed"):
                         feat.trigger_onATFailed(self, defender, attackType, atRoll, vtRoll, maneuvers)
 
-                if atRoll.isNat1():
+                if autoFail and atRoll.result() <= vtRoll.result():
                     if logFights: print("Patzer für", self.name)
-                    if "Unberechenbar" in self.waffenEigenschaften:
+                    if atRoll.isNat1() and unberechenbar:
                         if logFights: print("> Eigentreffer durch unberechenbare Waffe")
                         self.takeDamage(self.rollTP(), [])
                     if self.isAlive():
