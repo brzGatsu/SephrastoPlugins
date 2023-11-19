@@ -16,6 +16,18 @@ Enthält einen Baukasten mit WdH Spezies, Kulturen und Kämpferprofessionen für
 ### CharakterToText
 Das Plugin sorgt dafür, dass beim beim Speichern des Charakters zusätzlich eine Textdatei im gleichen Ordner angelegt wird. Diese Textdatei enthält alle Charakterwerte in leicht zu kopierendem Format. Ich nutze es beispielsweise, um ein digitales Charaktersheet in Form von Trello-Karten zu befüllen.
 
+### FoundryVTT
+Wenn das Plugin aktiv ist, wird beim Speichern des Helden neben der `<name>.xml` automatisch eine zweite Datei `<name>_foundryvtt.json` erstellt, die in Foundry als Held importiert werden kann. Die Foundry Helden können nicht zurück in Sephrasto importiert werden. Die `.xml`-Datei also nicht löschen!
+
+Es werden nur die für FoundryVTT relevanten Informationen in der `.json`-Datei gespeichert und auch hier gibt es noch einige Einschränkungen. Folgendes wird NICHT übertragen:
+
+- Geld
+- Zustände: Wunden, Furcht, Boni/Mali etc.
+- Status von Waffen/Rüstungen (in/aktiv, haupthand/nebenhand, kampfstil)
+- Einstellungen für Sephrasto (Welcher Bogen, Zonensystem, Regelanhänge usw..)
+- Hausregeln (Eigene Vorteile, Talente usw. könnten aber funktionieren)
+- Waffeneigenschaften
+
 ### Hexalogien
 Ein Ilaris-Elementarmagier hat nur wenig Motivation weitere Varianten von Hexalogie-Zaubern zu erlernen, der Mehrwert ist zu gering für die Kosten. Ich biete euch hier ein Sephrasto-Plugin, das die EP-Kosten von Talenten aus elementaren Hexalogien halbiert. Der volle EP-Preis muss nur für das teuerste erlernte Talent aus der Hexalogie bezahlt werden. Diese Umsetzung basiert auf der DSA4-Regel, die Hexalogiezauber eine Spalte günstiger steigern lässt, solange man eine Variante auf höherem TaW besitzt.
 Die Zauber sind über die Datenbankeinstellung "Hexalogien Plugin: Talente" konfigurierbar. Standardmäßig beinhaltet sind alle bestätigten Hexalogien gemäß https://de.wiki-aventurica.de/wiki/Hexalogie (nicht die vermuteten), zusätzlich noch die Herbeirufung und Macht des <Elements> Zauber. Prinzipiell können auch andere Zauber eingetragen werden, die bspw. keine Elementarzauber sind. Beispielsweise der Reptilea und der Arachnea.
