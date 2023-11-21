@@ -431,13 +431,10 @@ bis die Bindung gelöst wird oder alle Pfeile ihr Ziel gefunden haben
 
     def datenbankVerifyHook(self, errors, params):
         db = params["datenbank"]
-        isCharakterEditor = params["isCharakterEditor"]
         for karte in db.karten.values():
             try:
                 Hilfsmethoden.VerifyVorArray(karte.voraussetzungen, db)
             except VoraussetzungException as e:
-                if isCharakterEditor:
-                    karte.voraussetzungen = []
                 errorStr = f"{karte.displayName} {karte.name} hat fehlerhafte Voraussetzungen: {str(e)}"
                 errors.append([karte, errorStr])
         return errors
