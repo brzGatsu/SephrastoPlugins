@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from PySide6 import QtWidgets, QtCore, QtGui
-import lxml.etree as etree
 from EventBus import EventBus
 from Core.DatenbankEinstellung import DatenbankEinstellung
 from Core.Ruestung import Ruestung, RuestungDefinition
@@ -18,8 +17,6 @@ class Plugin:
 
         # Rüstungseigenschaften
         EventBus.addFilter("datenbank_editor_typen", self.datenbankEditorTypenHook)
-        EventBus.addFilter("datenbank_xml_laden", self.datenbankXmlLadenHook)
-        EventBus.addFilter("datenbank_xml_schreiben", self.datenbankXmlSchreibenHook)
         EventBus.addAction("charakter_aktualisieren_fertigkeiten", self.charakterAktualisierenHandler)
 
         # Regelanhang
@@ -78,35 +75,6 @@ class Plugin:
         editor = RSDatenbankEditRuestungseigenschaftWrapper.RSDatenbankEditRuestungseigenschaftWrapper
         typen[typ] = DatenbankEditor.DatenbankTypWrapper(typ, editor, True)
         return typen
-
-    def datenbankXmlLadenHook(self, root, params):
-        if params["basisdatenbank"]:
-            return root
-
-        eigenschaftNodes = root.findall('Rüstungseigenschaft')
-        for eigenschaft in eigenschaftNodes:
-            R = Ruestungseigenschaft.Ruestungseigenschaft()
-            R.name = eigenschaft.get('name')
-            R.text = eigenschaft.text or ''
-            R.script = eigenschaft.get('script')
-            if 'scriptOnlyFirst' in eigenschaft.attrib:
-                R.scriptOnlyFirst = eigenschaft.attrib['scriptOnlyFirst'] == "1"
-                                            
-            self.db.loadElement(R, params["basisdatenbank"], params["conflictCallback"])
-
-        return root
-
-    def datenbankXmlSchreibenHook(self, root, params):
-        for eigenschaft in self.db.ruestungseigenschaften.values():
-            if not params["merge"] and not self.db.isChangedOrNew(eigenschaft): continue
-            w = etree.SubElement(root, 'Rüstungseigenschaft')
-            w.set('name', eigenschaft.name)
-            w.set('scriptOnlyFirst', "1" if eigenschaft.scriptOnlyFirst else "0")
-            w.text = eigenschaft.text
-            if eigenschaft.script:
-                w.set('script', eigenschaft.script)
-
-        return root
 
     @staticmethod
     def getRuestungseigenschaft(eigStr, datenbank):

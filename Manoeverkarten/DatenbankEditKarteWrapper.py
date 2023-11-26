@@ -6,7 +6,7 @@ from Core.Regel import Regel
 from Core.Talent import TalentDefinition
 from Core.Vorteil import VorteilDefinition
 from Core.Waffeneigenschaft import Waffeneigenschaft
-from Hilfsmethoden import Hilfsmethoden, VoraussetzungException
+from Hilfsmethoden import Hilfsmethoden
 from Manoeverkarten.Manoeverkarte import KartenTyp, Karte, KartenUtility
 from DatenbankElementEditorBase import DatenbankElementEditorBase, BeschreibungEditor, VoraussetzungenEditor
 from PySide6.QtWebEngineWidgets import QWebEngineView

@@ -6,7 +6,7 @@ import PdfSerializer
 import os
 import re
 import math
-from Hilfsmethoden import Hilfsmethoden, WaffeneigenschaftException, VoraussetzungException
+from Hilfsmethoden import Hilfsmethoden, WaffeneigenschaftException
 from CharakterPrintUtility import CharakterPrintUtility
 from Core.DatenbankEinstellung import DatenbankEinstellung
 from Core.Vorteil import VorteilLinkKategorie
@@ -18,13 +18,13 @@ from EinstellungenWrapper import EinstellungenWrapper
 from QtUtils.ProgressDialogExt import ProgressDialogExt
 from HilfeWrapper import HilfeWrapper
 from QtUtils.SimpleSettingsDialog import SimpleSettingsDialog
+from VoraussetzungenListe import VoraussetzungenListe, VoraussetzungException
+from Serialization import Serialization
 
 class Plugin:
     def __init__(self):
         EventBus.addAction("basisdatenbank_geladen", self.basisDatenbankGeladenHook)
         EventBus.addFilter("datenbank_editor_typen", self.datenbankEditorTypenHook)
-        EventBus.addFilter("datenbank_xml_laden", self.datenbankXmlLadenHook)
-        EventBus.addFilter("datenbank_xml_schreiben", self.datenbankXmlSchreibenHook)
         EventBus.addFilter("datenbank_verify", self.datenbankVerifyHook)
         EventBus.addAction("dbe_menuitems_erstellen", self.menusErstellen)
         EventBus.addAction("charakter_instanziiert", self.charakterInstanziiertKategorienHandler)
@@ -378,62 +378,27 @@ bis die Bindung gelöst wird oder alle Pfeile ihr Ziel gefunden haben
         e.strip = False
         self.db.loadElement(e)
 
+        self.db.karten = {}     
+        self.db.insertTable(Karte, self.db.karten)
+
+        deserializer = Serialization.getDeserializer(".xml")
+        dbFilePath = os.path.join(os.path.dirname(os.path.abspath(__file__)), "Data", "datenbank.xml")
+        deserializer.readFile(dbFilePath)
+        for name in deserializer.next():
+            if name == "Karte":
+                k = Karte()
+                k.deserialize(deserializer)
+                self.db.loadElement(k, True, None)
+
     def datenbankEditorTypenHook(self, typen, params):
         typen[Karte] = DatenbankEditor.DatenbankTypWrapper(Karte, DatenbankEditKarteWrapper.DatenbankEditKarteWrapper, True)
         return typen
-
-    def datenbankXmlLadenHook(self, root, params):
-        sephrastoDb = params["datenbank"]
-        kartenRoot = root
-        if params["basisdatenbank"]:
-            sephrastoDb.karten = {}     
-            sephrastoDb.insertTable(Karte, sephrastoDb.karten)
-            dbFilePath = os.path.join(os.path.dirname(os.path.abspath(__file__)), "Data", "datenbank.xml")
-            kartenRoot = etree.parse(dbFilePath).getroot()
-
-        kartenNodes = kartenRoot.findall('Karte')
-        for karte in kartenNodes:
-            K = Karte()
-            K.name = karte.get('name')
-            K.typ = int(karte.get('typ'))
-            K.subtyp = karte.get('subtyp')
-            if K.typ != KartenTyp.Benutzerdefiniert:
-                K.subtyp = int(K.subtyp)
-            if K.typ == KartenTyp.Deck:
-                K.farbe = karte.get('farbe')
-            K.titel = karte.get('titel')
-            K.subtitel = karte.get('subtitel')
-            K.fusszeile = karte.get('fusszeile')
-            K.löschen = karte.get('löschen') == "1"
-            if karte.get('voraussetzungen'):
-                K.voraussetzungen = Hilfsmethoden.VorStr2Array(karte.get('voraussetzungen'))
-            K.text = karte.text or ''
-            sephrastoDb.loadElement(K, params["basisdatenbank"], params["conflictCallback"])
-
-        return root
-
-    def datenbankXmlSchreibenHook(self, root, params):
-        for karte in self.db.karten.values():
-            if not params["merge"] and not self.db.isChangedOrNew(karte): continue
-            k = etree.SubElement(root, 'Karte')
-            k.set('name', karte.name)
-            k.set('typ', str(karte.typ))
-            k.set('subtyp', str(karte.subtyp))
-            if karte.typ == KartenTyp.Deck:
-                k.set('farbe', karte.farbe)
-            k.set('titel', karte.titel)
-            k.set('subtitel', karte.subtitel)
-            k.set('fusszeile', karte.fusszeile)
-            k.set('löschen', "1" if karte.löschen else "0")
-            k.set('voraussetzungen',Hilfsmethoden.VorArray2Str(karte.voraussetzungen))
-            k.text = karte.text
-        return root
 
     def datenbankVerifyHook(self, errors, params):
         db = params["datenbank"]
         for karte in db.karten.values():
             try:
-                Hilfsmethoden.VerifyVorArray(karte.voraussetzungen, db)
+                VoraussetzungenListe().compile(karte.voraussetzungen.text, db)
             except VoraussetzungException as e:
                 errorStr = f"{karte.displayName} {karte.name} hat fehlerhafte Voraussetzungen: {str(e)}"
                 errors.append([karte, errorStr])

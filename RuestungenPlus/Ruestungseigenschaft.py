@@ -2,6 +2,7 @@
 
 class Ruestungseigenschaft():
     displayName = "Rüstungseigenschaft"
+    serializationName = "Rüstungseigenschaft"
 
     def __init__(self):
         # Serialized properties
@@ -27,3 +28,16 @@ class Ruestungseigenschaft():
         if self.script:
             return f"{self.text}\nScript: {self.script}"
         return self.text
+
+    def serialize(self, ser):
+        ser.set('name', self.name)
+        ser.set('text', self.text)
+        if self.script:
+            ser.set('script', self.script)
+            ser.set('scriptOnlyFirst', self.scriptOnlyFirst)
+
+    def deserialize(self, ser):
+        self.name = ser.get('name')
+        self.text = ser.get('text')
+        self.script = ser.get('script', self.script)
+        self.scriptOnlyFirst = ser.getBool('scriptOnlyFirst', self.scriptOnlyFirst)

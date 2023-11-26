@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from VoraussetzungenListe import VoraussetzungenListe
+
 class KartenTyp:
    Invalid = -1
    Vorteil = 0
@@ -77,6 +79,7 @@ class KartenUtility:
 
 class Karte:
     displayName = "Manöverkarte"
+    serializationName = "Karte"
 
     def __init__(self):
         # Serialized properties
@@ -88,7 +91,7 @@ class Karte:
         self.text = "$original$"
         self.fusszeile = "$original$"
         self.löschen = False
-        self.voraussetzungen = []
+        self.voraussetzungen = VoraussetzungenListe()
         self.customData = {}
         self.isUserAdded = True
 
@@ -137,3 +140,30 @@ class Karte:
     def getOriginalElement(self, db):
         return KartenUtility.getOriginalElement(db, self.name, self.typ)
 
+    def serialize(self, ser):
+        ser.set('name', self.name)
+        ser.set('text', self.text)
+        ser.set('voraussetzungen', self.voraussetzungen.text)
+        ser.set('typ', self.typ)
+        ser.set('subtyp', self.subtyp)
+        if self.typ == KartenTyp.Deck:
+            ser.set('farbe', self.farbe)
+        ser.set('titel', self.titel)
+        ser.set('subtitel', self.subtitel)
+        ser.set('fusszeile', self.fusszeile)
+        ser.set('löschen', self.löschen)
+
+    def deserialize(self, ser):
+        self.name = ser.get('name')
+        self.text = ser.get('text')
+        self.voraussetzungen.compile(ser.get('voraussetzungen', ''))
+        self.typ = ser.getInt('typ')
+        self.subtyp = ser.get('subtyp')
+        if self.typ != KartenTyp.Benutzerdefiniert:
+            self.subtyp = int(self.subtyp)
+        if self.typ == KartenTyp.Deck:
+            self.farbe = ser.get('farbe')
+        self.titel = ser.get('titel')
+        self.subtitel = ser.get('subtitel')
+        self.fusszeile = ser.get('fusszeile')
+        self.löschen = ser.getBool('löschen', False)
