@@ -677,7 +677,7 @@ class Fighter:
     def __init__(self, charPath, index, startPositionX, waffeIndex, nebenhandIndex, ausweichenIndex, mods):
         self.index = index
         self.char = Char()
-        self.char.xmlLesen(charPath)
+        self.char.loadFile(charPath)
         self.char.aktualisieren()
         self.name = self.char.name or os.path.splitext(os.path.basename(charPath))[0]
         self.mods = mods
