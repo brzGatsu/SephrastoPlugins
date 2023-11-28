@@ -90,12 +90,8 @@ def waffe_item(w):
 
 class Plugin:
     def __init__(self):
-        self.sephrasto_version = 10000 * _sephrasto_version_major \
-            + 100 * _sephrasto_version_minor + _sephrasto_version_build
-        if self.sephrasto_version > 30201:
-            EventBus.addFilter("charakter_xml_schreiben", self.json_schreiben)
-        else:
-            EventBus.addAction("pdf_geschrieben", self.json_schreiben_alt)
+        EventBus.addFilter("charakter_schreiben", self.json_schreiben)
+        EventBus.addAction("basisdatenbank_geladen", self.basisDatenbankGeladenHandler)
 
     def json_schreiben_alt(self, params):
         params["filepath"] = params["filename"]
@@ -107,6 +103,9 @@ class Plugin:
         return "Dieses Plugin speichert die Charakterwerte beim PDF-Export \
             zusätzlich als JSON-Datei ab.Wenn das Ilaris-System für FoundryVTT \
             aktiv ist können Charaktere so direkt als Actors importiert werden."
+
+    def basisDatenbankGeladenHandler(self, params):
+        self.db = params["datenbank"]
 
     def get_token(self):
         token = {
@@ -176,7 +175,7 @@ class Plugin:
             item = create_item(v.name, "vorteil") # TODO: v.anzeigenameExt enthält mit dem Kommentar wichtige Infos, die in .name fehlen
             item["data"] = {
                 # "voraussetzung": ", ".join(vorteil.voraussetzungen),
-                "voraussetzung": v.voraussetzungen,
+                "voraussetzung": v.voraussetzungen.anzeigetext(self.db),
                 "gruppe": Wolke.DB.einstellungen["Vorteile: Typen"].wert[v.typ], # "Kampfvorteile" etc.
                 "text": Hilfsmethoden.fixHtml(v.text)
             }
@@ -235,7 +234,7 @@ class Plugin:
                 "attribut_2": uef.attribute[2],
                 "gruppe": Wolke.DB.einstellungen["Fertigkeiten: Typen übernatürlich"].wert[uef.typ], # "Traditionszauber" etc.
                 "text": Hilfsmethoden.fixHtml(uef.text),
-                "voraussetzung": uef.voraussetzungen,
+                "voraussetzung": uef.voraussetzungen.anzeigetext(self.db),
             }
             items.append(item)
         # -- Zauber -- #
@@ -321,11 +320,14 @@ class Plugin:
 
         return item
 
-    def json_schreiben(self, val, params):
-        """Funktion wird als Filter in charakter_xml_schreiben (speichern)
-        angewendet. `val` wird unverändert zurückgegeben wärend aus params['charakter']
+    def json_schreiben(self, serializer, params):
+        """Funktion wird als Filter in charakter_schreiben (speichern)
+        angewendet. `serializer` wird unverändert zurückgegeben wärend aus params['charakter']
         die json file für foundry generiert und gespeichert wird.
         """
+        if params["filepath"] == "memory":
+            return serializer
+
         self.char = params['charakter']
         self.actor = {}
         if not self.char.name:
@@ -460,4 +462,4 @@ class Plugin:
         path = os.path.splitext(params["filepath"])[0] + "_foundryvtt.json"
         with open(path, 'w', encoding="utf-8") as f:
             json.dump(actor, f, indent=2)
-        return val
+        return serializer

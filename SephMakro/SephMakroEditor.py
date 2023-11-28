@@ -105,7 +105,7 @@ class SephMakroEditor(object):
         self.formMain.closeEvent = self.closeEvent
 
     def onDbChange(self):
-        Wolke.DB.xmlLaden(hausregeln = self.ui.comboDB.currentText(), isCharakterEditor = True)
+        Wolke.DB.loadFile(hausregeln = self.ui.comboDB.currentText(), isCharakterEditor = True)
 
     def updateWindowTitle(self):
         if self.savePath == "":

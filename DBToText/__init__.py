@@ -8,7 +8,6 @@ import math
 from Hilfsmethoden import Hilfsmethoden, WaffeneigenschaftException
 from CharakterPrintUtility import CharakterPrintUtility
 from Core.Fertigkeit import KampffertigkeitTyp
-import lxml.etree as etree
 
 class Plugin:
     def __init__(self):

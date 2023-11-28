@@ -1,7 +1,6 @@
 from PySide6 import QtWidgets, QtCore, QtGui
 import shutil
 import os
-import lxml.etree as etree
 from EventBus import EventBus
 from Wolke import Wolke
 from EinstellungenWrapper import EinstellungenWrapper

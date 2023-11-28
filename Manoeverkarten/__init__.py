@@ -10,7 +10,6 @@ from Hilfsmethoden import Hilfsmethoden, WaffeneigenschaftException
 from CharakterPrintUtility import CharakterPrintUtility
 from Core.DatenbankEinstellung import DatenbankEinstellung
 from Core.Vorteil import VorteilLinkKategorie
-import lxml.etree as etree
 from Manoeverkarten import DatenbankEditKarteWrapper, KartenExportDialogWrapper, KartenGenerator
 from Manoeverkarten.Manoeverkarte import KartenTyp, Karte
 import DatenbankEditor
@@ -28,8 +27,8 @@ class Plugin:
         EventBus.addFilter("datenbank_verify", self.datenbankVerifyHook)
         EventBus.addAction("dbe_menuitems_erstellen", self.menusErstellen)
         EventBus.addAction("charakter_instanziiert", self.charakterInstanziiertKategorienHandler)
-        EventBus.addFilter("charakter_xml_laden", self.charakterXmlLadenKategorienHook)
-        EventBus.addFilter("charakter_xml_schreiben", self.charakterXmlSchreibenKategorienHook)
+        EventBus.addFilter("charakter_laden", self.charakterLadenKategorienHook)
+        EventBus.addFilter("charakter_schreiben", self.charakterSchreibenKategorienHook)
 
         self.db = None
         EinstellungenWrapper.addSettings({"Manöverkarten_PDF-Open" : True,
@@ -384,7 +383,7 @@ bis die Bindung gelöst wird oder alle Pfeile ihr Ziel gefunden haben
         deserializer = Serialization.getDeserializer(".xml")
         dbFilePath = os.path.join(os.path.dirname(os.path.abspath(__file__)), "Data", "datenbank.xml")
         deserializer.readFile(dbFilePath)
-        for name in deserializer.next():
+        for name in deserializer.listTags():
             if name == "Karte":
                 k = Karte()
                 k.deserialize(deserializer)
@@ -408,21 +407,22 @@ bis die Bindung gelöst wird oder alle Pfeile ihr Ziel gefunden haben
         char = params["charakter"]
         char.deaktivierteKartenKategorien = []
 
-    def charakterXmlLadenKategorienHook(self, root, params):
-        einstellungen = root.find('Einstellungen')
+    def charakterLadenKategorienHook(self, deserializer, params):
         char = params["charakter"]
-        if einstellungen is not None:
-            if einstellungen.find('DeaktivierteKartenKategorien') is not None and einstellungen.find('DeaktivierteKartenKategorien').text:
-                char.deaktivierteKartenKategorien = list(map(str.strip, einstellungen.find('DeaktivierteKartenKategorien').text.split(",")))
-        return root
+        if deserializer.find('Einstellungen'):
+            deaktivierteKategorien = deserializer.getNested('DeaktivierteKartenKategorien')
+            if deaktivierteKategorien:
+                char.deaktivierteKartenKategorien = list(map(str.strip, deaktivierteKategorien.split(",")))      
+            deserializer.end() #einstellungen
 
-    def charakterXmlSchreibenKategorienHook(self, root, params):
+        return deserializer
+
+    def charakterSchreibenKategorienHook(self, serializer, params):
         char = params["charakter"]
-        einstellungen = root.find('Einstellungen')
-        if einstellungen is None:
-            return root
-        etree.SubElement(einstellungen, 'DeaktivierteKartenKategorien').text = str(",".join(char.deaktivierteKartenKategorien))
-        return root
+        if serializer.find('Einstellungen'):
+            serializer.setNested('DeaktivierteKartenKategorien', ",".join(char.deaktivierteKartenKategorien))
+            serializer.end() #einstellungen
+        return serializer
 
     def writeDatenbankKarten(self):
         if self.db is None:

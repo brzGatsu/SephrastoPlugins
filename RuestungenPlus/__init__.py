@@ -28,8 +28,8 @@ class Plugin:
         EventBus.addFilter("class_ausruestung_wrapper", self.provideAusruestungWrapperHook)
         EventBus.addFilter("class_inventar_wrapper", self.provideInventarWrapperHook)
         EventBus.addAction("charakter_instanziiert", self.charakterInstanziiertHandler)
-        EventBus.addAction("charakter_xml_geladen", self.charakterXmlGeladenHook)
-        EventBus.addFilter("charakter_xml_schreiben", self.charakterXmlSchreibenHook, 100)
+        EventBus.addAction("charakter_geladen", self.charakterGeladenHook)
+        EventBus.addFilter("charakter_schreiben", self.charakterSchreibenHook, 100)
 
     @staticmethod
     def getDescription():
@@ -295,63 +295,84 @@ class Plugin:
         char.teilrüstungen2 = []
         char.teilrüstungen3 = []
 
-    def charakterXmlGeladenHook(self, params):
+    def charakterGeladenHook(self, params):
         if not self.db.einstellungen["RüstungenPlus Plugin: Aktivieren"].wert:
             return
 
-        root = params["xmlRoot"]
-        objekte = root.find('Objekte')
-        if objekte is None:
-            return
+        deserializer = params["deserializer"]
+        char = params["charakter"]
+        teilrüstungen = [char.teilrüstungen1, char.teilrüstungen2, char.teilrüstungen3]
+
+        if deserializer.find('Objekte'):
+            for i in range(3):
+                if deserializer.find('Teilrüstungen'+str(i+1)):
+                    for tag in deserializer.listTags():
+                        name = deserializer.get('name')
+                        definition = None
+                        if name in Wolke.DB.rüstungen:
+                            definition = copy.deepcopy(Wolke.DB.rüstungen[name])
+                        else:
+                            definition = RuestungDefinition()
+                            definition.name = name
+                        rüst = Ruestung(definition)
+                        rüst.be = deserializer.getInt('be')
+                        rüst.rs = Hilfsmethoden.RsStr2Array(deserializer.get('rs'))
+                        typ = deserializer.getInt('typ')
+                        if typ:
+                            rüst.typ = typ
+
+                        if Wolke.DB.einstellungen["RüstungenPlus Plugin: Rüstungseigenschaften"].wert:
+                            eigenschaften = deserializer.get('text')
+                            if eigenschaften:
+                                definition.text = eigenschaften
+                            RSCharakterRuestungWrapper.applyEigenschaften(rüst)
+                        teilrüstungen[i].append(rüst)
+                    deserializer.end() #teilrüstungen
+
+            if Wolke.DB.einstellungen["RüstungenPlus Plugin: Rüstungseigenschaften"].wert:
+                if deserializer.find('Rüstungen'):
+                    count = 0
+                    for tag in deserializer.listTags():
+                        eigenschaften = deserializer.get('text')
+                        if eigenschaften:
+                            char.rüstung[count].definition.text = eigenschaften
+                        count += 1
+                    deserializer.end() #rüstungen
+
+                for rüst in char.rüstung:
+                    RSCharakterRuestungWrapper.applyEigenschaften(rüst)
+
+            deserializer.end() #objekte
+
+    def charakterSchreibenHook(self, serializer, params):
+        if not self.db.einstellungen["RüstungenPlus Plugin: Aktivieren"].wert:
+            return serializer
 
         char = params["charakter"]
         teilrüstungen = [char.teilrüstungen1, char.teilrüstungen2, char.teilrüstungen3]
 
-        for i in range(3):
-            for rüs in objekte.findall('Teilrüstungen'+str(i+1)+'/Rüstung'):
-                name = rüs.attrib['name']
-                definition = None
-                if name in Wolke.DB.rüstungen:
-                    definition = Wolke.DB.rüstungen[name]
-                else:
-                    definition = RuestungDefinition()
-                    definition.name = name
-                rüst = Ruestung(definition)
-                rüst.be = int(rüs.attrib['be'])
-                rüst.rs = Hilfsmethoden.RsStr2Array(rüs.attrib['rs'])
-                if 'typ' in rüs.attrib:
-                    rüst.typ = int(rüs.attrib['typ'])
-                RSCharakterRuestungWrapper.applyEigenschaften(rüst)
-                teilrüstungen[i].append(rüst)
+        if serializer.find('Objekte'):
+            for i in range(3):
+                serializer.beginList('Teilrüstungen'+str(i+1))
+                for rüst in teilrüstungen[i]:
+                    serializer.begin('Rüstung')
+                    serializer.set('name',rüst.name)
+                    serializer.set('be', rüst.be)
+                    serializer.set('rs', Hilfsmethoden.RsArray2Str(rüst.rs))
+                    serializer.set('typ', rüst.typ)
+                    if Wolke.DB.einstellungen["RüstungenPlus Plugin: Rüstungseigenschaften"].wert:
+                        serializer.set('text', ", ".join(rüst.eigenschaften))
+                    serializer.end() #rüstung
+                serializer.end() #teilrüstungen
 
-        for rüst in char.rüstung:
-            RSCharakterRuestungWrapper.applyEigenschaften(rüst)
+            if Wolke.DB.einstellungen["RüstungenPlus Plugin: Rüstungseigenschaften"].wert:
+                if serializer.find('Rüstungen'):
+                    count = 0
+                    for tag in serializer.listTags():
+                        serializer.set('text', ", ".join(char.rüstung[count].eigenschaften))
+                        count += 1
+                    serializer.end() #rüstungen
 
-    def charakterXmlSchreibenHook(self, root, params):
-        if not self.db.einstellungen["RüstungenPlus Plugin: Aktivieren"].wert:
-            return root
+            serializer.end() #objekte
 
-        objekte = root.find('Objekte')
-        if objekte is None:
-            return root
-
-        char = params["charakter"]
-        teilrüstungen = [char.teilrüstungen1, char.teilrüstungen2, char.teilrüstungen3]
-
-        for i in range(3):
-            rüs = etree.SubElement(objekte,'Teilrüstungen'+str(i+1))
-            for rüst in teilrüstungen[i]:
-                rüsNode = etree.SubElement(rüs,'Rüstung')
-                rüsNode.set('name',rüst.name)
-                rüsNode.set('be',str(rüst.be))
-                rüsNode.set('rs',Hilfsmethoden.RsArray2Str(rüst.rs))
-                rüsNode.set('typ',str(rüst.typ))
-                if Wolke.DB.einstellungen["RüstungenPlus Plugin: Rüstungseigenschaften"].wert:
-                    rüsNode.text = ", ".join(rüst.eigenschaften)
-
-        if Wolke.DB.einstellungen["RüstungenPlus Plugin: Rüstungseigenschaften"].wert:
-            count = 0
-            for rüs in objekte.findall('Rüstungen/Rüstung'):
-                rüs.text = ", ".join(char.rüstung[count].eigenschaften)
-                count += 1
-        return root
+        return serializer

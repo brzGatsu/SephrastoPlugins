@@ -1,5 +1,4 @@
 from PySide6 import QtWidgets, QtCore, QtGui
-import lxml.etree as etree
 from EventBus import EventBus
 from Wolke import Wolke
 from Core.DatenbankEinstellung import DatenbankEinstellung
@@ -13,8 +12,8 @@ class Plugin:
         EventBus.addAction("charakter_instanziiert", self.charakterInstanziiertHandler)
         EventBus.addFilter("class_inventar_wrapper", self.provideInventarWrapperHook)
         EventBus.addFilter("pdf_export", self.pdfExportHook)
-        EventBus.addFilter("charakter_xml_laden", self.charakterXmlLadenHook, 100)
-        EventBus.addFilter("charakter_xml_schreiben", self.charakterXmlSchreibenHook, 100)
+        EventBus.addFilter("charakter_laden", self.charakterLadenHook, 100)
+        EventBus.addFilter("charakter_schreiben", self.charakterSchreibenHook, 100)
 
     @staticmethod
     def getDescription():
@@ -117,39 +116,34 @@ class Plugin:
         return fields
 
     
-    def charakterXmlLadenHook(self, root, params):
+    def charakterLadenHook(self, deserializer, params):
+        if not self.db.einstellungen["Tragkraft Plugin: Aktivieren"].wert:
+            return deserializer
+
+        char = params["charakter"]
+        if deserializer.find('Objekte'):
+            if deserializer.find('Ausrüstung'):
+                for tag in deserializer.listTags():
+                    char.ausrüstungPlatzbedarf.append(deserializer.getInt('platzbedarf', 0))
+                deserializer.end() #ausrüstung
+            deserializer.end() #objekte
+        return deserializer
+
+    def charakterSchreibenHook(self, serializer, params):
         if not self.db.einstellungen["Tragkraft Plugin: Aktivieren"].wert:
             return root
 
-        objekte = root.find('Objekte')
-        if objekte is None:
-            return root
-
         char = params["charakter"]
-
-        for aus in objekte.findall('Ausrüstung/Ausrüstungsstück'):
-            if aus.get('platzbedarf'):
-                char.ausrüstungPlatzbedarf.append(int(aus.get('platzbedarf')))
-            else:
-                char.ausrüstungPlatzbedarf.append(0)
-
-        return root
-
-    def charakterXmlSchreibenHook(self, root, params):
-        if not self.db.einstellungen["Tragkraft Plugin: Aktivieren"].wert:
-            return root
-
-        objekte = root.find('Objekte')
-        if objekte is None:
-            return root
-
-        char = params["charakter"]
-        index = 0
-        for aus in objekte.findall('Ausrüstung/Ausrüstungsstück'):
-            if index < len(char.ausrüstungPlatzbedarf):
-                aus.set('platzbedarf', str(char.ausrüstungPlatzbedarf[index]))
-            index += 1
-        return root
+        if serializer.find('Objekte'):
+            if serializer.find('Ausrüstung'):
+                index = 0
+                for tag in serializer.listTags():
+                    if index < len(char.ausrüstungPlatzbedarf):
+                        serializer.set('platzbedarf', char.ausrüstungPlatzbedarf[index])
+                    index += 1
+                serializer.end() #ausrüstung
+            serializer.end() #objekte
+        return serializer
 
     def provideInventarWrapperHook(self, base, params):
         if not self.db.einstellungen["Tragkraft Plugin: Aktivieren"].wert:
