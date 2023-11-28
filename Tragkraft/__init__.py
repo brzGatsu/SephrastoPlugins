@@ -131,7 +131,7 @@ class Plugin:
 
     def charakterSchreibenHook(self, serializer, params):
         if not self.db.einstellungen["Tragkraft Plugin: Aktivieren"].wert:
-            return root
+            return serializer
 
         char = params["charakter"]
         if serializer.find('Objekte'):
