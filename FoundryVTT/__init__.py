@@ -107,9 +107,9 @@ class Plugin:
     def basisDatenbankGeladenHandler(self, params):
         self.db = params["datenbank"]
 
-    def get_token(self):
+    def get_token(self, name):
         token = {
-            "name": self.char.name,
+            "name": name,
             "img": "systems/Ilaris/assets/images/token/kreaturentypen/humanoid.png",
             "displayName": 20,
             "actorLink": False,
@@ -330,8 +330,10 @@ class Plugin:
 
         self.char = params['charakter']
         self.actor = {}
-        if not self.char.name:
-            self.char.name = "Der Namenlose"
+
+        name = self.char.name
+        if not name:
+            name = os.path.splitext(os.path.basename(params["filepath"]))[0]
 
         # direct keys
         attribute = {attr: {
@@ -381,11 +383,11 @@ class Plugin:
         actor = {
             # TODO: include base encoded character image?
             # "_id": random_foundry_id(),
-            "name": self.char.name,
+            "name": name,
             "type": "held",
             "img": "systems/Ilaris/assets/images/token/kreaturentypen/humanoid.png",
             "data": data,
-            "token": self.get_token(),
+            "token": self.get_token(name),
             "items": self.get_items(),
             "effects": []
         }
@@ -462,4 +464,6 @@ class Plugin:
         path = os.path.splitext(params["filepath"])[0] + "_foundryvtt.json"
         with open(path, 'w', encoding="utf-8") as f:
             json.dump(actor, f, indent=2)
+
+        self.char = None
         return serializer
