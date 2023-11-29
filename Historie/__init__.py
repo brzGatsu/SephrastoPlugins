@@ -12,9 +12,10 @@ from CharakterEditor import Tab
 from copy import deepcopy
 
 class Plugin:
-    def __init__(self):
 
+    def __init__(self):
         EventBus.addAction("charaktereditor_oeffnet", self.charakterEditorOeffnet)
+        EventBus.addAction("charakter_instanziiert", self.charakterInstanziiertHandler)
         EventBus.addAction("charakter_geladen", self.charakterGeladen)
         EventBus.addFilter("charakter_schreiben", self.charakterSchreibenHook)
         # Einstellungen mit defaults registrieren
@@ -52,6 +53,12 @@ class Plugin:
         # https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes
         dlg.addSetting("Historie_Datumsformat", "Datumsformat.", dateformatField)
         dlg.show()
+
+    def charakterInstanziiertHandler(self, params):
+        # if not self.db.einstellungen["Historie Plugin: Aktivieren"].wert:
+        #     return
+        char = params["charakter"]
+        char.historie = []
 
     def charakterEditorOeffnet(self, params):
         self.historieTab = HistorieTabWrapper()
@@ -103,5 +110,6 @@ class Plugin:
         diff['datum'] = dt.datetime.now()
         diff['epGesamt'] = neu.epGesamt - alt.epGesamt
         diff['epAusgegeben'] = neu.epAusgegeben - alt.epAusgegeben
-        neu.
+        neu.historie.append(diff)
+        self.alterCharakter = deepcopy(neu)
         return serializer
