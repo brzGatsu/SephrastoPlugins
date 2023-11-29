@@ -16,6 +16,9 @@ Enthält einen Baukasten mit WdH Spezies, Kulturen und Kämpferprofessionen für
 ### CharakterToText
 Das Plugin sorgt dafür, dass beim beim Speichern des Charakters zusätzlich eine Textdatei im gleichen Ordner angelegt wird. Diese Textdatei enthält alle Charakterwerte in leicht zu kopierendem Format. Ich nutze es beispielsweise, um ein digitales Charaktersheet in Form von Trello-Karten zu befüllen.
 
+### FertigkeitenPlus
+Dieses Plugin bietet bei Fertigkeiten die Möglichkeit, ein viertes Attribut anzugeben. Berechnungen für den Basiswert verwenden dann nur die 3 höchsten Attribute (siehe angepasste Einstellung "Fertigkeiten: BW Script").
+
 ### FoundryVTT
 Wenn das Plugin aktiv ist, wird beim Speichern des Helden neben der `<name>.xml` automatisch eine zweite Datei `<name>_foundryvtt.json` erstellt, die in Foundry als Held importiert werden kann. Die Foundry Helden können nicht zurück in Sephrasto importiert werden. Die `.xml`-Datei also nicht löschen!
 
