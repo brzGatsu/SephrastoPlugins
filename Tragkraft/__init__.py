@@ -12,8 +12,8 @@ class Plugin:
         EventBus.addAction("charakter_instanziiert", self.charakterInstanziiertHandler)
         EventBus.addFilter("class_inventar_wrapper", self.provideInventarWrapperHook)
         EventBus.addFilter("pdf_export", self.pdfExportHook)
-        EventBus.addFilter("charakter_laden", self.charakterLadenHook, 100)
-        EventBus.addFilter("charakter_schreiben", self.charakterSchreibenHook, 100)
+        EventBus.addAction("charakter_deserialisiert", self.charakterDeserialisiertHandler, 100)
+        EventBus.addAction("charakter_serialisiert", self.charakterSerialisiertHandler, 100)
 
     @staticmethod
     def getDescription():
@@ -116,24 +116,25 @@ class Plugin:
         return fields
 
     
-    def charakterLadenHook(self, deserializer, params):
+    def charakterDeserialisiertHandler(self, params):
         if not self.db.einstellungen["Tragkraft Plugin: Aktivieren"].wert:
-            return deserializer
+            return
 
         char = params["charakter"]
+        deserializer = params["deserializer"]
         if deserializer.find('Objekte'):
             if deserializer.find('Ausrüstung'):
                 for tag in deserializer.listTags():
                     char.ausrüstungPlatzbedarf.append(deserializer.getInt('platzbedarf', 0))
                 deserializer.end() #ausrüstung
             deserializer.end() #objekte
-        return deserializer
 
-    def charakterSchreibenHook(self, serializer, params):
+    def charakterSerialisiertHandler(self, params):
         if not self.db.einstellungen["Tragkraft Plugin: Aktivieren"].wert:
-            return serializer
+            return
 
         char = params["charakter"]
+        serializer = params["serializer"]
         if serializer.find('Objekte'):
             if serializer.find('Ausrüstung'):
                 index = 0
@@ -143,7 +144,6 @@ class Plugin:
                     index += 1
                 serializer.end() #ausrüstung
             serializer.end() #objekte
-        return serializer
 
     def provideInventarWrapperHook(self, base, params):
         if not self.db.einstellungen["Tragkraft Plugin: Aktivieren"].wert:

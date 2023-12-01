@@ -90,7 +90,7 @@ def waffe_item(w):
 
 class Plugin:
     def __init__(self):
-        EventBus.addFilter("charakter_schreiben", self.json_schreiben)
+        EventBus.addAction("charakter_geschrieben", self.json_schreiben)
         EventBus.addAction("basisdatenbank_geladen", self.basisDatenbankGeladenHandler)
 
     def json_schreiben_alt(self, params):
@@ -320,14 +320,10 @@ class Plugin:
 
         return item
 
-    def json_schreiben(self, serializer, params):
-        """Funktion wird als Filter in charakter_schreiben (speichern)
-        angewendet. `serializer` wird unverändert zurückgegeben wärend aus params['charakter']
-        die json file für foundry generiert und gespeichert wird.
+    def json_schreiben(self, params):
+        """Funktion wird als Action in Charakter.saveFile (speichern)
+        angewendet. Aus params['charakter'] wird die json file für foundry generiert und gespeichert.
         """
-        if params["filepath"] == "memory":
-            return serializer
-
         self.char = params['charakter']
         self.actor = {}
 
@@ -466,4 +462,3 @@ class Plugin:
             json.dump(actor, f, indent=2)
 
         self.char = None
-        return serializer

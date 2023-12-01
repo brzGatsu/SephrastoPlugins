@@ -28,8 +28,8 @@ class Plugin:
         EventBus.addFilter("class_ausruestung_wrapper", self.provideAusruestungWrapperHook)
         EventBus.addFilter("class_inventar_wrapper", self.provideInventarWrapperHook)
         EventBus.addAction("charakter_instanziiert", self.charakterInstanziiertHandler)
-        EventBus.addAction("charakter_geladen", self.charakterGeladenHook)
-        EventBus.addFilter("charakter_schreiben", self.charakterSchreibenHook, 100)
+        EventBus.addAction("charakter_deserialisiert", self.charakterDeserialisiertHandler)
+        EventBus.addAction("charakter_serialisiert", self.charakterSerialisiertHandler, 100)
 
     @staticmethod
     def getDescription():
@@ -295,7 +295,7 @@ class Plugin:
         char.teilrüstungen2 = []
         char.teilrüstungen3 = []
 
-    def charakterGeladenHook(self, params):
+    def charakterDeserialisiertHandler(self, params):
         if not self.db.einstellungen["RüstungenPlus Plugin: Aktivieren"].wert:
             return
 
@@ -344,10 +344,11 @@ class Plugin:
 
             deserializer.end() #objekte
 
-    def charakterSchreibenHook(self, serializer, params):
+    def charakterSerialisiertHandler(self, params):
         if not self.db.einstellungen["RüstungenPlus Plugin: Aktivieren"].wert:
-            return serializer
+            return
 
+        serializer = params["serializer"]
         char = params["charakter"]
         teilrüstungen = [char.teilrüstungen1, char.teilrüstungen2, char.teilrüstungen3]
 
@@ -374,5 +375,3 @@ class Plugin:
                     serializer.end() #rüstungen
 
             serializer.end() #objekte
-
-        return serializer
