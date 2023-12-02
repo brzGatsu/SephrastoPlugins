@@ -10,6 +10,12 @@ from CheatsheetGenerator import CheatsheetGenerator
 from Core.DatenbankEinstellung import DatenbankEinstellung
 from Core.Waffeneigenschaft import Waffeneigenschaft
 from Hilfsmethoden import Hilfsmethoden
+from Core.Waffe import WaffeDefinition, Waffe
+
+# Add dynamic properties to WaffeDefinition and Waffe that work exactly like the implementation of "wm"
+# The only difference is that WaffeDefinition returns wm if wmVt was never set.
+WaffeDefinition.wmVt = property(lambda self: self._wmVt if hasattr(self, "_wmVt") else self.wm).setter(lambda self, v: setattr(self, "_wmVt", v))
+Waffe.wmVt = property(lambda self: self._wmVtOverride if hasattr(self, "_wmVtOverride") else self.definition.wmVt).setter(lambda self, v: setattr(self, "_wmVtOverride", v))
 
 class Plugin:
     def __init__(self):
@@ -17,7 +23,12 @@ class Plugin:
         EventBus.addFilter("class_waffen_wrapper", self.provideWaffenWrapperHook)
         EventBus.addFilter("class_waffenpicker_wrapper", self.provideWaffenPickerWrapperHook)
         EventBus.addFilter("pdf_export", self.pdfExportWaffenHook)
-    
+        EventBus.addFilter("dbe_class_waffedefinition_wrapper", self.dbeClassWaffeFilter)
+        EventBus.addAction("waffedefinition_serialisiert", self.waffedefinitionSerialisiertHandler)
+        EventBus.addAction("waffedefinition_deserialisiert", self.waffedefinitionDeserialisiertHandler)
+        EventBus.addAction("waffe_serialisiert", self.waffeSerialisiertHandler)
+        EventBus.addAction("waffe_deserialisiert", self.waffeDeserialisiertHandler)
+
     @staticmethod
     def getDescription():
         return "Dieses Plugin schafft einige Anpassungsmöglichkeiten für Waffen:\n\n" +\
@@ -26,16 +37,18 @@ class Plugin:
             "- In den Hausregeln können bestimmte Waffeneigenschaften via 'WaffenPlus Plugin: Waffeneigenschaften Gruppieren' in der PDF separat gruppiert werden.\n" +\
             "Diese Features können in den Hausregeln über diverse 'WaffenPlus Plugin' Einstellungen deaktiviert werden."
 
+    def changesCharacter(self):
+        return self.db.einstellungen["WaffenPlus Plugin: Separater VT-WM"].wert
+
     def changesDatabase(self):
-        return False
+        return self.db.einstellungen["WaffenPlus Plugin: Separater VT-WM"].wert
 
     def basisDatenbankGeladenHandler(self, params):
         self.db = params["datenbank"]
 
         e = DatenbankEinstellung()
         e.name = "WaffenPlus Plugin: Separater VT-WM"
-        e.beschreibung = "Zeigt im Waffen-Tab ein VT-WM Feld an. Waffen in der Datenbank kann die Eigenschaft Unhandlich(X) gegeben werden, wobei X von der VT abgezogen wird; Beispiel: ein WM von 2 und Unhandlich (3) bedeutet einen Gesamt-WM von 2/-1." +\
-        "Falls die Option deaktiviert wird, sollte auch die Waffeneigenschaft Unhandlich gelöscht werden."
+        e.beschreibung = "Zeigt im Waffen-Tab und im Datenbank-Waffeneditor ein VT-WM Feld an. Achtung: Wenn du diese Option deaktivierst, verlieren alle Waffen den VT-WM Wert, den du eventuell bereits angegeben hast."
         e.text = "True"
         e.typ = "Bool"
         self.db.loadElement(e)
@@ -55,12 +68,45 @@ class Plugin:
         e.typ = "TextList"
         self.db.loadElement(e)
 
-        w = Waffeneigenschaft()
-        w.name = "Unhandlich"
-        w.text = "Diese Waffeneigenschaft sollte nur im Datenbankeditor verwendet werden. Im Charaktereditor wird sie durch das VT-WM Feld ersetzt."
-        w.script = "modifyWaffeVT(-int(getEigenschaftParam(1)))"
-        self.db.loadElement(w)
+        e = self.db.einstellungen["Waffen: Waffenwerte Script"]
+        e.text = """waffe = getWaffe()
+kampfstil = getKampfstil()
+be = max(getBEBySlot(waffe.beSlot) + kampfstil.be, 0)
+at = getPW() + kampfstil.at + waffe.wm - be
+vt = getPW() + kampfstil.vt + waffe.wmVt - be
+sb = getSB() if waffe.fertigkeit not in ["Schusswaffen"] else 0
+plus = waffe.plus + kampfstil.plus + sb
+rw = getWaffe().rw + getKampfstil().rw
+setWaffenwerte(at, vt, plus, rw)"""
     
+    def waffedefinitionSerialisiertHandler(self, params):
+        if not self.db.einstellungen["WaffenPlus Plugin: Separater VT-WM"].wert:
+            return
+        ser = params["serializer"]
+        waffe = params["object"]
+        ser.set("wmVt", waffe.wmVt)
+
+    def waffedefinitionDeserialisiertHandler(self, params):
+        ser = params["deserializer"]
+        waffe = params["object"]
+        waffe.wmVt = ser.getInt("wmVt", waffe.wm)
+
+    def waffeSerialisiertHandler(self, params):
+        if not self.db.einstellungen["WaffenPlus Plugin: Separater VT-WM"].wert:
+            return
+        ser = params["serializer"]
+        waffe = params["object"]
+        ser.set("wmVt", waffe.wmVt)
+
+    def waffeDeserialisiertHandler(self, params):
+        ser = params["deserializer"]
+        waffe = params["object"]
+        waffe.wmVt = ser.getInt("wmVt", waffe.wm)
+
+    ############################
+    # Charaktereditor
+    ############################
+
     def provideWaffenWrapperHook(self, base, params):
         if not self.db.einstellungen["WaffenPlus Plugin: Separater VT-WM"].wert:
             return base
@@ -88,48 +134,22 @@ class Plugin:
                     self.spinWM2Layout.append(layout)
 
                     self.form.setTabOrder(self.spinWM[i], spin)
-                    self.form.setTabOrder(spin, self.spinLZ[i])                  
-                    
-            def getWEParam(self, str):
-                match = re.search("\(\s*([+-]?\d*)\s*\)", str)
-                if match:
-                    return int(match.groups()[0])
-                return 0
+                    self.form.setTabOrder(spin, self.spinLZ[i])
 
             def loadWeaponIntoFields(self, W, index):
-                W = copy.deepcopy(W)
-                vtWM = W.wm
-                for we in W.eigenschaften:
-                    if we.startswith("Unhandlich"):
-                        vtWM -= self.getWEParam(we)
-                        W.eigenschaften.remove(we)
-                        break
-                isEmpty = W.name == ""
-
-                vtVerboten = Wolke.DB.einstellungen["Waffen: Talente VT verboten"].wert
-                self.spinWM2[index].setEnabled(not isEmpty and not (W.name in vtVerboten or W.talent in vtVerboten))
-                self.spinWM2[index].setValue(vtWM)
                 super().loadWeaponIntoFields(W, index)
-                atVerboten = Wolke.DB.einstellungen["Waffen: Talente AT verboten"].wert
-                enable = not isEmpty and not (W.name in atVerboten or W.talent in atVerboten)
-                self.spinWM[index].setEnabled(enable)
+                isEmpty = W.name == ""
+                vtVerboten = W.isVTVerboten(Wolke.DB)
+                self.spinWM2[index].setEnabled(not isEmpty and not vtVerboten)
+                if vtVerboten:
+                    self.spinWM2[index].setValue(0)
+                else:
+                    self.spinWM2[index].setValue(W.wmVt)
 
             def createWaffe(self, index):
                 W = super().createWaffe(index)
-                if W.nahkampf and self.spinWM2[index].value() != W.wm:
-                    W.eigenschaften.append("Unhandlich (" + str(W.wm - self.spinWM2[index].value()) + ")")
+                W.wmVt = self.spinWM2[index].value()
                 return W
-
-            def refreshDerivedWeaponValues(self, W, index):
-                unhandlich = None
-                for i in range(len(W.eigenschaften)):
-                    if W.eigenschaften[i].startswith("Unhandlich"):
-                        unhandlich = W.eigenschaften[i]
-                        del W.eigenschaften[i]
-                        break
-                super().refreshDerivedWeaponValues(W, index)
-                if unhandlich:
-                    W.eigenschaften.insert(i, unhandlich)
 
             def diffWaffeDefinition(self, waffe):
                 diff = []
@@ -142,13 +162,7 @@ class Plugin:
                     härteDiff = 0
 
                 atWMDiff = waffe.wm - waffe.definition.wm
-                def getUnhandlichParam(weapon):
-                    for we in weapon.eigenschaften:
-                        if we.startswith("Unhandlich"):
-                            return self.getWEParam(we)
-                    return 0
-                vtWMDiff = getUnhandlichParam(waffe.definition) - getUnhandlichParam(waffe) + atWMDiff
-
+                vtWMDiff = waffe.wmVt - waffe.definition.wmVt
                 rwDiff = waffe.rw - waffe.definition.rw
                 lzDiff = 0
                 if waffe.fernkampf:
@@ -159,8 +173,8 @@ class Plugin:
                         return s[:-len(suffix)]
                     return s
 
-                w1Eig = [rchop(eig, "(*)").strip() for eig in waffe.eigenschaften if not eig.startswith("Unhandlich")]
-                w2Eig = [rchop(eig, "(*)").strip() for eig in waffe.definition.eigenschaften if not eig.startswith("Unhandlich")]
+                w1Eig = [rchop(eig, "(*)").strip() for eig in waffe.eigenschaften]
+                w2Eig = [rchop(eig, "(*)").strip() for eig in waffe.definition.eigenschaften]
                 eigPlusDiff = list(set(w1Eig) - set(w2Eig))
                 eigMinusDiff = list(set(w2Eig) - set(w1Eig))
 
@@ -176,13 +190,11 @@ class Plugin:
                     diff.append("RW " + ("+" if rwDiff >= 0 else "") + str(rwDiff))
                 if atWMDiff != 0 or vtWMDiff != 0:
                     diff.append("WM ")
-                    atVerboten = Wolke.DB.einstellungen["Waffen: Talente AT verboten"].wert
-                    if waffe.name in atVerboten or waffe.talent in atVerboten:
+                    if waffe.isATVerboten(Wolke.DB):
                         diff[-1] += "-"
                     else:
                         diff[-1] += ("+" if atWMDiff >= 0 else "") + str(atWMDiff)
-                    vtVerboten = Wolke.DB.einstellungen["Waffen: Talente VT verboten"].wert
-                    if waffe.name in vtVerboten or waffe.talent in vtVerboten:
+                    if waffe.isVTVerboten(Wolke.DB):
                         diff[-1] += "/-"
                     else:
                         diff[-1] += "/" + ("+" if vtWMDiff >= 0 else "") + str(vtWMDiff)
@@ -209,32 +221,76 @@ class Plugin:
                 super().__init__(W)
 
             def updateInfo(self):
+                self.ui.labelWM_Text.setText("Waffenmodifikator AT/VT")
                 super().updateInfo()
                 if self.current == "":
                     return
                 W = Wolke.DB.waffen[self.current]
-                eigenschaftenNew = []
-                vtWM = W.wm
-                for we in W.eigenschaften:
-                    name = re.sub(r"\((.*?)\)", "", we, re.UNICODE).strip() # remove parameters
-                    if name == "Unhandlich":
-                        match = re.search("\(\s*([+-]?\d*)\s*\)", we)
-                        if match:
-                            vtWM -= int(match.groups()[0])
-                    else:
-                        eigenschaftenNew.append(we)
-                if len(eigenschaftenNew) > 0:
-                    self.ui.labelEigenschaften.setText("Eigenschaften: " + ", ".join(eigenschaftenNew))
-                else:
-                    self.ui.labelEigenschaften.setText("Eigenschaften: keine")
-                if W.nahkampf:
-                    self.ui.labelWM_Text.setText("Waffenmodifikator AT/VT")
-                    self.ui.labelWM.setText(("+" if W.wm > 0 else "") + str(W.wm) + "/" + ("+" if vtWM > 0 else "") + str(vtWM))
-                else:
-                    self.ui.labelWM_Text.setText("Waffenmodifikator")
-                    self.ui.labelWM.setText(("+" if W.wm > 0 else "") + str(W.wm))
+                wmAT = ("+" if W.wm > 0 else "") + str(W.wm)
+                wmVT = ("+" if W.wmVt > 0 else "") + str(W.wmVt)
+
+                if W.isATVerboten(Wolke.DB):
+                    wmAT = "-"
+                if W.isVTVerboten(Wolke.DB):
+                    wmVT = "-"
+
+                self.ui.labelWM.setText(f"{wmAT}/{wmVT}")
 
         return IAWaffenPicker
+
+    ############################
+    # Datenbankeditor
+    ############################
+
+    def dbeClassWaffeFilter(self, editorType, params):
+        if not self.db.einstellungen["WaffenPlus Plugin: Separater VT-WM"].wert:
+            return editorType
+
+        class DatenbankEditWaffeWrapperPlus(editorType):
+            def __init__(self, datenbank, fertigkeit=None, readonly=False):
+                super().__init__(datenbank, fertigkeit, readonly)
+
+            def onSetupUi(self):
+                super().onSetupUi()
+                self.ui.labelWMSeparator = QtWidgets.QLabel()
+                self.ui.labelWMSeparator.setText("/")
+                self.ui.spinWMVT = QtWidgets.QSpinBox()
+                self.ui.spinWMVT.setMinimumSize(QtCore.QSize(50, 0))
+                self.ui.spinWMVT.setAlignment(QtCore.Qt.AlignCenter)
+                self.ui.spinWMVT.setButtonSymbols(QtWidgets.QAbstractSpinBox.PlusMinus)
+                self.ui.spinWMVT.setMinimum(-99)
+                self.ui.spinWMVT.setMaximum(99)
+                self.ui.horizontalLayout_3.addWidget(self.ui.labelWMSeparator)
+                self.ui.horizontalLayout_3.addWidget(self.ui.spinWMVT)
+                self.ui.comboTalent.currentTextChanged.connect(self.updateVTWM)
+
+            def load(self, waffe):
+                self.ui.spinWMVT.setValue(waffe.wmVt)
+                super().load(waffe)
+
+            def update(self, waffe):
+                super().update(waffe)
+                if not waffe.isVTVerboten(self.datenbank):
+                    waffe.wmVt = int(self.ui.spinWMVT.value())
+
+            def nameChanged(self):
+                super().nameChanged()
+                self.updateVTWM()
+
+            def updateVTWM(self):
+                name = self.ui.leName.text()
+                talent = self.ui.comboTalent.currentText()
+                vtVerboten = talent in self.datenbank.einstellungen["Waffen: Talente VT verboten"].wert or \
+                    name in self.datenbank.einstellungen["Waffen: Talente VT verboten"].wert
+                self.ui.spinWMVT.setVisible(not vtVerboten)
+                self.ui.labelWMSeparator.setVisible(not vtVerboten)
+                self.ui.labelWM.setText("WM AT" if vtVerboten else "WM AT/VT")
+
+        return DatenbankEditWaffeWrapperPlus
+
+    ############################
+    # PDF Export
+    ############################
 
     def pdfExportWaffenHook(self, fields, params):
         waffen = copy.deepcopy(Wolke.Char.waffen) #{ name, text, würfel, würfelseiten, plus, eigenschaften[], härte, fertigkeit, talent, kampfstile[], kampfstil, rw, wm, lz}[]>
@@ -260,7 +316,7 @@ class Plugin:
 
         waffeIndex = 0
         for waffe in waffen:
-            if waffeIndex+1 > len(waffeToKey):
+            if waffeIndex+1 > len(waffeToKey) or not waffe.name:
                 continue
         
             vtKey = waffeToKey[waffeIndex] + "VTm"
@@ -270,23 +326,19 @@ class Plugin:
             wmKey = waffeToKey[waffeIndex] + "WM"
             tpmKey = waffeToKey[waffeIndex] + "TPm"
 
-            #Unhandlich
+            #VT WM
             if self.db.einstellungen["WaffenPlus Plugin: Separater VT-WM"].wert:
-                atVerboten = waffe.talent in Wolke.DB.einstellungen["Waffen: Talente AT verboten"].wert or waffe.name in Wolke.DB.einstellungen["Waffen: Talente AT verboten"].wert
-                vtVerboten = waffe.talent in Wolke.DB.einstellungen["Waffen: Talente VT verboten"].wert or waffe.name in Wolke.DB.einstellungen["Waffen: Talente VT verboten"].wert
-
-                unhandlich = getEigenschaft(waffe, "Unhandlich")
-                if not vtVerboten and fields[wmKey] and unhandlich:
-                    match = re.search("\(\s*([+-]?\d*)\s*\)", unhandlich)
-                    if match:
-                        val = int(match.groups()[0])
-                        if atVerboten:
-                            fields[wmKey] = str(int(fields[wmKey]) - val)
-                        else:
-                            fields[wmKey] = fields[wmKey] + "/" + str(int(fields[wmKey]) - val)
-                        removeEigenschaft(waffeIndex, unhandlich)
-                elif waffe.name and waffe.nahkampf and not atVerboten and not vtVerboten:
-                    fields[wmKey] += "/" + fields[wmKey]
+                #fernkampfwaffen haben schon die LZ hier eingetragen...
+                wmAT = ("+" if waffe.wm > 0 else "") + str(waffe.wm)
+                wmVT = ("+" if waffe.wmVt > 0 else "") + str(waffe.wmVt)
+                if waffe.isATVerboten(Wolke.DB):
+                    wmAT = "-"
+                if waffe.isVTVerboten(Wolke.DB):
+                    wmVT = "-"
+                if waffe.nahkampf:
+                    fields[wmKey] = f"{wmAT} / {wmVT}"
+                else:
+                    fields[wmKey] = f"{wmAT} / LZ {waffe.lz}"
 
             #Optionale Eigenschaften
             if self.db.einstellungen["WaffenPlus Plugin: Optionale Waffeneigenschaften"].wert:
