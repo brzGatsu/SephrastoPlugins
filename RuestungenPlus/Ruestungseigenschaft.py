@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-class Ruestungseigenschaft():
+class Ruestungseigenschaft:
     displayName = "Rüstungseigenschaft"
     serializationName = "Rüstungseigenschaft"
 

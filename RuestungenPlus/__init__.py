@@ -10,6 +10,19 @@ import DatenbankEditor
 from RuestungenPlus import RSDatenbankEditRuestungseigenschaftWrapper, Ruestungseigenschaft
 import copy
 import re
+from Core.Ruestung import Ruestung
+
+# Add dynamic properties to Ruestung
+def ruestungGetEigenschaften(self):
+    if not hasattr(self, "_eigenschaften"):
+        self._eigenschaften = []
+        if self.definition.text:
+            self._eigenschaften = list(map(str.strip, self.definition.text.split(",")))
+    return self._eigenschaften
+
+Ruestung.eigenschaften = property(ruestungGetEigenschaften).setter(lambda self, v: setattr(self, "_eigenschaften", v))
+Ruestung.typ = property(lambda self: self._typ if hasattr(self, "_typ") else -1).setter(lambda self, v: setattr(self, "_typ", v))
+Ruestung.zrsMod = property(lambda self: self._zrsMod if hasattr(self, "_zrsMod") else 0).setter(lambda self, v: setattr(self, "_zrsMod", v))
 
 class Plugin:
     def __init__(self):
@@ -30,6 +43,8 @@ class Plugin:
         EventBus.addAction("charakter_instanziiert", self.charakterInstanziiertHandler)
         EventBus.addAction("charakter_deserialisiert", self.charakterDeserialisiertHandler)
         EventBus.addAction("charakter_serialisiert", self.charakterSerialisiertHandler, 100)
+        EventBus.addAction("ruestung_deserialisiert", self.rüstungDeserialisiertHandler)
+        EventBus.addAction("ruestung_serialisiert", self.rüstungSerialisiertHandler)
 
     @staticmethod
     def getDescription():
@@ -66,15 +81,72 @@ class Plugin:
         self.db.ruestungseigenschaften = {}       
         self.db.insertTable(Ruestungseigenschaft.Ruestungseigenschaft, self.db.ruestungseigenschaften)
 
-    # -----------------------
-    # Rüstungseigenschaften
-    # -----------------------
+    def charakterInstanziiertHandler(self, params):
+        if not self.db.einstellungen["RüstungenPlus Plugin: Aktivieren"].wert:
+            return
+        char = params["charakter"]
+        char.teilrüstungen1 = []
+        char.teilrüstungen2 = []
+        char.teilrüstungen3 = []
 
-    def datenbankEditorTypenHook(self, typen, params):
-        typ = Ruestungseigenschaft.Ruestungseigenschaft
-        editor = RSDatenbankEditRuestungseigenschaftWrapper.RSDatenbankEditRuestungseigenschaftWrapper
-        typen[typ] = DatenbankEditor.DatenbankTypWrapper(typ, editor, True)
-        return typen
+    def rüstungSerialisiertHandler(self, params):
+        if not Wolke.DB.einstellungen["RüstungenPlus Plugin: Rüstungseigenschaften"].wert:
+            return
+        ser = params["serializer"]
+        rüstung = params["object"]
+        if rüstung.typ != -1:
+            ser.set('typ', rüstung.typ)
+        ser.set('text', ", ".join(rüstung.eigenschaften))
+
+    def rüstungDeserialisiertHandler(self, params):
+        if not Wolke.DB.einstellungen["RüstungenPlus Plugin: Rüstungseigenschaften"].wert:
+            return
+        ser = params["deserializer"]
+        rüstung = params["object"]
+        rüstung._typ = ser.getInt('typ', -1)
+        eigenschaften = ser.get('text')
+        if eigenschaften is not None:
+            if eigenschaften:
+                rüstung._eigenschaften = list(map(str.strip, eigenschaften.split(",")))
+            else:
+                rüstung._eigenschaften = []
+
+    def charakterDeserialisiertHandler(self, params):
+        if not self.db.einstellungen["RüstungenPlus Plugin: Aktivieren"].wert:
+            return
+
+        deserializer = params["deserializer"]
+        char = params["charakter"]
+        teilrüstungen = [char.teilrüstungen1, char.teilrüstungen2, char.teilrüstungen3]
+
+        if deserializer.find('Objekte'):
+            for i in range(3):
+                if deserializer.find('Teilrüstungen'+str(i+1)):
+                    for tag in deserializer.listTags():
+                        rüstung = Ruestung.__new__(Ruestung)
+                        if not rüstung.deserialize(deserializer, Wolke.DB.rüstungen, char):
+                            continue
+                        teilrüstungen[i].append(rüstung)
+                    deserializer.end() #teilrüstungen
+            deserializer.end() #objekte
+
+    def charakterSerialisiertHandler(self, params):
+        if not self.db.einstellungen["RüstungenPlus Plugin: Aktivieren"].wert:
+            return
+
+        serializer = params["serializer"]
+        char = params["charakter"]
+        teilrüstungen = [char.teilrüstungen1, char.teilrüstungen2, char.teilrüstungen3]
+
+        if serializer.find('Objekte'):
+            for i in range(3):
+                serializer.beginList('Teilrüstungen'+str(i+1))
+                for rüstung in teilrüstungen[i]:
+                    serializer.begin('Rüstung')
+                    rüstung.serialize(serializer)
+                    serializer.end() #rüstung
+                serializer.end() #teilrüstungen
+            serializer.end() #objekte
 
     @staticmethod
     def getRuestungseigenschaft(eigStr, datenbank):
@@ -117,8 +189,6 @@ class Plugin:
         for i in range(len(char.rüstung)):
             self.currentRuestung = char.rüstung[i]
             self.currentRuestung.zrsMod = 0
-            if not hasattr(self.currentRuestung, "eigenschaften"):
-                RSCharakterRuestungWrapper.applyEigenschaften(self.currentRuestung)
             for eig in self.currentRuestung.eigenschaften:
                 self.currentEigenschaft = eig
                 try:
@@ -131,9 +201,88 @@ class Plugin:
                     continue
                 ruestungsEigenschaft.executeScript(api)
 
-    # -----------------------
-    # Regelanhang
-    # -----------------------
+    ############################
+    # Charaktereditor
+    ############################
+
+    def provideRuestungPickerWrapperHook(self, base, params):
+        if not self.db.einstellungen["RüstungenPlus Plugin: Aktivieren"].wert:
+            return base
+
+        class RSRuestungPicker(base):
+            def __init__(self, ruestung, system, filterType):
+                self.ruestungErsetzen = True
+                self.filterType = filterType
+                super().__init__(ruestung, system)
+
+            def populateTree(self):
+                super().populateTree()
+                root = self.ui.treeArmors.invisibleRootItem()
+                for idx in range(root.childCount()):
+                    name = root.child(idx).text(0)
+                    if root.child(idx).text(0) != self.filterType:
+                        root.child(idx).setHidden(True)
+
+        return RSRuestungPicker
+
+    def provideAusruestungWrapperHook(self, base, params):
+        if not self.db.einstellungen["RüstungenPlus Plugin: Aktivieren"].wert:
+            return base
+
+        class RSCharakterEquipmentWrapper(base):
+            def __init__(self):
+                super().__init__()
+
+                if hasattr(self, "inventarWrapper"):
+                    idx = self.ui.tabs.indexOf(self.inventarWrapper.form)
+                    self.ui.tabs.setTabText(idx, "Inventar")
+
+                self.ruestungWrapper = []
+                for i in range(3):
+                    wrapper = RSCharakterRuestungWrapper(i)
+                    wrapper.modified.connect(self.onModified)
+                    wrapper.reloadRSTabs.connect(self.reloadRSTabs)
+                    self.ui.tabs.insertTab(1+i, wrapper.form, "Rüstung " + str(i+1))
+                    self.ui.tabs.tabBar().setTabTextColor(1+i, QtGui.QColor(Wolke.HeadingColor))
+                    self.ruestungWrapper.append(wrapper)
+            
+            def load(self):
+                super().load()
+                for i in range(3):
+                    if self.ui.tabs.currentWidget() == self.ruestungWrapper[i].form:
+                        self.ruestungWrapper[i].load()
+
+            def reloadRSTabs(self):
+                for wrapper in self.ruestungWrapper:
+                    wrapper.load()
+
+        return RSCharakterEquipmentWrapper
+
+    def provideInventarWrapperHook(self, base, params):
+        if not self.db.einstellungen["RüstungenPlus Plugin: Aktivieren"].wert:
+            return base
+
+        class RSCharakterInventarWrapper(base):
+            def __init__(self):
+                super().__init__()
+                self.ui.gbRstungen.hide()
+                self.ui.gbInventar.setTitle("")
+
+        return RSCharakterInventarWrapper
+
+    ############################
+    # Datenbankeditor
+    ############################
+    
+    def datenbankEditorTypenHook(self, typen, params):
+        typ = Ruestungseigenschaft.Ruestungseigenschaft
+        editor = RSDatenbankEditRuestungseigenschaftWrapper.RSDatenbankEditRuestungseigenschaftWrapper
+        typen[typ] = DatenbankEditor.DatenbankTypWrapper(typ, editor, True)
+        return typen
+
+    ############################
+    # PDF Export
+    ############################
 
     def regelanhangAnfuegenHandler(self, params):
         if not self.db.einstellungen["RüstungenPlus Plugin: Aktivieren"].wert:
@@ -217,161 +366,3 @@ class Plugin:
             strList.append("</article>")
         if len(strList) > 1:
             appendCb("".join(strList))
-
-    # -----------------------
-    # Slots
-    # -----------------------
-
-    def provideRuestungPickerWrapperHook(self, base, params):
-        if not self.db.einstellungen["RüstungenPlus Plugin: Aktivieren"].wert:
-            return base
-
-        class RSRuestungPicker(base):
-            def __init__(self, ruestung, system, filterType):
-                self.ruestungErsetzen = True
-                self.filterType = filterType
-                super().__init__(ruestung, system)
-
-            def populateTree(self):
-                super().populateTree()
-                root = self.ui.treeArmors.invisibleRootItem()
-                for idx in range(root.childCount()):
-                    name = root.child(idx).text(0)
-                    if root.child(idx).text(0) != self.filterType:
-                        root.child(idx).setHidden(True)
-
-        return RSRuestungPicker
-
-    def provideAusruestungWrapperHook(self, base, params):
-        if not self.db.einstellungen["RüstungenPlus Plugin: Aktivieren"].wert:
-            return base
-
-        class RSCharakterEquipmentWrapper(base):
-            def __init__(self):
-                super().__init__()
-
-                if hasattr(self, "inventarWrapper"):
-                    idx = self.ui.tabs.indexOf(self.inventarWrapper.form)
-                    self.ui.tabs.setTabText(idx, "Inventar")
-
-                self.ruestungWrapper = []
-                for i in range(3):
-                    wrapper = RSCharakterRuestungWrapper(i)
-                    wrapper.modified.connect(self.onModified)
-                    wrapper.reloadRSTabs.connect(self.reloadRSTabs)
-                    self.ui.tabs.insertTab(1+i, wrapper.form, "Rüstung " + str(i+1))
-                    self.ui.tabs.tabBar().setTabTextColor(1+i, QtGui.QColor(Wolke.HeadingColor))
-                    self.ruestungWrapper.append(wrapper)
-            
-            def load(self):
-                super().load()
-                for i in range(3):
-                    if self.ui.tabs.currentWidget() == self.ruestungWrapper[i].form:
-                        self.ruestungWrapper[i].load()
-
-            def reloadRSTabs(self):
-                for wrapper in self.ruestungWrapper:
-                    wrapper.load()
-
-        return RSCharakterEquipmentWrapper
-
-    def provideInventarWrapperHook(self, base, params):
-        if not self.db.einstellungen["RüstungenPlus Plugin: Aktivieren"].wert:
-            return base
-
-        class RSCharakterInventarWrapper(base):
-            def __init__(self):
-                super().__init__()
-                self.ui.gbRstungen.hide()
-                self.ui.gbInventar.setTitle("")
-
-        return RSCharakterInventarWrapper
-
-    def charakterInstanziiertHandler(self, params):
-        if not self.db.einstellungen["RüstungenPlus Plugin: Aktivieren"].wert:
-            return
-        char = params["charakter"]
-        char.teilrüstungen1 = []
-        char.teilrüstungen2 = []
-        char.teilrüstungen3 = []
-
-    def charakterDeserialisiertHandler(self, params):
-        if not self.db.einstellungen["RüstungenPlus Plugin: Aktivieren"].wert:
-            return
-
-        deserializer = params["deserializer"]
-        char = params["charakter"]
-        teilrüstungen = [char.teilrüstungen1, char.teilrüstungen2, char.teilrüstungen3]
-
-        if deserializer.find('Objekte'):
-            for i in range(3):
-                if deserializer.find('Teilrüstungen'+str(i+1)):
-                    for tag in deserializer.listTags():
-                        name = deserializer.get('name')
-                        definition = None
-                        if name in Wolke.DB.rüstungen:
-                            definition = copy.deepcopy(Wolke.DB.rüstungen[name])
-                        else:
-                            definition = RuestungDefinition()
-                            definition.name = name
-                        rüst = Ruestung(definition)
-                        rüst.be = deserializer.getInt('be')
-                        rüst.rs = Hilfsmethoden.RsStr2Array(deserializer.get('rs'))
-                        typ = deserializer.getInt('typ')
-                        if typ:
-                            rüst.typ = typ
-
-                        if Wolke.DB.einstellungen["RüstungenPlus Plugin: Rüstungseigenschaften"].wert:
-                            eigenschaften = deserializer.get('text')
-                            if eigenschaften:
-                                definition.text = eigenschaften
-                            RSCharakterRuestungWrapper.applyEigenschaften(rüst)
-                        teilrüstungen[i].append(rüst)
-                    deserializer.end() #teilrüstungen
-
-            if Wolke.DB.einstellungen["RüstungenPlus Plugin: Rüstungseigenschaften"].wert:
-                if deserializer.find('Rüstungen'):
-                    count = 0
-                    for tag in deserializer.listTags():
-                        eigenschaften = deserializer.get('text')
-                        if eigenschaften:
-                            char.rüstung[count].definition.text = eigenschaften
-                        count += 1
-                    deserializer.end() #rüstungen
-
-                for rüst in char.rüstung:
-                    RSCharakterRuestungWrapper.applyEigenschaften(rüst)
-
-            deserializer.end() #objekte
-
-    def charakterSerialisiertHandler(self, params):
-        if not self.db.einstellungen["RüstungenPlus Plugin: Aktivieren"].wert:
-            return
-
-        serializer = params["serializer"]
-        char = params["charakter"]
-        teilrüstungen = [char.teilrüstungen1, char.teilrüstungen2, char.teilrüstungen3]
-
-        if serializer.find('Objekte'):
-            for i in range(3):
-                serializer.beginList('Teilrüstungen'+str(i+1))
-                for rüst in teilrüstungen[i]:
-                    serializer.begin('Rüstung')
-                    serializer.set('name',rüst.name)
-                    serializer.set('be', rüst.be)
-                    serializer.set('rs', Hilfsmethoden.RsArray2Str(rüst.rs))
-                    serializer.set('typ', rüst.typ)
-                    if Wolke.DB.einstellungen["RüstungenPlus Plugin: Rüstungseigenschaften"].wert:
-                        serializer.set('text', ", ".join(rüst.eigenschaften))
-                    serializer.end() #rüstung
-                serializer.end() #teilrüstungen
-
-            if Wolke.DB.einstellungen["RüstungenPlus Plugin: Rüstungseigenschaften"].wert:
-                if serializer.find('Rüstungen'):
-                    count = 0
-                    for tag in serializer.listTags():
-                        serializer.set('text', ", ".join(char.rüstung[count].eigenschaften))
-                        count += 1
-                    serializer.end() #rüstungen
-
-            serializer.end() #objekte
