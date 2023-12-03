@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from EventBus import EventBus
 
 class Ruestungseigenschaft:
     displayName = "Rüstungseigenschaft"
@@ -35,9 +36,11 @@ class Ruestungseigenschaft:
         if self.script:
             ser.set('script', self.script)
             ser.set('scriptOnlyFirst', self.scriptOnlyFirst)
+        EventBus.doAction("ruestungseigenschaft_serialisiert", { "object" : self, "serializer" : ser})
 
     def deserialize(self, ser):
         self.name = ser.get('name')
         self.text = ser.get('text')
         self.script = ser.get('script', self.script)
         self.scriptOnlyFirst = ser.getBool('scriptOnlyFirst', self.scriptOnlyFirst)
+        EventBus.doAction("ruestungseigenschaft_deserialisiert", { "object" : self, "deserializer" : ser})
