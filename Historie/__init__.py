@@ -16,11 +16,11 @@ from Historie.Eintrag import Eintrag
 class Plugin:
 
     def __init__(self):
-        print("INIT HISTORIE PLUGIN")
         EventBus.addAction("charaktereditor_oeffnet", self.charakterEditorOeffnet)
         EventBus.addAction("charakter_instanziiert", self.charakterInstanziiertHandler)
         EventBus.addAction("charakter_deserialisiert", self.charakterDeserialisiertHandler)
         EventBus.addAction("charakter_serialisiert", self.charakterSerialisiertHandler, 100)
+        # EventBus.addAction("charakter_geschrieben", self.charakterGeschriebenHandler, 110)
         # Einstellungen mit defaults registrieren
         EinstellungenWrapper.addSettings({
             "Historie_Plugin_Daten" : True,
@@ -76,6 +76,8 @@ class Plugin:
         ui.labelEpAusgabe.setText(f"{eintrag.epAusgabe}")
         ui.labelDatum.setText(eintrag.datum.strftime("%d.%m.%Y"))
 
+    
+
     def createCharakterTabs(self):
         tab = Tab(72, self.historieTab, self.historieTab.form, "Historie")
         return [tab]
@@ -95,7 +97,8 @@ class Plugin:
         print("Charakter geladen")
         # print(self.neuerCharakter.historie[-1])
 
-    def charakterSerialisiertHandler(self, serializer, params):
+    def charakterSerialisiertHandler(self, params):
+        serializer = params["serializer"]
         if Wolke.Settings["Historie_Plugin_Daten"]:
             serializer = self.updatePluginData(serializer, params)
         if Wolke.Settings["Historie_Datei_Kopie"]:
@@ -105,23 +108,28 @@ class Plugin:
     def extraDateiSpeichern(self, serializer, params):
         dateTemplate = Wolke.Settings.get("Historie_Datumsformat", "%Y-%m-%d")
         fnameTemplate = Template(Wolke.Settings["Historie_Dateiname_Template"])
+        char_folder = Wolke.Settings["Pfad-Chars"]
         date = dt.datetime.now().strftime(dateTemplate)
-        (name, ext) = os.path.splitext(params['filepath'])
+        # (name, ext) = os.path.splitext(params['filepath'])
+        char = params["charakter"]
         fname = fnameTemplate.substitute({
-            "name": name,
+            "name": char.name,
             "datum": date,
-            "ep": params["charakter"].epAusgegeben,
-            "epgesamt": params["charakter"].epGesamt,
+            "ep": char.epAusgegeben,
+            "epgesamt": char.epGesamt,
         })
-        fname += ext
-        folderName = Wolke.Settings["Historie_Ordner"]
-        if folderName != "":
-            folder = Template(folderName).substitute({"name": name})
+        subfolder = Wolke.Settings["Historie_Ordner"]
+        if subfolder != "":
+            folder = Template(subfolder).substitute({"name": name})
             (head, tail) = os.path.split(fname)
             if not os.path.isdir(os.path.join(head, folder)):
                 os.mkdir(os.path.join(head, folder))
-            fname = os.path.join(head, folder, tail)
-        serializer.writeFile(fname)
+            fpath = os.path.join(char_folder, subfolder, fname)
+        else:
+            fpath = os.path.join(char_folder, fname)
+        if not fpath.endswith(".xml"):
+            fpath += ".xml"
+        serializer.writeFile(fpath)
         return serializer
 
     def updatePluginData(self, serializer, params):
@@ -158,20 +166,41 @@ class Plugin:
             table.setItem(r, 0, ep)
             table.setItem(r, 1, datum)
             table.setItem(r, 2, notiz)
+        table.setEditTriggers(QtWidgets.QAbstractItemView.DoubleClicked)
+        table.itemChanged.connect(self.saveChanges)
         self.neuerCharakter = char  # should be redundant
 
 
+    def saveChanges(self, item):
+        row = item.row()
+        col = item.column()
+        eintrag = self.neuerCharakter.historie[row]
+        if col == 0:
+            try:
+                eintrag.ep = int(item.text())
+            except Exception as e:
+                error_message = "Für EP sind nur ganze Zahlen erlaubt."
+                QtWidgets.QMessageBox.critical(None, "Error", error_message)
+        elif col == 1:
+            try:
+                eintrag.datum = dt.datetime.strptime(item.text(), "%d.%m.%Y")
+            except Exception as e:
+                error_message = "Falsches Datumsformate. Es muss 'dd.mm.yyyy' entsprechen."
+                QtWidgets.QMessageBox.critical(None, "Error", error_message)
+        elif col == 2:
+            eintrag.notiz = item.text()
+        # self.updateTab(self.neuerCharakter)
         
     def updateAltChar(self, alt, neu):
         # TODO: self.alt = deepcopy(neu) failed (pickle qt..)
-        self.alt = deepcopy(neu)
-        # alt.epGesamt = neu.epGesamt
-        # alt.epAusgegeben = neu.epAusgegeben
-        # alt.eigenheiten = deepcopy(neu.eigenheiten)
-        # alt.attribute = deepcopy(neu.attribute)
-        # # alt.energien = deepcopy(neu.energien)
-        # alt.vorteile = deepcopy(neu.vorteile)
-        # alt.fertigkeiten = deepcopy(neu.fertigkeiten)
-        # alt.talente = deepcopy(neu.talente)
-        # alt.übernatürlicheFertigkeiten = deepcopy(neu.übernatürlicheFertigkeiten)
-        # alt.freieFertigkeiten = deepcopy(neu.freieFertigkeiten)
+        # self.alt = deepcopy(neu)
+        alt.epGesamt = neu.epGesamt
+        alt.epAusgegeben = neu.epAusgegeben
+        alt.eigenheiten = deepcopy(neu.eigenheiten)
+        alt.attribute = deepcopy(neu.attribute)
+        alt.energien = deepcopy(neu.energien)
+        alt.vorteile = deepcopy(neu.vorteile)
+        alt.fertigkeiten = deepcopy(neu.fertigkeiten)
+        alt.talente = deepcopy(neu.talente)
+        alt.übernatürlicheFertigkeiten = deepcopy(neu.übernatürlicheFertigkeiten)
+        alt.freieFertigkeiten = deepcopy(neu.freieFertigkeiten)

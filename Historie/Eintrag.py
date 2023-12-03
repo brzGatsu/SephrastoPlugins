@@ -1,10 +1,27 @@
 import datetime as dt
-
 from Wolke import Wolke
 
 
+def span(text, color):
+    return f"<span style='color: {color}'>{text}</span>"
+
+def colorize(number):
+    if number > 0:
+        return span(number, COLOR_POSITIVE)
+    if number < 0:
+        return span(number, COLOR_NEGATIVE)
+
+COLOR_DEFAULT = "black"
+COLOR_POSITIVE = "green"
+COLOR_NEGATIVE = "red"
+HINZUGEFÜGT = span("hinzugefügt", COLOR_POSITIVE)
+ENTFERNT = span("entfernt", COLOR_NEGATIVE)
+GEKAUFT = span("gekauft", COLOR_POSITIVE)
+GELÖSCHT = span("gelöscht", COLOR_NEGATIVE)
+
+
 class Eintrag():
-    
+
     def __init__(self, ep) -> None:
         self.datum = dt.datetime.now()
         self.ep = ep
@@ -28,11 +45,11 @@ class Eintrag():
         self.epAusgabe += neu.epAusgegeben - alt.epAusgegeben
         self.compareEigenheiten(alt, neu, reset)
         self.compareAttribute(alt, neu, reset)
-        # self.compareEnergien(alt, neu, reset)
+        self.compareEnergien(alt, neu, reset)
         self.compareVorteile(alt, neu, reset)
         self.compareFreieFertigkeiten(alt, neu, reset)
         self.compareFertigkeiten(alt, neu, reset)
-        # self.compareÜbernatürlicheFertigkeiten(alt, neu, reset)
+        self.compareÜbernatürlicheFertigkeiten(alt, neu, reset)
         self.compareTalente(alt, neu, reset)
 
     @property
@@ -53,23 +70,21 @@ class Eintrag():
         if reset:
             self.energien = []
         for en in sorted(Wolke.DB.energien):
-            neuNamen = [e.name for e in neu.energien] 
-            altNamen = [e.name for e in alt.energien]
+            neuNamen = neu.energien.keys() # [e.name for e in neu.energien] 
+            altNamen = neu.energien.keys() # [e.name for e in alt.energien]
             delta = 0
-            if en.name not in neuNamen and en.name not in altNamen:
+            if en not in neuNamen and en not in altNamen:
                 continue
-            if en.name in neuNamen and en.name not in altNamen:
-                self.energien.append(f"{en.name}: <span style='color: green'>hinzugefügt</span>")
-                delta = neu.energien[en.name].mod
-            elif en.name not in neuNamen and en.name in altNamen:
-                self.energien.append(f"{en.name}: <span style='color: red'>entfernt</span>")
-            if en.name in neuNamen and en.name in altNamen:
-                delta = neu.energien[en.name].mod - alt.energien[en.name].mod
+            if en in neuNamen and en not in altNamen:
+                self.energien.append(f"{en}: {colorize('hinzugefügt')}")
+                delta = neu.energien[en.name].wert
+            elif en not in neuNamen and en in altNamen:
+                self.energien.append(f"{en}: {colorize('entfernt')}")
+            if en in neuNamen and en in altNamen:
+                delta = neu.energien[en].wert - alt.energien[en].wert
             if delta:
-                if delta > 0:
-                    self.energien.append(f"{en.name}: <span style='color: green'>um {delta} gesteigert</span>")
-                else:
-                    self.energien.append(f"{en.name}: <span style='color: red'>um {-delta} gesenkt</span>")
+                self.energien.append(f"{en}: {colorize(delta)}")
+                
     
     def compareVorteile(self, alt, neu, reset=True):
         if reset:
@@ -78,13 +93,12 @@ class Eintrag():
             if vorteil not in alt.vorteile and vorteil not in neu.vorteile:
                 continue
             elif vorteil in neu.vorteile and vorteil not in alt.vorteile:
-                self.vorteile.append(f"{vorteil}: <span style='color: green'>gekauft</span>")
+                self.vorteile.append(f"{vorteil}: {HINZUGEFÜGT}")
             elif vorteil not in neu.vorteile and vorteil in alt.vorteile:
-                self.vorteile.append(f"{vorteil}: <span style='color: red'>entfernt</span>")
+                self.vorteile.append(f"{vorteil}: {ENTFERNT}")
             elif neu.vorteile[vorteil].kosten != alt.vorteile[vorteil].kosten:
                 self.vorteile.append(f"{vorteil}: geändert (Kosten {neu.vorteile[vorteil].kosten - alt.vorteile[vorteil].kosten} EP)")
 
-        
     def compareTalente(self, alt, neu, reset=True):
         if reset:
             self.talente = []
@@ -92,29 +106,12 @@ class Eintrag():
             if talent not in alt.talente and talent not in neu.talente:
                 continue
             elif talent in neu.talente and talent not in alt.talente:
-                self.talente.append(f"{talent}: <span style='color: green'>gekauft</span>")
+                self.talente.append(f"{talent}: {GEKAUFT}")
             elif talent not in neu.talente and talent in alt.talente:
-                self.talente.append(f"{talent}: <span style='color: red'>entfernt</span>")
+                self.talente.append(f"{talent}: {ENTFERNT}")
             elif neu.talente[talent].kosten != alt.talente[talent].kosten:
                 self.talente.append(f"{talent}: geändert (Kosten {neu.talente[talent].kosten - alt.talente[talent].kosten} EP)")
-        
-    def compareFertigkeiten(self, alt, neu, reset=True):
-        if reset:
-            self.fertigkeiten = []
-        for fertigkeit in sorted(Wolke.DB.fertigkeiten):
-            if fertigkeit not in alt.fertigkeiten and fertigkeit not in neu.fertigkeiten:
-                continue
-            elif fertigkeit in neu.fertigkeiten and fertigkeit not in alt.fertigkeiten:
-                self.fertigkeiten.append(f"{fertigkeit}: <span style='color: green'>gekauft</span>")
-            elif fertigkeit not in neu.fertigkeiten and fertigkeit in alt.fertigkeiten:
-                self.fertigkeiten.append(f"{fertigkeit}: <span style='color: red'>entfernt</span>")
-            elif neu.fertigkeiten[fertigkeit].wert != alt.fertigkeiten[fertigkeit].wert:
-                delta = neu.fertigkeiten[fertigkeit].wert - alt.fertigkeiten[fertigkeit].wert
-                if delta > 0:
-                    self.fertigkeiten.append(f"{fertigkeit}: <span style='color: green'>um {delta} gesteigert</span>")
-                else:
-                    self.fertigkeiten.append(f"{fertigkeit}: <span style='color: red'>um {-delta} gesenkt</span>")
-        
+         
     def compareFreieFertigkeiten(self, alt, neu, reset=True):
         if reset:
             self.freieFertigkeiten = []
@@ -122,16 +119,42 @@ class Eintrag():
             if freie not in alt.freieFertigkeiten and freie not in neu.freieFertigkeiten:
                 continue
             elif freie in neu.freieFertigkeiten and freie not in alt.freieFertigkeiten:
-                self.freieFertigkeiten.append(f"{freie}: <span style='color: green'>gekauft</span>")
+                self.freieFertigkeiten.append(f"{freie}: {GEKAUFT}")
             elif freie not in neu.freieFertigkeiten and freie in alt.freieFertigkeiten:
-                self.freieFertigkeiten.append(f"{freie}: <span style='color: red'>entfernt</span>")
+                self.freieFertigkeiten.append(f"{freie}: {ENTFERNT}")
             elif neu.freieFertigkeiten[freie].wert != alt.freieFertigkeiten[freie].wert:
                 delta = neu.freieFertigkeiten[freie].wert - alt.freieFertigkeiten[freie].wert
-                if delta > 0:
-                    self.freieFertigkeiten.append(f"{freie}:<span style='color: green'> um {delta} gesteigert</span>")
-                else:
-                    self.freieFertigkeiten.append(f"{freie}:<span style='color: red'> um {-delta} gesenkt</span>")
+                self.freieFertigkeiten.append(f"{freie}: {colorize(delta)}")
 
+    def compareFertigkeiten(self, alt, neu, reset=True):
+        if reset:
+            self.fertigkeiten = []
+        for fertigkeit in sorted(Wolke.DB.fertigkeiten):
+            if fertigkeit not in alt.fertigkeiten and fertigkeit not in neu.fertigkeiten:
+                continue
+            elif fertigkeit in neu.fertigkeiten and fertigkeit not in alt.fertigkeiten:
+                self.fertigkeiten.append(f"{fertigkeit}: {GEKAUFT}")
+            elif fertigkeit not in neu.fertigkeiten and fertigkeit in alt.fertigkeiten:
+                self.fertigkeiten.append(f"{fertigkeit}: {ENTFERNT}")
+            elif neu.fertigkeiten[fertigkeit].wert != alt.fertigkeiten[fertigkeit].wert:
+                delta = neu.fertigkeiten[fertigkeit].wert - alt.fertigkeiten[fertigkeit].wert
+                self.fertigkeiten.append(f"{fertigkeit}: {colorize(delta)}")
+                
+    def compareÜbernatürlicheFertigkeiten(self, alt, neu, reset=True):
+        if reset:
+            self.übernatürlicheFertigkeiten = []
+        for fert in sorted(Wolke.DB.übernatürlicheFertigkeiten):
+            if (fert not in alt.übernatürlicheFertigkeiten 
+            and fert not in neu.übernatürlicheFertigkeiten):
+                continue
+            elif fert in neu.übernatürlicheFertigkeiten and fert not in alt.übernatürlicheFertigkeiten:
+                self.übernatürlicheFertigkeiten.append(f"{fert}: {GEKAUFT}")
+            elif fert not in neu.übernatürlicheFertigkeiten and fert in alt.übernatürlicheFertigkeiten:
+                self.übernatürlicheFertigkeiten.append(f"{fert}: {ENTFERNT}")
+            elif neu.übernatürlicheFertigkeiten[fert].wert != alt.übernatürlicheFertigkeiten[fert].wert:
+                delta = neu.übernatürlicheFertigkeiten[fert].wert - alt.übernatürlicheFertigkeiten[fert].wert
+                self.übernatürlicheFertigkeiten.append(f"{fert}: {colorzize(delta)}")
+       
     def compareAttribute(self, alt, neu, reset=True):
         if reset:
             self.attribute = []
@@ -139,25 +162,22 @@ class Eintrag():
             if attr not in alt.attribute and attr not in neu.attribute:
                 continue
             elif attr in neu.attribute and attr not in alt.attribute:
-                self.attribute.append(f"{attr}: <span style='color: green'>gekauft</span>")
+                self.attribute.append(f"{attr}: {GEKAUFT}")
             elif attr not in neu.attribute and attr in alt.attribute:
-                self.attribute.append(f"{attr}: <span style='color: red'>entfernt</span>")
+                self.attribute.append(f"{attr}: {ENTFERNT}")
             elif neu.attribute[attr].wert != alt.attribute[attr].wert:
                 delta = neu.attribute[attr].wert - alt.attribute[attr].wert
-                if delta > 0:
-                    self.attribute.append(f"{attr}: <span style='color: green'> um {delta} gesteigert</span>")
-                else:
-                    self.attribute.append(f"{attr}: <span style='color: red'>um {-delta} gesenkt</span>")
+                self.attribute.append(f"{attr}: {colorize(delta)}")
 
     def compareEigenheiten(self, alt, neu, reset=True):
         if reset:
             self.eigenheiten = []
         for eig in neu.eigenheiten:
-            if eig not in alt.eigenheiten:
-                self.eigenheiten.append(f"{eig}: <span style='color: green'>hinzugefügt</span>")
+            if eig and eig not in alt.eigenheiten:
+                self.eigenheiten.append(f"{eig}: {HINZUGEFÜGT}")
         for eig in alt.eigenheiten:
-            if eig not in neu.eigenheiten:
-                self.eigenheiten.append(f"{eig}: <span style='color: red'>entfernt</span>")
+            if eig and eig not in neu.eigenheiten:
+                self.eigenheiten.append(f"{eig}: {ENTFERNT}")
 
     def __str__(self) -> str:
         return f"{self.ep} EP ({self.datum.strftime('%d.%m.%Y')})"
@@ -165,18 +185,22 @@ class Eintrag():
     @property
     def text(self) -> str:
         text = ""
-        if len(self.vorteile) > 0:
-            text += f"<p>Vorteile:</b><br>{'<br>'.join(self.vorteile)}</p>"
-        if len(self.freieFertigkeiten) > 0:
-            text += f"<p>Freie Fertigkeiten:</b><br>{'<br>'.join(self.freieFertigkeiten)}</p>"
-        if len(self.attribute) > 0:
-            text += f"<p>Attribute:</b><br>{'<br>'.join(self.attribute)}</p>"
-        if len(self.energien) > 0:
-            text += f"<p>Energien:</b><br>{'<br>'.join(self.energien)}</p>"
-        if len(self.talente) > 0:  
-            text += f"<p>Talente:</b><br>{'<br>'.join(self.talente)}</p>"
         if len(self.eigenheiten) > 0:
-            text += f"<p>Eigenheiten:</b><br>{'<br>'.join(self.eigenheiten)}</p>"
+            text += f"<p><h3>Eigenheiten:</h3>{'<br>'.join(self.eigenheiten)}</p>"
+        if len(self.attribute) > 0:
+            text += f"<p><h3>Attribute:</h3>{'<br>'.join(self.attribute)}</p>"
+        if len(self.energien) > 0:
+            text += f"<p><h3>Energien:</h3>{'<br>'.join(self.energien)}</p>"
+        if len(self.vorteile) > 0:
+            text += f"<p><h3>Vorteile:</h3>{'<br>'.join(self.vorteile)}</p>"
+        if len(self.freieFertigkeiten) > 0:
+            text += f"<p><h3>Freie Fertigkeiten:</h3>{'<br>'.join(self.freieFertigkeiten)}</p>"
+        if len(self.fertigkeiten) > 0:
+            text += f"<p><h3>Fertigkeiten:</h3>{'<br>'.join(self.fertigkeiten)}</p>"
+        if len(self.übernatürlicheFertigkeiten) > 0:
+            text += f"<p><h3>Übernatürliche Fertigkeiten:</h3>{'<br>'.join(self.übernatürlicheFertigkeiten)}</p>"
+        if len(self.talente) > 0:  
+            text += f"<p><h3>Talente/Zauber/Liturgien:</h3>{'<br>'.join(self.talente)}</p>"
         return text
     
     def serialize(self, ser):
