@@ -32,6 +32,11 @@ Es werden nur die für FoundryVTT relevanten Informationen in der `.json`-Datei 
 Ein Ilaris-Elementarmagier hat nur wenig Motivation weitere Varianten von Hexalogie-Zaubern zu erlernen, der Mehrwert ist zu gering für die Kosten. Ich biete euch hier ein Sephrasto-Plugin, das die EP-Kosten von Talenten aus elementaren Hexalogien halbiert. Der volle EP-Preis muss nur für das teuerste erlernte Talent aus der Hexalogie bezahlt werden. Diese Umsetzung basiert auf der DSA4-Regel, die Hexalogiezauber eine Spalte günstiger steigern lässt, solange man eine Variante auf höherem TaW besitzt.
 Die Zauber sind über die Datenbankeinstellung "Hexalogien Plugin: Talente" konfigurierbar. Standardmäßig beinhaltet sind alle bestätigten Hexalogien gemäß https://de.wiki-aventurica.de/wiki/Hexalogie (nicht die vermuteten), zusätzlich noch die Herbeirufung und Macht des <Elements> Zauber. Prinzipiell können auch andere Zauber eingetragen werden, die bspw. keine Elementarzauber sind. Beispielsweise der Reptilea und der Arachnea.
 
+### Historie
+In der Historie werden Änderungen des Charakters in Textform gespeichert. Über einen Extra-Tab im Charakter-Editor lässt sich der EP Verlauf und die Änderungen von übernatürlichen, freien und profanen Fertigkeiten und Talenten, Eigenheiten, Zaubern, Vorteilen und Attributen nach verfolgen. Das Inventar und Beschreibungen, die nicht ausschlaggebend für die Generierung sind, werden nicht aufgezeichnet.
+
+Aus dem aufgezeichneten Verlauf ist es nicht möglich alte Versionen des Charakters wieder herzustellen. Zu diesem Zweck bietet das Plugin jedoch die Möglichkeit automatische Backups nach EP-Stand oder Datum anzulegen. Verschiedene Dateien können mit dem charakter_diff-Makro verglichen werden.
+
 ### Manoeverkarten
 Das Plugin gibt im Charaktereditor den Regelanhang eines Charakters und im Datenbankeditor die ganze Sephrastodatenbank in Manöverkarten aus. Im Datenbankeditor erscheint außerdem ein zusätzliches Datenbankelement "Manöverkarte" mit dem eigene Karten erstellt und automatisch generierte Karten angepasst werden können. Eine Anleitung kann im Hilfemenu des Datenbankeditors gefunden werden.
 

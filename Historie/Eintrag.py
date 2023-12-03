@@ -11,55 +11,65 @@ class Eintrag():
         self.epGewinn = 0
         self.epAusgabe = 0
         self.notiz = ""
-        self.vorteile = []
-        self.fertigkeiten = []
-        self.freieFertigkeiten = []
+        self.eigenheiten = []
         self.attribute = []
         self.energien = []
+        self.vorteile = []
+        self.freieFertigkeiten = []
+        self.fertigkeiten = []
+        self.übernatürlicheFertigkeiten = []
         self.talente = []
-        self.eigenheiten = []
     
     def compare(self, alt, neu, reset=True):
-        self.compareVorteile(alt, neu, reset)
-        self.compareTalente(alt, neu, reset)
-        self.compareFertigkeiten(alt, neu, reset)
-        self.compareFreieFertigkeiten(alt, neu, reset)
-        self.compareAttribute(alt, neu, reset)
-        self.compareEnergien(alt, neu, reset)
-        self.compareEigenheiten(alt, neu, reset)
         if reset:
             self.epGewinn = 0
             self.epAusgabe = 0
         self.epGewinn += neu.epGesamt - alt.epGesamt
         self.epAusgabe += neu.epAusgegeben - alt.epAusgegeben
+        self.compareEigenheiten(alt, neu, reset)
+        self.compareAttribute(alt, neu, reset)
+        # self.compareEnergien(alt, neu, reset)
+        self.compareVorteile(alt, neu, reset)
+        self.compareFreieFertigkeiten(alt, neu, reset)
+        self.compareFertigkeiten(alt, neu, reset)
+        # self.compareÜbernatürlicheFertigkeiten(alt, neu, reset)
+        self.compareTalente(alt, neu, reset)
 
     @property
     def totalChanges(self):
         return (
-            len(self.vorteile) +
-            len(self.fertigkeiten) +
-            len(self.freieFertigkeiten) +
+            abs(int(self.epGewinn)) +
+            len(self.eigenheiten) + 
             len(self.attribute) +
             len(self.energien) +
-            len(self.talente) +
-            len(self.eigenheiten) + 
-            abs(int(self.epGewinn))
+            len(self.vorteile) +
+            len(self.freieFertigkeiten) +
+            len(self.fertigkeiten) +
+            len(self.übernatürlicheFertigkeiten) +
+            len(self.talente)
         )
     
     def compareEnergien(self, alt, neu, reset=True):
         if reset:
             self.energien = []
-        for energie in sorted(Wolke.DB.energien):
-            if energie not in alt.energien and energie not in neu.energien:
+        for en in sorted(Wolke.DB.energien):
+            neuNamen = [e.name for e in neu.energien] 
+            altNamen = [e.name for e in alt.energien]
+            delta = 0
+            if en.name not in neuNamen and en.name not in altNamen:
                 continue
-            elif energie in neu.energien and energie not in alt.energien:
-                self.energien.append(f"{energie}: <span style='color: green'>ergänzt</span>")
-            elif energie not in neu.energien and energie in alt.energien:
-                self.energien.append(f"{energie}: <span style='color: red'>entfernt</span>")
-            elif neu.energien[energie].wert > alt.energien[energie].wert:
-                self.energien.append(f"{energie}: <span style='color: green'>um {neu.energien[energie].wert - alt.energien[energie].wert} gesteigert</span>")
-            elif neu.energien[energie].wert < alt.energien[energie].wert:
-                self.energien.append(f"{energie}: <span style='color: red'>um {alt.energien[energie].wert - neu.energien[energie].wert} gesenkt</span>")
+            if en.name in neuNamen and en.name not in altNamen:
+                self.energien.append(f"{en.name}: <span style='color: green'>hinzugefügt</span>")
+                delta = neu.energien[en.name].mod
+            elif en.name not in neuNamen and en.name in altNamen:
+                self.energien.append(f"{en.name}: <span style='color: red'>entfernt</span>")
+            if en.name in neuNamen and en.name in altNamen:
+                delta = neu.energien[en.name].mod - alt.energien[en.name].mod
+            if delta:
+                if delta > 0:
+                    self.energien.append(f"{en.name}: <span style='color: green'>um {delta} gesteigert</span>")
+                else:
+                    self.energien.append(f"{en.name}: <span style='color: red'>um {-delta} gesenkt</span>")
     
     def compareVorteile(self, alt, neu, reset=True):
         if reset:

@@ -16,6 +16,7 @@ from Historie.Eintrag import Eintrag
 class Plugin:
 
     def __init__(self):
+        print("INIT HISTORIE PLUGIN")
         EventBus.addAction("charaktereditor_oeffnet", self.charakterEditorOeffnet)
         EventBus.addAction("charakter_instanziiert", self.charakterInstanziiertHandler)
         EventBus.addAction("charakter_geladen", self.charakterGeladen)
@@ -80,6 +81,7 @@ class Plugin:
         return [tab]
 
     def charakterGeladen(self, params):
+        print("LADE CHARAKTER")
         self.deserialize(params["deserializer"], params["charakter"])
         self.alterCharakter = deepcopy(params["charakter"])
         self.updateTab(params["charakter"])
@@ -161,13 +163,10 @@ class Plugin:
 
     def deserialize(self, deser, char):
         if deser.find('Historie'):
-            for tag in deser.listTags():
-                if tag == 'Eintrag':
-                    eintrag = Eintrag(ep=0)
-                    eintrag.deserialize(deser)
-                    char.historie.append(eintrag)
-                else:
-                    print("Falschen Tag gefunden: {tag}")
+            for _ in deser.listTags():
+                eintrag = Eintrag(ep=0)
+                eintrag.deserialize(deser)
+                char.historie.append(eintrag)
             deser.end() # historie
         
     def updateAltChar(self, alt, neu):
@@ -175,15 +174,10 @@ class Plugin:
         alt.epGesamt = neu.epGesamt
         alt.epAusgegeben = neu.epAusgegeben
         alt.eigenheiten = deepcopy(neu.eigenheiten)
+        alt.attribute = deepcopy(neu.attribute)
+        # alt.energien = deepcopy(neu.energien)
         alt.vorteile = deepcopy(neu.vorteile)
         alt.fertigkeiten = deepcopy(neu.fertigkeiten)
-        alt.freieFertigkeiten = deepcopy(neu.freieFertigkeiten)
         alt.talente = deepcopy(neu.talente)
-        alt.energien = deepcopy(neu.energien)
-        alt.attribute = deepcopy(neu.attribute)
         alt.übernatürlicheFertigkeiten = deepcopy(neu.übernatürlicheFertigkeiten)
-        # alt.waffen = deepcopy(neu.waffen)
-        # alt.rüstung = deepcopy(neu.rüstung)
-        # alt.ausrüstung = deepcopy(neu.ausrüstung)
-        # alt.geld = deepcopy(neu.geld)
-        # alt.inventar = deepcopy(neu.inventar)
+        alt.freieFertigkeiten = deepcopy(neu.freieFertigkeiten)
