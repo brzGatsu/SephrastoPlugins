@@ -356,7 +356,7 @@ class Plugin:
                 serializer.beginList('Teilrüstungen'+str(i+1))
                 for rüst in teilrüstungen[i]:
                     serializer.begin('Rüstung')
-                    serializer.set('name',rüst.name)
+                    serializer.set('name', rüst.name)
                     serializer.set('be', rüst.be)
                     serializer.set('rs', Hilfsmethoden.RsArray2Str(rüst.rs))
                     serializer.set('typ', rüst.typ)

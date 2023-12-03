@@ -10,6 +10,8 @@ from string import Template
 from Historie.HistorieTabWrapper import HistorieTabWrapper
 from CharakterEditor import Tab
 from copy import deepcopy
+from Wolke import Wolke
+from Historie.Eintrag import Eintrag
 
 class Plugin:
 
@@ -27,7 +29,7 @@ class Plugin:
             "Historie_Ordner": "",
         })
         self.alterCharakter = None
-
+        self.neuerCharakter = None
 
     @staticmethod
     def getDescription():
@@ -62,24 +64,37 @@ class Plugin:
 
     def charakterEditorOeffnet(self, params):
         self.historieTab = HistorieTabWrapper()
-        pass 
+        self.historieTab.ui.historieTable.itemClicked.connect(self.rowClicked)
+
+    def rowClicked(self, item):
+        row = item.row()
+        eintrag = self.neuerCharakter.historie[row]
+        ui = self.historieTab.ui
+        ui.plainText.setText(eintrag.text)
+        ui.labelEpGewinn.setText(f"{eintrag.epGewinn}")
+        ui.labelEpAusgabe.setText(f"{eintrag.epAusgabe}")
+        ui.labelDatum.setText(eintrag.datum.strftime("%d.%m.%Y"))
 
     def createCharakterTabs(self):
         tab = Tab(72, self.historieTab, self.historieTab.form, "Historie")
         return [tab]
 
     def charakterGeladen(self, params):
-        print("Charakter Zwischenspeichern")
-        # raise Exception("TT")
+        self.deserialize(params["deserializer"], params["charakter"])
         self.alterCharakter = deepcopy(params["charakter"])
-        print(self.alterCharakter)
-        # return serializer
-    
+        self.updateTab(params["charakter"])
+        self.neuerCharakter = params["charakter"]
+        print("Charakter geladen")
+        print(self.neuerCharakter.historie[-1])
+
     def charakterSchreibenHook(self, serializer, params):
         if Wolke.Settings["Historie_Plugin_Daten"]:
             serializer = self.updatePluginData(serializer, params)
-        if not Wolke.Settings["Historie_Datei_Kopie"]:
-            return serializer
+        if Wolke.Settings["Historie_Datei_Kopie"]:
+            serializer = self.extraDateiSpeichern(serializer, params)
+        return serializer
+
+    def extraDateiSpeichern(self, serializer, params):
         dateTemplate = Wolke.Settings.get("Historie_Datumsformat", "%Y-%m-%d")
         fnameTemplate = Template(Wolke.Settings["Historie_Dateiname_Template"])
         date = dt.datetime.now().strftime(dateTemplate)
@@ -98,18 +113,77 @@ class Plugin:
             if not os.path.isdir(os.path.join(head, folder)):
                 os.mkdir(os.path.join(head, folder))
             fname = os.path.join(head, folder, tail)
-        print(fname)
         serializer.writeFile(fname)
         return serializer
 
     def updatePluginData(self, serializer, params):
         # TODO: add note field on history tab that is used for next note message
         neu = params["charakter"]
+        self.neuerCharakter = neu
         alt = self.alterCharakter
-        diff = {}
-        diff['datum'] = dt.datetime.now()
-        diff['epGesamt'] = neu.epGesamt - alt.epGesamt
-        diff['epAusgegeben'] = neu.epAusgegeben - alt.epAusgegeben
-        neu.historie.append(diff)
-        self.alterCharakter = deepcopy(neu)
+        # generate new history entry or merge with last one
+        if len(neu.historie) > 0 and neu.historie[-1].ep == neu.epGesamt:
+            print("Merging with last entry")
+            eintrag = neu.historie[-1]
+            eintrag.compare(alt, neu, reset=False)   
+        else:
+            print("Creating new entry")
+            print(neu.historie[-1].ep)
+            print(neu.epGesamt)
+            eintrag = Eintrag(ep=neu.epGesamt)
+            eintrag.compare(alt, neu)
+            if eintrag.totalChanges > 0:
+                neu.historie.append(eintrag)
+        self.serialize(serializer, neu)
+        self.updateAltChar(alt, neu)
+        self.updateTab(neu)
         return serializer
+
+    def updateTab(self, char):
+        table = self.historieTab.ui.historieTable
+        while table.rowCount() > 0:
+            table.removeRow(0)
+        table.setRowCount(len(char.historie))
+        for r, eintrag in enumerate(char.historie):
+            datum = QtWidgets.QTableWidgetItem(eintrag.datum.strftime("%d.%m.%Y"))
+            ep = QtWidgets.QTableWidgetItem(str(eintrag.ep))
+            notiz = QtWidgets.QTableWidgetItem(eintrag.notiz)
+            table.setItem(r, 0, ep)
+            table.setItem(r, 1, datum)
+            table.setItem(r, 2, notiz)
+        self.neuerCharakter = char  # should be redundant
+
+    def serialize(self, serializer, char):
+        serializer.beginList('Historie')
+        for eintrag in char.historie:
+            serializer = eintrag.serialize(serializer)
+        serializer.end() # List
+
+    def deserialize(self, deser, char):
+        if deser.find('Historie'):
+            for tag in deser.listTags():
+                if tag == 'Eintrag':
+                    eintrag = Eintrag(ep=0)
+                    eintrag.deserialize(deser)
+                    char.historie.append(eintrag)
+                else:
+                    print("Falschen Tag gefunden: {tag}")
+            deser.end() # historie
+        
+    def updateAltChar(self, alt, neu):
+        # TODO: self.alt = deepcopy(neu) failed (pickle qt..)
+        alt.epGesamt = neu.epGesamt
+        alt.epAusgegeben = neu.epAusgegeben
+        alt.eigenheiten = deepcopy(neu.eigenheiten)
+        alt.vorteile = deepcopy(neu.vorteile)
+        alt.fertigkeiten = deepcopy(neu.fertigkeiten)
+        alt.freieFertigkeiten = deepcopy(neu.freieFertigkeiten)
+        alt.talente = deepcopy(neu.talente)
+        alt.energien = deepcopy(neu.energien)
+        alt.attribute = deepcopy(neu.attribute)
+        alt.übernatürlicheFertigkeiten = deepcopy(neu.übernatürlicheFertigkeiten)
+        # alt.waffen = deepcopy(neu.waffen)
+        # alt.rüstung = deepcopy(neu.rüstung)
+        # alt.ausrüstung = deepcopy(neu.ausrüstung)
+        # alt.geld = deepcopy(neu.geld)
+        # alt.inventar = deepcopy(neu.inventar)
