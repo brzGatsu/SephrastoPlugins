@@ -18,7 +18,7 @@ def diffCharacters():
         return
     charOld = Char()
     try:
-        charOld.xmlLesen(pathOld)
+        charOld.loadFile(pathOld)
     except:
         print("Fehler beim Laden der ersten Datei. Es werden nur von Sephrasto erzeuge Charakter-XML-Dateien unterstützt.")
         return
@@ -29,7 +29,7 @@ def diffCharacters():
         return
     charNew = Char()
     try:
-        charNew.xmlLesen(pathNew)
+        charNew.loadFile(pathNew)
     except:
         print("Fehler beim Laden der zweiten Datei. Es werden nur von Sephrasto erzeuge Charakter-XML-Dateien unterstützt.")
         return

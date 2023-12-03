@@ -151,7 +151,7 @@ class Plugin:
             content.append(f"{en.anzeigename} ({en.name})")
             if en.text:
                 content.append(en.text)
-            content.append("Voraussetzungen: " + Hilfsmethoden.VorArray2AnzeigeStr(en.voraussetzungen, self.db))
+            content.append("Voraussetzungen: " + en.voraussetzungen.anzeigetext(self.db))
             content.append(f"")
 
         content.append("\nVORTEILE\n")
@@ -161,8 +161,8 @@ class Plugin:
                 # see Core.Vorteil.VorteilDefinition for all properties
                 content.append(v.name)
                 content.append(self.shortenText(v.text))
-                if (len(v.voraussetzungen) > 0):
-                    content.append(f"Voraussetzungen: {Hilfsmethoden.VorArray2AnzeigeStr(v.voraussetzungen, self.db)}; {v.kosten} EP")
+                if v.voraussetzungen.text:
+                    content.append(f"Voraussetzungen: {v.voraussetzungen.anzeigetext(self.db)}; {v.kosten} EP")
                 else:
                     content.append(f"Voraussetzungen: {v.kosten} EP")
                 content.append(f"Nachkauf: {v.nachkauf}")
@@ -178,8 +178,8 @@ class Plugin:
                     sf = "4/" + str(sf)
                 content.append(f"{f.name} ({f.attribute[0]}/{f.attribute[1]}/{f.attribute[2]}, {sf})")
                 content.append(self.shortenText(f.text))
-                if len(f.voraussetzungen) > 0:
-                    content.append(f"Voraussetzungen: {Hilfsmethoden.VorArray2AnzeigeStr(f.voraussetzungen, self.db)}")
+                if f.voraussetzungen.text:
+                    content.append(f"Voraussetzungen: {f.voraussetzungen.anzeigetext(self.db)}")
                 content.append("")
 
         content.append("\nPROFANE TALENTE\n")
@@ -199,8 +199,8 @@ class Plugin:
                 # see Core.Fertigkeit.FertigkeitDefinition for all properties
                 content.append(f"{f.name} ({f.attribute[0]}/{f.attribute[1]}/{f.attribute[2]}, {f.steigerungsfaktor})")
                 content.append(self.shortenText(f.text))
-                if len(f.voraussetzungen) > 0:
-                    content.append(f"Voraussetzungen: {Hilfsmethoden.VorArray2AnzeigeStr(f.voraussetzungen, self.db)}")
+                if f.voraussetzungen.text:
+                    content.append(f"Voraussetzungen: {f.voraussetzungen.anzeigetext(self.db)}")
                 content.append("")
 
         talenteByTyp = self.getTalenteÜbernatürlich()
@@ -222,8 +222,8 @@ class Plugin:
                 if r.probe:
                     content[-1] += f" ({r.probe})"
                 content.append(f"Wirkung: {self.shortenText(r.text)}")
-                if len(r.voraussetzungen) > 0:
-                    content.append(f"Voraussetzungen: {Hilfsmethoden.VorArray2AnzeigeStr(r.voraussetzungen, self.db)}")
+                if r.voraussetzungen.text:
+                    content.append(f"Voraussetzungen: {r.voraussetzungen.anzeigetext(self.db)}")
                 content.append("")
 
         content.append("\nWAFFEN\n")

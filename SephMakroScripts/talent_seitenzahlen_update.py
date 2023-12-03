@@ -69,10 +69,7 @@ for tal in datenbank.talente.values():
 startDir = os.path.dirname(pdfDir)
 dbDir, _ = QtWidgets.QFileDialog.getSaveFileName(None,"Speicherpfad für Datenbank wählen...", startDir, "XML Datei (*.xml)")
 if dbDir:
-    tmp = datenbank.hausregelDatei
-    datenbank.hausregelDatei = dbDir
-    datenbank.xmlSchreiben()
-    datenbank.hausregelDatei = tmp
+    datenbank.saveFile(dbDir)
     print("Aktualisierte Seitenzahlen erfolgreich gespeichert.")
 else:
     print("Kein Speicherpfad gewählt, aktualisierte Seitenzahlen werden nicht gespeichert.")

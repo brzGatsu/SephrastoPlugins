@@ -27,8 +27,8 @@ class Plugin:
         EventBus.addFilter("datenbank_verify", self.datenbankVerifyHook)
         EventBus.addAction("dbe_menuitems_erstellen", self.menusErstellen)
         EventBus.addAction("charakter_instanziiert", self.charakterInstanziiertKategorienHandler)
-        EventBus.addFilter("charakter_laden", self.charakterLadenKategorienHook)
-        EventBus.addFilter("charakter_schreiben", self.charakterSchreibenKategorienHook)
+        EventBus.addAction("charakter_deserialisiert", self.charakterDeserialisiertKategorienHandler)
+        EventBus.addAction("charakter_serialisiert", self.charakterSerialisiertKategorienHandler)
 
         self.db = None
         EinstellungenWrapper.addSettings({"Manöverkarten_PDF-Open" : True,
@@ -407,22 +407,21 @@ bis die Bindung gelöst wird oder alle Pfeile ihr Ziel gefunden haben
         char = params["charakter"]
         char.deaktivierteKartenKategorien = []
 
-    def charakterLadenKategorienHook(self, deserializer, params):
+    def charakterDeserialisiertKategorienHandler(self, params):
         char = params["charakter"]
+        deserializer = params["deserializer"]
         if deserializer.find('Einstellungen'):
             deaktivierteKategorien = deserializer.getNested('DeaktivierteKartenKategorien')
             if deaktivierteKategorien:
                 char.deaktivierteKartenKategorien = list(map(str.strip, deaktivierteKategorien.split(",")))      
             deserializer.end() #einstellungen
 
-        return deserializer
-
-    def charakterSchreibenKategorienHook(self, serializer, params):
+    def charakterSerialisiertKategorienHandler(self, params):
         char = params["charakter"]
+        serializer = params["serializer"]
         if serializer.find('Einstellungen'):
             serializer.setNested('DeaktivierteKartenKategorien', ",".join(char.deaktivierteKartenKategorien))
             serializer.end() #einstellungen
-        return serializer
 
     def writeDatenbankKarten(self):
         if self.db is None:

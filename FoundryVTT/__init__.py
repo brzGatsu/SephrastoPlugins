@@ -90,7 +90,7 @@ def waffe_item(w):
 
 class Plugin:
     def __init__(self):
-        EventBus.addFilter("charakter_schreiben", self.json_schreiben)
+        EventBus.addAction("charakter_geschrieben", self.json_schreiben)
         EventBus.addAction("basisdatenbank_geladen", self.basisDatenbankGeladenHandler)
 
     def json_schreiben_alt(self, params):
@@ -100,16 +100,16 @@ class Plugin:
 
     @staticmethod
     def getDescription():
-        return "Dieses Plugin speichert die Charakterwerte beim PDF-Export \
-            zusätzlich als JSON-Datei ab.Wenn das Ilaris-System für FoundryVTT \
-            aktiv ist können Charaktere so direkt als Actors importiert werden."
+        return "Dieses Plugin speichert die Charakterwerte beim PDF-Export " \
+            "zusätzlich als JSON-Datei ab.Wenn das Ilaris-System für FoundryVTT " \
+            "aktiv ist können Charaktere so direkt als Actors importiert werden."
 
     def basisDatenbankGeladenHandler(self, params):
         self.db = params["datenbank"]
 
-    def get_token(self):
+    def get_token(self, name):
         token = {
-            "name": self.char.name,
+            "name": name,
             "img": "systems/Ilaris/assets/images/token/kreaturentypen/humanoid.png",
             "displayName": 20,
             "actorLink": False,
@@ -320,18 +320,16 @@ class Plugin:
 
         return item
 
-    def json_schreiben(self, serializer, params):
-        """Funktion wird als Filter in charakter_schreiben (speichern)
-        angewendet. `serializer` wird unverändert zurückgegeben wärend aus params['charakter']
-        die json file für foundry generiert und gespeichert wird.
+    def json_schreiben(self, params):
+        """Funktion wird als Action in Charakter.saveFile (speichern)
+        angewendet. Aus params['charakter'] wird die json file für foundry generiert und gespeichert.
         """
-        if params["filepath"] == "memory":
-            return serializer
-
         self.char = params['charakter']
         self.actor = {}
-        if not self.char.name:
-            self.char.name = "Der Namenlose"
+
+        name = self.char.name
+        if not name:
+            name = os.path.splitext(os.path.basename(params["filepath"]))[0]
 
         # direct keys
         attribute = {attr: {
@@ -381,11 +379,11 @@ class Plugin:
         actor = {
             # TODO: include base encoded character image?
             # "_id": random_foundry_id(),
-            "name": self.char.name,
+            "name": name,
             "type": "held",
             "img": "systems/Ilaris/assets/images/token/kreaturentypen/humanoid.png",
             "data": data,
-            "token": self.get_token(),
+            "token": self.get_token(name),
             "items": self.get_items(),
             "effects": []
         }
@@ -462,4 +460,5 @@ class Plugin:
         path = os.path.splitext(params["filepath"])[0] + "_foundryvtt.json"
         with open(path, 'w', encoding="utf-8") as f:
             json.dump(actor, f, indent=2)
-        return serializer
+
+        self.char = None

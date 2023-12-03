@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from VoraussetzungenListe import VoraussetzungenListe
+from EventBus import EventBus
 
 class KartenTyp:
    Invalid = -1
@@ -152,6 +153,7 @@ class Karte:
         ser.set('subtitel', self.subtitel)
         ser.set('fusszeile', self.fusszeile)
         ser.set('löschen', self.löschen)
+        EventBus.doAction("karte_serialisiert", { "object" : self, "serializer" : ser})
 
     def deserialize(self, ser):
         self.name = ser.get('name')
@@ -167,3 +169,4 @@ class Karte:
         self.subtitel = ser.get('subtitel')
         self.fusszeile = ser.get('fusszeile')
         self.löschen = ser.getBool('löschen', False)
+        EventBus.doAction("karte_deserialisiert", { "object" : self, "deserializer" : ser})

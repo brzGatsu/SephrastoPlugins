@@ -16,14 +16,6 @@ class RSCharakterRuestungWrapper(QtCore.QObject):
     modified = QtCore.Signal()
     reloadRSTabs = QtCore.Signal()
 
-    @staticmethod
-    def applyEigenschaften(r):
-        if Wolke.DB.einstellungen["RüstungenPlus Plugin: Rüstungseigenschaften"].wert:
-            r.eigenschaften = []
-            if r.definition.text:
-                r.eigenschaften = list(map(str.strip, r.definition.text.split(",")))
-        return r
-
     def __init__(self, index):
         super().__init__()
 
@@ -195,7 +187,7 @@ class RSCharakterRuestungWrapper(QtCore.QObject):
         R = self.createRuestung(self.gesamtIndex)
         self.refreshDerivedArmorValues(R, self.gesamtIndex)
         while self.index >= len(Wolke.Char.rüstung):
-            Wolke.Char.rüstung.append(RSCharakterRuestungWrapper.applyEigenschaften(Ruestung(RuestungDefinition())))
+            Wolke.Char.rüstung.append(Ruestung(RuestungDefinition()))
 
         if Wolke.Char.rüstung[self.index] != R:
             Wolke.Char.rüstung[self.index] = R
@@ -225,7 +217,7 @@ class RSCharakterRuestungWrapper(QtCore.QObject):
 
         definition = RuestungDefinition()
         definition.name = self.ui.editGesamtName.text()
-        R = RSCharakterRuestungWrapper.applyEigenschaften(Ruestung(definition))
+        R = Ruestung(definition)
         for type in range(len(self.ruestungsTypen)):
             if self.ui.checkZonen.isChecked():
                 for i in range(6):
@@ -262,9 +254,7 @@ class RSCharakterRuestungWrapper(QtCore.QObject):
         spinPunkte.setValue(sum(R.rs))
 
         if index == self.gesamtIndex:
-            punkte = sum(R.rs)
-            if self.index < len(Wolke.Char.rüstung) and hasattr(Wolke.Char.rüstung[self.index], 'zrsMod'):
-                punkte += Wolke.Char.rüstung[self.index].zrsMod
+            punkte = sum(R.rs) + R.zrsMod
             spinPunkte.setValue(punkte)
             if punkte % 6 != 0:
                 self.ui.spinGesamtPunkte.setStyleSheet("border: 1px solid orange;")
@@ -353,12 +343,12 @@ class RSCharakterRuestungWrapper(QtCore.QObject):
             logging.debug("RuestungPicker created")
             if picker.ruestung is not None:
                 self.currentlyLoading = True
-                self.loadArmorIntoFields(RSCharakterRuestungWrapper.applyEigenschaften(Ruestung(picker.ruestung)), index)
+                self.loadArmorIntoFields(Ruestung(picker.ruestung), index)
                 self.currentlyLoading = False
                 self.updateRuestungen()
         else:
             self.currentlyLoading = True
-            self.loadArmorIntoFields(RSCharakterRuestungWrapper.applyEigenschaften(Ruestung(RuestungDefinition())), index)
+            self.loadArmorIntoFields(Ruestung(RuestungDefinition()), index)
             self.currentlyLoading = False
             self.updateRuestungen()
 
@@ -394,7 +384,7 @@ class RSCharakterRuestungWrapper(QtCore.QObject):
             self.buttons[typIdx].setVisible(showType)
 
             if not showType:
-                self.loadArmorIntoFields(RSCharakterRuestungWrapper.applyEigenschaften(Ruestung(RuestungDefinition())), typIdx)
+                self.loadArmorIntoFields(Ruestung(RuestungDefinition()), typIdx)
 
         self.currentlyLoading = False
         self.updateRuestungen()

@@ -6,15 +6,13 @@ import Version
 
 class Plugin:
     def __init__(self):
-        EventBus.addFilter("charakter_schreiben", self.charakterSchreibenHook)
+        EventBus.addAction("charakter_geschrieben", self.charakterGeschriebenHandler)
 
     @staticmethod
     def getDescription():
         return "Dieses Plugin speichert die Charakterwerte beim Speichern zusätzlich als Textdatei ab. Die Werte können dadurch leicht kopiert und z.B. in Trello-Karten eingefügt werden."
 
-    def charakterSchreibenHook(self, serializer, params):
-        if params["filepath"] == "memory":
-            return serializer
+    def charakterGeschriebenHandler(self, params):
         char = params["charakter"]
         content = []
 
@@ -149,6 +147,5 @@ class Plugin:
         path = os.path.splitext(params["filepath"])[0] + "_text.txt"
         with open(path, 'w', encoding="utf-8") as f:
             f.write("\n".join(content))
-        return serializer
 
 
