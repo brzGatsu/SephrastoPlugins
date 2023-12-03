@@ -19,8 +19,8 @@ class Plugin:
         print("INIT HISTORIE PLUGIN")
         EventBus.addAction("charaktereditor_oeffnet", self.charakterEditorOeffnet)
         EventBus.addAction("charakter_instanziiert", self.charakterInstanziiertHandler)
-        EventBus.addAction("charakter_geladen", self.charakterGeladen)
-        EventBus.addFilter("charakter_schreiben", self.charakterSchreibenHook)
+        EventBus.addAction("charakter_deserialisiert", self.charakterDeserialisiertHandler)
+        EventBus.addAction("charakter_serialisiert", self.charakterSerialisiertHandler, 100)
         # Einstellungen mit defaults registrieren
         EinstellungenWrapper.addSettings({
             "Historie_Plugin_Daten" : True,
@@ -80,16 +80,22 @@ class Plugin:
         tab = Tab(72, self.historieTab, self.historieTab.form, "Historie")
         return [tab]
 
-    def charakterGeladen(self, params):
-        print("LADE CHARAKTER")
-        self.deserialize(params["deserializer"], params["charakter"])
+    def charakterDeserialisiertHandler(self, params):
+        deser = params["deserializer"]
+        char = params["charakter"]
+        if deser.find('Historie'):
+            for _ in deser.listTags():
+                eintrag = Eintrag(ep=0)
+                eintrag.deserialize(deser)
+                char.historie.append(eintrag)
+            deser.end() # historie
         self.alterCharakter = deepcopy(params["charakter"])
         self.updateTab(params["charakter"])
         self.neuerCharakter = params["charakter"]
         print("Charakter geladen")
-        print(self.neuerCharakter.historie[-1])
+        # print(self.neuerCharakter.historie[-1])
 
-    def charakterSchreibenHook(self, serializer, params):
+    def charakterSerialisiertHandler(self, serializer, params):
         if Wolke.Settings["Historie_Plugin_Daten"]:
             serializer = self.updatePluginData(serializer, params)
         if Wolke.Settings["Historie_Datei_Kopie"]:
@@ -125,18 +131,17 @@ class Plugin:
         alt = self.alterCharakter
         # generate new history entry or merge with last one
         if len(neu.historie) > 0 and neu.historie[-1].ep == neu.epGesamt:
-            print("Merging with last entry")
             eintrag = neu.historie[-1]
             eintrag.compare(alt, neu, reset=False)   
         else:
-            print("Creating new entry")
-            print(neu.historie[-1].ep)
-            print(neu.epGesamt)
             eintrag = Eintrag(ep=neu.epGesamt)
             eintrag.compare(alt, neu)
             if eintrag.totalChanges > 0:
                 neu.historie.append(eintrag)
-        self.serialize(serializer, neu)
+        serializer.beginList('Historie')
+        for eintrag in neu.historie:
+            serializer = eintrag.serialize(serializer)
+        serializer.end() # List
         self.updateAltChar(alt, neu)
         self.updateTab(neu)
         return serializer
@@ -155,29 +160,18 @@ class Plugin:
             table.setItem(r, 2, notiz)
         self.neuerCharakter = char  # should be redundant
 
-    def serialize(self, serializer, char):
-        serializer.beginList('Historie')
-        for eintrag in char.historie:
-            serializer = eintrag.serialize(serializer)
-        serializer.end() # List
 
-    def deserialize(self, deser, char):
-        if deser.find('Historie'):
-            for _ in deser.listTags():
-                eintrag = Eintrag(ep=0)
-                eintrag.deserialize(deser)
-                char.historie.append(eintrag)
-            deser.end() # historie
         
     def updateAltChar(self, alt, neu):
         # TODO: self.alt = deepcopy(neu) failed (pickle qt..)
-        alt.epGesamt = neu.epGesamt
-        alt.epAusgegeben = neu.epAusgegeben
-        alt.eigenheiten = deepcopy(neu.eigenheiten)
-        alt.attribute = deepcopy(neu.attribute)
-        # alt.energien = deepcopy(neu.energien)
-        alt.vorteile = deepcopy(neu.vorteile)
-        alt.fertigkeiten = deepcopy(neu.fertigkeiten)
-        alt.talente = deepcopy(neu.talente)
-        alt.übernatürlicheFertigkeiten = deepcopy(neu.übernatürlicheFertigkeiten)
-        alt.freieFertigkeiten = deepcopy(neu.freieFertigkeiten)
+        self.alt = deepcopy(neu)
+        # alt.epGesamt = neu.epGesamt
+        # alt.epAusgegeben = neu.epAusgegeben
+        # alt.eigenheiten = deepcopy(neu.eigenheiten)
+        # alt.attribute = deepcopy(neu.attribute)
+        # # alt.energien = deepcopy(neu.energien)
+        # alt.vorteile = deepcopy(neu.vorteile)
+        # alt.fertigkeiten = deepcopy(neu.fertigkeiten)
+        # alt.talente = deepcopy(neu.talente)
+        # alt.übernatürlicheFertigkeiten = deepcopy(neu.übernatürlicheFertigkeiten)
+        # alt.freieFertigkeiten = deepcopy(neu.freieFertigkeiten)
