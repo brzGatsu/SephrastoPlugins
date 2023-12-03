@@ -120,10 +120,9 @@ class Plugin:
         })
         subfolder = Wolke.Settings["Historie_Ordner"]
         if subfolder != "":
-            folder = Template(subfolder).substitute({"name": name})
-            (head, tail) = os.path.split(fname)
-            if not os.path.isdir(os.path.join(head, folder)):
-                os.mkdir(os.path.join(head, folder))
+            folder = Template(subfolder).substitute({"name": char.name})
+            if not os.path.isdir(os.path.join(char_folder, folder)):
+                os.mkdir(os.path.join(char_folder, folder))
             fpath = os.path.join(char_folder, subfolder, fname)
         else:
             fpath = os.path.join(char_folder, fname)
