@@ -39,9 +39,8 @@ class Plugin:
         return "Dieses Plugin speichert Änderungen des Charakters und kann automatische Kopien mit Zeitstempeln anlegen."
 
     def changesCharacter(self):
-        return True
+        return Wolke.Settings.get("Historie_Plugin_Daten", True)
     
-
     def showSettings(self):
         dlg = SimpleSettingsDialog("Historie Plugin Einstellungen")
         dlg.addSetting("Historie_Plugin_Daten", "Änderungen als Verlauf im Charakter speichern", QtWidgets.QCheckBox())
@@ -104,7 +103,7 @@ class Plugin:
         ui.labelDatum.clear()
 
     def createCharakterTabs(self):
-        if not Wolke.settings.get("Historie_Plugin_Daten"):
+        if not Wolke.Settings.get("Historie_Plugin_Daten"):
             return []
         tab = Tab(72, self.historieTab, self.historieTab.form, "Historie")
         return [tab]
@@ -176,6 +175,7 @@ class Plugin:
         # self.updateTab(self.neuerCharakter)
         return serializer
 
+
     def updateTab(self, char):
         table = self.historieTab.ui.historieTable
         while table.rowCount() > 0:
@@ -188,6 +188,12 @@ class Plugin:
             table.setItem(r, 0, ep)
             table.setItem(r, 1, datum)
             table.setItem(r, 2, notiz)
+            
+            # Add validators for date field
+            # date_validator = QtGui.QDateValidator()
+            # datum.setFlags(datum.flags() | QtCore.Qt.ItemIsEditable)
+            # datum.setValidator(date_validator)
+            
         table.setEditTriggers(QtWidgets.QAbstractItemView.DoubleClicked)
         table.itemChanged.connect(self.saveChanges)
 
@@ -197,18 +203,19 @@ class Plugin:
         eintrag = self.neuerCharakter.historie[row]
         if col == 0:
             try:
-                oldEp = eintrag.ep
+                # oldEp = eintrag.ep
                 eintrag.ep = int(item.text())
             except Exception as e:
-                eintrag.ep = oldEp
+                item.setText(eintrag.ep)  # reset cell
+                item.setText(str(oldEp))
                 error_message = "Für EP sind nur ganze Zahlen erlaubt."
                 QtWidgets.QMessageBox.critical(None, "Error", error_message)
         elif col == 1:
             try:
-                oldDatum = eintrag.datum
+                # oldDatum = eintrag.datum
                 eintrag.datum = dt.datetime.strptime(item.text(), "%d.%m.%Y")
             except Exception as e:
-                eintrag.datum = oldDatum
+                item.setText(eintrag.datum.strftime("%d.%m.%Y"))  # reset cell
                 error_message = "Falsches Datumsformate. Es muss 'dd.mm.yyyy' entsprechen."
                 QtWidgets.QMessageBox.critical(None, "Error", error_message)
         elif col == 2:
