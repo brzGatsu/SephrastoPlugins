@@ -153,7 +153,7 @@ class Eintrag():
                 self.übernatürlicheFertigkeiten.append(f"{fert}: {ENTFERNT}")
             elif neu.übernatürlicheFertigkeiten[fert].wert != alt.übernatürlicheFertigkeiten[fert].wert:
                 delta = neu.übernatürlicheFertigkeiten[fert].wert - alt.übernatürlicheFertigkeiten[fert].wert
-                self.übernatürlicheFertigkeiten.append(f"{fert}: {colorzize(delta)}")
+                self.übernatürlicheFertigkeiten.append(f"{fert}: {colorize(delta)}")
        
     def compareAttribute(self, alt, neu, reset=True):
         if reset:
