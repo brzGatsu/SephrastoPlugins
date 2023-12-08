@@ -7,7 +7,7 @@ def span(text, color):
 
 def colorize(number):
     if number > 0:
-        return span(number, COLOR_POSITIVE)
+        return span(f"+{number}", COLOR_POSITIVE)
     if number < 0:
         return span(number, COLOR_NEGATIVE)
 

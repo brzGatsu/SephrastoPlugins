@@ -12,6 +12,7 @@ from CharakterEditor import Tab
 from copy import deepcopy
 from Wolke import Wolke
 from Historie.Eintrag import Eintrag
+from Charakter import Char
 
 class Plugin:
 
@@ -84,23 +85,26 @@ class Plugin:
 
     def charakterDeserialisiertHandler(self, params):
         deser = params["deserializer"]
-        char = params["charakter"]
+        self.alterCharakter = Char()
+        self.neuerCharakter = params["charakter"]
+        self.updateAltChar(self.neuerCharakter)
         if deser.find('Historie'):
             for _ in deser.listTags():
                 eintrag = Eintrag(ep=0)
                 eintrag.deserialize(deser)
-                char.historie.append(eintrag)
+                self.neuerCharakter.historie.append(eintrag)
             deser.end() # historie
-        self.alterCharakter = deepcopy(params["charakter"])
-        self.updateTab(params["charakter"])
-        self.neuerCharakter = params["charakter"]
+        # self.alterCharakter = deepcopy(params["charakter"])
+        self.updateAltChar(self.neuerCharakter)
+        self.updateTab(self.neuerCharakter)
         print("Charakter geladen")
         # print(self.neuerCharakter.historie[-1])
 
     def charakterSerialisiertHandler(self, params):
         serializer = params["serializer"]
         if Wolke.Settings["Historie_Plugin_Daten"]:
-            serializer = self.updatePluginData(serializer, params)
+            self.updateHistorie(serializer, params)
+            serializer = self.serialize(serializer, params["charakter"])
         if Wolke.Settings["Historie_Datei_Kopie"]:
             serializer = self.extraDateiSpeichern(serializer, params)
         return serializer
@@ -131,7 +135,7 @@ class Plugin:
         serializer.writeFile(fpath)
         return serializer
 
-    def updatePluginData(self, serializer, params):
+    def updateHistorie(self, serializer, params):
         # TODO: add note field on history tab that is used for next note message
         neu = params["charakter"]
         self.neuerCharakter = neu
@@ -145,12 +149,14 @@ class Plugin:
             eintrag.compare(alt, neu)
             if eintrag.totalChanges > 0:
                 neu.historie.append(eintrag)
+    
+    def serialize(self, serializer, char):
         serializer.beginList('Historie')
-        for eintrag in neu.historie:
+        for eintrag in self.neuerCharakter.historie:
             serializer = eintrag.serialize(serializer)
         serializer.end() # List
-        self.updateAltChar(alt, neu)
-        self.updateTab(neu)
+        self.updateAltChar(self.neuerCharakter)
+        self.updateTab(self.neuerCharakter)
         return serializer
 
     def updateTab(self, char):
@@ -167,7 +173,7 @@ class Plugin:
             table.setItem(r, 2, notiz)
         table.setEditTriggers(QtWidgets.QAbstractItemView.DoubleClicked)
         table.itemChanged.connect(self.saveChanges)
-        self.neuerCharakter = char  # should be redundant
+        # self.neuerCharakter = char  # should be redundant
 
 
     def saveChanges(self, item):
@@ -190,16 +196,16 @@ class Plugin:
             eintrag.notiz = item.text()
         # self.updateTab(self.neuerCharakter)
         
-    def updateAltChar(self, alt, neu):
+    def updateAltChar(self, neu):
         # TODO: self.alt = deepcopy(neu) failed (pickle qt..)
         # self.alt = deepcopy(neu)
-        alt.epGesamt = neu.epGesamt
-        alt.epAusgegeben = neu.epAusgegeben
-        alt.eigenheiten = deepcopy(neu.eigenheiten)
-        alt.attribute = deepcopy(neu.attribute)
-        alt.energien = deepcopy(neu.energien)
-        alt.vorteile = deepcopy(neu.vorteile)
-        alt.fertigkeiten = deepcopy(neu.fertigkeiten)
-        alt.talente = deepcopy(neu.talente)
-        alt.übernatürlicheFertigkeiten = deepcopy(neu.übernatürlicheFertigkeiten)
-        alt.freieFertigkeiten = deepcopy(neu.freieFertigkeiten)
+        self.alterCharakter.epGesamt = neu.epGesamt
+        self.alterCharakter.epAusgegeben = neu.epAusgegeben
+        self.alterCharakter.eigenheiten = deepcopy(neu.eigenheiten)
+        self.alterCharakter.attribute = deepcopy(neu.attribute)
+        self.alterCharakter.energien = deepcopy(neu.energien)
+        self.alterCharakter.vorteile = deepcopy(neu.vorteile)
+        self.alterCharakter.fertigkeiten = deepcopy(neu.fertigkeiten)
+        self.alterCharakter.talente = deepcopy(neu.talente)
+        self.alterCharakter.übernatürlicheFertigkeiten = deepcopy(neu.übernatürlicheFertigkeiten)
+        self.alterCharakter.freieFertigkeiten = deepcopy(neu.freieFertigkeiten)
