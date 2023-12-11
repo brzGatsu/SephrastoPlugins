@@ -1,8 +1,7 @@
 from EventBus import EventBus
 import os
 import datetime as dt
-import lxml.etree as etree
-from PySide6 import QtWidgets, QtCore, QtGui
+from PySide6 import QtWidgets
 from QtUtils.SimpleSettingsDialog import SimpleSettingsDialog
 from EinstellungenWrapper import EinstellungenWrapper
 from Wolke import Wolke
@@ -14,6 +13,8 @@ from Wolke import Wolke
 from Historie.Eintrag import Eintrag
 from Charakter import Char
 from PySide6.QtWidgets import QFileDialog
+from pathlib import Path
+import Version
 
 class Plugin:
 
@@ -46,7 +47,7 @@ class Plugin:
         dlg.addSetting("Historie_Plugin_Daten", "Änderungen als Verlauf im Charakter speichern", QtWidgets.QCheckBox())
         dlg.addSetting("Historie_Datei_Kopie", "Kopien der Charaktere anlegen", QtWidgets.QCheckBox())
         dirField = QtWidgets.QLineEdit()
-        dirField.setToolTip("Pfad zum Speichern der Charakterkopien")
+        dirField.setToolTip("Pfad zum Speichern der Charakterkopien. Relative Pfade werden relativ zum Charakterordner verstanden.")
         dirButton = QtWidgets.QPushButton('\uf07c')
         dirButton.setProperty("class", "icon")
         dirButton.clicked.connect(lambda: self.selectDirectory(dirField))
@@ -57,11 +58,11 @@ class Plugin:
         dlg.addSetting("Historie_Ordner", "Backupordner", dirField, layout=dirRow)
         # dlg.addSetting("Historie_Ordner_Button", "", dirButton)
         fnameField = QtWidgets.QLineEdit()
-        fnameField.setToolTip("${name} für den Charakternamen, ${datum} für Datum/Uhrzeit, ${epgesamt} bzw. ${ep} für die Gesamt- bzw. ausgegebenen EP des Charakters")
+        fnameField.setToolTip("Es stehen die Platzhalter ${name}, ${datum},\n${epgesamt}, ${ep} (ausgegeben), ${version} (sephrasto) zur Verfügung.")
         fnameField.setPlaceholderText("${name}_${datum}")
-        dlg.addSetting("Historie_Dateiname_Template", "Template für die Dateinamen.\nDefault: ${name}_${datum}", fnameField)
+        dlg.addSetting("Historie_Dateiname_Template", "Template für Dateinamen\nDefault: ${name}_${datum}", fnameField)
         dateformatField = QtWidgets.QLineEdit()
-        dateformatField.setToolTip("Liste der Optionen zum darstellen des Datums/Uhrzeit: https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes")
+        dateformatField.setToolTip("Liste der Optionen zum darstellen des Datums/Uhrzeit:\nhttps://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes")
         dateformatField.setPlaceholderText("%Y-%m-%d")
         # https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes
         dlg.addSetting("Historie_Datumsformat", "Datumsformat.", dateformatField)
@@ -74,13 +75,17 @@ class Plugin:
             Wolke.Settings["Pfad-Chars"], 
             QFileDialog.ShowDirsOnly)
         if directory:  # Don't update if user cancelled the dialog
-            dirField.setText(directory)
+            try:
+                directory = Path(directory).relative_to(Wolke.Settings["Pfad-Chars"])
+            except ValueError:
+                pass
+            dirField.setText(str(directory))
 
     def charakterInstanziiertHandler(self, params):
         # if not self.db.einstellungen["Historie Plugin: Aktivieren"].wert:
         #     return
         char = params["charakter"]
-        char.historie = []
+        char.historie = [] 
 
     def charakterEditorOeffnet(self, params):
         self.historieTab = HistorieTabWrapper()
@@ -124,6 +129,8 @@ class Plugin:
 
     def charakterSerialisiertHandler(self, params):
         serializer = params["serializer"]
+        if self.alterCharakter is None:
+            self.alterCharakter = Char()
         if Wolke.Settings["Historie_Plugin_Daten"]:
             self.updateHistorie(params)
             serializer = self.serialize(serializer)
@@ -142,11 +149,14 @@ class Plugin:
             "datum": date,
             "ep": char.epAusgegeben,
             "epgesamt": char.epGesamt,
+            "version": Version.toString(),
         })
         folder = Wolke.Settings.get("Historie_Ordner", char_folder)
         fpath = os.path.join(folder, fname)
         if not fpath.endswith(".xml"):
             fpath += ".xml"
+        # ensure absolute path
+        fpath = str(Path(char_folder) / Path(fpath))
         serializer.writeFile(fpath)
         return serializer
 
@@ -172,7 +182,6 @@ class Plugin:
             serializer = eintrag.serialize(serializer)
         serializer.end() # List
         self.updateAltChar(self.neuerCharakter)
-        # self.updateTab(self.neuerCharakter)
         return serializer
 
 
@@ -188,12 +197,6 @@ class Plugin:
             table.setItem(r, 0, ep)
             table.setItem(r, 1, datum)
             table.setItem(r, 2, notiz)
-            
-            # Add validators for date field
-            # date_validator = QtGui.QDateValidator()
-            # datum.setFlags(datum.flags() | QtCore.Qt.ItemIsEditable)
-            # datum.setValidator(date_validator)
-            
         table.setEditTriggers(QtWidgets.QAbstractItemView.DoubleClicked)
         table.itemChanged.connect(self.saveChanges)
 
@@ -203,16 +206,13 @@ class Plugin:
         eintrag = self.neuerCharakter.historie[row]
         if col == 0:
             try:
-                # oldEp = eintrag.ep
                 eintrag.ep = int(item.text())
             except Exception as e:
-                item.setText(eintrag.ep)  # reset cell
-                item.setText(str(oldEp))
+                item.setText(str(eintrag.ep))  # reset cell
                 error_message = "Für EP sind nur ganze Zahlen erlaubt."
                 QtWidgets.QMessageBox.critical(None, "Error", error_message)
         elif col == 1:
             try:
-                # oldDatum = eintrag.datum
                 eintrag.datum = dt.datetime.strptime(item.text(), "%d.%m.%Y")
             except Exception as e:
                 item.setText(eintrag.datum.strftime("%d.%m.%Y"))  # reset cell
@@ -221,10 +221,10 @@ class Plugin:
         elif col == 2:
             eintrag.notiz = item.text()
         self.historieTab.changed()
-        # self.updateTab(self.neuerCharakter)
         
     def updateAltChar(self, neu):
-        # self.alt = deepcopy(neu)
+        if self.alterCharakter is None:
+            self.alterCharakter = Char()
         self.alterCharakter.epGesamt = neu.epGesamt
         self.alterCharakter.epAusgegeben = neu.epAusgegeben
         self.alterCharakter.eigenheiten = deepcopy(neu.eigenheiten)
