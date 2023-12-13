@@ -2,5 +2,5 @@
   "name": "DB to Text",
   "description": "Das Plugin ist für Entwickler gedacht, die es als Template für Datenbankexporter nutzen können. Es speichert die Datenbank in einer Textdatei.",
   "author": "Gatsu",
-  "version": "4.4.0.0"
+  "version": "1"
 }

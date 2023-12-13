@@ -2,5 +2,5 @@
   "name": "Foundry VTT",
   "description": "Wenn das Plugin aktiv ist, wird beim Speichern des Helden neben der <name>.xml automatisch eine zweite Datei <name>_foundryvtt.json erstellt, die in Foundry als Held importiert werden kann. Die Foundry Helden können nicht zurück in Sephrasto importiert werden. Die .xml-Datei also nicht löschen!\nEs werden nur die für FoundryVTT relevanten Informationen in der .json-Datei gespeichert und auch hier gibt es noch einige Einschränkungen. Folgendes wird NICHT übertragen:<ul><li>Geld</li><li>Zustände: Wunden, Furcht, Boni/Mali etc.</li><li>Status von Waffen/Rüstungen (in/aktiv, haupthand/nebenhand, kampfstil)</li><li>Einstellungen für Sephrasto (Welcher Bogen, Zonensystem, Regelanhänge usw..)</li><li>Hausregeln (Eigene Vorteile, Talente usw. könnten aber funktionieren)</li><li>Waffeneigenschaften</li></ul>",
   "author": "Lukr",
-  "version": "4.4.0.0"
+  "version": "1"
 }
