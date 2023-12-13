@@ -54,7 +54,7 @@ Features:
 - Enthält einen Code-Editor mit Zeilen-Anzeige und Syntax-Highlighting. Der Editor hat auch eine rudimentäre Autocomplete-Funktion, die allerdings keinen Kontext kennt.
 - Alle Sephrasto-Python-Files können importiert werden, ihr könntet mit einem Makro theoretisch sogar den Charaktereditor nachprogrammieren.
 - Der print output und eventuelle Fehler wird direkt in einem Textfeld angezeigt. 
-- Auf die Datenbank kannst du direkt über die globale Variable "datenbank" zugreifen. Alles über die Struktur der Datenbank kannst du in https://github.com/Aeolitus/Sephrasto/blob/master/Datenbank.py auf github unter "xmlLadenInternal" nachschlagen.
+- Auf die Datenbank kannst du direkt über die globale Variable "datenbank" zugreifen. Sie hat für jedes Datenbankelement ein dict<name, objekt> als Attribut. So kannst du beispielsweise mit datenbank.vorteile["Achaz"] an das Objekt des Vorteils "Achaz" gelangen. Die Struktur der Datenbankobjekte kannst du hier nachschlagen: https://github.com/Aeolitus/Sephrasto/tree/master/src/Sephrasto/Core.
 - Außer Sephrasto und diesem Plugin wird nichts benötigt!
 
 #### SephMakroScripts
@@ -65,7 +65,7 @@ Hier findest du einige nützliche scripts für Sephmakro.
 - inselfertigkeiten: Das Makro betrachtet für jede Tradition alle Fertigkeiten, deren Talent-Gesamt-EP unter 121 liegen. Dann inspiziert es jedes Talent dieser Fertigkeiten und prüft, ob es mit einer anderen Fertigkeit oberhalb der EP-Schwelle wirkbar ist. Wird ein Talent gefunden, bei dem das nicht der Fall ist, wird es zusammen mit seiner "Inselfertigkeit" ausgegeben. Passive Talente werden ignoriert (da PW-unabhängig). Es gibt hier einige Einstellungsmöglichkeiten direkt am Anfang des Makros
 - talent_seitenzahlen_update: Das Makro aktualisiert die Seitenzahl-Angaben von übernatürlichen Talenten in der Sephrasto-Datenbank. Dazu werden die Lesezeichen einer gewählten PDF-Datei ausgewertet. Diese müssen exakt gleich, wie die Talente heißen. PDFs ohne Talentnamen in den Lesezeichen werden nicht unterstützt!
 - waffenbewerter: Das Makro geht durch alle Waffen in der Datenbank und wendet ein Punkteschema an (ähnlich wie hier: https://dsaforum.de/viewtopic.php?f=180&t=56989&p=2012837#p2012837), wodurch Waffen besser verglichen werden können. Das hilft insbesondere dabei, eigene Waffenkreationen zu balancen. Das Standard-Bewertungsschema habe ich nach bestem Gewissen erstellt, ich erhebe keinen Anspruch auf Richtigkeit, das kann nur Curthan :D. Das Schema ist sehr einfach komplett einstellbar in der Settings-Sektion.
-- zufälligeZauber: Das Makro würfelt auf die Verbreitungsangabe aller Zauber für eine angegebene Tradition. Die Numpy-Variante erfordert
+- zufälligeZauber: Das Makro würfelt auf die Verbreitungsangabe aller Zauber für eine angegebene Tradition.
 - zufälligeZauberNumpy: Wie zufälligeZauber mit etwas anderer Wahrscheinlichkeitsverteilung, aber benötigt Python und das Paket Numpy.
 
 ### Tierbegleiter
@@ -76,8 +76,8 @@ Das Plugin setzt die Tragkraft der Regeln für Reisen von Alrik Normalpaktierer 
 
 ### WaffenPlus
 Dieses Plugin schafft einige Anpassungsmöglichkeiten für Waffen:
-- Zeigt im Waffen-Tab ein VT-WM Feld an. Waffen in der Datenbank kann die Eigenschaft Unhandlich(X) gegeben werden, wobei X von der VT abgezogen wird. Beispiel: ein WM von 2 und Unhandlich (3) bedeutet einen Gesamt-WM von 2/-1.
-- Optionale Waffeneigenschaften, die mit '(\*)' am Ende des Namens markiert werden; Beispiel: die Streitaxt erhält die Eigenschaft Rüstungsbrechend (\*). Diese Markierung muss im Charaktereditor entfernt werden, ansonsten wird die Eigenschaft nicht auf dem Charakterbogen ausgegeben.
+- Zeigt im Waffen-Tab des Charaktereditors und im Datenbank-Waffeneditor zwei statt nur einem WM Feld an - eines für die AT und eines für die VT.
+- Support für optionale Waffeneigenschaften, indem sie mit '(\*)' am Ende des Namens markiert werden; Beispiel: die Streitaxt erhält die Eigenschaft Rüstungsbrechend (\*). Diese Markierung muss im Charaktereditor entfernt werden, ansonsten wird die Eigenschaft nicht auf dem Charakterbogen ausgegeben.
 - In den Hausregeln können bestimmte Waffeneigenschaften via 'WaffenPlus Plugin: Waffeneigenschaften Gruppieren' in der PDF separat gruppiert werden. Dies kann beispielsweise genutzt werden, um bestimmte Waffeneigenschaften als Angriffsarten herauszuheben (siehe IA).
 
 Diese Features können in den Hausregeln über diverse 'WaffenPlus Plugin' Einstellungen deaktiviert werden.

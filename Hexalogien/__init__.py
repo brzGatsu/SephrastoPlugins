@@ -9,10 +9,6 @@ class Plugin:
         EventBus.addAction("basisdatenbank_geladen", self.basisDatenbankGeladenHandler)
         EventBus.addAction("datenbank_geladen", self.datenbankGeladenHandler)
 
-    @staticmethod
-    def getDescription():
-        return "Dieses Plugin halbiert die EP-Kosten von Talenten aus elementaren Hexalogien über die Einstellung 'Hexalogien Plugin: Talente'. Der volle EP-Preis muss nur für das teuerste erlernte Talent aus der Hexalogie bezahlt werden.\nPrinzipiell kann das Plugin auch für andere Talentverbilligungen verwendet werden, beispielsweise um den Arachnea Krabbeltier für Besitzer des Reptilea Natternnest zu vergünstigen."
-
     def changesCharacter(self):
         return self.db.einstellungen["Hexalogien Plugin: Aktivieren"].wert
 

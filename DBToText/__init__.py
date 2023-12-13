@@ -15,10 +15,6 @@ class Plugin:
         EventBus.addAction("dbe_menuitems_erstellen", self.menusErstellen)
         self.db = None
 
-    @staticmethod
-    def getDescription():
-        return "Exportiert via Datenbank-Editor Button die Datenbank in ein Text-Format."
-
     def menusErstellen(self, params):
         addMenuItemCB = params["addMenuItemCB"]
         self.exportDB = QtGui.QAction("Text-Export")

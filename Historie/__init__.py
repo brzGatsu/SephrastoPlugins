@@ -35,10 +35,6 @@ class Plugin:
         self.alterCharakter = None
         self.neuerCharakter = None
 
-    @staticmethod
-    def getDescription():
-        return "Dieses Plugin speichert Änderungen des Charakters und kann automatische Kopien mit Zeitstempeln anlegen."
-
     def changesCharacter(self):
         return Wolke.Settings.get("Historie_Plugin_Daten", True)
     

@@ -9,11 +9,6 @@ class Plugin:
         EventBus.addFilter("dbe_class_fertigkeitdefinition_wrapper", self.dbeClassFertigkeitFilter)
         EventBus.addFilter("dbe_class_ueberfertigkeitdefinition_wrapper", self.dbeClassFertigkeitFilter)
 
-    @staticmethod
-    def getDescription():
-        return "Dieses Plugin bietet bei Fertigkeiten die Möglichkeit, ein viertes Attribut anzugeben.\n"\
-        "Berechnungen für den Basiswert verwenden dann nur die 3 höchsten Attribute (siehe angepasste Einstellung \"Fertigkeiten: BW Script\")."
-
     def changesCharacter(self):
         return True
 

@@ -40,12 +40,6 @@ class Plugin:
                                           "Manöverkarten_Font" : Wolke.DefaultOSFont,
                                           "Manöverkarten_DeaktivierteKategorien" : []})
 
-    @staticmethod
-    def getDescription():
-        return "Dieses Plugin gibt den Regelanhang zusätzlich als separate PDF in Spielkartengröße, auf sogenannten Manöverkarten aus.\n"\
-            "Alternativ kann damit im Datenbankeditor auch die gesamte Regelbasis auf Karten ausgegeben werden.\n" \
-            "Die Karten können dann z.B. im 3x3 Format auf dickes Papier gedruckt und dann ausgeschnitten werden."
-
     def changesDatabase(self):
         return True
 

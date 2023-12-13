@@ -17,10 +17,6 @@ class Plugin:
         EventBus.addFilter("pdf_export", self.pdfExportZaubertricksHook)
         EventBus.addFilter("pdf_export_extrapage", self.pdfExportZaubertricksHook)
 
-    @staticmethod
-    def getDescription():
-        return "Das Plugin passt die Anzeige der Fertigkeit Zaubertricks an, sodass sie nicht mehr steigerbar ist und keinen PW hat. Im Charakterbogen wird der PW auf '-' gesetzt."
-
     def changesCharacter(self):
         return False
 

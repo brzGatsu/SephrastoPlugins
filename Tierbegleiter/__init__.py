@@ -10,10 +10,6 @@ class Plugin:
         self.mainWindowButton = None
         EventBus.addAction("basisdatenbank_geladen", self.basisDatenbankGeladenHandler)
 
-    @staticmethod
-    def getDescription():
-        return "Dieses Plugin erlaubt das Erstellen von Tierbegleitern und das Exportieren in einen Tierbegleiterbogen. Optional können in der Regelbasis mittels der Einstellung \"Tierbegleiter Plugin: IA Zucht und Ausbildung\" die Ilaris Advanced Regeln zu Zucht und Ausbildung aktiviert werden."
-
     def createMainWindowButtons(self):
         self.mainWindowButton = QtWidgets.QPushButton()
         self.mainWindowButton.setObjectName("buttonPlugin")

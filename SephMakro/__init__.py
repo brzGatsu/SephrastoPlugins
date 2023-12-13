@@ -8,10 +8,6 @@ class Plugin:
     def __init__(self):
         self.mainWindowButton = None
 
-    @staticmethod
-    def getDescription():
-        return "Mit diesem Plugin kannst du Python-Makros direkt in Sephrasto schreiben und damit z.B. die Datenbank abfragen."
-
     def createMainWindowButtons(self):
         self.mainWindowButton = QtWidgets.QPushButton()
         self.mainWindowButton.setObjectName("buttonPlugin")

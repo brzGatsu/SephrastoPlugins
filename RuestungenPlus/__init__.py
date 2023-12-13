@@ -46,14 +46,6 @@ class Plugin:
         EventBus.addAction("ruestung_deserialisiert", self.rüstungDeserialisiertHandler)
         EventBus.addAction("ruestung_serialisiert", self.rüstungSerialisiertHandler)
 
-    @staticmethod
-    def getDescription():
-        return "Dieses Plugin teilt die drei Rüstungen auf jeweils eigene Tabs auf. " +\
-    "Dort werden sie nach Slots (wie Arme und Kopf) aufgeteilt, sodass einzelne Rüstungsteile besser verwaltet werden können.\n" +\
-    "Im Charakterbogen erscheinen aus Platzmangel weiterhin nur die berechneten kompletten Rüstungen, die Einzelteile können aber im Regelanhang ausgegeben werden:\n" +\
-    "Hierzu musst du in der Datenbankeinstellung 'Regelanhang: Reihenfolge' an der gewünschten Position (z.B. nach 'W') ein 'R' einfügen.\n" +\
-    "Wenn du die Option 'Rüstungseigenschaften' aktivierst, kannst du zusätzlich Rüstungseigenschaften anlegen, optional mit Scripts versehen und Slots zuweisen."
-
     def changesCharacter(self):
         return self.db.einstellungen["RüstungenPlus Plugin: Aktivieren"].wert
 

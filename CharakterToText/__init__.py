@@ -8,10 +8,6 @@ class Plugin:
     def __init__(self):
         EventBus.addAction("charakter_geschrieben", self.charakterGeschriebenHandler)
 
-    @staticmethod
-    def getDescription():
-        return "Dieses Plugin speichert die Charakterwerte beim Speichern zusätzlich als Textdatei ab. Die Werte können dadurch leicht kopiert und z.B. in Trello-Karten eingefügt werden."
-
     def charakterGeschriebenHandler(self, params):
         char = params["charakter"]
         content = []

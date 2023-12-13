@@ -98,12 +98,6 @@ class Plugin:
         params["charakter"] = Wolke.Char
         self.json_schreiben(None, params)
 
-    @staticmethod
-    def getDescription():
-        return "Dieses Plugin speichert die Charakterwerte beim PDF-Export " \
-            "zusätzlich als JSON-Datei ab.Wenn das Ilaris-System für FoundryVTT " \
-            "aktiv ist können Charaktere so direkt als Actors importiert werden."
-
     def basisDatenbankGeladenHandler(self, params):
         self.db = params["datenbank"]
 

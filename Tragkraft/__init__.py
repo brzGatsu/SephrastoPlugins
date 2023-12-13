@@ -15,13 +15,6 @@ class Plugin:
         EventBus.addAction("charakter_deserialisiert", self.charakterDeserialisiertHandler, 100)
         EventBus.addAction("charakter_serialisiert", self.charakterSerialisiertHandler, 100)
 
-    @staticmethod
-    def getDescription():
-        return "Das Plugin setzt die Tragkraft der 'Regeln für Reisen' von Alrik Normalpaktierer um (siehe dsaforum.de). Dazu wird in der Regelbasis ein neuer abgeleiteter Wert 'TK' eingefügt, wodurch die neuen Script-Funktionen 'getTK', 'setTK' und 'modifyTK' zur Verfügung stehen." +\
-    "Durch diese kann die Tragkraft mit Vorteilen oder Waffeneigenschaften modifiziert werden.\n.\n" +\
-    "Die Tragkraft und der resultierende BE-Modifikator werden in der ersten Inventarzeile angezeigt. Der BE-Modifikator wird nicht(!) bei der BE oder den Waffen eingerechnet. Allen anderen Zeilen kann eine Last zugewiesen werden.\n" +\
-    "Mit der Datenbank-Einstellung 'Last BE Script' kann angegeben werden, wie aus Tragkraft und Last der BE-Modifikator berechnet wird."
-
     def changesCharacter(self):
         return self.db.einstellungen["Tragkraft Plugin: Aktivieren"].wert
 

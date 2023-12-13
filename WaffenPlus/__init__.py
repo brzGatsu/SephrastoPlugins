@@ -29,14 +29,6 @@ class Plugin:
         EventBus.addAction("waffe_serialisiert", self.waffeSerialisiertHandler)
         EventBus.addAction("waffe_deserialisiert", self.waffeDeserialisiertHandler)
 
-    @staticmethod
-    def getDescription():
-        return "Dieses Plugin schafft einige Anpassungsmöglichkeiten für Waffen:\n\n" +\
-            "- Zeigt im Waffen-Tab ein VT-WM Feld an. Waffen in der Datenbank kann die Eigenschaft Unhandlich(X) gegeben werden, wobei X von der VT abgezogen wird. Beispiel: ein WM von 2 und Unhandlich (3) bedeutet einen Gesamt-WM von 2/-1.\n" +\
-            "- Optionale Waffeneigenschaften, die mit '(*)' am Ende des Namens markiert werden; Beispiel: die Streitaxt erhält die Eigenschaft Rüstungsbrechend (*). Diese Markierung muss im Charaktereditor entfernt werden, ansonsten wird die Eigenschaft nicht auf dem Charakterbogen ausgegeben.\n" +\
-            "- In den Hausregeln können bestimmte Waffeneigenschaften via 'WaffenPlus Plugin: Waffeneigenschaften Gruppieren' in der PDF separat gruppiert werden.\n" +\
-            "Diese Features können in den Hausregeln über diverse 'WaffenPlus Plugin' Einstellungen deaktiviert werden."
-
     def changesCharacter(self):
         return self.db.einstellungen["WaffenPlus Plugin: Separater VT-WM"].wert
 
