@@ -17,7 +17,7 @@ class Plugin:
 
         e = DatenbankEinstellung()
         e.name = "Hexalogien Plugin: Aktivieren"
-        e.beschreibung = Plugin.getDescription()
+        e.beschreibung = "Wenn du den Haken entfernst, kannst du das Plugin speziell für diese Hausregeln deaktivieren, ohne es löschen zu müssen."
         e.text = "True"
         e.typ = "Bool"
         self.db.loadElement(e)
