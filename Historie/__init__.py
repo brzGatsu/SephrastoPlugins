@@ -20,6 +20,7 @@ class Plugin:
 
     def __init__(self):
         EventBus.addAction("charaktereditor_oeffnet", self.charakterEditorOeffnet)
+        EventBus.addAction("charaktereditor_geschlossen", self.charakterEditorGeschlossen)
         EventBus.addAction("charakter_instanziiert", self.charakterInstanziiertHandler)
         EventBus.addAction("charakter_deserialisiert", self.charakterDeserialisiertHandler)
         EventBus.addAction("charakter_serialisiert", self.charakterSerialisiertHandler, 100)
@@ -34,6 +35,7 @@ class Plugin:
         })
         self.alterCharakter = None
         self.neuerCharakter = None
+        self.historieTab = None
 
     def changesCharacter(self):
         return Wolke.Settings.get("Historie_Plugin_Daten", True)
@@ -87,6 +89,11 @@ class Plugin:
         self.historieTab = HistorieTabWrapper()
         self.historieTab.ui.historieTable.itemClicked.connect(self.rowClicked)
 
+    def charakterEditorGeschlossen(self, params):
+        self.alterCharakter = None
+        self.neuerCharakter = None
+        self.historieTab = None
+
     def rowClicked(self, item):
         row = item.row()
         eintrag = self.neuerCharakter.historie[row]
@@ -121,7 +128,8 @@ class Plugin:
                 self.neuerCharakter.historie.append(eintrag)
             deser.end() # historie
         self.updateAltChar(self.neuerCharakter)
-        self.updateTab(self.neuerCharakter)
+        if self.historieTab is not None:
+            self.updateTab(self.neuerCharakter)
 
     def charakterSerialisiertHandler(self, params):
         serializer = params["serializer"]
@@ -169,8 +177,9 @@ class Plugin:
             eintrag.compare(alt, neu)
             if eintrag.totalChanges > 0:
                 neu.historie.append(eintrag)
-        self.updateTab(self.neuerCharakter)
-        self.clearDetails()
+        if self.historieTab is not None:
+            self.updateTab(self.neuerCharakter)
+            self.clearDetails()
     
     def serialize(self, serializer):
         serializer.beginList('Historie')

@@ -224,11 +224,11 @@ class Eintrag():
     
 
     def deserialize(self, deser):
-        self.ep = int(deser.get('ep'))
+        self.ep = int(deser.get('ep', 0))
         self.epGewinn = int(deser.get('epGewinn', 0))
         self.epAusgabe = int(deser.get('epAusgabe', 0))
         self.notiz = deser.get('notiz')
-        self.datum = dt.datetime.strptime(deser.get('datum'), "%d.%m.%Y")
+        self.datum = dt.datetime.strptime(deser.get('datum', '01.01.0001'), "%d.%m.%Y")
         self.eigenheiten = deser.get('eigenheiten', '').split(';') if deser.get('eigenheiten') else []
         self.vorteile = deser.get('vorteile', '').split(';') if deser.get('vorteile') else []
         self.fertigkeiten = deser.get('fertigkeiten', '').split(';') if deser.get('fertigkeiten') else []
