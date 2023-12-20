@@ -23,7 +23,6 @@ from PySide6 import QtWidgets
 vtPassiv = True # falls True wird kein W20 sondern 10 zur VT addiert
 vtPassivMod = -10 # wieviel soll von der VT abgezogen werden bei vtPassiv = True (z.b. weil die 10 schon in Sephrasto hinzugefügt wird)
 wundschmerz = False # sollen die Wundschmerzregeln verwendet werden? Betäubt wird mit Kampf verloren gleichgesetzt
-nat20AutoHit = True # Soll eine 20 immer treffen? Triumphe gibt es weiterhin nur, wenn die VT übetroffen wurde.
 samples = 1000 # wieviele Kämpfe sollen simuliert werden
 useSchildspalter = False
 kvk3ExtraAttack = True # behandelt kvk3 wie snk3 für eine bessere vergleichbarkeit
@@ -368,7 +367,7 @@ class KVKII:
     def trigger_onAT(attacker, defender, attackType, atRoll, maneuvers):
         atRoll.modifyCrit(-1)
     def trigger_onDamageDealt(attacker, defender, attackType, atRoll, vtRoll, tpRoll, maneuvers):
-        if not atRoll.isNat20() or not BonusAngriff.isUsable(attacker, defender):
+        if not atRoll.isCrit() or not BonusAngriff.isUsable(attacker, defender):
             return
         if logFights: print(">", attacker.name, "macht als Bonusaktion einen weiteren Angriff durch", KVKII.name)
         BonusAngriff.use(attacker, defender)
@@ -589,7 +588,7 @@ def ai_chooseManeuvers(attacker, defender, attackType):
     return maneuvers
 
 def ai_addCritManeuvers(attacker, defender, attackType, maneuvers):
-    if logFights: print("Triumph für", attacker.name)
+    if logFights: print("Bestätigter Triumph für", attacker.name)
     atMod = attackType.mod(attacker) + attacker.modATEstimation(defender) + 10
     maneuversAvailable = [m for m in CombatManeuvers if m.isUnlocked(attacker) and m.score(attacker, defender, attackType, atMod) != -1 and attackType.isManeuverAllowed(attacker, m) and m != Wuchtschlag8 and m != Wuchtschlag6 and (m not in maneuvers or m == Wuchtschlag4)]
     maneuversAvailable.sort(key = lambda m: m.score(attacker, defender, attackType, atMod))
@@ -626,6 +625,7 @@ class D20Roll:
         self.couldProfitFromAdvantage = True
         self.special = "" # i. e. Schildspalter, Körperbeherrschung
         self.critChance = 20
+        self.failChance = 1
         self.lastRoll = -1
 
     def setAdvantageDisadvantage(self, advantage, disadvantage):
@@ -654,13 +654,14 @@ class D20Roll:
         return self.mod
 
     def modifyCrit(self, mod): self.critChance += mod
+    def modifyFail(self, mod): self.failChance += mod
     def result(self):
         assert(self.lastRoll != -1)
         return self.lastRoll + self.mod
-    def isNat1(self): return self.lastRoll == 1
-    def isNat20(self): return self.lastRoll >= self.critChance
-    def isCrit(self, difficulty): return self.isNat20() and self.result() >= difficulty
-    def isCritFail(self, difficulty): return self.isNat1() and self.result() < difficulty
+    def isFail(self): return self.lastRoll <= self.failChance
+    def isConfirmedFail(self, difficulty): return self.isFail() and self.result() < difficulty
+    def isCrit(self): return self.lastRoll >= self.critChance
+    def isConfirmedCrit(self, difficulty): return self.isCrit() and self.result() >= difficulty
     def modify(self, value): self.mod += value
     def str(self): return str(self.result()) + " (" + str(self.lastRoll) + ("+" if self.mod >= 0 else "") + str(self.mod) + (", Vorteil" if self.advantage else "") + (", Nachteil" if self.disadvantage else "") + ")"
 
@@ -839,10 +840,10 @@ class Fighter:
                 vt = self.vtNebenhand + self.shieldmalus()
         if self.ausweichen > vt:
             vt = self.ausweichen
-        return vt + self.wundmalus() + (vtPassivMod if vtPassiv else 0)
+        return vt + self.wundmalus() + vtPassivMod
 
     def modAusweichen(self):
-        return self.ausweichen + self.wundmalus() + (vtPassivMod if vtPassiv else 0)
+        return self.ausweichen + self.wundmalus() + vtPassivMod
 
     def rollTP(self):
         tp = TPRoll(self.tpWürfel, self.tpSeiten, self.tpPlus)
@@ -973,18 +974,15 @@ class Fighter:
                     feat.trigger_onVTFailing(self, defender, attackType, atRoll, vtRoll, maneuvers)
         # evaluate
         if not vtRoll.special == "Körperbeherrschung":
-            autoHit = nat20AutoHit and atRoll.isNat20()
-            autoFail = atRoll.isNat1() or unberechenbar and atRoll.lastRoll == 2
-
-            if autoHit and atRoll.result() <= vtRoll.result():
+            if atRoll.isCrit() and not atRoll.isConfirmedCrit(vtRoll.result() +1):
                 if logFights: print(self.name + "s", attackType.name, "landet einen automatischen Treffer, allerdings ohne eventuelle Manöver:", ", ".join([s.name for s in maneuvers]) if len(maneuvers) > 0 else "keine")
                 maneuvers = []
                 featsAndManeuvers = self.feats
-            if not autoFail and (autoHit or atRoll.result() > vtRoll.result()):
+            if not atRoll.isFail() and (atRoll.isCrit() or atRoll.result() > vtRoll.result()):
                 if logFights: print(self.name + "s", attackType.name, "trifft mit", atRoll.str(), "gegen", vtRoll.str(), "| Manöver:", ", ".join([s.name for s in maneuvers]) if len(maneuvers) > 0 else "keine")
                 
                 # trigger_onATSucess
-                if atRoll.isCrit(vtRoll.result() + 1):
+                if atRoll.isConfirmedCrit(vtRoll.result() + 1):
                     ai_addCritManeuvers(self, defender, attackType, featsAndManeuvers)     
                 tpRoll = self.rollTP()
                 tpRoll.modify(tpMod)
@@ -1014,17 +1012,15 @@ class Fighter:
                     if hasattr(feat, "trigger_onATFailed"):
                         feat.trigger_onATFailed(self, defender, attackType, atRoll, vtRoll, maneuvers)
 
-                if autoFail and atRoll.result() <= vtRoll.result():
-                    if logFights: print("Patzer für", self.name)
-                    if atRoll.isNat1() and unberechenbar:
-                        if logFights: print("> Eigentreffer durch unberechenbare Waffe")
-                        self.takeDamage(self.rollTP(), [])
-                    if self.isAlive():
+                if atRoll.isFail() and self.isAlive():
+                    if atRoll.isConfirmedFail(vtRoll.result() +1):
+                        if logFights: print("Bestätigter Patzer für", self.name)
                         if Passierschlag.isUsable(defender, self):            
                             if logFights: print("> Passierschlag")
                             Passierschlag.use(defender, self)
                         else:
                             if logFights: print(">", defender.name, "kann aber keinen Passierschlag mehr ausführen")
+                    elif logFights: print("Unbestätigter Patzer für", self.name)
         # trigger_onATDone
         for feat in featsAndManeuvers:
             if hasattr(feat, "trigger_onATDone"):
