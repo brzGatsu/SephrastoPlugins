@@ -376,7 +376,7 @@ class KVKII:
 
 class KVKIII:
     name = "KVKIII (SNK III variante)"
-    def isUnlocked(fighter): return "Kraftvoller Kampf III" in fighter.char.vorteile and fighter.kampfstil == "Kraftvoller Kampf"
+    def isUnlocked(fighter): return kvk3ExtraAttack and "Kraftvoller Kampf III" in fighter.char.vorteile and fighter.kampfstil == "Kraftvoller Kampf"
     def trigger_onDamageDealt(attacker, defender, attackType, atRoll, vtRoll, tpRoll, maneuvers):
         if not ExtraAngriff.isUsable(attacker, defender):
             return
@@ -502,10 +502,8 @@ class PWKIII:
     def trigger_onVTFailed(attacker, defender, attackType, atRoll, vtRoll, tpRoll, maneuvers):
         if not defender.actionUsable(Action.Reaktion):
             return
-        if (tpRoll.isSP and tpRoll.result() <= defender.ws) or (not tpRoll.isSP and tpRoll.result() <= defender.wsStern):
-            return
         defender.useAction(Action.Reaktion)
-        tpRoll.multiplier *= 0.5
+        tpRoll.overallMultiplier = 0.5
         if logFights: print(defender.name, "halbiert den erlittenen Schaden durch",  PWKIII.name)
 
 class BKIII:
@@ -607,6 +605,7 @@ class TPRoll():
         self.plus = plus
         self.mod = 0
         self.multiplier = 1
+        self.overallMultiplier = 1
         self.isSP = False
         self.noDamage = False
         self.lastRoll = -1
@@ -615,7 +614,7 @@ class TPRoll():
     def modify(self, value): self.mod += value
     def result(self):
         assert(self.lastRoll != -1)
-        return round(self.lastRoll * self.multiplier) + self.mod
+        return round((round(self.lastRoll * self.multiplier) + self.mod) * self.overallMultiplier)
     def str(self): return str(self.result()) + (" SP" if self.isSP else " TP")
 
 class D20Roll:
