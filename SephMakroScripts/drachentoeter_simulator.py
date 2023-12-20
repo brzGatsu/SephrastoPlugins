@@ -35,12 +35,6 @@ simulate_all = [] # Hiermit können mehrere Simulaitonen nacheinander durchgefü
                   # Angabe als kommagetrennte Dateinamen ohne Dateiendung, die im Charakter-Ordner liegen,
                   # z. B. ["bhk_s3", "bsk_s3", "kvk_s3", "pwk_s3", "sk_s3", "snk_s3"].
 
-if testManeuvers:
-    logFights = False
-if len(simulate_all) > 0:
-    logFighters = False
-    logFights = False
-
 fighter1Path = "" # Wird nur verwendet, wenn simulate_all leer ist. Pfad für charakter xml von Kämpfer 1 im Charakterordner ohne .xml Endung - falls leer, geht ein Datei-Auswahldialog auf
 fighter1WaffeIndex = 2 # welche Waffe soll Kämpfer 1 verwenden - entspricht der Position im Waffen Tab, beginnend bei 0
 fighter1NebenhandIndex = 3 # wird ignoriert, wenn fighter2WaffeIndex zweihändig ist
@@ -52,10 +46,18 @@ fighter2NebenhandIndex = 3 # wird ignoriert, wenn fighter2WaffeIndex zweihändig
 fighter2AusweichenIndex = 1 # bei -1 wird ausweichen nicht verwendet
 
 # Stats
-fighter1Mods = {"AT" : 0, "VT" : 0, "TP" : 0, "WS" : 0, "RS" : 0 }
-fighter2Mods = {"AT" : 0, "VT" : 0, "TP" : 0, "WS" : 0, "RS" : 0 }
+fighter1Mods = {"AT" : 0, "VT" : 0, "TP" : 0, "WS" : 0, "RS" : 0, "VolleOffensive" : False }
+fighter2Mods = {"AT" : 0, "VT" : 0, "TP" : 0, "WS" : 0, "RS" : 0, "VolleOffensive" : False }
 zähigkeitOverride = 18 # setzt die Zähigkeit bei allen Kämpfern auf den angegebenen Wert; setze es auf -1, um den Wert aus der Charakterdatei zu nehmen
 iniOverride = 0 # setzt die INI bei allen Kämpfern auf den angegebenen Wert; setze es auf -1, um den Wert aus der Charakterdatei zu nehmen
+
+if testManeuvers:
+    logFights = False
+if len(simulate_all) > 0:
+    logFighters = False
+    logFights = False
+    fighter1Mods["VolleOffensive"] = False
+    fighter2Mods["VolleOffensive"] = False
 
 #========== Implementation ===========
 
@@ -923,8 +925,10 @@ class Fighter:
                 self.useAction(Action.ExtraAngriff)
                 BonusAngriff.use(self, defender)
         elif NormalerAngriff.isUsable(self, defender):
-            if "Offensiver Kampfstil" in self.char.vorteile:
+            if (self.actionUsable(Action.Reaktion) and self.mods["VolleOffensive"]) or "Offensiver Kampfstil" in self.char.vorteile:
                 if logFights: print(self.name, "nutzt volle Offensive")
+                if self.mods["VolleOffensive"]:
+                    self.useAction(Action.Reaktion)
                 self.advantage.append(Fighter.DurationEndPhase)
                 self.advantageForEnemy.append(Fighter.DurationStartNextPhase)
             NormalerAngriff.use(self, defender)
