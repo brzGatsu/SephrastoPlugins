@@ -76,7 +76,7 @@ Das Plugin setzt die Tragkraft der Regeln für Reisen von Alrik Normalpaktierer 
 
 ### WaffenPlus
 Dieses Plugin schafft einige Anpassungsmöglichkeiten für Waffen:
-- Zeigt im Waffen-Tab des Charaktereditors und im Datenbank-Waffeneditor zwei statt nur einem WM Feld an - eines für die AT und eines für die VT.
+- Zeigt im Waffen-Tab des Charaktereditors und im Datenbank-Waffeneditor zwei statt nur einem WM Feld an - eines für die AT und eines für die VT. Wichtig: Wenn du die Einstellung "Waffen: Waffenwerte Script" modifiziert hast, musst du dort händisch bei "vt = ..." waffe.wm durch waffe.wmVt ersetzen.
 - Support für optionale Waffeneigenschaften, indem sie mit '(\*)' am Ende des Namens markiert werden; Beispiel: die Streitaxt erhält die Eigenschaft Rüstungsbrechend (\*). Diese Markierung muss im Charaktereditor entfernt werden, ansonsten wird die Eigenschaft nicht auf dem Charakterbogen ausgegeben.
 - In den Hausregeln können bestimmte Waffeneigenschaften via 'WaffenPlus Plugin: Waffeneigenschaften Gruppieren' in der PDF separat gruppiert werden. Dies kann beispielsweise genutzt werden, um bestimmte Waffeneigenschaften als Angriffsarten herauszuheben (siehe IA).
 
