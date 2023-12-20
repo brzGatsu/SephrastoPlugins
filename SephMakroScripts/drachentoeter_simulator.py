@@ -144,8 +144,8 @@ class Passierschlag:
 # if at > vt:
 #     trigger_onVTFailing (defender)
 # if still at > vt:
-#     trigger_onVTFailed (defender)
 #     trigger_onATSuccess (attacker)
+#     trigger_onVTFailed (defender)
 #     trigger_onDealWounds (attacker)
 #     trigger_onDamageReceived (defender)
 #     trigger_onDamageDealt (attacker)
@@ -497,14 +497,14 @@ class PWKI:
 class PWKIII:
     name = "Kreuzblock"
     def isUnlocked(fighter): return "Parierwaffenkampf III" in fighter.char.vorteile and fighter.kampfstil == "Parierwaffenkampf"
-    def trigger_onVTFailing(attacker, defender, attackType, atRoll, vtRoll, maneuvers):
+    def trigger_onVTFailed(attacker, defender, attackType, atRoll, vtRoll, tpRoll, maneuvers):
         if not defender.actionUsable(Action.Reaktion):
             return
-        if atRoll.result() - vtRoll.result() > 4:
+        if (tpRoll.isSP and tpRoll.result() <= defender.ws) or (not tpRoll.isSP and tpRoll.result() <= defender.wsStern):
             return
         defender.useAction(Action.Reaktion)
-        vtRoll.modify(4)
-        if logFights: print(defender.name, "verbessert als Reaktion die VT nachträglich um 4 durch",  PWKIII.name)
+        tpRoll.multiplier *= 0.5
+        if logFights: print(defender.name, "halbiert den erlittenen Schaden durch",  PWKIII.name)
 
 class BKIII:
     name = "Vergeltung"
@@ -989,7 +989,9 @@ class Fighter:
                 for feat in featsAndManeuvers:
                     if hasattr(feat, "trigger_onATSuccess"):
                         feat.trigger_onATSuccess(self, defender, attackType, atRoll, vtRoll, tpRoll, maneuvers)
-  
+                for feat in defender.feats:
+                  if hasattr(feat, "trigger_onVTFailed"):
+                      feat.trigger_onVTFailed(self, defender, attackType, atRoll, vtRoll, tpRoll, maneuvers)
                 defender.takeDamage(tpRoll, featsAndManeuvers)
 
                 # trigger_onDamageReceived
