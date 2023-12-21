@@ -73,7 +73,7 @@ class Action:
 # Attack Types
 class NormalerAngriff:
     name = "Normaler Angriff"
-    def isUsable(attacker, defender): return attacker.isAlive() and defender.isAlive() and attacker.actionUsable(Action.Aktion) and attacker.myTurn and not attacker.bedrängt
+    def isUsable(attacker, defender): return attacker.isAlive() and defender.isAlive() and attacker.actionUsable(Action.Aktion) and attacker.myTurn
     def mod(fighter): return 0
     def isManeuverAllowed(fighter, maneuver): return True    
     def use(attacker, defender, tpMod = 0):
@@ -90,7 +90,7 @@ class NebenhandAngriff:
             return False
         if attacker.isShieldBroken():
             return False
-        return attacker.isAlive() and defender.isAlive() and attacker.actionUsable(Action.Bonusaktion) and attacker.myTurn and not attacker.bedrängt
+        return attacker.isAlive() and defender.isAlive() and attacker.actionUsable(Action.Bonusaktion) and attacker.myTurn
     def mod(fighter):
         mod = -4
         if fighter.kampfstil == "Beidhändiger Kampf" and "Beidhändiger Kampf II" in fighter.char.vorteile:
@@ -124,7 +124,7 @@ class ExtraAngriff:
 
 class Passierschlag:
     name = "Passierschlag"
-    def isUsable(attacker, defender): return attacker.isAlive() and defender.isAlive() and attacker.actionUsable(Passierschlag.__getActionType(attacker)) and not attacker.bedrängt
+    def isUsable(attacker, defender): return attacker.isAlive() and defender.isAlive() and attacker.actionUsable(Passierschlag.__getActionType(attacker))
     def mod(fighter): return 0
     def isManeuverAllowed(fighter, maneuver): return True    
     def use(attacker, defender, tpMod = 0):
@@ -915,7 +915,7 @@ class Fighter:
                 if hasattr(feat, "trigger_onMoveIntoReach"):
                     feat.trigger_onMoveIntoReach(self, defender)
 
-        if self.bedrängt or "Defensiver Kampfstil" in self.char.vorteile:
+        if (defender.actionUsable(Action.Reaktion) and self.bedrängt) or "Defensiver Kampfstil" in self.char.vorteile:
             if logFights: print(self.name, "nutzt volle Defensive")
             self.useAction(Action.Aktion)
             self.disadvantageForEnemy.append(Fighter.DurationStartNextPhase)
