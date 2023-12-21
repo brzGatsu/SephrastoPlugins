@@ -56,8 +56,6 @@ if testManeuvers:
 if len(simulate_all) > 0:
     logFighters = False
     logFights = False
-    fighter1Mods["VolleOffensive"] = False
-    fighter2Mods["VolleOffensive"] = False
 
 #========== Implementation ===========
 
@@ -99,7 +97,7 @@ class NebenhandAngriff:
             mod = 0
         return mod
     def isManeuverAllowed(fighter, maneuver):
-        if fighter.kampfstil == "Schildkampf":
+        if fighter.kampfstil == "Schildkampf" and "Schildkampf II" in fighter.char.vorteile:
             return maneuver.name.startswith("Wuchtschlag") or maneuver == Niederwerfen or maneuver == Umreißen
         return maneuver.name.startswith("Wuchtschlag")
     def use(attacker, defender, tpMod = 0):
@@ -408,12 +406,11 @@ class Präzision:
     def isUnlocked(fighter): return "Präzision" in fighter.char.vorteile
 
     def trigger_onATSuccess(attacker, defender, attackType, atRoll, vtRoll, tpRoll, maneuvers):
-        if not atRoll.lastRoll >= 16 or not attacker.actionUsable(Action.Präzision):
+        if not atRoll.advantage or not attacker.actionUsable(Action.Präzision):
             return
-        bonus = attacker.char.attribute["GE"].wert
+        attacker.useAction(Action.Präzision)
         bonus = random.randint(1,6) + random.randint(1,6)
         tpRoll.modify(bonus)
-        attacker.useAction(Action.Präzision)
         if logFights: print(">", attacker.name, "erhält TP +", bonus, "durch", Präzision.name)        
 
 class Unaufhaltsam:
@@ -473,16 +470,19 @@ class Klingentanz:
 # Feats (defensive)
 class SK:
     name = "Schildwall"
-    def isUnlocked(fighter): return "Schildkampf II" in fighter.char.vorteile and fighter.kampfstil == "Schildkampf"
+    def isUnlocked(fighter): return "Schildkampf I" in fighter.char.vorteile and fighter.kampfstil == "Schildkampf"
     def trigger_onVTFailing(attacker, defender, attackType, atRoll, vtRoll, maneuvers):
         if defender.isShieldBroken():
             return
         if not defender.actionUsable(Action.Reaktion):
             return
-        if atRoll.result() - vtRoll.result() > 6:
+        bonus = 2
+        if "Schildkampf II" in defender.char.vorteile:
+            bonus = 4
+
+        if atRoll.result() - vtRoll.result() > bonus:
             return
         defender.useAction(Action.Reaktion)
-        bonus = random.randint(1,6)
         vtRoll.modify(bonus)
         if logFights: print(defender.name, "verbessert als Reaktion die VT nachträglich um", bonus, "durch",  SK.name)
 
