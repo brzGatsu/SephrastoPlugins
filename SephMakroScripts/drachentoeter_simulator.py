@@ -57,6 +57,8 @@ if len(simulate_all) > 0:
     logFighters = False
     logFights = False
 
+assert os.path.splitext(os.path.basename(datenbank.hausregelDatei))[0] == "Drachentöter", "Bitte wähle die Drachentöter-Regeln aus"
+
 #========== Implementation ===========
 
 class Action:
@@ -1105,9 +1107,7 @@ def simulate(fighter1, fighter2):
                 if fighter1.isAlive():
                     fighter1.onIniphase(fighter2)
             rounds += 1
-            if rounds > 50:
-                print("Kampf dauert zu lang, breche ab")
-                return
+            assert rounds < 50, "Kampf dauert zu lang, breche ab"
         
         if fighter1.isAlive():
             fighter1Wins += 1
@@ -1143,25 +1143,21 @@ else:
         startDir = ""
     if not fighter1Path:
         fighter1Path, _ = QtWidgets.QFileDialog.getOpenFileName(None,"Charakterdatei für Kämpfer 1...", startDir, "XML Datei (*.xml)")
-        if not fighter1Path:
-            print("Du hast keine Charakterdatei gewählt.")
+        assert fighter1Path is not None, "Du hast keine Charakterdatei gewählt."
     else:
          fighter1Path = os.path.join(startDir, fighter1Path + ".xml")
     if fighter1Path and not fighter2Path:
         fighter2Path, _ = QtWidgets.QFileDialog.getOpenFileName(None,"Charakterdatei für Kämpfer 2...", startDir, "XML Datei (*.xml)")
-        if not fighter2Path:
-            print("Du hast keine Charakterdatei gewählt.")
+        assert fighter2Path is not None, "Du hast keine Charakterdatei gewählt."
     elif fighter2Path:
         fighter2Path = os.path.join(startDir, fighter2Path + ".xml")
  
-
-    if fighter1Path and fighter2Path:
-        fighter1 = Fighter(fighter1Path, 0, 0, fighter1WaffeIndex, fighter1NebenhandIndex, fighter1AusweichenIndex, fighter1Mods)
-        fighter2 = Fighter(fighter2Path, 1, 6, fighter2WaffeIndex, fighter2NebenhandIndex, fighter2AusweichenIndex, fighter2Mods)
-        if testManeuvers:
-            for m in CombatManeuvers:
-                print("\n==== Teste", m.name,"====")
-                currentTestManeuver = m
-                simulate(fighter1, fighter2)
-        else:
+    fighter1 = Fighter(fighter1Path, 0, 0, fighter1WaffeIndex, fighter1NebenhandIndex, fighter1AusweichenIndex, fighter1Mods)
+    fighter2 = Fighter(fighter2Path, 1, 6, fighter2WaffeIndex, fighter2NebenhandIndex, fighter2AusweichenIndex, fighter2Mods)
+    if testManeuvers:
+        for m in CombatManeuvers:
+            print("\n==== Teste", m.name,"====")
+            currentTestManeuver = m
             simulate(fighter1, fighter2)
+    else:
+        simulate(fighter1, fighter2)
