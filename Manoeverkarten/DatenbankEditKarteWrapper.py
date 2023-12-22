@@ -9,7 +9,7 @@ from Core.Waffeneigenschaft import Waffeneigenschaft
 from Hilfsmethoden import Hilfsmethoden
 from Manoeverkarten.Manoeverkarte import KartenTyp, Karte, KartenUtility
 from DatenbankElementEditorBase import DatenbankElementEditorBase, BeschreibungEditor, VoraussetzungenEditor
-from PySide6.QtWebEngineWidgets import QWebEngineView
+from QtUtils.WebEngineViewPlus import WebEngineViewPlus
 from Manoeverkarten import KartenGenerator
 from QtUtils.HtmlToolbar import HtmlToolbar
 import os
@@ -56,7 +56,7 @@ class DatenbankEditKarteWrapper(DatenbankElementEditorBase):
         self.updateTimer = QtCore.QTimer()
         self.updateTimer.setSingleShot(True)
         self.updateTimer.timeout.connect(self.updateWebView)
-        self.webView = QWebEngineView()
+        self.webView = WebEngineViewPlus()
         self.ui.gbPreview.layout().addWidget(self.webView)
         zoomFactor = 2
         self.webView.setFixedSize(238 * zoomFactor, 332 * zoomFactor)
