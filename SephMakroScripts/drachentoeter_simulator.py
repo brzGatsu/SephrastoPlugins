@@ -950,16 +950,16 @@ class Fighter:
         maneuvers = ai_chooseManeuvers(self, defender, attackType)
         featsAndManeuvers = self.feats + maneuvers
         unberechenbar = "Unberechenbar" in self.waffenEigenschaften
-        defenderShield = "Schild" in defender.char.waffen[self.nebenhandIndex].eigenschaften
         # trigger_onAT
         atRoll = D20Roll(self.modAT())
         atRoll.modify(attackType.mod(self))
-        atRoll.setAdvantageDisadvantage(self.hasAdvantage() or defender.enemyHasAdvantage() or (unberechenbar and defenderShield), self.hasDisadvantage() or defender.enemyHasDisadvantage())
+        atRoll.setAdvantageDisadvantage(self.hasAdvantage() or defender.enemyHasAdvantage(), self.hasDisadvantage() or defender.enemyHasDisadvantage())
         for feat in featsAndManeuvers:
             if hasattr(feat, "trigger_onAT"):
                 feat.trigger_onAT(self, defender, attackType, atRoll, maneuvers)
         # Feats may give advantage onAT, so set again
-        atRoll.setAdvantageDisadvantage(self.hasAdvantage() or defender.enemyHasAdvantage() or (unberechenbar and defenderShield), self.hasDisadvantage() or defender.enemyHasDisadvantage())
+        atRoll.setAdvantageDisadvantage(self.hasAdvantage() or defender.enemyHasAdvantage(), self.hasDisadvantage() or defender.enemyHasDisadvantage())
+        atRoll.modifyFail(2 if unberechenbar else 0)
         atRoll.roll()
         for duration in [Fighter.DurationStartNextPhaseOneRoll, Fighter.DurationEndPhaseOneRoll, Fighter.DurationEndNextPhaseOneRoll]:
             self.pruneAdvantageDisadvantage(duration)
