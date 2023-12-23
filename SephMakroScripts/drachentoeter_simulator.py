@@ -57,6 +57,7 @@ if len(simulate_all) > 0:
     logFighters = False
     logFights = False
 
+assert os.path.splitext(os.path.basename(datenbank.hausregelDatei))[0].startswith("Drachentöter"), "Bitte wähle die Drachentöter-Regeln aus"
 
 #========== Implementation ===========
 
