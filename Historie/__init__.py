@@ -153,7 +153,7 @@ class Plugin:
             "datum": date,
             "ep": char.epAusgegeben,
             "epgesamt": char.epGesamt,
-            "version": Version.toString(),
+            "version": Version.clientToString(),
         })
         folder = Wolke.Settings.get("Historie_Ordner", char_folder)
         fpath = os.path.join(folder, fname)
