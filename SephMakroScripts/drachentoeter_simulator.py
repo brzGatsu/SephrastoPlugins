@@ -57,7 +57,6 @@ if len(simulate_all) > 0:
     logFighters = False
     logFights = False
 
-assert os.path.splitext(os.path.basename(datenbank.hausregelDatei))[0] == "Drachentöter", "Bitte wähle die Drachentöter-Regeln aus"
 
 #========== Implementation ===========
 
@@ -348,8 +347,6 @@ class SNKII:
             return
         if not atRoll.couldProfitFromAdvantage:
             return
-        if atRoll.disadvantage:
-            return
         attacker.useAction(Action.Bonusaktion)
         attacker.advantage.append(Fighter.DurationEndPhaseOneRoll)
         if logFights: print(attacker.name, "gibt sich als Bonusaktion Vorteil durch", SNKII.name)
@@ -366,8 +363,6 @@ class SNKIII:
 class KVKII:
     name = "Durchbrechen"
     def isUnlocked(fighter): return "Kraftvoller Kampf II" in fighter.char.vorteile and fighter.kampfstil == "Kraftvoller Kampf"
-    def trigger_onAT(attacker, defender, attackType, atRoll, maneuvers):
-        atRoll.modifyCrit(-1)
     def trigger_onDamageDealt(attacker, defender, attackType, atRoll, vtRoll, tpRoll, maneuvers):
         if not atRoll.isCrit() or not BonusAngriff.isUsable(attacker, defender):
             return
@@ -399,7 +394,7 @@ class PWKII:
         if not atRoll.advantage or not attacker.actionUsable(Action.TückischeKlinge):
             return
         attacker.useAction(Action.TückischeKlinge)
-        bonus = random.randint(1,6) + random.randint(1,6)
+        bonus = random.randint(1,6)
         tpRoll.modify(bonus)
         if logFights: print(">", attacker.name, "verursacht +", bonus, "TP durch", PWKII.name)
 
@@ -928,7 +923,7 @@ class Fighter:
         elif NormalerAngriff.isUsable(self, defender):
             if (self.actionUsable(Action.Reaktion) and self.mods["VolleOffensive"]) or "Offensiver Kampfstil" in self.char.vorteile:
                 if logFights: print(self.name, "nutzt volle Offensive")
-                if self.mods["VolleOffensive"]:
+                if "Offensiver Kampfstil" not in self.char.vorteile:
                     self.useAction(Action.Reaktion)
                 self.advantage.append(Fighter.DurationEndPhase)
                 self.advantageForEnemy.append(Fighter.DurationStartNextPhase)
