@@ -16,6 +16,9 @@ Enthält einen Baukasten mit WdH Spezies, Kulturen und Kämpferprofessionen für
 ### CharakterToText
 Das Plugin sorgt dafür, dass beim beim Speichern des Charakters zusätzlich eine Textdatei im gleichen Ordner angelegt wird. Diese Textdatei enthält alle Charakterwerte in leicht zu kopierendem Format. Ich nutze es beispielsweise, um ein digitales Charaktersheet in Form von Trello-Karten zu befüllen.
 
+### Drachentöter Kampfregeln
+Dieses Plugin installiert die Hausregeln des Drachentöter Kampfregelwerks für Ilaris. Weitere Infos findest du auf <a href=\"https://dsaforum.de/viewtopic.php?t=59615\">dsaforum.de</a> und dem <a href=\"https://discord.gg/AF3WjqvMU9\">Drachentöter Discord Server</a>.
+
 ### FertigkeitenPlus
 Dieses Plugin bietet bei Fertigkeiten die Möglichkeit, ein viertes Attribut anzugeben. Berechnungen für den Basiswert verwenden dann nur die 3 höchsten Attribute (siehe angepasste Einstellung "Fertigkeiten: BW Script").
 

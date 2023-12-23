@@ -9,6 +9,7 @@ os.makedirs(build_path)
 includes = [
     "CharakterAssistent",
     "CharakterToText",
+    "DrachentoeterKampfregeln",
     "FertigkeitenPlus",
     "FoundryVTT",
     "Hexalogien",
