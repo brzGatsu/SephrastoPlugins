@@ -31,7 +31,7 @@ Ignifaxius Flammenstrahl, Orcanofaxius, Archofaxius, Frigifaxius, Aquafaxius, Hu
 Ignisphaero, Orcanosphaero, Archosphaero, Frigisphaero, Aquasphaero, Humosphaero
 Wand aus Flammen, Orkanwand, Wand aus Erz, Gletscherwand, Wasserwand, Wand aus Dornen
 Feuersturm, Windhose, Malmkreis, Eiswirbel, Mahlstrom, Sumpfstrudel
-Ignimorpho Feuerform, Aeromorpho Wirbelform, Metamorpho Felsenform, Metamorpho Gletscherform, Aquamorpho Wasserform, Metamorpho Eisenholz
+Ignimorpho Feuerform, Aeromorpho Wirbelform, Metamorpho Felsenform, Metamorpho Gletscherform, Aquamorpho Wasserform, Metamorpho Eisenholz, Haselbusch und Ginsterkraut
 Weisheit der Flammen, Weisheit der Wolken, Weisheit der Steine, Weisheit des Eises, Weisheit des Teiches, Weisheit der Bäume
 Pfeil des Feuers, Pfeil der Luft, Pfeil des Erzes, Pfeil des Eises, Pfeil des Wassers, Pfeil des Humus
 Herbeirufung des Feuers, Herbeirufung der Luft, Herbeirufung des Erzes, Herbeirufung des Eises, Herbeirufung des Wassers, Herbeirufung des Humus, Macht des Feuers, Macht der Luft, Macht des Erzes, Macht des Eises, Macht des Wassers, Macht des Humus"""
