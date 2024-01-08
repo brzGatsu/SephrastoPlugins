@@ -278,15 +278,15 @@ habe ich mit docsmagic.de gemacht, hier werden Sleeves mit farbigen Rückseiten 
         text = re.sub("\$vorteil:([^\$]*)\$", repl, text)
 
         def repl(m):
-            return self.db.talente[m.group(1)].text if m.group(1) in self.db.talente else "talent: nicht gefunden$"
+            return self.db.talente[m.group(1)].anzeigetext if m.group(1) in self.db.talente else "$talent: nicht gefunden$"
         text = re.sub("\$talent:([^\$]*)\$", repl, text)
         
         def repl(m):
-            return self.db.waffeneigenschaften[m.group(1)].text if m.group(1) in self.db.waffeneigenschaften else "waffeneigenschaft: nicht gefunden$"
+            return self.db.waffeneigenschaften[m.group(1)].text if m.group(1) in self.db.waffeneigenschaften else "$waffeneigenschaft: nicht gefunden$"
         text = re.sub("\$waffeneigenschaft:([^\$]*)\$", repl, text)
         
         def repl(m):
-            return self.db.regeln[m.group(1)].text if m.group(1) in self.db.regeln else "regel: nicht gefunden$"
+            return self.db.regeln[m.group(1)].text if m.group(1) in self.db.regeln else "$regel: nicht gefunden$"
         text = re.sub("\$regel:([^\$]*)\$", repl, text)
         return text
 
