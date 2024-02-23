@@ -1,0 +1,7 @@
+{
+  "name": "Kreaturen",
+  "description": "Mit dem Kreaturen Plugin können neben Charakteren auch Kreaturen als Gegner oder NSCs erstellt werden. Die Generierung ist weniger kompliziert und folgt keinen Regeln. Fertige Kreaturen können als Statblock exportiert oder mit dem IlarisOnline Plugin auf ilaris-online.de veröffentlicht werden.",
+  "author": "Lukr",
+  "version": "1",
+  "hasSettings": true
+}
