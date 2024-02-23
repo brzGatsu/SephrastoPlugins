@@ -646,7 +646,10 @@ habe ich mit docsmagic.de gemacht, hier werden Sleeves mit farbigen Rückseiten 
             progressDlg.setValue(progressDlg.value()+1)
             if progressDlg.shouldCancel():
                 for pdf in kartenPdfs: os.remove(pdf[0])
+                webEngineView.deleteLater()
                 return
+
+        webEngineView.deleteLater()
 
         if writeEinzeln:
             progressDlg.setLabelText("Optimiere Dateigröße...")
@@ -688,32 +691,29 @@ habe ich mit docsmagic.de gemacht, hier werden Sleeves mit farbigen Rückseiten 
             if Wolke.Settings["Manöverkarten_PDF-Open"]:
                 Hilfsmethoden.openFile(spath)
 
-    def __convertHtmlToJpg(self, out_file, html, htmlBaseUrl, width, height, scale = 1, backgroundColor = QtCore.Qt.transparent, webView = None):
+    def __convertHtmlToJpg(self, webEngineView, out_file, html, htmlBaseUrl, width, height, scale = 1, backgroundColor = QtCore.Qt.transparent):
         if isinstance(htmlBaseUrl, str):
             htmlBaseUrl = QtCore.QUrl.fromLocalFile(QtCore.QFileInfo(htmlBaseUrl).absoluteFilePath())
-
-        if webView is None:
-            webView = WebEngineViewPlus()
-        webView.setFixedSize(width*scale, height*scale)
-        webView.setZoomFactor(scale)
-        webView.page().setBackgroundColor(backgroundColor)
-        webView.show()
-        with PdfSerializer.waitForSignal(webView.htmlLoaded):
-            webView.setHtml(html, htmlBaseUrl)
+        webEngineView.setFixedSize(width*scale, height*scale)
+        webEngineView.setZoomFactor(scale)
+        webEngineView.page().setBackgroundColor(backgroundColor)
+        webEngineView.show()
+        with PdfSerializer.waitForSignal(webEngineView.htmlLoaded):
+            webEngineView.setHtml(html, htmlBaseUrl)
 
         if Wolke.Settings["Manöverkarten_ExportVerzögerungMs"] > 0:
             timer = QtCore.QTimer()
             with PdfSerializer.waitForSignal(timer.timeout):
                 timer.start(Wolke.Settings["Manöverkarten_ExportVerzögerungMs"])
 
-        pixmap = webView.grab()
+        pixmap = webEngineView.grab()
         pixmap.save(out_file, "JPG", 90)
 
     def writeKartenBilder(self, spath, karten, nameFormat, progressDlg):
         if len(karten) == 0:
             return
         deckName = os.path.splitext(os.path.basename(spath))[0]
-        webView = WebEngineViewPlus()
+        webEngineView = WebEngineViewPlus()
 
         for karte in karten:
             if karte.typ == KartenTyp.Deck:
@@ -729,7 +729,12 @@ habe ich mit docsmagic.de gemacht, hier werden Sleeves mit farbigen Rückseiten 
             kartenName = nameFormat.replace("{deckname}", deckName).replace("{titel}", titel)
             path = os.path.join(os.path.dirname(spath), f"{kartenName}.jpg")
             html, htmlPath = self.generateHtml(karte)
-            self.__convertHtmlToJpg(path, html, htmlPath, 238, 332, 3, karte.farbe)
+            self.__convertHtmlToJpg(webEngineView, path, html, htmlPath, 238, 332, 3, karte.farbe)
             progressDlg.setValue(progressDlg.value()+1)
             if progressDlg.shouldCancel():
+                webEngineView.hide()
+                webEngineView.deleteLater()
                 return
+
+        webEngineView.hide()
+        webEngineView.deleteLater()
