@@ -570,7 +570,7 @@ $regel:Aktion Verzögern (voll)$&lt;/p&gt;</Karte>
   <Karte name="Immunität gegen Krankheiten" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
   <Karte name="Resistenz gegen Kälte" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
   <Karte name="Resistenz gegen Hitze" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
-  <Karte name="Verbindungen" typ="0" subtyp="0" titel="$original$" subtitel="" fusszeile="$original$" löschen="0" voraussetzungen="Vorteil Angepasst I ODER Vorteil Angepasst (Dunkelheit) I ODER Vorteil Angepasst (Wasser) I ODER Vorteil Angepasst (Wald) I ODER Vorteil Angepasst (Schnee) I">$original$
+  <Karte name="Verbindungen" typ="0" subtyp="0" titel="$original$" subtitel="" fusszeile="$original$" löschen="0" voraussetzungen="Vorteil Verbindungen">$original$
 &lt;table&gt;
 &lt;tr&gt;
 &lt;th align="left"&gt;Verbindung&lt;/th&gt;

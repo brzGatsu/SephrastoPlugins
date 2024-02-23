@@ -119,6 +119,8 @@ class Karte:
             name += f" ({db.einstellungen['Regeln: Typen'].wert[self.subtyp]})"
         elif self.typ == KartenTyp.Talent:
             name += f" ({list(db.einstellungen['Talente: Spezialtalent Typen'].wert.keys())[self.subtyp]})"
+        elif self.typ == KartenTyp.Benutzerdefiniert:
+            name = f"{self.subtyp}"
         return name
 
     def details(self, db):

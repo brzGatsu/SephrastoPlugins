@@ -210,8 +210,6 @@ class DatenbankEditKarteWrapper(DatenbankElementEditorBase):
 
         self.ui.labelTitel.setVisible(not isNew)
         self.ui.leTitel.setVisible(not isNew)
-        self.ui.labelVoraussetzungen.setVisible(isNew)
-        self.ui.teVoraussetzungen.setVisible(isNew)
         
         if isNew:
             self.ui.labelInfo.setText("Neue Karte erstellen")
@@ -237,6 +235,8 @@ class DatenbankEditKarteWrapper(DatenbankElementEditorBase):
         self.ui.leTitel.setEnabled(not delete)
         self.ui.labelUntertitel.setEnabled(not delete)
         self.ui.leUntertitel.setEnabled(not delete)
+        self.ui.labelVoraussetzungen.setEnabled(not delete)
+        self.ui.teVoraussetzungen.setEnabled(not delete)
         self.ui.labelText.setEnabled(not delete)
         self.ui.teBeschreibung.setEnabled(not delete)
         self.ui.labelFusszeile.setEnabled(not delete)
