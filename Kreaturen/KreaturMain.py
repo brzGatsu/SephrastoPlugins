@@ -41,7 +41,7 @@ class Ui_formMain(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 1292, 759))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 1275, 1277))
         self.gridLayout_4 = QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout_4.setObjectName(u"gridLayout_4")
         self.Sidebar = QVBoxLayout()
@@ -599,6 +599,40 @@ class Ui_formMain(object):
         self.tab_4.setObjectName(u"tab_4")
         self.verticalLayout_2 = QVBoxLayout(self.tab_4)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+        self.groupBox_8 = QGroupBox(self.tab_4)
+        self.groupBox_8.setObjectName(u"groupBox_8")
+        self.gridLayout_8 = QGridLayout(self.groupBox_8)
+        self.gridLayout_8.setObjectName(u"gridLayout_8")
+        self.treeTalente = QTreeWidget(self.groupBox_8)
+        self.treeTalente.setObjectName(u"treeTalente")
+
+        self.gridLayout_8.addWidget(self.treeTalente, 0, 0, 1, 1)
+
+        self.btnAddTalent = QPushButton(self.groupBox_8)
+        self.btnAddTalent.setObjectName(u"btnAddTalent")
+
+        self.gridLayout_8.addWidget(self.btnAddTalent, 1, 0, 1, 1)
+
+
+        self.verticalLayout_2.addWidget(self.groupBox_8)
+
+        self.groupBox_9 = QGroupBox(self.tab_4)
+        self.groupBox_9.setObjectName(u"groupBox_9")
+        self.gridLayout_10 = QGridLayout(self.groupBox_9)
+        self.gridLayout_10.setObjectName(u"gridLayout_10")
+        self.treeZauberfertigkeiten = QTreeWidget(self.groupBox_9)
+        self.treeZauberfertigkeiten.setObjectName(u"treeZauberfertigkeiten")
+
+        self.gridLayout_10.addWidget(self.treeZauberfertigkeiten, 0, 0, 1, 1)
+
+        self.btnAddZauberfertigkeit = QPushButton(self.groupBox_9)
+        self.btnAddZauberfertigkeit.setObjectName(u"btnAddZauberfertigkeit")
+
+        self.gridLayout_10.addWidget(self.btnAddZauberfertigkeit, 1, 0, 1, 1)
+
+
+        self.verticalLayout_2.addWidget(self.groupBox_9)
+
         self.verticalSpacer_5 = QSpacerItem(20, 694, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
         self.verticalLayout_2.addItem(self.verticalSpacer_5)
@@ -609,6 +643,18 @@ class Ui_formMain(object):
         self.verticalLayout_6 = QVBoxLayout(self.tab_3)
         self.verticalLayout_6.setObjectName(u"verticalLayout_6")
         self.verticalLayout_6.setContentsMargins(20, 20, 20, 20)
+        self.boxAngriffe = QGroupBox(self.tab_3)
+        self.boxAngriffe.setObjectName(u"boxAngriffe")
+        self.layoutAngriffe = QVBoxLayout(self.boxAngriffe)
+        self.layoutAngriffe.setObjectName(u"layoutAngriffe")
+
+        self.verticalLayout_6.addWidget(self.boxAngriffe)
+
+        self.btnAddAngriff = QPushButton(self.tab_3)
+        self.btnAddAngriff.setObjectName(u"btnAddAngriff")
+
+        self.verticalLayout_6.addWidget(self.btnAddAngriff)
+
         self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
         self.verticalLayout_6.addItem(self.verticalSpacer)
@@ -693,7 +739,7 @@ class Ui_formMain(object):
 
         self.retranslateUi(formMain)
 
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(3)
 
 
         QMetaObject.connectSlotsByName(formMain)
@@ -765,7 +811,21 @@ class Ui_formMain(object):
         ___qtreewidgetitem1.setText(0, QCoreApplication.translate("formMain", u"Name", None));
         self.btnAddInfo.setText(QCoreApplication.translate("formMain", u"Hinzuf\u00fcgen", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), QCoreApplication.translate("formMain", u"Eigenschaften und Infos", None))
+        self.groupBox_8.setTitle(QCoreApplication.translate("formMain", u"Freie Talente", None))
+        ___qtreewidgetitem2 = self.treeTalente.headerItem()
+        ___qtreewidgetitem2.setText(2, QCoreApplication.translate("formMain", u"Text", None));
+        ___qtreewidgetitem2.setText(1, QCoreApplication.translate("formMain", u"PW", None));
+        ___qtreewidgetitem2.setText(0, QCoreApplication.translate("formMain", u"Talent", None));
+        self.btnAddTalent.setText(QCoreApplication.translate("formMain", u"Hinzuf\u00fcgen", None))
+        self.groupBox_9.setTitle(QCoreApplication.translate("formMain", u"\u00dcbernat\u00fcrlich", None))
+        ___qtreewidgetitem3 = self.treeZauberfertigkeiten.headerItem()
+        ___qtreewidgetitem3.setText(2, QCoreApplication.translate("formMain", u"Zauber/Liturgien", None));
+        ___qtreewidgetitem3.setText(1, QCoreApplication.translate("formMain", u"PW", None));
+        ___qtreewidgetitem3.setText(0, QCoreApplication.translate("formMain", u"Fertigkeit", None));
+        self.btnAddZauberfertigkeit.setText(QCoreApplication.translate("formMain", u"Hinzuf\u00fcgen", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_4), QCoreApplication.translate("formMain", u"Fertigkeiten", None))
+        self.boxAngriffe.setTitle(QCoreApplication.translate("formMain", u"Angriffe", None))
+        self.btnAddAngriff.setText(QCoreApplication.translate("formMain", u"Hinzuf\u00fcgen", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), QCoreApplication.translate("formMain", u"Angriffe", None))
         self.buttonLoad.setText(QCoreApplication.translate("formMain", u"Laden", None))
         self.buttonQuicksave.setText(QCoreApplication.translate("formMain", u"Speichern", None))

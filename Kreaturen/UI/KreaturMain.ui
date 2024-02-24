@@ -36,8 +36,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>1292</width>
-        <height>759</height>
+        <width>1275</width>
+        <height>1277</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_4">
@@ -162,7 +162,7 @@
        <item row="0" column="0">
         <widget class="QTabWidget" name="tabWidget">
          <property name="currentIndex">
-          <number>0</number>
+          <number>3</number>
          </property>
          <widget class="QWidget" name="tab">
           <attribute name="title">
@@ -1065,6 +1065,76 @@
           </attribute>
           <layout class="QVBoxLayout" name="verticalLayout_2">
            <item>
+            <widget class="QGroupBox" name="groupBox_8">
+             <property name="title">
+              <string>Freie Talente</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_8">
+              <item row="0" column="0">
+               <widget class="QTreeWidget" name="treeTalente">
+                <column>
+                 <property name="text">
+                  <string>Talent</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>PW</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>Text</string>
+                 </property>
+                </column>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QPushButton" name="btnAddTalent">
+                <property name="text">
+                 <string>Hinzufügen</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="groupBox_9">
+             <property name="title">
+              <string>Übernatürlich</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_10">
+              <item row="0" column="0">
+               <widget class="QTreeWidget" name="treeZauberfertigkeiten">
+                <column>
+                 <property name="text">
+                  <string>Fertigkeit</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>PW</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>Zauber/Liturgien</string>
+                 </property>
+                </column>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QPushButton" name="btnAddZauberfertigkeit">
+                <property name="text">
+                 <string>Hinzufügen</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
             <spacer name="verticalSpacer_5">
              <property name="orientation">
               <enum>Qt::Vertical</enum>
@@ -1096,6 +1166,21 @@
            <property name="bottomMargin">
             <number>20</number>
            </property>
+           <item>
+            <widget class="QGroupBox" name="boxAngriffe">
+             <property name="title">
+              <string>Angriffe</string>
+             </property>
+             <layout class="QVBoxLayout" name="layoutAngriffe"/>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="btnAddAngriff">
+             <property name="text">
+              <string>Hinzufügen</string>
+             </property>
+            </widget>
+           </item>
            <item>
             <spacer name="verticalSpacer">
              <property name="orientation">

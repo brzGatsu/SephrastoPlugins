@@ -18,6 +18,7 @@ from Hilfsmethoden import Hilfsmethoden
 import shutil
 from QtUtils.ProgressDialogExt import ProgressDialogExt
 from Kreaturen.IlarisOnlineApi import APIClient
+from Kreaturen import AngriffWidget
 
 ATTRIBUTE = ["KO", "MU", "GE", "KK", "IN", "KL", "CH", "FF"]
 KAMPFWERTE = ["WS", "WSE", "KOL", "MR", "INI", "GS", "GSS", "GST", "GSS_label", "GST_label"]
@@ -35,6 +36,46 @@ DATA = {
     "kap": None,
     "nsc": False,
 }
+
+def as_int(value, fallback=-99):
+    if value is None:
+        return fallback
+    else:
+        return int(value)
+
+class AngriffWidgetWrapper(QtWidgets.QWidget, AngriffWidget.Ui_Form):
+    def __init__(self, parent=None):
+        super(AngriffWidgetWrapper, self).__init__(parent)
+        self.setupUi(self)
+
+    def setAngriff(self, angriff):
+        # self.ui = AngriffWidget.Ui_Form()
+        # self.ui.setupUi(self)
+        self.leName.setText(angriff.get("name", ""))
+        self.leTP.setText(angriff.get("tp", ""))
+        self.sbRW.setValue(as_int(angriff.get("rw")))
+        self.sbAT.setValue(as_int(angriff.get("at")))
+        self.sbVT.setValue(as_int(angriff.get("vt")))
+        self.sbLZ.setValue(as_int(angriff.get("lz")))
+        self.leEigenschaften.setText(", ".join([e.get("name") for e in angriff.get("eigenschaften", [])]))
+        # self.ui.leEigenschaften.setText(", ".join(angriff.get("eigenschaften", [])))
+
+    def getAngriff(self):
+        return {
+            "name": self.leName.text(),
+            "tp": self.leTP.text(),
+            "rw": self.sbRW.value(),
+            "at": self.sbAT.value(),
+            "vt": self.sbVT.value(),
+            "lz": self.sbLZ.value(),
+            "eigenschaften": [ {"name": e} for e in self.leEigenschaften.text().split(",") ]
+        }
+
+    def clear(self):
+        self.ui.leName.setText("")
+        self.ui.leWert.setText("")
+        self.ui.leText.setText("")
+
 
 class KreaturEditor(object):
     def __init__(self):
@@ -79,11 +120,16 @@ class KreaturEditor(object):
 
         # second tab Eigenschaften
         self.ui.btnAddEigenschaft.clicked.connect(self.addEigenschaftClicked)
-        self.ui.btnAddEigenschaft.clicked.connect(self.addInfoClicked)
+        self.ui.btnAddInfo.clicked.connect(self.addInfoClicked)
 
+        # third tab fertigkeiten
+        self.ui.btnAddTalent.clicked.connect(self.addTalentClicked)
+        self.ui.btnAddZauberfertigkeit.clicked.connect(self.addZauberfertigkeitClicked)
         self.ui.tabWidget.setStyleSheet('QTabBar { font-weight: bold; font-size: ' + str(Wolke.Settings["FontHeadingSize"]) + 'pt; font-family: \"' + Wolke.Settings["FontHeading"] + '\"; }')
         # self.vorteilCompleter = TextTagCompleter(self.ui.leVorteile, self.datenbank.tiervorteile.keys())
 
+        # fourth tab Angriffe
+        self.ui.btnAddAngriff.clicked.connect(self.addAngriffClicked)
         self.stateChanged()
         self.updateTitlebar()
 
@@ -101,6 +147,10 @@ class KreaturEditor(object):
             if item.text(0) == "" and item.text(1) == "":
                 treeWidget.takeTopLevelItem(idx)
 
+    def addAngriffClicked(self):
+        widget = AngriffWidgetWrapper()
+        self.ui.layoutAngriffe.addWidget(widget)
+
     def addEigenschaftClicked(self):
         """remove emty items and add a new one"""
         self.removeEmptyItems(self.ui.treeEigenschaften)
@@ -117,9 +167,27 @@ class KreaturEditor(object):
         self.ui.treeInfos.addTopLevelItem(item)
         self.ui.treeInfos.setCurrentItem(item)
 
+    def addTalentClicked(self):
+        """remove emty items and add a new one"""
+        self.removeEmptyItems(self.ui.treeTalente)
+        item = QtWidgets.QTreeWidgetItem(["", 0, ""])
+        item.setFlags(item.flags() | QtCore.Qt.ItemIsEditable)
+        self.ui.treeTalente.addTopLevelItem(item)
+        self.ui.treeTalente.setCurrentItem(item)
+
+    def addZauberfertigkeitClicked(self):
+        """remove emty items and add a new one"""
+        self.removeEmptyItems(self.ui.treeZauberfertigkeiten)
+        item = QtWidgets.QTreeWidgetItem(["", 0, ""])
+        item.setFlags(item.flags() | QtCore.Qt.ItemIsEditable)
+        self.ui.treeZauberfertigkeiten.addTopLevelItem(item)
+        self.ui.treeZauberfertigkeiten.setCurrentItem(item)
 
     def loadOnlineClickedHandler(self):
-        self.onlineDialog()
+        diag = self.onlineDialog()
+        if diag.kreatur is not None:
+            self.data = diag.kreatur
+            self.renderData()
 
     def saveOnlineClickedHandler(self):
         pass
@@ -215,6 +283,9 @@ class KreaturEditor(object):
         self.eigenschaftenChanged()
         self.infosChanged()
         self.kampfwerteChanged()
+        self.talenteChanged()
+        self.zauberfertigkeitenChanged()
+        self.angriffeChanged()
 
     def werteChanged(self):
         for attr in ATTRIBUTE:
@@ -280,23 +351,73 @@ class KreaturEditor(object):
         self.data["kampfwerte"]["GSS_label"] = self.ui.leGSS_label.text()
         self.data["kampfwerte"]["GST_label"] = self.ui.leGST_label.text()
 
+    def talenteChanged(self):
+        self.data["talente"] = []
+        for i in range(self.ui.treeTalente.topLevelItemCount()):
+            item = self.ui.treeTalente.topLevelItem(i)
+            self.data["freietalente"].append(
+                {"name": item.text(0), "wert": item.text(1), "text": item.text(2)})
+        # self.removeEmptyItems(self.ui.treeTalente)
+
+    def zauberfertigkeitenChanged(self):
+        self.data["zauberfertigkeiten"] = []
+        for i in range(self.ui.treeZauberfertigkeiten.topLevelItemCount()):
+            item = self.ui.treeZauberfertigkeiten.topLevelItem(i)
+            zaubers = item.text(2).split(", ")
+            self.data["zauberfertigkeiten"].append(
+                {"name": item.text(0), "wert": item.text(1), "zaubers": [{"name": z} for z in zaubers]})
+        # self.removeEmptyItems(self.ui.treeZauberfertigkeiten)
+
+    def angriffeChanged(self):
+        self.data["angriffe"] = []
+        for i in range(self.ui.layoutAngriffe.count()):
+            widget = self.ui.layoutAngriffe.itemAt(i).widget()
+            self.data["angriffe"].append(widget.getAngriff())
+
+
     def renderData(self):
         """render self.data to the ui elements"""
         self.renderAllgemein()
         self.renderWerte()
         self.renderEigenschaften()
         self.renderInfos()
+        self.renderTalente()
+        self.renderZauberfertigkeiten()
+        self.renderAngriffe()
 
     def renderAllgemein(self):
         self.ui.leName.setText(self.data["name"])
         self.ui.leKurzbeschreibung.setText(self.data["kurzbeschreibung"])
         self.ui.cbTyp.setCurrentText(self.data["typ"].capitalize())
         self.ui.leVorteile.setText(self.vorteileAsText())
-        self.ui.sbGUP.setValue(self.data.get("gup", 0))
-        self.ui.sbASP.setValue(self.data.get("asp", 0))
-        self.ui.sbKAP.setValue(self.data.get("kap", 0))
+        self.ui.sbGUP.setValue(as_int(self.data.get("gup")))
+        self.ui.sbASP.setValue(as_int(self.data.get("asp")))
+        self.ui.sbKAP.setValue(as_int(self.data.get("kap")))
         self.ui.cbNSC.setChecked(self.data.get("nsc", False))
     
+    def renderTalente(self):
+        self.ui.treeTalente.clear()
+        for t in self.data.get("freietalente", []):
+            item = QtWidgets.QTreeWidgetItem([t["name"], str(t["wert"]), t["text"]])
+            item.setFlags(item.flags() | QtCore.Qt.ItemIsEditable)
+            self.ui.treeTalente.addTopLevelItem(item)
+
+    def renderZauberfertigkeiten(self):
+        self.ui.treeZauberfertigkeiten.clear()
+        for z in self.data["zauberfertigkeiten"]:
+            item = QtWidgets.QTreeWidgetItem([z["name"], str(z["wert"]), ", ".join([z["name"] for z in z["zaubers"]])])
+            item.setFlags(item.flags() | QtCore.Qt.ItemIsEditable)
+            self.ui.treeZauberfertigkeiten.addTopLevelItem(item)
+    
+    def renderAngriffe(self):
+        # empty angriff box
+        while self.ui.layoutAngriffe.takeAt(0) is not None:
+            pass
+        for a in self.data["angriffe"]:
+            widget = AngriffWidgetWrapper()
+            widget.setAngriff(a)
+            self.ui.layoutAngriffe.addWidget(widget)
+
     def vorteileAsText(self):
         vorteile = []
         for v in self.data["vorteile"]:
@@ -309,12 +430,14 @@ class KreaturEditor(object):
     def renderWerte(self):
         fields = {a: f"sb{a}" for a in ATTRIBUTE}
         for attr, field in fields.items():
-            self.ui.__getattribute__(field).setValue(self.data["attribute"][attr])
+            self.ui.__getattribute__(field).setValue(as_int(self.data["attribute"].get(attr)))
         for attr in KAMPFWERTE:
-            if attr in ["GSS_label", "GST_label"]:
-                self.ui.__getattribute__(f"le{attr}").setText(self.data["kampfwerte"]["GSS_label"])
+            if attr == "GSS_label":
+                self.ui.__getattribute__(f"le{attr}").setText(self.data["kampfwerte"].get("GSS_label", "schwimmend"))
+            elif attr == "GST_label":
+                self.ui.__getattribute__(f"le{attr}").setText(self.data["kampfwerte"].get("GST_label", "fliegend"))
             else:
-                self.ui.__getattribute__(f"sb{attr}").setValue(self.data["kampfwerte"][attr])
+                self.ui.__getattribute__(f"sb{attr}").setValue(as_int(self.data["kampfwerte"].get(attr)))
 
     def renderEigenschaften(self):
         self.ui.treeEigenschaften.clear()
