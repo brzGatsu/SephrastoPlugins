@@ -3,6 +3,7 @@ from EventBus import EventBus
 from Kreaturen import KreaturEditor
 from Kreaturen import KreaturMain
 from Kreaturen import IlarisOnlineDBWrapper
+from Kreaturen import IlarisOnlineLoginWrapper
 from Hilfsmethoden import Hilfsmethoden
 
 class Plugin:
@@ -34,4 +35,5 @@ class Plugin:
         print("setup main")
         self.ed.setupMainForm()
         self.ed.onlineDialog = IlarisOnlineDBWrapper.KreaturOnlineDBWrapper
+        self.ed.loginDialog = IlarisOnlineLoginWrapper.IlarisOnlineLoginWrapper
         self.ed.formMain.show()

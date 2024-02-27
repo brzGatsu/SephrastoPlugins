@@ -74,6 +74,16 @@ class Ui_formMain(object):
         self.groupBox.setObjectName(u"groupBox")
         self.verticalLayout_8 = QVBoxLayout(self.groupBox)
         self.verticalLayout_8.setObjectName(u"verticalLayout_8")
+        self.laStatus = QLabel(self.groupBox)
+        self.laStatus.setObjectName(u"laStatus")
+
+        self.verticalLayout_8.addWidget(self.laStatus)
+
+        self.btnLogin = QPushButton(self.groupBox)
+        self.btnLogin.setObjectName(u"btnLogin")
+
+        self.verticalLayout_8.addWidget(self.btnLogin)
+
         self.btnDBLaden = QPushButton(self.groupBox)
         self.btnDBLaden.setObjectName(u"btnDBLaden")
 
@@ -739,7 +749,7 @@ class Ui_formMain(object):
 
         self.retranslateUi(formMain)
 
-        self.tabWidget.setCurrentIndex(3)
+        self.tabWidget.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(formMain)
@@ -753,6 +763,8 @@ class Ui_formMain(object):
         self.buttonLoadImage.setText(QCoreApplication.translate("formMain", u"Bild Laden", None))
         self.buttonDeleteImage.setText(QCoreApplication.translate("formMain", u"Bild L\u00f6schen", None))
         self.groupBox.setTitle(QCoreApplication.translate("formMain", u"ilaris-online.de", None))
+        self.laStatus.setText(QCoreApplication.translate("formMain", u"Angemeldet: ", None))
+        self.btnLogin.setText(QCoreApplication.translate("formMain", u"Anmelden", None))
         self.btnDBLaden.setText(QCoreApplication.translate("formMain", u"Aus Datenbank Laden", None))
         self.btnDBSpeichern.setText(QCoreApplication.translate("formMain", u"In Datenbank Speichern", None))
         self.lblWerte.setText(QCoreApplication.translate("formMain", u"<html><head/><body><p><br/></p></body></html>", None))

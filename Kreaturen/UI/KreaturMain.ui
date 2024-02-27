@@ -90,6 +90,20 @@
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_8">
             <item>
+             <widget class="QLabel" name="laStatus">
+              <property name="text">
+               <string>Angemeldet: </string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="btnLogin">
+              <property name="text">
+               <string>Anmelden</string>
+              </property>
+             </widget>
+            </item>
+            <item>
              <widget class="QPushButton" name="btnDBLaden">
               <property name="text">
                <string>Aus Datenbank Laden</string>
@@ -162,7 +176,7 @@
        <item row="0" column="0">
         <widget class="QTabWidget" name="tabWidget">
          <property name="currentIndex">
-          <number>3</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="tab">
           <attribute name="title">

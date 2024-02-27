@@ -83,6 +83,7 @@ class KreaturEditor(object):
         self.savepath = ""
         self.characterImage = None
         self.currentlyLoading = False
+        # self.angemeldet = False
 
     def setupMainForm(self): 
         if "WindowSize-KreaturenPlugin" in Wolke.Settings:
@@ -91,6 +92,7 @@ class KreaturEditor(object):
 
         # main window
         self.ui.btnExport.clicked.connect(self.exportClickedHandler)
+        self.ui.btnLogin.clicked.connect(self.loginClickedHandler)
         self.ui.btnDBLaden.clicked.connect(self.loadOnlineClickedHandler)
         self.ui.btnDBSpeichern.clicked.connect(self.saveOnlineClickedHandler)
         self.ui.buttonLoad.clicked.connect(self.loadClickedHandler)
@@ -132,6 +134,7 @@ class KreaturEditor(object):
         self.ui.btnAddAngriff.clicked.connect(self.addAngriffClicked)
         self.stateChanged()
         self.updateTitlebar()
+        self.updateLoginStatus()
 
         self.formMain.closeEvent = self.closeEvent
 
@@ -182,6 +185,45 @@ class KreaturEditor(object):
         item.setFlags(item.flags() | QtCore.Qt.ItemIsEditable)
         self.ui.treeZauberfertigkeiten.addTopLevelItem(item)
         self.ui.treeZauberfertigkeiten.setCurrentItem(item)
+
+    def loginClickedHandler(self):
+        if Wolke.Settings.get("IlarisOnlineToken", False) is not None:
+            # abmelden
+            popup = QtWidgets.QMessageBox()
+            popup.setWindowTitle("Abmelden")
+            popup.setText("Möchtest du dich wirklich abmelden?")
+            okButton = popup.addButton("Ja, Abmelden", QtWidgets.QMessageBox.AcceptRole)
+            noButton = popup.addButton("Nein, Abbrechen", QtWidgets.QMessageBox.RejectRole)
+            # popup.setDefaultButton(QtWidgets.QMessageBox.AcceptRole)
+            clickedButton = popup.exec()
+            # print(popup.exec())
+            if popup.clickedButton() == okButton:
+                print("abmelden...")
+                Wolke.Settings["IlarisOnlineToken"] = None
+                Wolke.Settings["IlarisOnlineUser"] = None
+                print("wolke cleaned")
+            self.updateLoginStatus()
+            return
+        # sonst anmelde popup
+        diag = self.loginDialog(callback=self.updateLoginStatus)
+        # diag.loginSuccessful.connect(self.updateLoginStatus)
+        # self.loginDialog.show()
+        # if diag.exec_():
+        # self.angemeldet = True
+        # self.ui.btnDBLaden.setEnabled(True)
+        # self.ui.btnDBSpeichern.setEnabled(True)
+
+    def updateLoginStatus(self):
+        self.ui.btnDBSpeichern.setEnabled(False)
+        self.ui.btnLogin.setText("Anmelden")
+        self.ui.laStatus.setText("Nicht angemeldet")
+        print("status update")
+        print(Wolke.Settings.get("IlarisOnlineToken", False))
+        if Wolke.Settings.get("IlarisOnlineToken", False) is not None:
+            self.ui.btnDBSpeichern.setEnabled(True)
+            self.ui.btnLogin.setText("Abmelden")
+            name = Wolke.Settings.get("IlarisOnlineUser", "Unbekannt")
+            self.ui.laStatus.setText(f"Hallo {name}!")
 
     def loadOnlineClickedHandler(self):
         diag = self.onlineDialog()
@@ -262,7 +304,8 @@ class KreaturEditor(object):
             buffer = QtCore.QBuffer()
             buffer.open(QtCore.QIODevice.WriteOnly)
             self.characterImage.save(buffer, "JPG")
-            self.data["bild"] = base64.b64encode(buffer.data().data())
+            # self.data["bild"] = base64.b64encode(buffer.data().data())
+            self.data["bild"] = base64.b64encode(buffer.data().data()).decode("utf-8")
 
         with open(self.savepath, 'w') as file:
             json.dump(self.data, file, indent=2, ensure_ascii=False)

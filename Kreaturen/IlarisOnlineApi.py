@@ -37,16 +37,19 @@ class ReplyHandler(QtCore.QObject):
 
 
 class APIClient:
-    def __init__(self):
+    def __init__(self, token=None):
         self.base_url = "https://ilaris-online.de/api/"
         self.manager = QNetworkAccessManager()
         self.handlers = []
+        self.token = token
         print("api client created")
 
     def request(self, path, callback):
         print("request running")
         url = QUrl(self.base_url + path)
         request = QNetworkRequest(url)
+        if self.token:
+            request.setRawHeader(b"Authorization", b"Token " + self.token.encode())
         reply = self.manager.get(request)
         handler = ReplyHandler(callback)
         reply.readyRead.connect(handler.handle_ready_read)
@@ -58,6 +61,22 @@ class APIClient:
         loop.exec()
 
 
+    def login(self, username, password, callback):
+        url = "https://ilaris-online.de/accounts/token"
+        # url = "http://localhost:8000/accounts/token"
+        request = QNetworkRequest(url)
+        request.setHeader(QNetworkRequest.ContentTypeHeader, "application/json")
+        data = {
+            "username": username,
+            "password": password
+        }
+        reply = self.manager.post(request, QJsonDocument(data).toJson())
+        handler = ReplyHandler(callback)
+        reply.readyRead.connect(handler.handle_ready_read)
+        reply.finished.connect(handler.handle_finished)
+        self.handlers.append(handler)        
+        loop = QtCore.QEventLoop()
+        loop.exec()
 
 
 if __name__ == "__main__":
