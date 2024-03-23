@@ -18,7 +18,7 @@ class KartenUtility:
     def getAnzeigename(name):
         anzeigename = name
         for typName in KartenTyp.TypNamen:
-            anzeigename = anzeigename.replace(f" ({typName})", "")
+            anzeigename = anzeigename.replace(f" ({typName})", "").replace(f" ({typName})", "")
         return anzeigename
 
     @staticmethod
@@ -121,6 +121,8 @@ class Karte:
             name += f" ({list(db.einstellungen['Talente: Spezialtalent Typen'].wert.keys())[self.subtyp]})"
         elif self.typ == KartenTyp.Benutzerdefiniert:
             name = f"{self.subtyp}"
+            if self.fusszeile and self.fusszeile != "$original$":
+                name += f" ({self.fusszeile})"
         return name
 
     def details(self, db):
