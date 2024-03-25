@@ -558,7 +558,7 @@ habe ich mit docsmagic.de gemacht, hier werden Sleeves mit farbigen Rückseiten 
             EventBus.doAction("karten_anfuegen", { "reihenfolge" : r, "appendCallback" : lambda karte: currentDeck.append(karte) })
 
         for deck in decks.values():
-            deck[1:] = sorted(deck[1:], key=lambda k: (k.fusszeile, k.name))
+            deck[1:] = sorted(deck[1:], key=lambda k: (Hilfsmethoden.unicodeCaseInsensitive(k.fusszeile), Hilfsmethoden.unicodeCaseInsensitive(k.name)))
 
         return decks
 

@@ -66,7 +66,7 @@ class KartenExportDialogWrapper(object):
                 typ = int(r[2:])
                 createItem(parent, spezialTalentTypen[typ], r)
             else:
-                name = EventBus.applyFilter("karten_reihenfolge_name", r)
+                name = EventBus.applyFilter("regelanhang_reihenfolge_name", r)
                 createItem(parent, name, r)
 
         benutzerdefiniert = KartenUtility.getBenutzerdefinierteTypen(datenbank)
