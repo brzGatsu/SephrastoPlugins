@@ -771,179 +771,181 @@ class TierbegleiterEditor(object):
         return "<h3>" + text + "</h3>"
 
     def createPdf(self, path):
-        dlg = ProgressDialogExt(minimum = 0, maximum = 100)
-        dlg.disableCancel()
-        dlg.setWindowTitle("Exportiere Tierbegleiter")
-        dlg.show()
-        QtWidgets.QApplication.processEvents() #make sure the dialog immediatelly shows
+        try:
+            dlg = ProgressDialogExt(minimum = 0, maximum = 100)
+            dlg.disableCancel()
+            dlg.setWindowTitle("Exportiere Tierbegleiter")
+            dlg.show()
+            QtWidgets.QApplication.processEvents() #make sure the dialog immediatelly shows
 
-        dlg.setLabelText("Befülle Formularfelder")
-        fields = copy.copy(self.attributModifiers)
-        fields["WSStern"] = fields["WS*"]
+            dlg.setLabelText("Befülle Formularfelder")
+            fields = copy.copy(self.attributModifiers)
+            fields["WSStern"] = fields["WS*"]
 
-        if "KO" in fields:
-            fields["DH"] = int(int(fields["KO"]) / 2)
+            if "KO" in fields:
+                fields["DH"] = int(int(fields["KO"]) / 2)
 
-        talentModifierList = []
-        for key, value in self.talentModifiers.items():
-            temp = [key,value]
-            talentModifierList.append(temp)
-        talentModifierList = sorted(talentModifierList)
+            talentModifierList = []
+            for key, value in self.talentModifiers.items():
+                temp = [key,value]
+                talentModifierList.append(temp)
+            talentModifierList = sorted(talentModifierList)
 
-        for i in range(0, self.charakterbogen.maxFertigkeiten):
-            if i < len(talentModifierList):
-                fields['Talent.' + str(i)] = talentModifierList[i][0]
-                fields['TalentPW.' + str(i)] = talentModifierList[i][1]
+            for i in range(0, self.charakterbogen.maxFertigkeiten):
+                if i < len(talentModifierList):
+                    fields['Talent.' + str(i)] = talentModifierList[i][0]
+                    fields['TalentPW.' + str(i)] = talentModifierList[i][1]
 
-        for i in range(0, self.charakterbogen.maxVorteile):
-            if i < len(self.vorteilModifiers):
-                fields['Vorteil.' + str(i)] = self.vorteilModifiers[i].name
+            for i in range(0, self.charakterbogen.maxVorteile):
+                if i < len(self.vorteilModifiers):
+                    fields['Vorteil.' + str(i)] = self.vorteilModifiers[i].name
 
-        fields["Name"] = self.ui.leName.text()
+            fields["Name"] = self.ui.leName.text()
 
-        tier = self.datenbank.tierbegleiter[self.ui.cbTier.currentText()]
-        fields["Spezies"] = tier.name
-        fields["Nahrung"] = self.ui.leNahrung.text()
+            tier = self.datenbank.tierbegleiter[self.ui.cbTier.currentText()]
+            fields["Spezies"] = tier.name
+            fields["Nahrung"] = self.ui.leNahrung.text()
 
-        charsPerLine = 80
-        text = self.ui.teHintergrund.toPlainText().split("\n")
-        if len(text[-1]) < charsPerLine:
-            text[-1] += " " * (int(charsPerLine * 1.5) - len(text[-1])) # space has less width, so add 50%
-        fields["Hintergrund"] = "\n".join(text)
+            charsPerLine = 80
+            text = self.ui.teHintergrund.toPlainText().split("\n")
+            if len(text[-1]) < charsPerLine:
+                text[-1] += " " * (int(charsPerLine * 1.5) - len(text[-1])) # space has less width, so add 50%
+            fields["Hintergrund"] = "\n".join(text)
 
-        text = self.ui.teAussehen.toPlainText().split("\n")
-        if len(text[-1]) < charsPerLine:
-            text[-1] += " " * (int(charsPerLine * 1.5) - len(text[-1])) # space has less width, so add 50%
-        fields["Aussehen"] = "\n".join(text)
+            text = self.ui.teAussehen.toPlainText().split("\n")
+            if len(text[-1]) < charsPerLine:
+                text[-1] += " " * (int(charsPerLine * 1.5) - len(text[-1])) # space has less width, so add 50%
+            fields["Aussehen"] = "\n".join(text)
 
-        for i in range(0, 3):
-            if i < len(self.waffen):
-                fields['Waffe.' + str(i)] = self.waffen[i].name
-                fields['WaffeRW.' + str(i)] = self.waffen[i].rw
-                fields['WaffeEig.' + str(i)] = self.waffen[i].eigenschaften
-                fields['WaffeAT.' + str(i)] = self.waffen[i].at if self.waffen[i].at is not None else "-"
-                fields['WaffeVT.' + str(i)] = self.waffen[i].vt if self.waffen[i].vt is not None else "-"
-                fields['WaffeTP.' + str(i)] = self.waffen[i].getTP()
+            for i in range(0, 3):
+                if i < len(self.waffen):
+                    fields['Waffe.' + str(i)] = self.waffen[i].name
+                    fields['WaffeRW.' + str(i)] = self.waffen[i].rw
+                    fields['WaffeEig.' + str(i)] = self.waffen[i].eigenschaften
+                    fields['WaffeAT.' + str(i)] = self.waffen[i].at if self.waffen[i].at is not None else "-"
+                    fields['WaffeVT.' + str(i)] = self.waffen[i].vt if self.waffen[i].vt is not None else "-"
+                    fields['WaffeTP.' + str(i)] = self.waffen[i].getTP()
 
-        for i in range(len(self.inventory)):
-            fields['Ausruestung.' + str(i)] = self.inventory[i].text()
+            for i in range(len(self.inventory)):
+                fields['Ausruestung.' + str(i)] = self.inventory[i].text()
 
-        tiereigenschaften = [vorteilMod for vorteilMod in self.vorteilModifiers if vorteilMod.name in self.datenbank.guteZuchteigenschaften or vorteilMod.name in self.datenbank.schlechteZuchteigenschaften]
-        tiervorteile = [vorteilMod for vorteilMod in self.vorteilModifiers if vorteilMod.name in self.datenbank.tiervorteile]
-        for waffe in self.waffen:
-            eigenschaften = list(map(str.strip, waffe.eigenschaften.split(",")))
-            for eig in eigenschaften:
-                name = re.sub(r"\((.*?)\)", "", eig, re.UNICODE).strip() # remove parameters
-                if name in self.datenbank.tiervorteile:
-                    hatVorteil = False
+            tiereigenschaften = [vorteilMod for vorteilMod in self.vorteilModifiers if vorteilMod.name in self.datenbank.guteZuchteigenschaften or vorteilMod.name in self.datenbank.schlechteZuchteigenschaften]
+            tiervorteile = [vorteilMod for vorteilMod in self.vorteilModifiers if vorteilMod.name in self.datenbank.tiervorteile]
+            for waffe in self.waffen:
+                eigenschaften = list(map(str.strip, waffe.eigenschaften.split(",")))
+                for eig in eigenschaften:
+                    name = re.sub(r"\((.*?)\)", "", eig, re.UNICODE).strip() # remove parameters
+                    if name in self.datenbank.tiervorteile:
+                        hatVorteil = False
+                        for vorteilMod in tiervorteile:
+                            if vorteilMod.name == name:
+                              hatVorteil = True
+                              break
+                        if hatVorteil:
+                            continue
+                        tiervorteile.append(self.datenbank.tiervorteile[name])
+            tiervorteile = sorted(tiervorteile, key = lambda vort: vort.name)
+
+            addRules = self.ui.checkRegeln.isChecked() and (len(tiervorteile) + len(tiereigenschaften) > 0)
+            handle, tmpTierbegleiterPath = tempfile.mkstemp()
+            os.close(handle)
+
+            flatten = not self.ui.checkEditierbar.isChecked()
+            PdfSerializer.write_pdf(self.charakterbogen.filePath, fields, tmpTierbegleiterPath, flatten)
+
+            bookmarks = []
+            for i in range(PdfSerializer.getNumPages(self.charakterbogen.filePath)):
+                text = "Charakterbogen"
+                if i < len(self.charakterbogen.seitenbeschreibungen):
+                    text = self.charakterbogen.seitenbeschreibungen[i]
+                bookmarks.append(PdfSerializer.PdfBookmark("S. " + str(i+1) + " - " + text, i+1))
+            i += 1
+
+            if self.characterImage is not None:
+                # The approach is to convert the image to pdf and stamp it over the char sheet with pdftk
+                dlg.setLabelText("Stemple Charakterbild")
+                dlg.setValue(30)
+                buffer = QtCore.QBuffer()
+                buffer.open(QtCore.QIODevice.WriteOnly);
+                self.characterImage.save(buffer, "JPG")
+                image = buffer.data().data()
+                image_pdf = PdfSerializer.convertJpgToPdf(image, self.charakterbogen.getImageSize(0, [193, 254]), self.charakterbogen.getImageOffset(0), self.charakterbogen.getPageLayout())
+                stamped_pdf = PdfSerializer.stamp(tmpTierbegleiterPath, image_pdf)
+                os.remove(image_pdf)
+                os.remove(tmpTierbegleiterPath)
+                tmpTierbegleiterPath = stamped_pdf
+
+            if addRules:
+                dlg.setLabelText("Erstelle Regelanhang")
+                dlg.setValue(50)
+                fields = {}
+                rules = ["<h1>Regeln für " + self.ui.leName.text() + "</h1>"]
+                if len(tiereigenschaften) > 0:
+                    rules.append(self.categoryHeading("Tiereigenschaften"))
+                    for vorteilMod in tiereigenschaften:
+                        rules.append("<article>")
+                        rules.append(self.ruleHeading(vorteilMod.name))
+                        rules.append(vorteilMod.wirkung)
+                        rules.append("</article>")
+
+                if sum(1 for v in self.vorteilModifiers if not v.manöver) > 0:
+                    rules.append(self.categoryHeading("Tiervorteile"))
+                    if self.datenbank.iaZuchtAusbildung:
+                        rules.append("Der Einsatz eines Vorteils, der nicht passiv ist, erfordert eine Probe auf Tiere beeinflussen (20). Kampfmanöver gelten immer als passiv.\n\n")
                     for vorteilMod in tiervorteile:
-                        if vorteilMod.name == name:
-                          hatVorteil = True
-                          break
-                    if hatVorteil:
-                        continue
-                    tiervorteile.append(self.datenbank.tiervorteile[name])
-        tiervorteile = sorted(tiervorteile, key = lambda vort: vort.name)
+                        if vorteilMod.wirkung and not vorteilMod.manöver:
+                            rules.append("<article>")
+                            rules.append(self.ruleHeading(vorteilMod.name))
+                            rules.append(vorteilMod.wirkung)
+                            rules.append("</article>")
 
-        addRules = self.ui.checkRegeln.isChecked() and (len(tiervorteile) + len(tiereigenschaften) > 0)
-        handle, tmpTierbegleiterPath = tempfile.mkstemp()
-        os.close(handle)
+                if sum(1 for v in self.vorteilModifiers if v.manöver) > 0:
+                    rules.append(self.categoryHeading("Manöver und Waffeneigenschaften"))
+                    for vorteilMod in tiervorteile:
+                        if vorteilMod.wirkung and vorteilMod.manöver:
+                            rules.append("<article>")
+                            rules.append(self.ruleHeading(vorteilMod.name))
+                            rules.append(vorteilMod.wirkung)
+                            rules.append("</article>")
+                rules = "".join(rules).replace("\n", "<br>")
+                html = ""
+                with open(self.charakterbogen.regelanhangPfad, 'r', encoding="utf-8") as infile:
+                    rules = rules.replace("$sephrasto_dir$", "file:///" + os.getcwd().replace('\\', '/'))
+                    rules = rules.replace("$regeln_dir$", "file:///" + Wolke.Settings['Pfad-Regeln'].replace('\\', '/'))
+                    rules = rules.replace("$plugins_dir$", "file:///" + Wolke.Settings['Pfad-Plugins'].replace('\\', '/'))
+                    html = infile.read()
+                    html = html.replace("{sephrasto_dir}", "file:///" + os.getcwd().replace('\\', '/'))
+                    html = html.replace("{rules_content}", rules)
+                    html = html.replace("{rules_font_size}", str(self.ui.spinRegelnGroesse.value()))
+                baseUrl = QtCore.QUrl.fromLocalFile(QtCore.QFileInfo(self.charakterbogen.regelanhangPfad).absoluteFilePath())
+                rulesFile = PdfSerializer.convertHtmlToPdf(html, baseUrl, self.charakterbogen.getRegelanhangPageLayout(), 100)
 
-        flatten = not self.ui.checkEditierbar.isChecked()
-        PdfSerializer.write_pdf(self.charakterbogen.filePath, fields, tmpTierbegleiterPath, flatten)
+                for j in range(1, PdfSerializer.getNumPages(rulesFile)+1):
+                    bookmarks.append(PdfSerializer.PdfBookmark("S. " + str(i+1) + " - Regelanhang " + str(j), i+1))
+                    i += 1
 
-        bookmarks = []
-        for i in range(PdfSerializer.getNumPages(self.charakterbogen.filePath)):
-            text = "Charakterbogen"
-            if i < len(self.charakterbogen.seitenbeschreibungen):
-                text = self.charakterbogen.seitenbeschreibungen[i]
-            bookmarks.append(PdfSerializer.PdfBookmark("S. " + str(i+1) + " - " + text, i+1))
-        i += 1
+                if self.charakterbogen.regelanhangHintergrundPfad:
+                    tmpRulesFile = PdfSerializer.addBackground(rulesFile, self.charakterbogen.regelanhangHintergrundPfad)
+                    os.remove(rulesFile)
+                    rulesFile = tmpRulesFile
 
-        if self.characterImage is not None:
-            # The approach is to convert the image to pdf and stamp it over the char sheet with pdftk
-            dlg.setLabelText("Stemple Charakterbild")
-            dlg.setValue(30)
-            buffer = QtCore.QBuffer()
-            buffer.open(QtCore.QIODevice.WriteOnly);
-            self.characterImage.save(buffer, "JPG")
-            image = buffer.data().data()
-            image_pdf = PdfSerializer.convertJpgToPdf(image, self.charakterbogen.getImageSize(0, [193, 254]), self.charakterbogen.getImageOffset(0), self.charakterbogen.getPageLayout())
-            stamped_pdf = PdfSerializer.stamp(tmpTierbegleiterPath, image_pdf)
-            os.remove(image_pdf)
-            os.remove(tmpTierbegleiterPath)
-            tmpTierbegleiterPath = stamped_pdf
-
-        if addRules:
-            dlg.setLabelText("Erstelle Regelanhang")
-            dlg.setValue(50)
-            fields = {}
-            rules = ["<h1>Regeln für " + self.ui.leName.text() + "</h1>"]
-            if len(tiereigenschaften) > 0:
-                rules.append(self.categoryHeading("Tiereigenschaften"))
-                for vorteilMod in tiereigenschaften:
-                    rules.append("<article>")
-                    rules.append(self.ruleHeading(vorteilMod.name))
-                    rules.append(vorteilMod.wirkung)
-                    rules.append("</article>")
-
-            if sum(1 for v in self.vorteilModifiers if not v.manöver) > 0:
-                rules.append(self.categoryHeading("Tiervorteile"))
-                if self.datenbank.iaZuchtAusbildung:
-                    rules.append("Der Einsatz eines Vorteils, der nicht passiv ist, erfordert eine Probe auf Tiere beeinflussen (20). Kampfmanöver gelten immer als passiv.\n\n")
-                for vorteilMod in tiervorteile:
-                    if vorteilMod.wirkung and not vorteilMod.manöver:
-                        rules.append("<article>")
-                        rules.append(self.ruleHeading(vorteilMod.name))
-                        rules.append(vorteilMod.wirkung)
-                        rules.append("</article>")
-
-            if sum(1 for v in self.vorteilModifiers if v.manöver) > 0:
-                rules.append(self.categoryHeading("Manöver und Waffeneigenschaften"))
-                for vorteilMod in tiervorteile:
-                    if vorteilMod.wirkung and vorteilMod.manöver:
-                        rules.append("<article>")
-                        rules.append(self.ruleHeading(vorteilMod.name))
-                        rules.append(vorteilMod.wirkung)
-                        rules.append("</article>")
-            rules = "".join(rules).replace("\n", "<br>")
-            html = ""
-            with open(self.charakterbogen.regelanhangPfad, 'r', encoding="utf-8") as infile:
-                rules = rules.replace("$sephrasto_dir$", "file:///" + os.getcwd().replace('\\', '/'))
-                rules = rules.replace("$regeln_dir$", "file:///" + Wolke.Settings['Pfad-Regeln'].replace('\\', '/'))
-                rules = rules.replace("$plugins_dir$", "file:///" + Wolke.Settings['Pfad-Plugins'].replace('\\', '/'))
-                html = infile.read()
-                html = html.replace("{sephrasto_dir}", "file:///" + os.getcwd().replace('\\', '/'))
-                html = html.replace("{rules_content}", rules)
-                html = html.replace("{rules_font_size}", str(self.ui.spinRegelnGroesse.value()))
-            baseUrl = QtCore.QUrl.fromLocalFile(QtCore.QFileInfo(self.charakterbogen.regelanhangPfad).absoluteFilePath())
-            rulesFile = PdfSerializer.convertHtmlToPdf(html, baseUrl, self.charakterbogen.getRegelanhangPageLayout(), 100)
-
-            for j in range(1, PdfSerializer.getNumPages(rulesFile)+1):
-                bookmarks.append(PdfSerializer.PdfBookmark("S. " + str(i+1) + " - Regelanhang " + str(j), i+1))
-                i += 1
-
-            if self.charakterbogen.regelanhangHintergrundPfad:
-                tmpRulesFile = PdfSerializer.addBackground(rulesFile, self.charakterbogen.regelanhangHintergrundPfad)
+                tmp = PdfSerializer.concat([tmpTierbegleiterPath, rulesFile])
+                os.remove(tmpTierbegleiterPath)
                 os.remove(rulesFile)
-                rulesFile = tmpRulesFile
+                tmpTierbegleiterPath = tmp
 
-            tmp = PdfSerializer.concat([tmpTierbegleiterPath, rulesFile])
-            os.remove(tmpTierbegleiterPath)
-            os.remove(rulesFile)
-            tmpTierbegleiterPath = tmp
+            dlg.setLabelText("Füge Lesezeichen hinzu")
+            dlg.setValue(80)
+            PdfSerializer.addBookmarks(tmp, bookmarks, path)
+            os.remove(tmp)
 
-        dlg.setLabelText("Füge Lesezeichen hinzu")
-        dlg.setValue(80)
-        PdfSerializer.addBookmarks(tmp, bookmarks, path)
-        os.remove(tmp)
-
-        dlg.setLabelText("Optimiere Dateigröße")
-        dlg.setValue(90)
-        PdfSerializer.squeeze(path, path)
-        dlg.setValue(100)
-        dlg.hide()
-        dlg.deleteLater()
+            dlg.setLabelText("Optimiere Dateigröße")
+            dlg.setValue(90)
+            PdfSerializer.squeeze(path, path)
+            dlg.setValue(100)
+        finally:
+            dlg.hide()
+            dlg.deleteLater()
 
         if Wolke.Settings['PDF-Open']:
             Hilfsmethoden.openFile(path)

@@ -437,21 +437,23 @@ bis die Bindung gelöst wird oder alle Pfeile ihr Ziel gefunden haben
                 continue
             max += len(deck)
 
-        dlg = ProgressDialogExt(minimum = 0, maximum = max)
-        dlg.setWindowTitle("Exportiere Manöverkarten")
-        dlg.show()
-        QtWidgets.QApplication.processEvents() #make sure the dialog immediatelly shows
-        for titel, deck in decks.items():
-            if len(deck) <= 1:
-                continue
-            if dialog.bilderExport:
-                self.kartenGenerator.writeKartenBilder(os.path.join(spath, titel + ".pdf"), deck, dialog.nameFormat, dlg)
-            else:
-                self.kartenGenerator.writeKarten(os.path.join(spath, titel + ".pdf"), deck, dialog.einzelExport, dialog.nameFormat, dlg)
-            if dlg.shouldCancel():
-                break
-        dlg.hide()
-        dlg.deleteLater()
+        try:
+            dlg = ProgressDialogExt(minimum = 0, maximum = max)
+            dlg.setWindowTitle("Exportiere Manöverkarten")
+            dlg.show()
+            QtWidgets.QApplication.processEvents() #make sure the dialog immediatelly shows
+            for titel, deck in decks.items():
+                if len(deck) <= 1:
+                    continue
+                if dialog.bilderExport:
+                    self.kartenGenerator.writeKartenBilder(os.path.join(spath, titel + ".pdf"), deck, dialog.nameFormat, dlg)
+                else:
+                    self.kartenGenerator.writeKarten(os.path.join(spath, titel + ".pdf"), deck, dialog.einzelExport, dialog.nameFormat, dlg)
+                if dlg.shouldCancel():
+                    break
+        finally:
+            dlg.hide()
+            dlg.deleteLater()
 
     def writeCharakterKarten(self):
         if self.db is None:
@@ -476,10 +478,12 @@ bis die Bindung gelöst wird oder alle Pfeile ihr Ziel gefunden haben
                 continue
             deck.extend(d)
 
-        dlg = ProgressDialogExt(minimum = 0, maximum = len(deck))
-        dlg.setWindowTitle("Exportiere Manöverkarten")
-        dlg.show()
-        QtWidgets.QApplication.processEvents() #make sure the dialog immediatelly shows
-        self.kartenGenerator.writeKarten(spath, deck, dialog.einzelExport, dialog.nameFormat, dlg)
-        dlg.hide()
-        dlg.deleteLater()
+        try:
+            dlg = ProgressDialogExt(minimum = 0, maximum = len(deck))
+            dlg.setWindowTitle("Exportiere Manöverkarten")
+            dlg.show()
+            QtWidgets.QApplication.processEvents() #make sure the dialog immediatelly shows
+            self.kartenGenerator.writeKarten(spath, deck, dialog.einzelExport, dialog.nameFormat, dlg)
+        finally:
+            dlg.hide()
+            dlg.deleteLater()
