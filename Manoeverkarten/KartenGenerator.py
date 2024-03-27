@@ -568,6 +568,9 @@ habe ich mit docsmagic.de gemacht, hier werden Sleeves mit farbigen Rückseiten 
 
     def generateHtml(self, karte, forceHintergrund = False):
         typName = KartenTyp.TypNamen[karte.typ]
+        if karte.typ == KartenTyp.Benutzerdefiniert:
+           typName = karte.subtyp
+
         if typName in self.templates:
             htmlPath = self.templates[typName][0]
             html = self.templates[typName][1]

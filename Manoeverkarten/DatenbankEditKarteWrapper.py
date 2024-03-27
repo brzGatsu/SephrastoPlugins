@@ -140,7 +140,8 @@ class DatenbankEditKarteWrapper(DatenbankElementEditorBase):
 
         if self.ui.comboTyp.currentIndex() != KartenTyp.Deck:
             if self.ui.comboTyp.currentIndex() == KartenTyp.Benutzerdefiniert:
-                currentCat = self.ui.comboSubtyp.currentText()
+                karte.subtyp = self.ui.comboSubtyp.currentText()
+                currentCat = karte.subtyp
             else:
                 for r in reihenfolge:
                     if r[0] == "T" and len(r) > 2:
