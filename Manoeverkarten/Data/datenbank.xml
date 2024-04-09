@@ -308,29 +308,29 @@ $regel:Aktion Verzögern (voll)$&lt;/p&gt;</Karte>
   <Karte name="Beschwörungen" typ="1" subtyp="4" titel="$original$" subtitel="$original$" fusszeile="Beschwörungen">$original$</Karte>
   <Karte name="Beschwörungen - Bindung" typ="1" subtyp="4" titel="Bindung" subtitel="$original$" fusszeile="Beschwörungen">$original$</Karte>
   <Karte name="Beschwörungen - Zusätzliche Fähigkeiten" typ="1" subtyp="4" titel="Zusätzliche Fähigkeiten" subtitel="$original$" fusszeile="Beschwörungen">$original$</Karte>
-  <Karte name="Allegorische Analyse (passiv)" typ="2" subtyp="0" titel="Allegorische Analyse" subtitel="Passiv" fusszeile="$original$">$original$</Karte>
-  <Karte name="Astralspeicher (passiv)" typ="2" subtyp="0" titel="Astralspeicher" subtitel="Passiv, $original$" fusszeile="$original$">$original$</Karte>
-  <Karte name="Aura des Stabes (passiv)" typ="2" subtyp="0" titel="Aura des Stabes" subtitel="Passiv" fusszeile="$original$">$original$</Karte>
-  <Karte name="Bann der Keule (passiv)" typ="2" subtyp="0" titel="Bann der Keule" subtitel="Passiv" fusszeile="$original$">$original$</Karte>
-  <Karte name="Blut des Dolches (passiv)" typ="2" subtyp="0" titel="Blut des Dolches" subtitel="Passiv" fusszeile="$original$">$original$</Karte>
-  <Karte name="Chymische Hochzeit (passiv)" typ="2" subtyp="0" titel="Chymische Hochzeit" subtitel="Passiv, $original$" fusszeile="$original$">$original$</Karte>
-  <Karte name="Dämon der Keule (passiv)" typ="2" subtyp="0" titel="Dämon der Keule" subtitel="Passiv" fusszeile="$original$">$original$</Karte>
-  <Karte name="Elementar der Keule (passiv)" typ="2" subtyp="0" titel="Elementar der Keule" subtitel="Passiv" fusszeile="$original$">$original$</Karte>
-  <Karte name="Ewige Wegzehrung (passiv)" typ="2" subtyp="0" titel="Ewige Wegzehrung" subtitel="Passiv" fusszeile="$original$">$original$</Karte>
-  <Karte name="Federleichter Beutel (passiv)" typ="2" subtyp="0" titel="Federleichter Beutel" subtitel="Passiv, $original$" fusszeile="$original$">$original$</Karte>
-  <Karte name="Geräumiger Schuppenbeutel (passiv)" typ="2" subtyp="0" titel="Geräumiger Schuppenbeutel" subtitel="Passiv, $original$" fusszeile="$original$">$original$</Karte>
-  <Karte name="Herrschaft über Dämonen (passiv)" typ="2" subtyp="2" titel="Herrschaft über Dämonen" subtitel="Passiv" fusszeile="$original$">$original$</Karte>
-  <Karte name="H‘Szints Auge (passiv)" typ="2" subtyp="0" titel="H‘Szints Auge" subtitel="Passiv" fusszeile="$original$">$original$</Karte>
-  <Karte name="Kristallkraft bündeln (passiv)" typ="2" subtyp="0" titel="Kristallkraft bündeln" subtitel="Passiv" fusszeile="$original$">$original$</Karte>
-  <Karte name="Kugel des Hellsehers (passiv)" typ="2" subtyp="0" titel="Kugel des Hellsehers" subtitel="Passiv" fusszeile="$original$">$original$</Karte>
-  <Karte name="Kugel des Illusionisten (passiv)" typ="2" subtyp="0" titel="Kugel des Illusionisten" subtitel="Passiv" fusszeile="$original$">$original$</Karte>
-  <Karte name="Leib des Dolches (passiv)" typ="2" subtyp="0" titel="Leib des Dolches" subtitel="Passiv" fusszeile="$original$">$original$</Karte>
-  <Karte name="Matrixstabilisierung (passiv)" typ="2" subtyp="0" titel="Matrixstabilisierung" subtitel="Passiv, $original$" fusszeile="$original$">$original$</Karte>
-  <Karte name="Opferdolch (passiv)" typ="2" subtyp="0" titel="Opferdolch" subtitel="Passiv" fusszeile="$original$">$original$</Karte>
-  <Karte name="Sichere Aufbewahrung (passiv)" typ="2" subtyp="0" titel="Sichere Aufbewahrung" subtitel="Passiv" fusszeile="$original$">$original$</Karte>
-  <Karte name="Sicherer Tritt (passiv)" typ="2" subtyp="2" titel="Sicherer Tritt" subtitel="Passiv" fusszeile="$original$">$original$</Karte>
-  <Karte name="Verwandlung des Iama (passiv)" typ="2" subtyp="0" titel="Verwandlung des Iama" subtitel="Passiv" fusszeile="$original$">$original$</Karte>
-  <Karte name="Wasseratmung (passiv)" typ="2" subtyp="2" titel="Wasseratmung" subtitel="Passiv" fusszeile="$original$">$original$</Karte>
+  <Karte name="Allegorische Analyse (passiv)" typ="2" subtyp="1" titel="Allegorische Analyse" subtitel="Passiv" fusszeile="$original$">$original$</Karte>
+  <Karte name="Astralspeicher (passiv)" typ="2" subtyp="1" titel="Astralspeicher" subtitel="Passiv, $original$" fusszeile="$original$">$original$</Karte>
+  <Karte name="Aura des Stabes (passiv)" typ="2" subtyp="1" titel="Aura des Stabes" subtitel="Passiv" fusszeile="$original$">$original$</Karte>
+  <Karte name="Bann der Keule (passiv)" typ="2" subtyp="1" titel="Bann der Keule" subtitel="Passiv" fusszeile="$original$">$original$</Karte>
+  <Karte name="Blut des Dolches (passiv)" typ="2" subtyp="1" titel="Blut des Dolches" subtitel="Passiv" fusszeile="$original$">$original$</Karte>
+  <Karte name="Chymische Hochzeit (passiv)" typ="2" subtyp="1" titel="Chymische Hochzeit" subtitel="Passiv, $original$" fusszeile="$original$">$original$</Karte>
+  <Karte name="Dämon der Keule (passiv)" typ="2" subtyp="1" titel="Dämon der Keule" subtitel="Passiv" fusszeile="$original$">$original$</Karte>
+  <Karte name="Elementar der Keule (passiv)" typ="2" subtyp="1" titel="Elementar der Keule" subtitel="Passiv" fusszeile="$original$">$original$</Karte>
+  <Karte name="Ewige Wegzehrung (passiv)" typ="2" subtyp="1" titel="Ewige Wegzehrung" subtitel="Passiv" fusszeile="$original$">$original$</Karte>
+  <Karte name="Federleichter Beutel (passiv)" typ="2" subtyp="1" titel="Federleichter Beutel" subtitel="Passiv, $original$" fusszeile="$original$">$original$</Karte>
+  <Karte name="Geräumiger Schuppenbeutel (passiv)" typ="2" subtyp="1" titel="Geräumiger Schuppenbeutel" subtitel="Passiv, $original$" fusszeile="$original$">$original$</Karte>
+  <Karte name="Herrschaft über Dämonen (passiv)" typ="2" subtyp="3" titel="Herrschaft über Dämonen" subtitel="Passiv" fusszeile="$original$">$original$</Karte>
+  <Karte name="H‘Szints Auge (passiv)" typ="2" subtyp="1" titel="H‘Szints Auge" subtitel="Passiv" fusszeile="$original$">$original$</Karte>
+  <Karte name="Kristallkraft bündeln (passiv)" typ="2" subtyp="1" titel="Kristallkraft bündeln" subtitel="Passiv" fusszeile="$original$">$original$</Karte>
+  <Karte name="Kugel des Hellsehers (passiv)" typ="2" subtyp="1" titel="Kugel des Hellsehers" subtitel="Passiv" fusszeile="$original$">$original$</Karte>
+  <Karte name="Kugel des Illusionisten (passiv)" typ="2" subtyp="1" titel="Kugel des Illusionisten" subtitel="Passiv" fusszeile="$original$">$original$</Karte>
+  <Karte name="Leib des Dolches (passiv)" typ="2" subtyp="1" titel="Leib des Dolches" subtitel="Passiv" fusszeile="$original$">$original$</Karte>
+  <Karte name="Matrixstabilisierung (passiv)" typ="2" subtyp="1" titel="Matrixstabilisierung" subtitel="Passiv, $original$" fusszeile="$original$">$original$</Karte>
+  <Karte name="Opferdolch (passiv)" typ="2" subtyp="1" titel="Opferdolch" subtitel="Passiv" fusszeile="$original$">$original$</Karte>
+  <Karte name="Sichere Aufbewahrung (passiv)" typ="2" subtyp="1" titel="Sichere Aufbewahrung" subtitel="Passiv" fusszeile="$original$">$original$</Karte>
+  <Karte name="Sicherer Tritt (passiv)" typ="2" subtyp="3" titel="Sicherer Tritt" subtitel="Passiv" fusszeile="$original$">$original$</Karte>
+  <Karte name="Verwandlung des Iama (passiv)" typ="2" subtyp="1" titel="Verwandlung des Iama" subtitel="Passiv" fusszeile="$original$">$original$</Karte>
+  <Karte name="Wasseratmung (passiv)" typ="2" subtyp="3" titel="Wasseratmung" subtitel="Passiv" fusszeile="$original$">$original$</Karte>
   <Karte name="Zaubertechnik ignorieren" typ="1" subtyp="2" titel="Technik ignorieren" subtitel="$original$" fusszeile="$original$">$original$</Karte>
   <Karte name="Liturgische Technik ignorieren" typ="1" subtyp="3" titel="Technik ignorieren" subtitel="$original$" fusszeile="$original$">$original$</Karte>
   <Karte name="Anrufungstechnik ignorieren" typ="1" subtyp="6" titel="Technik ignorieren" subtitel="$original$" fusszeile="$original$">$original$</Karte>
@@ -689,7 +689,7 @@ $regel:Aktion Verzögern (voll)$&lt;/p&gt;</Karte>
   <Karte name="Kommando: Keine Gefangenen!" typ="0" subtyp="2" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
   <Karte name="Kommando: Formiert Euch!" typ="0" subtyp="2" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
   <Karte name="Kommando: Kennt Keinen Schmerz!" typ="0" subtyp="2" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>
-  <Karte name="Rüstungsgew&amp;ouml;hnung" typ="0" subtyp="2" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="0" voraussetzungen="">&lt;i&gt;Wirkung:&lt;/i&gt;
+  <Karte name="Rüstungsgew&amp;ouml;hnung" typ="0" subtyp="2" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="0" voraussetzungen="Vorteil Rüstungsgewöhnung ODER Vorteil Verbesserte Rüstungsgewöhnung">&lt;i&gt;Wirkung:&lt;/i&gt;
 &lt;ul&gt;&lt;li class="checkbox"&gt;Rüstungsgewöhnung: $vorteil:Rüstungsgewöhnung$&lt;/li&gt;
 &lt;li class="checkbox"&gt;Verbesserte Rüstungsgewöhnung: $vorteil:Verbesserte Rüstungsgewöhnung$&lt;/li&gt;&lt;/ul&gt;</Karte>
   <Karte name="Rüstungsgewöhnung" typ="0" subtyp="2" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="1" voraussetzungen="">$original$</Karte>

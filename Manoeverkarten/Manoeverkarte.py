@@ -106,7 +106,7 @@ class Karte:
     def finalize(self, db):
         pass
 
-    def typname(self, db):
+    def kategorieName(self, db):
         name = "n/a"
         if self.typ != KartenTyp.Invalid:
             name = KartenTyp.TypNamen[self.typ]
@@ -114,11 +114,11 @@ class Karte:
             return name
 
         if self.typ == KartenTyp.Vorteil:
-            name += f" ({db.einstellungen['Vorteile: Typen'].wert[self.subtyp]})"
+            name += f" ({db.einstellungen['Vorteile: Kategorien'].wert.keyAtIndex(self.subtyp)})"
         elif self.typ == KartenTyp.Regel:
-            name += f" ({db.einstellungen['Regeln: Typen'].wert[self.subtyp]})"
+            name += f" ({db.einstellungen['Regeln: Kategorien'].wert.keyAtIndex(self.subtyp)})"
         elif self.typ == KartenTyp.Talent:
-            name += f" ({list(db.einstellungen['Talente: Spezialtalent Typen'].wert.keys())[self.subtyp]})"
+            name += f" ({db.einstellungen['Talente: Kategorien'].wert.keyAtIndex(self.subtyp)})"
         elif self.typ == KartenTyp.Benutzerdefiniert:
             name = f"{self.subtyp}"
             if self.fusszeile and self.fusszeile != "$original$":

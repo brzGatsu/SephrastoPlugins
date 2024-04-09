@@ -47,20 +47,17 @@ class Plugin:
             content.append(v)
 
         content.append("\n=== Profane Fertigkeiten === ")
-
-        fertigkeitsTypen = Wolke.DB.einstellungen["Fertigkeiten: Typen profan"].wert
-        lastType = -1
-        for f in CharakterPrintUtility.getFertigkeiten(char):
-            fert = char.fertigkeiten[f]
-            if lastType != fert.typ:
-                content.append("\n" + fertigkeitsTypen[fert.typ] + ":")
-                lastType = fert.typ
-
-            talente = CharakterPrintUtility.getTalente(char, fert)
-            talentStr = " "
-            if len(talente) > 0:
-                talentStr = " (" + ", ".join(talente) + ") "
-            content.append(fert.name + talentStr + str(fert.probenwert) + "/" + str(fert.probenwertTalent))
+        for kategorie, ferts in CharakterPrintUtility.getFertigkeiten(char).items():
+            if len(ferts) == 0:
+                continue
+            content.append("\n" + kategorie + ":")
+            for f in ferts:
+                fert = char.fertigkeiten[f]
+                talente = CharakterPrintUtility.getTalente(char, fert)
+                talentStr = " "
+                if len(talente) > 0:
+                    talentStr = " (" + ", ".join(talente) + ") "
+                content.append(fert.name + talentStr + str(fert.probenwert) + "/" + str(fert.probenwertTalent))
 
         content.append("\nFreie Fertigkeiten:")
         for fert in CharakterPrintUtility.getFreieFertigkeiten(char):
@@ -118,12 +115,7 @@ class Plugin:
 
         überFerts = CharakterPrintUtility.getÜberFertigkeiten(char)
         überTalente = CharakterPrintUtility.getÜberTalente(char)
-        anyÜberTalente = False
-        for arr in überTalente:
-            if len(arr) > 0:
-                anyÜberTalente = True
-                break
-        if len(vorteileUeber) > 0 or len(überFerts) > 0 or anyÜberTalente:
+        if len(vorteileUeber) > 0 or sum([len(ferts) for ferts in überFerts.values()]) > 0 or sum([len(talente) for talente in überTalente.values()]) > 0:
             content.append("\n=== Übernatürliche Fertigkeiten und Talente ===")
 
             content.append("\nVorteile:")
@@ -131,13 +123,15 @@ class Plugin:
                 content.append(v)
 
             content.append("\nÜbernatürliche Fertigkeiten:")
-            for f in überFerts:
-                fert = char.übernatürlicheFertigkeiten[f]
-                content.append(fert.name + " " + str(fert.probenwertTalent))
+            for ferts in überFerts.values():
+                for f in ferts:
+                    fert = char.übernatürlicheFertigkeiten[f]
+                    content.append(fert.name + " " + str(fert.probenwertTalent))
 
             content.append("\nÜbernatürliche Talente:")
-            for arr in überTalente:
-                for talent in arr:
+            for arr in überTalente.values():
+                for t in arr:
+                    talent = char.talente[t]
                     content.append(talent.anzeigename + " " + str(talent.probenwert))
 
         path = os.path.splitext(params["filepath"])[0] + "_text.txt"

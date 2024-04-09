@@ -15,7 +15,7 @@ gekaufteVorteile = ["Geweiht I", "Zauberer I", "Paktierer I"]
 
 #========== Implementation ===========
 
-fertigkeiten = sorted(datenbank.übernatürlicheFertigkeiten.values(), key= lambda f : (f.typ, f.name))
+fertigkeiten = sorted(datenbank.übernatürlicheFertigkeiten.values(), key= lambda f : (f.kategorie, f.name))
 spezialTalente = sorted([t for t in datenbank.talente.values() if t.spezialTalent and not t.name.endswith("(passiv)")], key = lambda t:  t.name)
 traditionen = [v.name for v in datenbank.vorteile.values() if v.name.startswith("Tradition") and v.name.endswith(" I")]
 traditionen += zusatzTraditionen

@@ -34,7 +34,7 @@ class RSCharakterRuestungWrapper(QtCore.QObject):
 
         self.ui.checkZonen.stateChanged.connect(self.checkZonenChanged)
 
-        self.ruestungsTypen = Wolke.DB.einstellungen["Rüstungen: Typen"].wert
+        self.ruestungsKategorien = list(Wolke.DB.einstellungen["Rüstungen: Kategorien"].wert.keys())
         self.ruestungsEigenschaften = Wolke.DB.einstellungen["RüstungenPlus Plugin: Rüstungseigenschaften"].wert
         self.gesamtZRS = [self.ui.spinGesamtBein, self.ui.spinGesamtLarm, self.ui.spinGesamtRarm, self.ui.spinGesamtBauch, self.ui.spinGesamtBrust, self.ui.spinGesamtKopf]
 
@@ -64,9 +64,9 @@ class RSCharakterRuestungWrapper(QtCore.QObject):
         self.eigenschaftenCompleter = []
         row = 3
         index = 0
-        for typ in self.ruestungsTypen:
+        for kategorie in self.ruestungsKategorien:
             col = 0
-            label = QtWidgets.QLabel(typ)
+            label = QtWidgets.QLabel(kategorie)
             self.labels.append(label)
             self.ui.Ruestungen.addWidget(label, row, col, 1, 1)
             col += 1
@@ -140,7 +140,7 @@ class RSCharakterRuestungWrapper(QtCore.QObject):
             self.editEigenschaften.append(self.editGesamtEigenschaften)
             eigenschaftenCompleter = TextTagCompleter(self.editGesamtEigenschaften, Wolke.DB.ruestungseigenschaften.keys())
             self.eigenschaftenCompleter.append(eigenschaftenCompleter)
-        self.gesamtIndex = len(self.ruestungsTypen)
+        self.gesamtIndex = len(self.ruestungsKategorien)
 
     def load(self):
         self.currentlyLoading = True
@@ -151,7 +151,7 @@ class RSCharakterRuestungWrapper(QtCore.QObject):
 
         for index in range(len(self.charTeilrüstungen)):
             R = self.charTeilrüstungen[index]
-            if index < len(self.ruestungsTypen):
+            if index < len(self.ruestungsKategorien):
                 self.loadArmorIntoFields(R, index)
 
         self.ui.checkZonen.setChecked(Wolke.Char.zonenSystemNutzen)
@@ -198,7 +198,7 @@ class RSCharakterRuestungWrapper(QtCore.QObject):
         if self.currentlyLoading:
             return
         ruestungNeu = []
-        for index in range(len(self.ruestungsTypen)):
+        for index in range(len(self.ruestungsKategorien)):
             R = self.createRuestung(index)
             ruestungNeu.append(R)
             self.refreshDerivedArmorValues(R, index)
@@ -218,13 +218,13 @@ class RSCharakterRuestungWrapper(QtCore.QObject):
         definition = RuestungDefinition()
         definition.name = self.ui.editGesamtName.text()
         R = Ruestung(definition)
-        for type in range(len(self.ruestungsTypen)):
+        for kategorie in range(len(self.ruestungsKategorien)):
             if self.ui.checkZonen.isChecked():
                 for i in range(6):
-                    R.rs[i] += self.spinZRS[type][i].value()
+                    R.rs[i] += self.spinZRS[kategorie][i].value()
             else:
                 for i in range(6):
-                    R.rs[i] += self.spinRS[type].value()
+                    R.rs[i] += self.spinRS[kategorie].value()
         beDelta = self.ui.spinGesamtBE.value() - self.ui.spinGesamtRS.value()
         R.be = R.getRSGesamtInt() + beDelta
         if self.ruestungsEigenschaften:
@@ -285,7 +285,7 @@ class RSCharakterRuestungWrapper(QtCore.QObject):
             R.be = int(self.ui.spinGesamtBE.value())
         else:
             R.be = R.getRSGesamtInt()
-            R.typ = index
+            R.kategorie = index
         if self.ruestungsEigenschaften:
             if self.editEigenschaften[index].text():
                 R.eigenschaften = list(map(str.strip, self.editEigenschaften[index].text().split(",")))
@@ -339,7 +339,7 @@ class RSCharakterRuestungWrapper(QtCore.QObject):
             logging.debug("Starting RuestungPicker")
 
             pickerClass = EventBus.applyFilter("class_ruestungspicker_wrapper", RuestungPicker)
-            picker = pickerClass(self.editRName[index].text(), 2 if self.ui.checkZonen.isChecked() else 1, self.ruestungsTypen[index])
+            picker = pickerClass(self.editRName[index].text(), 2 if self.ui.checkZonen.isChecked() else 1, self.ruestungsKategorien[index])
             logging.debug("RuestungPicker created")
             if picker.ruestung is not None:
                 self.currentlyLoading = True
@@ -352,9 +352,9 @@ class RSCharakterRuestungWrapper(QtCore.QObject):
             self.currentlyLoading = False
             self.updateRuestungen()
 
-    def shouldShowType(typIdx, system):
+    def shouldShowCategory(kategorie, system):
         for rues in Wolke.DB.rüstungen:
-            if Wolke.DB.rüstungen[rues].typ != typIdx:
+            if Wolke.DB.rüstungen[rues].kategorie != kategorie:
                 continue
             if Wolke.DB.rüstungen[rues].system != 0 and Wolke.DB.rüstungen[rues].system != system:
                 continue
@@ -370,21 +370,21 @@ class RSCharakterRuestungWrapper(QtCore.QObject):
         for widget in zrsWidgets:
             widget.setVisible(self.ui.checkZonen.isChecked())
 
-        for typIdx in range(len(self.ruestungsTypen)):
-            showType = RSCharakterRuestungWrapper.shouldShowType(typIdx, 2 if self.ui.checkZonen.isChecked() else 1)
-            self.labels[typIdx].setVisible(showType)
-            self.editRName[typIdx].setVisible(showType)
-            self.spinRS[typIdx].setVisible(showType)
-            self.spinRS[typIdx].setEnabled(not self.ui.checkZonen.isChecked())
+        for kategorie in range(len(self.ruestungsKategorien)):
+            showCategory = RSCharakterRuestungWrapper.shouldShowCategory(kategorie, 2 if self.ui.checkZonen.isChecked() else 1)
+            self.labels[kategorie].setVisible(showCategory)
+            self.editRName[kategorie].setVisible(showCategory)
+            self.spinRS[kategorie].setVisible(showCategory)
+            self.spinRS[kategorie].setEnabled(not self.ui.checkZonen.isChecked())
             for j in range(6):
-                self.spinZRS[typIdx][j].setVisible(showType and self.ui.checkZonen.isChecked())
-            self.spinPunkte[typIdx].setVisible(showType and self.ui.checkZonen.isChecked())
+                self.spinZRS[kategorie][j].setVisible(showCategory and self.ui.checkZonen.isChecked())
+            self.spinPunkte[kategorie].setVisible(showCategory and self.ui.checkZonen.isChecked())
             if self.ruestungsEigenschaften:
-                self.editEigenschaften[typIdx].setVisible(showType)
-            self.buttons[typIdx].setVisible(showType)
+                self.editEigenschaften[kategorie].setVisible(showCategory)
+            self.buttons[kategorie].setVisible(showCategory)
 
-            if not showType:
-                self.loadArmorIntoFields(Ruestung(RuestungDefinition()), typIdx)
+            if not showCategory:
+                self.loadArmorIntoFields(Ruestung(RuestungDefinition()), kategorie)
 
         self.currentlyLoading = False
         self.updateRuestungen()

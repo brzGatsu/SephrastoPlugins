@@ -21,7 +21,7 @@ def ruestungGetEigenschaften(self):
     return self._eigenschaften
 
 Ruestung.eigenschaften = property(ruestungGetEigenschaften).setter(lambda self, v: setattr(self, "_eigenschaften", v))
-Ruestung.typ = property(lambda self: self._typ if hasattr(self, "_typ") else -1).setter(lambda self, v: setattr(self, "_typ", v))
+Ruestung.kategorie = property(lambda self: self._kategorie if hasattr(self, "_kategorie") else -1).setter(lambda self, v: setattr(self, "_kategorie", v))
 Ruestung.zrsMod = property(lambda self: self._zrsMod if hasattr(self, "_zrsMod") else 0).setter(lambda self, v: setattr(self, "_zrsMod", v))
 
 class Plugin:
@@ -86,8 +86,8 @@ class Plugin:
             return
         ser = params["serializer"]
         rüstung = params["object"]
-        if rüstung.typ != -1:
-            ser.set('typ', rüstung.typ)
+        if rüstung.kategorie != -1:
+            ser.set('kategorie', rüstung.kategorie)
         ser.set('text', ", ".join(rüstung.eigenschaften))
 
     def rüstungDeserialisiertHandler(self, params):
@@ -95,7 +95,7 @@ class Plugin:
             return
         ser = params["deserializer"]
         rüstung = params["object"]
-        rüstung._typ = ser.getInt('typ', -1)
+        rüstung._kategorie = ser.getInt('kategorie', -1)
         eigenschaften = ser.get('text')
         if eigenschaften is not None:
             if eigenschaften:
@@ -289,7 +289,6 @@ class Plugin:
             return
 
         teilrüstungen = [Wolke.Char.teilrüstungen1, Wolke.Char.teilrüstungen2, Wolke.Char.teilrüstungen3]
-        slots = Wolke.DB.einstellungen["Rüstungen: Typen"].wert
         addEigenschaften = self.db.einstellungen["RüstungenPlus Plugin: Rüstungseigenschaften"].wert 
         strList = ["<h2>Rüstungen</h1>"]
         for i in range(len(Wolke.Char.rüstung)):
@@ -321,7 +320,7 @@ class Plugin:
                     strList.append("<td align='center'>" + str(r.getRSGesamtInt()) + "</td>")
                 strList.append("</tr>")
                 strList.append("<tr>")
-                strList.append("<td colspan='100' style='font-size: 6pt;'>&nbsp;&nbsp;&nbsp;&nbsp;" + slots[r.typ])
+                strList.append("<td colspan='100' style='font-size: 6pt;'>&nbsp;&nbsp;&nbsp;&nbsp;" + Wolke.DB.einstellungen["Rüstungen: Kategorien"].wert.keyAtIndex(r.kategorie))
                 if addEigenschaften:
                     strList.append(" | Eigenschaften: ")
                     if len(r.eigenschaften) > 0:
