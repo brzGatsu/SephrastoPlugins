@@ -10,6 +10,7 @@ import os
 from EinstellungenWrapper import EinstellungenWrapper
 from Manoeverkarten.Manoeverkarte import KartenUtility
 import copy
+from QtUtils.TreeExpansionHelper import TreeExpansionHelper
 
 class KartenExportDialogWrapper(object):
     def __init__(self, isDbExport, datenbank):
@@ -85,6 +86,8 @@ class KartenExportDialogWrapper(object):
 
         self.ui.buttonBox.button(QtWidgets.QDialogButtonBox.Ok).setText("Exportieren")
         self.ui.buttonBox.button(QtWidgets.QDialogButtonBox.Cancel).setText("Abbrechen")
+
+        self.expansionHelper = TreeExpansionHelper(self.ui.treeCategories, self.ui.buttonExpandToggle, True)
 
         self.form.setWindowModality(QtCore.Qt.ApplicationModal)
         self.form.show()

@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'DatenbankEditKarte.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.5.1
+## Created by: Qt User Interface Compiler version 6.6.3
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -94,7 +94,7 @@ class Ui_karteDialog(object):
 
         self.layoutEditDelete.addWidget(self.radioDelete)
 
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.layoutEditDelete.addItem(self.horizontalSpacer)
 
@@ -224,7 +224,7 @@ class Ui_karteDialog(object):
         self.vlBeschreibung.setObjectName(u"vlBeschreibung")
         self.teBeschreibung = QPlainTextEdit(self.gbEditor)
         self.teBeschreibung.setObjectName(u"teBeschreibung")
-        sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.MinimumExpanding)
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.MinimumExpanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.teBeschreibung.sizePolicy().hasHeightForWidth())
