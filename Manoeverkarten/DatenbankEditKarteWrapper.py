@@ -57,6 +57,7 @@ class DatenbankEditKarteWrapper(DatenbankElementEditorBase):
         self.updateTimer.setSingleShot(True)
         self.updateTimer.timeout.connect(self.updateWebView)
         self.webView = WebEngineViewPlus()
+        self.webView.installJSBridge()
         self.ui.gbPreview.layout().addWidget(self.webView)
         zoomFactor = 2
         self.webView.setFixedSize(238 * zoomFactor, 332 * zoomFactor)

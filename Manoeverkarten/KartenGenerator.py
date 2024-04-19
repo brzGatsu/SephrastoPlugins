@@ -627,6 +627,7 @@ habe ich mit docsmagic.de gemacht, hier werden Sleeves mit farbigen Rückseiten 
 
         bookmarks = []
         webEngineView = WebEngineViewPlus()
+        webEngineView.installJSBridge()
         kartenPdfs = []
         count = 1
         lastFooter = ""
@@ -720,6 +721,7 @@ habe ich mit docsmagic.de gemacht, hier werden Sleeves mit farbigen Rückseiten 
             return
         deckName = os.path.splitext(os.path.basename(spath))[0]
         webEngineView = WebEngineViewPlus()
+        webEngineView.installJSBridge()
 
         for karte in karten:
             if karte.typ == KartenTyp.Deck:

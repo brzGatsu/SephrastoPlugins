@@ -15,7 +15,7 @@ from Manoeverkarten.Manoeverkarte import KartenTyp, Karte
 import DatenbankEditor
 from EinstellungenWrapper import EinstellungenWrapper
 from QtUtils.ProgressDialogExt import ProgressDialogExt
-from HilfeWrapper import HilfeWrapper
+from WebEngineWrapper import WebEngineWrapper
 from QtUtils.SimpleSettingsDialog import SimpleSettingsDialog
 from VoraussetzungenListe import VoraussetzungenListe, VoraussetzungException
 from Serialization import Serialization
@@ -97,7 +97,8 @@ class Plugin:
 
     def showHelp(self):
         if not hasattr(self, "helpWindow"):
-            self.helpWindow = HilfeWrapper("Help.md", False, [os.path.join(Wolke.Settings['Pfad-Plugins'], "Manoeverkarten", "Doc")])
+            self.helpWindow = WebEngineWrapper("Hilfe", os.path.join(Wolke.Settings['Pfad-Plugins'], "Manoeverkarten", "Data", "Doc", "index.html"), extraCss = Wolke.MkDocsCSS)
+
             self.helpWindow.form.show()
         else:
             self.helpWindow.form.show()

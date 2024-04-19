@@ -31,7 +31,9 @@ for include in includes:
 print("Removing unneeded folders")
 removeSubfiles = [
     "UI",
-    "__pycache__"
+    "docs",
+    "__pycache__",
+    "Data/Doc/assets/external/unpkg.com/mermaid@10.7.0"
 ]
 
 for include in includes:

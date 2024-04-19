@@ -85,7 +85,6 @@ class KartenExportDialogWrapper(object):
         self.einzelnExportChanged()
 
         self.ui.buttonBox.button(QtWidgets.QDialogButtonBox.Ok).setText("Exportieren")
-        self.ui.buttonBox.button(QtWidgets.QDialogButtonBox.Cancel).setText("Abbrechen")
 
         self.expansionHelper = TreeExpansionHelper(self.ui.treeCategories, self.ui.buttonExpandToggle, True)
 
