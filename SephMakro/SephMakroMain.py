@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'SephMakroMain.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.5.2
+## Created by: Qt User Interface Compiler version 6.7.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -26,7 +26,7 @@ class Ui_formMain(object):
             formMain.setObjectName(u"formMain")
         formMain.setWindowModality(Qt.ApplicationModal)
         formMain.resize(1016, 811)
-        sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(formMain.sizePolicy().hasHeightForWidth())
@@ -81,13 +81,12 @@ class Ui_formMain(object):
 
         self.horizontalLayout_2.addWidget(self.comboDB)
 
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_2.addItem(self.horizontalSpacer)
 
         self.buttonSaveOutput = QPushButton(formMain)
         self.buttonSaveOutput.setObjectName(u"buttonSaveOutput")
-        self.buttonSaveOutput.setMaximumSize(QSize(120, 16777215))
 
         self.horizontalLayout_2.addWidget(self.buttonSaveOutput)
 

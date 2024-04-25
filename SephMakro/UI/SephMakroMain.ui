@@ -129,12 +129,6 @@
      </item>
      <item>
       <widget class="QPushButton" name="buttonSaveOutput">
-       <property name="maximumSize">
-        <size>
-         <width>120</width>
-         <height>16777215</height>
-        </size>
-       </property>
        <property name="text">
         <string>Ausgabe speichern</string>
        </property>
