@@ -63,13 +63,13 @@ class Plugin:
         e = self.db.einstellungen["Waffen: Waffenwerte Script"]
         e.text = """waffe = getWaffe()
 kampfstil = getKampfstil()
-be = max(getBEBySlot(waffe.beSlot) + kampfstil.be, 0)
+be = max(getRüstungBE() + kampfstil.be, 0)
 at = getPW() + kampfstil.at + waffe.wm - be
 vt = getPW() + kampfstil.vt + waffe.wmVt - be
 sb = getSB() if waffe.fertigkeit not in ["Schusswaffen"] else 0
-plus = waffe.plus + kampfstil.plus + sb
-rw = getWaffe().rw + getKampfstil().rw
-setWaffenwerte(at, vt, plus, rw)"""
+plus = kampfstil.plus + sb
+rw = getKampfstil().rw
+modifyWaffenwerte(at, vt, plus, rw)"""
     
     def waffedefinitionSerialisiertHandler(self, params):
         if not self.db.einstellungen["WaffenPlus Plugin: Separater VT-WM"].wert:
