@@ -38,7 +38,7 @@ class Plugin:
 
         energien = [e for e in sorted(char.energien.values(), key=lambda value: value.sortorder)]
         for en in energien:
-            content.append(en.name + " " + str(en.gesamtwert))
+            content.append(en.name + " " + str(en.wertFinal))
 
         content.append("\n=== Allgemeine und Profane Vorteile === ")
         vorteile = CharakterPrintUtility.getVorteile(char)
@@ -91,22 +91,24 @@ class Plugin:
             if not waffe.name:
                 continue
 
-            werte = char.waffenwerte[count]
             keinSchaden = waffe.würfel == 0 and waffe.plus == 0
             sg = ""
             if waffe.plus >= 0:
                 sg = "+"
             content.append(waffe.anzeigename)
+
+            content[-1] += " RW " + str(waffe.rwFinal)
+
             if waffe.fernkampf:
-                content[-1] += " LZ " + str(waffe.lz)
-            content[-1] += " AT " + str(werte.at)
+                content[-1] += " LZ " + str(waffe.lzFinal)
+            content[-1] += " AT " + str(waffe.at)
 
             vtVerboten = Wolke.DB.einstellungen["Waffen: Talente VT verboten"].wert
             if waffe.talent in vtVerboten or waffe.name in vtVerboten:
                 content[-1] += " VT -"
             else:
-                content[-1] += " VT " + str(werte.vt)
-            content[-1] += " " + ("-" if keinSchaden else str(werte.würfel) + "W" + str(waffe.würfelSeiten) + sg + str(werte.plus))
+                content[-1] += " VT " + str(waffe.vt)
+            content[-1] += " " + ("-" if keinSchaden else str(waffe.würfelFinal) + "W" + str(waffe.würfelSeiten) + sg + str(waffe.plusFinal))
             if len(waffe.eigenschaften) > 0:
                 content.append(", ".join(waffe.eigenschaften))
             content.append("")
