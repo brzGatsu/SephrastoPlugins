@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'DatenbankEditKarte.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.6.3
+## Created by: Qt User Interface Compiler version 6.7.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -18,8 +18,8 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QAbstractButton, QApplication, QComboBox, QDialog,
     QDialogButtonBox, QGridLayout, QGroupBox, QHBoxLayout,
     QLabel, QLineEdit, QPlainTextEdit, QPushButton,
-    QRadioButton, QSizePolicy, QSpacerItem, QVBoxLayout,
-    QWidget)
+    QRadioButton, QScrollArea, QSizePolicy, QSpacerItem,
+    QVBoxLayout, QWidget)
 
 class Ui_karteDialog(object):
     def setupUi(self, karteDialog):
@@ -29,32 +29,15 @@ class Ui_karteDialog(object):
         karteDialog.resize(1032, 674)
         self.gridLayout_2 = QGridLayout(karteDialog)
         self.gridLayout_2.setObjectName(u"gridLayout_2")
-        self.buttonBox = QDialogButtonBox(karteDialog)
-        self.buttonBox.setObjectName(u"buttonBox")
-        self.buttonBox.setOrientation(Qt.Horizontal)
-        self.buttonBox.setStandardButtons(QDialogButtonBox.Cancel|QDialogButtonBox.Save)
-        self.buttonBox.setCenterButtons(True)
-
-        self.gridLayout_2.addWidget(self.buttonBox, 1, 0, 1, 1)
-
-        self.gridLayout = QGridLayout()
+        self.scrollArea = QScrollArea(karteDialog)
+        self.scrollArea.setObjectName(u"scrollArea")
+        self.scrollArea.setWidgetResizable(True)
+        self.scrollAreaWidgetContents = QWidget()
+        self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 1012, 625))
+        self.gridLayout = QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout.setObjectName(u"gridLayout")
-        self.gbPreview = QGroupBox(karteDialog)
-        self.gbPreview.setObjectName(u"gbPreview")
-        self.verticalLayout_2 = QVBoxLayout(self.gbPreview)
-        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-
-        self.gridLayout.addWidget(self.gbPreview, 1, 1, 1, 1)
-
-        self.warning = QLabel(karteDialog)
-        self.warning.setObjectName(u"warning")
-        self.warning.setVisible(False)
-        self.warning.setStyleSheet(u"background-color: rgb(255, 255, 0); color: black;")
-        self.warning.setWordWrap(True)
-
-        self.gridLayout.addWidget(self.warning, 0, 0, 1, 2)
-
-        self.gbEditor = QGroupBox(karteDialog)
+        self.gbEditor = QGroupBox(self.scrollAreaWidgetContents)
         self.gbEditor.setObjectName(u"gbEditor")
         self.gridLayout_4 = QGridLayout(self.gbEditor)
         self.gridLayout_4.setObjectName(u"gridLayout_4")
@@ -236,10 +219,34 @@ class Ui_karteDialog(object):
         self.gridLayout_4.addLayout(self.vlBeschreibung, 6, 1, 1, 1)
 
 
-        self.gridLayout.addWidget(self.gbEditor, 1, 0, 1, 1)
+        self.gridLayout.addWidget(self.gbEditor, 2, 0, 1, 1)
 
+        self.gbPreview = QGroupBox(self.scrollAreaWidgetContents)
+        self.gbPreview.setObjectName(u"gbPreview")
+        self.verticalLayout_2 = QVBoxLayout(self.gbPreview)
+        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
 
-        self.gridLayout_2.addLayout(self.gridLayout, 0, 0, 1, 1)
+        self.gridLayout.addWidget(self.gbPreview, 2, 1, 1, 1)
+
+        self.warning = QLabel(self.scrollAreaWidgetContents)
+        self.warning.setObjectName(u"warning")
+        self.warning.setVisible(True)
+        self.warning.setStyleSheet(u"background-color: rgb(255, 255, 0); color: black;")
+        self.warning.setWordWrap(True)
+
+        self.gridLayout.addWidget(self.warning, 0, 0, 1, 2)
+
+        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
+
+        self.gridLayout_2.addWidget(self.scrollArea, 0, 0, 1, 1)
+
+        self.buttonBox = QDialogButtonBox(karteDialog)
+        self.buttonBox.setObjectName(u"buttonBox")
+        self.buttonBox.setOrientation(Qt.Horizontal)
+        self.buttonBox.setStandardButtons(QDialogButtonBox.Cancel|QDialogButtonBox.Save)
+        self.buttonBox.setCenterButtons(True)
+
+        self.gridLayout_2.addWidget(self.buttonBox, 1, 0, 1, 1)
 
 
         self.retranslateUi(karteDialog)
@@ -251,8 +258,6 @@ class Ui_karteDialog(object):
 
     def retranslateUi(self, karteDialog):
         karteDialog.setWindowTitle(QCoreApplication.translate("karteDialog", u"Sephrasto - Man\u00f6verkarte bearbeiten...", None))
-        self.gbPreview.setTitle(QCoreApplication.translate("karteDialog", u"Vorschau", None))
-        self.warning.setText(QCoreApplication.translate("karteDialog", u"<html><head/><body><p>Dies ist eine Standard-Man\u00f6verkarte. Sobald du hier etwas ver\u00e4nderst, bekommst du eine pers\u00f6nliche Kopie und das Original wird in den Hausregeln gel\u00f6scht. Damit erh\u00e4ltst du f\u00fcr diese Man\u00f6verkarte keine automatischen Updates mehr mit neuen Man\u00f6verkarten-Plugin-Versionen.</p></body></html>", None))
         self.gbEditor.setTitle(QCoreApplication.translate("karteDialog", u"Editor", None))
 #if QT_CONFIG(tooltip)
         self.leFusszeile.setToolTip("")
@@ -290,5 +295,7 @@ class Ui_karteDialog(object):
         self.teBeschreibung.setToolTip("")
 #endif // QT_CONFIG(tooltip)
         self.teBeschreibung.setPlainText(QCoreApplication.translate("karteDialog", u"$original$", None))
+        self.gbPreview.setTitle(QCoreApplication.translate("karteDialog", u"Vorschau", None))
+        self.warning.setText(QCoreApplication.translate("karteDialog", u"<html><head/><body><p>Dies ist eine Standard-Man\u00f6verkarte. Sobald du hier etwas ver\u00e4nderst, bekommst du eine pers\u00f6nliche Kopie und das Original wird in den Hausregeln gel\u00f6scht. Damit erh\u00e4ltst du f\u00fcr diese Man\u00f6verkarte keine automatischen Updates mehr mit neuen Man\u00f6verkarten-Plugin-Versionen.</p></body></html>", None))
     # retranslateUi
 

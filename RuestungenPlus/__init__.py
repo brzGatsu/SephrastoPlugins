@@ -11,6 +11,7 @@ from RuestungenPlus import RSDatenbankEditRuestungseigenschaftWrapper, Ruestungs
 import copy
 import re
 from Core.Ruestung import Ruestung
+from Scripts import Script, ScriptParameter
 
 # Add dynamic properties to Ruestung
 def ruestungGetEigenschaften(self):
@@ -31,6 +32,7 @@ class Plugin:
         # Rüstungseigenschaften
         EventBus.addFilter("datenbank_editor_typen", self.datenbankEditorTypenHook)
         EventBus.addAction("charakter_aktualisieren_fertigkeiten", self.charakterAktualisierenHandler)
+        EventBus.addFilter("scripts_available", self.scriptsAvailableHook)
 
         # Regelanhang
         EventBus.addAction("regelanhang_anfuegen", self.regelanhangAnfuegenHandler)
@@ -80,6 +82,29 @@ class Plugin:
         char.teilrüstungen1 = []
         char.teilrüstungen2 = []
         char.teilrüstungen3 = []
+        
+        char.rüstungenScriptAPI = copy.copy(char.charakterScriptAPI)
+        char.rüstungenScriptAPI['getEigenschaftParam'] = lambda paramNb: self.API_getEigenschaftParam(paramNb)
+        char.rüstungenScriptAPI['modifyZRSPunkte'] = lambda zrs: setattr(self.currentRuestung, 'zrsMod', self.currentRuestung.zrsMod + zrs)
+
+    def scriptsAvailableHook(self, scripts, params):
+        context = params["context"]
+        if context == RSDatenbankEditRuestungseigenschaftWrapper.RSDatenbankEditRuestungseigenschaftWrapper.ScriptContext:
+            script = Script(f"Rüstungseigenschaft Parameter (Zahl)", f"getEigenschaftParam", "Rüstungseigenschaften", castType = int)
+            script.parameter.append(ScriptParameter("Index", int))
+            scripts.numberGetter[script.name] = script
+
+            script = Script(f"Waffeneigenschaft Parameter (Text)", f"getEigenschaftParam", "Rüstungseigenschaften")
+            script.parameter.append(ScriptParameter("Index", int))
+            scripts.stringGetter[script.name] = script
+
+            script = Script("Rüstungseigenschaft ZRS-Punkte modifizieren", "modifyZRSPunkte", "Rüstungseigenschaften")
+            script.beschreibung = "Modifiert die ZRS-Punkte, die eine Rüstung anhand ihrer Zonenrüstungswerte hat. "\
+                "Damit kann das RS/BE-Verhältnis verbessert oder verschlechtert werden."
+            script.parameter.append(ScriptParameter("Modifikator", int))
+            scripts.setters[script.name] = script
+
+        return scripts
 
     def rüstungSerialisiertHandler(self, params):
         if not Wolke.DB.einstellungen["RüstungenPlus Plugin: Rüstungseigenschaften"].wert:
@@ -174,10 +199,6 @@ class Plugin:
         if len(char.rüstung) == 0:
             return
 
-        api = copy.copy(char.charakterScriptAPI)
-        api['getEigenschaftParam'] = lambda paramNb: self.API_getEigenschaftParam(paramNb)
-        api['modifyZRSPunkte'] = lambda zrs: setattr(self.currentRuestung, 'zrsMod', self.currentRuestung.zrsMod + zrs)
-
         for i in range(len(char.rüstung)):
             self.currentRuestung = char.rüstung[i]
             self.currentRuestung.zrsMod = 0
@@ -191,7 +212,7 @@ class Plugin:
                     continue
                 if ruestungsEigenschaft.scriptOnlyFirst and i != 0:
                     continue
-                ruestungsEigenschaft.executeScript(api)
+                ruestungsEigenschaft.executeScript(char.rüstungenScriptAPI)
 
     ############################
     # Charaktereditor
