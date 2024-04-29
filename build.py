@@ -1,7 +1,7 @@
 import os
 import shutil
 
-version = "4.4.0"
+version = "5.0.0"
 dir_path = os.path.dirname(os.path.realpath(__file__))
 build_path = os.path.join(dir_path,  "build")
 os.makedirs(build_path)
