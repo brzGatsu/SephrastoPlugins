@@ -2,5 +2,5 @@
   "name": "Charakter to Text",
   "description": "Das Plugin sorgt dafür, dass beim beim Speichern des Charakters zusätzlich eine Textdatei im gleichen Ordner angelegt wird. Diese Textdatei enthält alle Charakterwerte in leicht zu kopierendem Format. Ich nutze es beispielsweise, um ein digitales Charaktersheet in Form von Trello-Karten zu befüllen.",
   "author": "Gatsu",
-  "version": "1"
+  "version": "2"
 }
