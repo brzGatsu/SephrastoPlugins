@@ -32,7 +32,7 @@ for idx in range(waffenCount()):
     rw = getKampfstilRW(kampfstil)
     modifyWaffeRW(idx, rw)
     
-    if kampfstil == "Beidhändiger Kampf" and rw == 0:
+    if kampfstil == "Beidhändiger Kampf" and getWaffeRW(idx) == 0:
         modifyWaffeAT(idx, 1)
     if "Nebenhand" in getWaffeEigenschaften(idx) and kampfstil in ["Schneller Kampf", "Kraftvoller Kampf", "Berserkerkampf", "Halbschwert Kampf"]:
         modifyWaffeAT(idx, -getKampfstilAT(kampfstil))
