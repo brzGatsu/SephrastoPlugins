@@ -33,7 +33,8 @@ removeSubfiles = [
     "UI",
     "docs",
     "__pycache__",
-    "Data/Doc/assets/external/unpkg.com/mermaid@10.7.0"
+    "Data/Doc/assets/external/unpkg.com/mermaid@10.7.0",
+    ".cache"
 ]
 
 for include in includes:
