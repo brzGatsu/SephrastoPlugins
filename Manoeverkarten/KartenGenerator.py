@@ -42,7 +42,7 @@ class KartenGenerator:
         bedingungen = vorteil.bedingungen
         if vorteil.linkKategorie == VorteilLinkKategorie.Vorteil: 
             beschreibungenErsetzen = self.db.einstellungen["Regelanhang: Vorteilsbeschreibungen ersetzen"].wert
-            if vorteil.typ not in beschreibungenErsetzen:
+            if vorteil.kategorie not in beschreibungenErsetzen:
                 bedingungen2 = self.getVorteilBedingungen(self.db.vorteile[vorteil.linkElement])
                 if bedingungen2:
                     bedingungen = bedingungen2 + "\n" + bedingungen
@@ -264,7 +264,7 @@ habe ich mit docsmagic.de gemacht, hier werden Sleeves mit farbigen Rückseiten 
 
         karte.customData["fertigkeitenicon"] = "../Fertigkeiten/Zauber.png"
         if element is not None:
-            karte.customData["fertigkeitenicon"] = f"../Fertigkeiten/{list(self.db.einstellungen['Talente: Spezialtalent Typen'].wert.values())[element.spezialTyp]}.png"
+            karte.customData["fertigkeitenicon"] = f"../Fertigkeiten/{self.db.einstellungen['Talente: Kategorien'].wert.keyAtIndex(element.kategorie)}.png"
 
         karte.text, line = self.removeLineHtml(karte.text, "Erlernen:")
         if line:
@@ -303,9 +303,9 @@ habe ich mit docsmagic.de gemacht, hier werden Sleeves mit farbigen Rückseiten 
             karte.subtitel = k.subtitel.replace("$original$", "")
         footer = ""
         if k.typ == KartenTyp.Vorteil:
-            footer = self.db.einstellungen["Vorteile: Typen"].wert[k.subtyp]
+            footer = self.db.einstellungen["Vorteile: Kategorien"].wert.keyAtIndex(k.subtyp)
         elif k.typ == KartenTyp.Regel:
-            footer = self.db.einstellungen["Regeln: Typen"].wert[k.subtyp]
+            footer = self.db.einstellungen["Regeln: Kategorien"].wert.keyAtIndex(k.subtyp)
         karte.fusszeile = k.fusszeile.replace("$original$", footer)
 
         if k.typ == KartenTyp.Talent:
@@ -321,7 +321,7 @@ habe ich mit docsmagic.de gemacht, hier werden Sleeves mit farbigen Rückseiten 
 
         if isinstance(element, VorteilDefinition):
             karte.typ = KartenTyp.Vorteil
-            karte.subtyp = element.typ
+            karte.subtyp = element.kategorie
             text = self.getVorteilDescription(element)
             listified = "<ul" in text or "<ol" in text
 
@@ -346,7 +346,7 @@ habe ich mit docsmagic.de gemacht, hier werden Sleeves mit farbigen Rückseiten 
             if bedingungen:
                 text = f"<i>Bedingungen:</i> {bedingungen}\n{text}"
             karte.text = text
-            karte.fusszeile = self.db.einstellungen["Vorteile: Typen"].wert[element.typ]
+            karte.fusszeile = self.db.einstellungen["Vorteile: Kategorien"].wert.keyAtIndex(element.kategorie)
             karte.subtitel = ""
             if element.kommentarErlauben:
                 line = "<table style='width: 100%; margin-bottom: 4px;'><tr style='border-bottom: 1px solid black;'><td>&nbsp;</td></tr></table>"
@@ -356,11 +356,14 @@ habe ich mit docsmagic.de gemacht, hier werden Sleeves mit farbigen Rückseiten 
                     karte.subtitel = line
         elif isinstance(element, TalentDefinition):
             karte.typ = KartenTyp.Talent
-            karte.subtyp = element.spezialTyp
+            karte.subtyp = element.kategorie
             karte.text = element.text
             karte.subtitel = "PW <u>" + "&nbsp;"*12 + "</u>"
             if element.hauptfertigkeit is not None:
-                karte.fusszeile = self.db.einstellungen["Fertigkeiten: Typen übernatürlich"].wert[element.hauptfertigkeit.typ]
+                if element.spezialTalent:
+                    karte.fusszeile = self.db.einstellungen["Fertigkeiten: Kategorien übernatürlich"].wert.keyAtIndex(element.hauptfertigkeit.kategorie)
+                else:
+                    karte.fusszeile = self.db.einstellungen["Fertigkeiten: Kategorien profan"].wert.keyAtIndex(element.hauptfertigkeit.kategorie)
             else:
                 karte.fusszeile = ""
             if element.kommentarErlauben:
@@ -371,11 +374,11 @@ habe ich mit docsmagic.de gemacht, hier werden Sleeves mit farbigen Rückseiten 
                     karte.text = line + karte.text
         elif isinstance(element, Regel):
             karte.typ = KartenTyp.Regel
-            karte.subtyp = element.typ
+            karte.subtyp = element.kategorie
             karte.titel = element.anzeigename
             karte.text = element.text
             karte.subtitel = element.probe
-            karte.fusszeile = self.db.einstellungen["Regeln: Typen"].wert[element.typ]
+            karte.fusszeile = self.db.einstellungen["Regeln: Kategorien"].wert.keyAtIndex(element.kategorie)
         elif isinstance(element, Waffeneigenschaft):
             karte.typ = KartenTyp.Waffeneigenschaft
             karte.text = element.text
@@ -449,22 +452,22 @@ habe ich mit docsmagic.de gemacht, hier werden Sleeves mit farbigen Rückseiten 
 
     def generate(self, deaktivierteKategorien, vorteile, regeln, waffeneigenschaften, talente, karten):
         # Vorteile
-        vorteilTypen = self.db.einstellungen["Vorteile: Typen"].wert
+        vorteilKategorien = self.db.einstellungen["Vorteile: Kategorien"].wert
         vorteileGruppiert = []
-        for i in range(len(vorteilTypen)):
-            vorteileGruppiert.append([v for v in vorteile if v.typ == i])
+        for i in range(len(vorteilKategorien)):
+            vorteileGruppiert.append([v for v in vorteile if v.kategorie == i])
 
         # Regeln
-        regelTypen = self.db.einstellungen["Regeln: Typen"].wert
+        regelKategorien = self.db.einstellungen["Regeln: Kategorien"].wert
         regelnGruppiert = []
-        for i in range(len(regelTypen)):
-            regelnGruppiert.append([r for r in regeln if r.typ == i])
+        for i in range(len(regelKategorien)):
+            regelnGruppiert.append([r for r in regeln if r.kategorie == i])
 
         # Talente
-        spezialTalentTypen = self.db.einstellungen["Talente: Spezialtalent Typen"].wert
-        talenteByTyp = []
-        for typ in range(len(spezialTalentTypen)):
-            talenteByTyp.append([t for t in talente if t.spezialTyp == typ])
+        talentKategorien = self.db.einstellungen["Talente: Kategorien"].wert
+        talenteGruppiert = []
+        for kategorie in range(len(talentKategorien)):
+            talenteGruppiert.append([t for t in talente if t.kategorie == kategorie])
 
         # Benutzerdefiniert
         benutzerdefiniert = [k for k in karten if k.typ == KartenTyp.Benutzerdefiniert and k.subtyp]
@@ -515,23 +518,23 @@ habe ich mit docsmagic.de gemacht, hier werden Sleeves mit farbigen Rückseiten 
             if r in deaktivierteKategorien:
                 continue
             if r[0] == "V" and len(r) > 2 and r[2:].isnumeric():
-                typ = int(r[2:])
-                if typ >= len(vorteileGruppiert):
+                kategorie = int(r[2:])
+                if kategorie >= len(vorteileGruppiert):
                     continue
-                for el in vorteileGruppiert[typ]:
+                for el in vorteileGruppiert[kategorie]:
                     karte = self.generateKarte(el, farbe, overrideKarten[el] if el in overrideKarten else None)
                     if karte is not None:
                         currentDeck.append(karte)
-                currentDeck.extend([self.generateZusatzKarte(k, farbe) for k in karten if k.typ == KartenTyp.Vorteil and k.isNew(self.db) and k.subtyp == typ])
+                currentDeck.extend([self.generateZusatzKarte(k, farbe) for k in karten if k.typ == KartenTyp.Vorteil and k.isNew(self.db) and k.subtyp == kategorie])
             elif r[0] == "R" and len(r) > 2 and r[2:].isnumeric():
-                typ = int(r[2:])
-                if typ >= len(regelnGruppiert):
+                kategorie = int(r[2:])
+                if kategorie >= len(regelnGruppiert):
                     continue
-                for el in regelnGruppiert[typ]:
+                for el in regelnGruppiert[kategorie]:
                     karte = self.generateKarte(el, farbe, overrideKarten[el] if el in overrideKarten else None)
                     if karte is not None:
                         currentDeck.append(karte)
-                currentDeck.extend([self.generateZusatzKarte(k, farbe) for k in karten if k.typ == KartenTyp.Regel and k.isNew(self.db) and k.subtyp == typ])
+                currentDeck.extend([self.generateZusatzKarte(k, farbe) for k in karten if k.typ == KartenTyp.Regel and k.isNew(self.db) and k.subtyp == kategorie])
             elif r[0] == "W":
                 for el in waffeneigenschaften:
                     karte = self.generateKarte(el, farbe, overrideKarten[el] if el in overrideKarten else None)
@@ -539,14 +542,14 @@ habe ich mit docsmagic.de gemacht, hier werden Sleeves mit farbigen Rückseiten 
                         currentDeck.append(karte)
                 currentDeck.extend([self.generateZusatzKarte(k, farbe) for k in karten if k.typ == KartenTyp.Waffeneigenschaft and k.isNew(self.db)])
             elif r[0] == "S" and len(r) > 2 and r[2:].isnumeric():
-                typ = int(r[2:])
-                if typ >= len(spezialTalentTypen):
+                kategorie = int(r[2:])
+                if kategorie >= len(talentKategorien):
                     continue
-                for el in talenteByTyp[typ]:
+                for el in talenteGruppiert[kategorie]:
                     karte = self.generateKarte(el, farbe, overrideKarten[el] if el in overrideKarten else None)
                     if karte is not None:
                         currentDeck.append(karte)
-                currentDeck.extend([self.generateZusatzKarte(k, farbe) for k in karten if k.typ == KartenTyp.Talent and k.isNew(self.db) and k.subtyp == typ])
+                currentDeck.extend([self.generateZusatzKarte(k, farbe) for k in karten if k.typ == KartenTyp.Talent and k.isNew(self.db) and k.subtyp == kategorie])
             elif r[0] == "B" and len(r) > 2:
                 typ = r[2:]
                 if not typ in benutzerdefiniertByTyp:
@@ -558,7 +561,7 @@ habe ich mit docsmagic.de gemacht, hier werden Sleeves mit farbigen Rückseiten 
             EventBus.doAction("karten_anfuegen", { "reihenfolge" : r, "appendCallback" : lambda karte: currentDeck.append(karte) })
 
         for deck in decks.values():
-            deck[1:] = sorted(deck[1:], key=lambda k: (k.fusszeile, k.name))
+            deck[1:] = sorted(deck[1:], key=lambda k: (Hilfsmethoden.unicodeCaseInsensitive(k.fusszeile), Hilfsmethoden.unicodeCaseInsensitive(k.name)))
 
         return decks
 
@@ -568,6 +571,9 @@ habe ich mit docsmagic.de gemacht, hier werden Sleeves mit farbigen Rückseiten 
 
     def generateHtml(self, karte, forceHintergrund = False):
         typName = KartenTyp.TypNamen[karte.typ]
+        if karte.typ == KartenTyp.Benutzerdefiniert:
+           typName = karte.subtyp
+
         if typName in self.templates:
             htmlPath = self.templates[typName][0]
             html = self.templates[typName][1]
@@ -621,6 +627,7 @@ habe ich mit docsmagic.de gemacht, hier werden Sleeves mit farbigen Rückseiten 
 
         bookmarks = []
         webEngineView = WebEngineViewPlus()
+        webEngineView.installJSBridge()
         kartenPdfs = []
         count = 1
         lastFooter = ""
@@ -646,7 +653,10 @@ habe ich mit docsmagic.de gemacht, hier werden Sleeves mit farbigen Rückseiten 
             progressDlg.setValue(progressDlg.value()+1)
             if progressDlg.shouldCancel():
                 for pdf in kartenPdfs: os.remove(pdf[0])
+                webEngineView.deleteLater()
                 return
+
+        webEngineView.deleteLater()
 
         if writeEinzeln:
             progressDlg.setLabelText("Optimiere Dateigröße...")
@@ -688,32 +698,30 @@ habe ich mit docsmagic.de gemacht, hier werden Sleeves mit farbigen Rückseiten 
             if Wolke.Settings["Manöverkarten_PDF-Open"]:
                 Hilfsmethoden.openFile(spath)
 
-    def __convertHtmlToJpg(self, out_file, html, htmlBaseUrl, width, height, scale = 1, backgroundColor = QtCore.Qt.transparent, webView = None):
+    def __convertHtmlToJpg(self, webEngineView, out_file, html, htmlBaseUrl, width, height, scale = 1, backgroundColor = QtCore.Qt.transparent):
         if isinstance(htmlBaseUrl, str):
             htmlBaseUrl = QtCore.QUrl.fromLocalFile(QtCore.QFileInfo(htmlBaseUrl).absoluteFilePath())
-
-        if webView is None:
-            webView = WebEngineViewPlus()
-        webView.setFixedSize(width*scale, height*scale)
-        webView.setZoomFactor(scale)
-        webView.page().setBackgroundColor(backgroundColor)
-        webView.show()
-        with PdfSerializer.waitForSignal(webView.htmlLoaded):
-            webView.setHtml(html, htmlBaseUrl)
+        webEngineView.setFixedSize(width*scale, height*scale)
+        webEngineView.setZoomFactor(scale)
+        webEngineView.page().setBackgroundColor(backgroundColor)
+        webEngineView.show()
+        with PdfSerializer.waitForSignal(webEngineView.htmlLoaded):
+            webEngineView.setHtml(html, htmlBaseUrl)
 
         if Wolke.Settings["Manöverkarten_ExportVerzögerungMs"] > 0:
             timer = QtCore.QTimer()
             with PdfSerializer.waitForSignal(timer.timeout):
                 timer.start(Wolke.Settings["Manöverkarten_ExportVerzögerungMs"])
 
-        pixmap = webView.grab()
+        pixmap = webEngineView.grab()
         pixmap.save(out_file, "JPG", 90)
 
     def writeKartenBilder(self, spath, karten, nameFormat, progressDlg):
         if len(karten) == 0:
             return
         deckName = os.path.splitext(os.path.basename(spath))[0]
-        webView = WebEngineViewPlus()
+        webEngineView = WebEngineViewPlus()
+        webEngineView.installJSBridge()
 
         for karte in karten:
             if karte.typ == KartenTyp.Deck:
@@ -729,7 +737,12 @@ habe ich mit docsmagic.de gemacht, hier werden Sleeves mit farbigen Rückseiten 
             kartenName = nameFormat.replace("{deckname}", deckName).replace("{titel}", titel)
             path = os.path.join(os.path.dirname(spath), f"{kartenName}.jpg")
             html, htmlPath = self.generateHtml(karte)
-            self.__convertHtmlToJpg(path, html, htmlPath, 238, 332, 3, karte.farbe)
+            self.__convertHtmlToJpg(webEngineView, path, html, htmlPath, 238, 332, 3, karte.farbe)
             progressDlg.setValue(progressDlg.value()+1)
             if progressDlg.shouldCancel():
+                webEngineView.hide()
+                webEngineView.deleteLater()
                 return
+
+        webEngineView.hide()
+        webEngineView.deleteLater()

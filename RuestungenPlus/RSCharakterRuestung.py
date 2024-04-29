@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'RSCharakterRuestung.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.5.1
+## Created by: Qt User Interface Compiler version 6.7.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -39,7 +39,7 @@ class Ui_formAusruestung(object):
         self.Ruestungen.setSizeConstraint(QLayout.SetDefaultConstraint)
         self.labelRarm = QLabel(self.gbRstungen)
         self.labelRarm.setObjectName(u"labelRarm")
-        sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.labelRarm.sizePolicy().hasHeightForWidth())
@@ -254,7 +254,7 @@ class Ui_formAusruestung(object):
 
         self.verticalLayout.addWidget(self.gbRstungen)
 
-        self.verticalSpacer_4 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.verticalSpacer_4 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.verticalLayout.addItem(self.verticalSpacer_4)
 

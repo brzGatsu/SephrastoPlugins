@@ -10,6 +10,7 @@ import os
 from EinstellungenWrapper import EinstellungenWrapper
 from Manoeverkarten.Manoeverkarte import KartenUtility
 import copy
+from QtUtils.TreeExpansionHelper import TreeExpansionHelper
 
 class KartenExportDialogWrapper(object):
     def __init__(self, isDbExport, datenbank):
@@ -22,9 +23,6 @@ class KartenExportDialogWrapper(object):
         self.ui.checkHintergrund.setChecked(Wolke.Settings["Manöverkarten_Hintergrundbild"])
         
         deaktiviert = Wolke.Settings["Manöverkarten_DeaktivierteKategorien"] if isDbExport else Wolke.Char.deaktivierteKartenKategorien
-        vorteilTypen = datenbank.einstellungen["Vorteile: Typen"].wert
-        regelnTypen = datenbank.einstellungen["Regeln: Typen"].wert
-        spezialTalentTypen = list(datenbank.einstellungen["Talente: Spezialtalent Typen"].wert.values())
         def createItem(parent, name, cat):
             if isinstance(parent, QtWidgets.QTreeWidgetItem) and parent.text(0) == name:
                 parent.setData(0, QtCore.Qt.UserRole, cat)
@@ -55,18 +53,18 @@ class KartenExportDialogWrapper(object):
                 parent.setCheckState(0, QtCore.Qt.Checked)
                 parent.setFlags(parent.flags() | QtCore.Qt.ItemIsAutoTristate)
             elif r[0] == "V" and len(r) > 2 and r[2:].isnumeric():
-                typ = int(r[2:])
-                createItem(parent, vorteilTypen[typ], r)
+                kategorie = int(r[2:])
+                createItem(parent, datenbank.einstellungen["Vorteile: Kategorien"].wert.keyAtIndex(kategorie), r)
             elif r[0] == "R" and len(r) > 2 and r[2:].isnumeric():
-                typ = int(r[2:])
-                createItem(parent, regelnTypen[typ], r)
+                kategorie = int(r[2:])
+                createItem(parent, datenbank.einstellungen["Regeln: Kategorien"].wert.keyAtIndex(kategorie), r)
             elif r[0] == "W":
                 createItem(parent, "Waffeneigenschaften", r)
             elif r[0] == "S" and len(r) > 2 and r[2:].isnumeric():
-                typ = int(r[2:])
-                createItem(parent, spezialTalentTypen[typ], r)
+                kategorie = int(r[2:])
+                createItem(parent, datenbank.einstellungen["Talente: Kategorien"].wert.keyAtIndex(kategorie), r)
             else:
-                name = EventBus.applyFilter("karten_reihenfolge_name", r)
+                name = EventBus.applyFilter("regelanhang_reihenfolge_name", r)
                 createItem(parent, name, r)
 
         benutzerdefiniert = KartenUtility.getBenutzerdefinierteTypen(datenbank)
@@ -87,7 +85,8 @@ class KartenExportDialogWrapper(object):
         self.einzelnExportChanged()
 
         self.ui.buttonBox.button(QtWidgets.QDialogButtonBox.Ok).setText("Exportieren")
-        self.ui.buttonBox.button(QtWidgets.QDialogButtonBox.Cancel).setText("Abbrechen")
+
+        self.expansionHelper = TreeExpansionHelper(self.ui.treeCategories, self.ui.buttonExpandToggle, True)
 
         self.form.setWindowModality(QtCore.Qt.ApplicationModal)
         self.form.show()

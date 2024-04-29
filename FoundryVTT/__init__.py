@@ -170,7 +170,7 @@ class Plugin:
             item["data"] = {
                 # "voraussetzung": ", ".join(vorteil.voraussetzungen),
                 "voraussetzung": v.voraussetzungen.anzeigetext(self.db),
-                "gruppe": Wolke.DB.einstellungen["Vorteile: Typen"].wert[v.typ], # "Kampfvorteile" etc.
+                "gruppe": v.kategorieName(Wolke.DB), # "Kampfvorteile" etc.
                 "text": Hilfsmethoden.fixHtml(v.text)
             }
             # print(self.char.vorteileVariable)
@@ -192,7 +192,7 @@ class Plugin:
                 "attribut_0": f.attribute[0],
                 "attribut_1": f.attribute[1],
                 "attribut_2": f.attribute[2],
-                "gruppe": Wolke.DB.einstellungen["Fertigkeiten: Typen profan"].wert[f.typ], # "Nahkampffertigkeiten" etc.
+                "gruppe": f.kategorieName(Wolke.DB), # "Nahkampffertigkeiten" etc.
                 "text": Hilfsmethoden.fixHtml(f.text)
             }
             items.append(item)
@@ -226,7 +226,7 @@ class Plugin:
                 "attribut_0": uef.attribute[0],
                 "attribut_1": uef.attribute[1],
                 "attribut_2": uef.attribute[2],
-                "gruppe": Wolke.DB.einstellungen["Fertigkeiten: Typen übernatürlich"].wert[uef.typ], # "Traditionszauber" etc.
+                "gruppe": uef.kategorieName(Wolke.DB), # "Traditionszauber" etc.
                 "text": Hilfsmethoden.fixHtml(uef.text),
                 "voraussetzung": uef.voraussetzungen.anzeigetext(self.db),
             }
@@ -240,7 +240,7 @@ class Plugin:
                 "fertigkeit_ausgewaehlt": "auto",
                 "fertigkeiten": ", ".join(t.fertigkeiten),
                 "text": Hilfsmethoden.fixHtml(t.text),
-                "gruppe": list(Wolke.DB.einstellungen["Talente: Spezialtalent Typen"].wert.values())[t.spezialTyp], # "Liturgien" etc., wert.keys() für Singular
+                "gruppe": t.kategorieName(Wolke.DB), # "Liturgien" etc.
                 "pw": -1,  # TODO: warum hat talent/zauber ein pw?? sollte aus fertigkeit kommen. Gatsu: t.probenwert ist der höchste pw aller fertigkeiten des talents
                 "vorbereitung" : t.vorbereitungszeit,
                 "reichweite" : t.reichweite,

@@ -71,21 +71,20 @@ class Eintrag():
             self.energien = []
         for en in sorted(Wolke.DB.energien):
             neuNamen = neu.energien.keys() # [e.name for e in neu.energien] 
-            altNamen = neu.energien.keys() # [e.name for e in alt.energien]
+            altNamen = alt.energien.keys() # [e.name for e in alt.energien]
             delta = 0
             if en not in neuNamen and en not in altNamen:
                 continue
             if en in neuNamen and en not in altNamen:
-                self.energien.append(f"{en}: {colorize('hinzugefügt')}")
-                delta = neu.energien[en.name].wert
+                self.energien.append(f"{en}: {HINZUGEFÜGT}")
+                delta = neu.energien[en].wert
             elif en not in neuNamen and en in altNamen:
-                self.energien.append(f"{en}: {colorize('entfernt')}")
+                self.energien.append(f"{en}: {ENTFERNT}")
             if en in neuNamen and en in altNamen:
                 delta = neu.energien[en].wert - alt.energien[en].wert
             if delta:
                 self.energien.append(f"{en}: {colorize(delta)}")
-                
-    
+                 
     def compareVorteile(self, alt, neu, reset=True):
         if reset:
             self.vorteile = []

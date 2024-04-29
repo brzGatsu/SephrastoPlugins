@@ -11,6 +11,7 @@ from Core.DatenbankEinstellung import DatenbankEinstellung
 from Core.Waffeneigenschaft import Waffeneigenschaft
 from Hilfsmethoden import Hilfsmethoden
 from Core.Waffe import WaffeDefinition, Waffe
+from Scripts import Script, ScriptParameter
 
 # Add dynamic properties to WaffeDefinition and Waffe that work exactly like the implementation of "wm"
 # The only difference is that WaffeDefinition returns wm if wmVt was never set.
@@ -20,6 +21,8 @@ Waffe.wmVt = property(lambda self: self._wmVtOverride if hasattr(self, "_wmVtOve
 class Plugin:
     def __init__(self):
         EventBus.addAction("basisdatenbank_geladen", self.basisDatenbankGeladenHandler)
+        EventBus.addAction("charakter_instanziiert", self.charakterInstanziiertHandler)
+        EventBus.addFilter("scripts_available", self.scriptsAvailableHook)
         EventBus.addFilter("class_waffen_wrapper", self.provideWaffenWrapperHook)
         EventBus.addFilter("class_waffenpicker_wrapper", self.provideWaffenPickerWrapperHook)
         EventBus.addFilter("pdf_export", self.pdfExportWaffenHook)
@@ -60,17 +63,26 @@ class Plugin:
         e.typ = "TextList"
         self.db.loadElement(e)
 
-        e = self.db.einstellungen["Waffen: Waffenwerte Script"]
-        e.text = """waffe = getWaffe()
-kampfstil = getKampfstil()
-be = max(getBEBySlot(waffe.beSlot) + kampfstil.be, 0)
-at = getPW() + kampfstil.at + waffe.wm - be
-vt = getPW() + kampfstil.vt + waffe.wmVt - be
-sb = getSB() if waffe.fertigkeit not in ["Schusswaffen"] else 0
-plus = waffe.plus + kampfstil.plus + sb
-rw = getWaffe().rw + getKampfstil().rw
-setWaffenwerte(at, vt, plus, rw)"""
-    
+        e = self.db.einstellungen["Charakter aktualisieren Script"]
+        e.text = e.text.replace("vt = pw + getKampfstilVT(kampfstil) + getWaffeWM(idx) - be",
+                                "vt = pw + getKampfstilVT(kampfstil) + getWaffeWMVT(idx) - be")
+
+    def charakterInstanziiertHandler(self, params):
+        char = params["charakter"]
+        if self.db.einstellungen["WaffenPlus Plugin: Separater VT-WM"].wert:
+            char.charakterScriptAPI["getWaffeWMVT"] = lambda index: char.API_getWaffeValue(index, "wmVt")
+        else:
+            char.charakterScriptAPI["getWaffeWMVT"] = lambda index: char.API_getWaffeValue(index, "wm")
+        char.waffenScriptAPI["getWaffeWMVT"] = char.charakterScriptAPI["getWaffeWMVT"]
+        if hasattr(char, "rüstungenScriptAPI"): #rüstungenplus plugin
+            char.rüstungenScriptAPI["getWaffeWMVT"] = char.charakterScriptAPI["getWaffeWMVT"]
+
+    def scriptsAvailableHook(self, scripts, params):
+        script = Script(f"Waffe WM VT", f"getWaffeWMVT", "Ausrüstung")
+        script.parameter.append(ScriptParameter("Index", int))
+        scripts.numberGetter[script.name] = script
+        return scripts
+
     def waffedefinitionSerialisiertHandler(self, params):
         if not self.db.einstellungen["WaffenPlus Plugin: Separater VT-WM"].wert:
             return
@@ -111,6 +123,7 @@ setWaffenwerte(at, vt, plus, rw)"""
                 self.spinWM2Layout = []
                 for i in range(8):
                     spin = QtWidgets.QSpinBox()
+                    spin.setAlignment(QtCore.Qt.AlignCenter)
                     spin.setButtonSymbols(QtWidgets.QAbstractSpinBox.PlusMinus)
                     spin.valueChanged.connect(self.updateWaffen)
                     spin.setMinimum(-99)

@@ -5,9 +5,10 @@ import tempfile
 import os
 import re
 import math
-from Hilfsmethoden import Hilfsmethoden, WaffeneigenschaftException
+from Hilfsmethoden import Hilfsmethoden, WaffeneigenschaftException, SortedCategoryToListDict
 from CharakterPrintUtility import CharakterPrintUtility
 from Core.Fertigkeit import KampffertigkeitTyp
+from Core.Talent import Talent
 
 class Plugin:
     def __init__(self):
@@ -33,40 +34,32 @@ class Plugin:
         self.db = params["datenbank"]
 
     def getVorteile(self):
-        vorteilTypen = self.db.einstellungen["Vorteile: Typen"].wert
-        vorteileGruppiert = {}
-        for i in range(len(vorteilTypen)):
-            vorteile = [v for v in self.db.vorteile.values() if v.typ == i]
-            vorteile = sorted(vorteile, key = lambda v: v.name)
-            vorteileGruppiert[vorteilTypen[i]] = vorteile
-        return vorteileGruppiert
+        vorteileByKategorie = SortedCategoryToListDict(self.db.einstellungen["Vorteile: Kategorien"].wert)
+        for vorteil in self.db.vorteile.values():
+            vorteileByKategorie.append(vorteil.kategorie, vorteil)
+        vorteileByKategorie.sortValues(lambda el: Hilfsmethoden.unicodeCaseInsensitive(el.name))
+        return vorteileByKategorie
 
     def getRegeln(self):
-        regelTypen = self.db.einstellungen["Regeln: Typen"].wert
-        regelnGruppiert = {}
-        for i in range(len(regelTypen)):
-            regeln = [m for m in self.db.regeln.values() if m.typ == i]
-            regeln = sorted(regeln, key = lambda m: m.name)
-            regelnGruppiert[regelTypen[i]] = regeln
-        return regelnGruppiert
+        regelnByKategorie = SortedCategoryToListDict(self.db.einstellungen["Regeln: Kategorien"].wert)
+        for regel in self.db.regeln.values():
+            regelnByKategorie.append(regel.kategorie, regel)
+        regelnByKategorie.sortValues(lambda el: Hilfsmethoden.unicodeCaseInsensitive(el.name))
+        return regelnByKategorie
 
     def getFertigkeitenProfan(self):
-        fertigkeitsTypenProfan = self.db.einstellungen["Fertigkeiten: Typen profan"].wert
-        fertigkeitenGruppiert = {}
-        for i in range(len(fertigkeitsTypenProfan)):
-            fertigkeiten = [f for f in self.db.fertigkeiten.values() if f.typ == i]
-            fertigkeiten = sorted(fertigkeiten, key = lambda f: f.name)
-            fertigkeitenGruppiert[fertigkeitsTypenProfan[i]] = fertigkeiten
-        return fertigkeitenGruppiert
+        fertigkeitenByKategorie = SortedCategoryToListDict(self.db.einstellungen["Fertigkeiten: Kategorien profan"].wert)
+        for fert in self.db.fertigkeiten.values():
+            fertigkeitenByKategorie.append(fert.kategorie, fert)
+        fertigkeitenByKategorie.sortValues(lambda el: Hilfsmethoden.unicodeCaseInsensitive(el.name))
+        return fertigkeitenByKategorie
 
     def getFertigkeitenÜbernatürlich(self):
-        fertigkeitsTypenUeber = self.db.einstellungen["Fertigkeiten: Typen übernatürlich"].wert
-        fertigkeitenGruppiert = {}
-        for i in range(len(fertigkeitsTypenUeber)):
-            fertigkeiten = [f for f in self.db.übernatürlicheFertigkeiten.values() if f.typ == i]
-            fertigkeiten = sorted(fertigkeiten, key = lambda f: f.name)
-            fertigkeitenGruppiert[fertigkeitsTypenUeber[i]] = fertigkeiten
-        return fertigkeitenGruppiert
+        fertigkeitenByKategorie = SortedCategoryToListDict(self.db.einstellungen["Fertigkeiten: Kategorien übernatürlich"].wert)
+        for fert in self.db.übernatürlicheFertigkeiten.values():
+            fertigkeitenByKategorie.append(fert.kategorie, fert)
+        fertigkeitenByKategorie.sortValues(lambda el: Hilfsmethoden.unicodeCaseInsensitive(el.name))
+        return fertigkeitenByKategorie
 
     def getWaffen(self):
         waffenGruppiert = {}
@@ -83,27 +76,12 @@ class Plugin:
     def getWaffeneigenschaften(self):
         return sorted(self.db.waffeneigenschaften.values(), key = lambda w: w.name)
 
-    def getTalenteProfan(self):
-        return sorted([t for t in self.db.talente.values() if not t.spezialTalent], key = lambda t : t.name)
-
-    def getTalenteÜbernatürlich(self):
-        talenteUeber = [t for t in self.db.talente.values() if t.spezialTalent]
-
-        def sortTalente(tal):
-            hauptFert = tal.hauptfertigkeit
-            if hauptFert is None:
-                return (0, "", tal.name)
-            elif hauptFert.talenteGruppieren:
-               return (hauptFert.typ, hauptFert.name, tal.name)
-            else:
-               return (hauptFert.typ, "", tal.name)
-
-        talenteByTyp = []
-        for typ in range(len(self.db.einstellungen["Talente: Spezialtalent Typen"].wert)):
-            talenteByTyp.append([t for t in talenteUeber if t.spezialTyp == typ])
-            talenteByTyp[-1].sort(key = sortTalente)
-
-        return talenteByTyp
+    def getTalente(self):
+        talenteByKategorie = SortedCategoryToListDict(self.db.einstellungen["Talente: Kategorien"].wert)
+        for talent in self.db.talente.values():
+            talenteByKategorie.append(talent.kategorie, talent)
+        talenteByKategorie.sortValues(Talent.sorter)
+        return talenteByKategorie
 
     def shortenText(self, text):
         index = text.find('\nSephrasto')
@@ -151,8 +129,8 @@ class Plugin:
             content.append(f"")
 
         content.append("\nVORTEILE\n")
-        for vTyp, vorteile in self.getVorteile().items():
-            content.append(f"==={vTyp} ===\n")
+        for kategorie, vorteile in self.getVorteile().items():
+            content.append(f"==={kategorie} ===\n")
             for v in vorteile:
                 # see Core.Vorteil.VorteilDefinition for all properties
                 content.append(v.name)
@@ -165,8 +143,8 @@ class Plugin:
                 content.append("")
 
         content.append("\nPROFANE FERTIGKEITEN\n")
-        for fTyp, fertigkeiten in self.getFertigkeitenProfan().items():
-            content.append(f"=== {fTyp} ===\n")
+        for kategorie, fertigkeiten in self.getFertigkeitenProfan().items():
+            content.append(f"=== {kategorie} ===\n")
             for f in fertigkeiten:
                 # see Core.Fertigkeit.FertigkeitDefinition for all properties
                 sf = str(f.steigerungsfaktor)
@@ -178,19 +156,9 @@ class Plugin:
                     content.append(f"Voraussetzungen: {f.voraussetzungen.anzeigetext(self.db)}")
                 content.append("")
 
-        content.append("\nPROFANE TALENTE\n")
-        for t in self.getTalenteProfan():
-            # see Core.Talent.TalentDefinition for all properties
-            content.append(t.name)
-            if t.verbilligt == 1:
-                content[-1] += " (verbilligt)"
-            if t.text:
-                content.append(self.shortenText(t.text))
-            content.append("")
-
         content.append("\nÜBERNATÜRLICHE FERTIGKEITEN\n")
-        for fTyp, fertigkeiten in self.getFertigkeitenÜbernatürlich().items():
-            content.append(f"=== {fTyp} ===\n")
+        for kategorie, fertigkeiten in self.getFertigkeitenÜbernatürlich().items():
+            content.append(f"=== {kategorie} ===\n")
             for f in fertigkeiten:
                 # see Core.Fertigkeit.FertigkeitDefinition for all properties
                 content.append(f"{f.name} ({f.attribute[0]}/{f.attribute[1]}/{f.attribute[2]}, {f.steigerungsfaktor})")
@@ -199,19 +167,21 @@ class Plugin:
                     content.append(f"Voraussetzungen: {f.voraussetzungen.anzeigetext(self.db)}")
                 content.append("")
 
-        talenteByTyp = self.getTalenteÜbernatürlich()
-        spezialTalentTypen = list(self.db.einstellungen["Talente: Spezialtalent Typen"].wert.values())
-        for i in range(len(talenteByTyp)):
-            content.append("\n" + spezialTalentTypen[i].upper() + "\n")
-            for t in talenteByTyp[i]:
+        content.append("\nTALENTE\n")
+        for kategorie, talente in self.getTalente().items():
+            content.append("\n" + kategorie.upper() + "\n")
+            for t in talente:
                 # see Core.Talent.TalentDefinition for all properties
                 content.append(t.name)
-                content.append(self.shortenText(t.text))      
+                if t.verbilligt == 1:
+                    content[-1] += " (verbilligt)"
+                if t.text:
+                    content.append(self.shortenText(t.text))      
                 content.append("")
 
         content.append("\nREGELN\n")
-        for rTyp, regeln in self.getRegeln().items():
-            content.append(f"=== {rTyp} ===\n")
+        for kategorie, regeln in self.getRegeln().items():
+            content.append(f"=== {kategorie} ===\n")
             for r in regeln:
                 # see Core.Regel.Regel for all properties
                 content.append(r.name)

@@ -43,7 +43,8 @@ class Plugin:
                 self.zauberTricksFW = QtWidgets.QLabel("-")
                 self.zauberTricksFW.setAlignment(QtCore.Qt.AlignCenter)
                 for row in range(self.ui.tableWidget.rowCount()):
-                    if self.availableFerts[row] == "Zaubertricks":
+                    widget = self.ui.tableWidget.cellWidget(row, 1)
+                    if widget is not None and widget.text() == "Zaubertricks":
                         self.ui.tableWidget.setCellWidget(row,2, self.zauberTricksFW)
                         self.ui.tableWidget.cellWidget(row,3).setText("-")
                         self.ui.tableWidget.cellWidget(row,3).setAlignment(QtCore.Qt.AlignCenter)

@@ -30,7 +30,7 @@ traditionen += zusatzTraditionen
 spezialTalente = [t for t in datenbank.talente.values() if t.spezialTalent]
 if skipPassivTalente:
     spezialTalente = [t for t in spezialTalente if not t.name.endswith("(passiv)")]
-fertigkeiten = sorted(datenbank.übernatürlicheFertigkeiten.values(), key= lambda f : (f.typ, f.name))
+fertigkeiten = sorted(datenbank.übernatürlicheFertigkeiten.values(), key= lambda f : (f.kategorie, f.name))
 if debugFertigkeit:
     fertigkeiten = [datenbank.übernatürlicheFertigkeiten[debugFertigkeit]]
 

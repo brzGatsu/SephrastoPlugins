@@ -6,9 +6,7 @@ from PySide6 import QtWidgets, QtCore, QtGui
 from PySide6.QtWidgets import QCompleter, QApplication, QStyle
 from PySide6.QtGui import QCursor
 from PySide6.QtCore import Qt, QFile, QStringListModel
-from SephMakro.PyEdit2 import TextEdit
-from SephMakro.PyEdit2 import NumberBar
-from SephMakro.syntax_py import *
+from QtUtils.PyEdit2 import TextEdit, NumberBar
 import Datenbank
 from Wolke import Wolke
 from EinstellungenWrapper import EinstellungenWrapper
@@ -40,31 +38,12 @@ class SephMakroEditor(object):
         self.ui.horizontalLayout.layout().addWidget(self.editor)
 
         # Just monospace doesn't work, have to specify fonts... seems to be an issue in chromium
-        cssEditor = """\
-        QPlainTextEdit
-        {
-        font-family: Consolas,'Lucida Console','Liberation Mono','DejaVu Sans Mono','Bitstream Vera Sans Mono','Courier New',monospace,sans-serif;
-        background: #E2E2E2;
-        color: #202020;
-        border: 1px solid #1EAE3D;
-        }"""
-        self.editor.setStyleSheet(cssEditor)
-
         cssOutput = """\
         QPlainTextEdit
         {
         font-family: Consolas,'Lucida Console','Liberation Mono','DejaVu Sans Mono','Bitstream Vera Sans Mono','Courier New',monospace,sans-serif;
         }"""
         self.ui.teOutput.setStyleSheet(cssOutput)
-
-        self.completer = QCompleter(self.formMain)
-        self.completer.setModel(self.modelFromFile(os.path.dirname(os.path.abspath(__file__)) + '/resources/wordlist.txt'))
-        self.completer.setCaseSensitivity(Qt.CaseInsensitive)
-        self.completer.setWrapAround(False)
-        self.completer.setCompletionRole(Qt.EditRole)
-        self.editor.setCompleter(self.completer)
-
-        self.highlighter = Highlighter(self.editor.document())
 
         self.loadedText = ""
 
@@ -234,25 +213,3 @@ class SephMakroEditor(object):
 
         with open(spath, "w", encoding="utf-8") as file:
             file.write(self.ui.teOutput.toPlainText())
-
-    def modelFromFile(self, fileName):
-        f = QFile(fileName)
-        if not f.open(QFile.ReadOnly):
-            return QStringListModel(self.completer)
-
-        QApplication.setOverrideCursor(QCursor(Qt.WaitCursor))
-
-        self.words = []
-        while not f.atEnd():
-            line = f.readLine().trimmed()
-            if line.length() != 0:
-                try:
-                    line = str(line, encoding='ascii')
-                except TypeError:
-                    line = str(line)
-
-                self.words.append(line)
-
-        QApplication.restoreOverrideCursor()
-
-        return QStringListModel(self.words, self.completer)

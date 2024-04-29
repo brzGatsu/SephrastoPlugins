@@ -57,6 +57,7 @@ class DatenbankEditKarteWrapper(DatenbankElementEditorBase):
         self.updateTimer.setSingleShot(True)
         self.updateTimer.timeout.connect(self.updateWebView)
         self.webView = WebEngineViewPlus()
+        self.webView.installJSBridge()
         self.ui.gbPreview.layout().addWidget(self.webView)
         zoomFactor = 2
         self.webView.setFixedSize(238 * zoomFactor, 332 * zoomFactor)
@@ -140,25 +141,26 @@ class DatenbankEditKarteWrapper(DatenbankElementEditorBase):
 
         if self.ui.comboTyp.currentIndex() != KartenTyp.Deck:
             if self.ui.comboTyp.currentIndex() == KartenTyp.Benutzerdefiniert:
-                currentCat = self.ui.comboSubtyp.currentText()
+                karte.subtyp = self.ui.comboSubtyp.currentText()
+                currentCat = karte.subtyp
             else:
                 for r in reihenfolge:
                     if r[0] == "T" and len(r) > 2:
                         currentCat = r[2:]
                     elif r[0] == "V" and len(r) > 2 and r[2:].isnumeric():
-                        typ = int(r[2:])
-                        if self.ui.comboTyp.currentIndex() == KartenTyp.Vorteil and typ == self.ui.comboSubtyp.currentIndex():
+                        kategorie = int(r[2:])
+                        if self.ui.comboTyp.currentIndex() == KartenTyp.Vorteil and kategorie == self.ui.comboSubtyp.currentIndex():
                             break;
                     elif r[0] == "R" and len(r) > 2 and r[2:].isnumeric():
-                        typ = int(r[2:])
-                        if self.ui.comboTyp.currentIndex() == KartenTyp.Regel and typ == self.ui.comboSubtyp.currentIndex():
+                        kategorie = int(r[2:])
+                        if self.ui.comboTyp.currentIndex() == KartenTyp.Regel and kategorie == self.ui.comboSubtyp.currentIndex():
                             break;
                     elif r[0] == "W":
                         if self.ui.comboTyp.currentIndex() == KartenTyp.Waffeneigenschaft:
                             break;
                     elif r[0] == "S" and len(r) > 2 and r[2:].isnumeric():
-                        typ = int(r[2:])
-                        if self.ui.comboTyp.currentIndex() == KartenTyp.Talent and typ == self.ui.comboSubtyp.currentIndex():
+                        kategorie = int(r[2:])
+                        if self.ui.comboTyp.currentIndex() == KartenTyp.Talent and kategorie == self.ui.comboSubtyp.currentIndex():
                             break;
                     else:
                         continue
@@ -187,17 +189,17 @@ class DatenbankEditKarteWrapper(DatenbankElementEditorBase):
 
         originalElement = KartenUtility.getOriginalElement(self.datenbank, self.ui.leName.text(), self.ui.comboTyp.currentIndex())
         if self.ui.comboTyp.currentIndex() == KartenTyp.Vorteil:
-            self.ui.comboSubtyp.addItems(self.datenbank.einstellungen["Vorteile: Typen"].wert)
+            self.ui.comboSubtyp.addItems(self.datenbank.einstellungen["Vorteile: Kategorien"].wert.keyList)
             if originalElement is not None:
-                self.ui.comboSubtyp.setCurrentIndex(originalElement.typ)
+                self.ui.comboSubtyp.setCurrentIndex(originalElement.kategorie)
         elif self.ui.comboTyp.currentIndex() == KartenTyp.Regel:
-            self.ui.comboSubtyp.addItems(self.datenbank.einstellungen["Regeln: Typen"].wert)
+            self.ui.comboSubtyp.addItems(self.datenbank.einstellungen["Regeln: Kategorien"].wert.keyList)
             if originalElement is not None:
-                self.ui.comboSubtyp.setCurrentIndex(originalElement.typ)
+                self.ui.comboSubtyp.setCurrentIndex(originalElement.kategorie)
         elif self.ui.comboTyp.currentIndex() == KartenTyp.Talent:
-            self.ui.comboSubtyp.addItems(list(self.datenbank.einstellungen["Talente: Spezialtalent Typen"].wert.keys()))
+            self.ui.comboSubtyp.addItems(self.datenbank.einstellungen["Talente: Kategorien"].wert.keyList)
             if originalElement is not None:
-                self.ui.comboSubtyp.setCurrentIndex(originalElement.spezialTyp)
+                self.ui.comboSubtyp.setCurrentIndex(originalElement.kategorie)
         elif self.ui.comboTyp.currentIndex() == KartenTyp.Benutzerdefiniert:
             typen = KartenUtility.getBenutzerdefinierteTypen(self.datenbank)
             if len(typen) == 0:
@@ -210,8 +212,6 @@ class DatenbankEditKarteWrapper(DatenbankElementEditorBase):
 
         self.ui.labelTitel.setVisible(not isNew)
         self.ui.leTitel.setVisible(not isNew)
-        self.ui.labelVoraussetzungen.setVisible(isNew)
-        self.ui.teVoraussetzungen.setVisible(isNew)
         
         if isNew:
             self.ui.labelInfo.setText("Neue Karte erstellen")
@@ -237,6 +237,8 @@ class DatenbankEditKarteWrapper(DatenbankElementEditorBase):
         self.ui.leTitel.setEnabled(not delete)
         self.ui.labelUntertitel.setEnabled(not delete)
         self.ui.leUntertitel.setEnabled(not delete)
+        self.ui.labelVoraussetzungen.setEnabled(not delete)
+        self.ui.teVoraussetzungen.setEnabled(not delete)
         self.ui.labelText.setEnabled(not delete)
         self.ui.teBeschreibung.setEnabled(not delete)
         self.ui.labelFusszeile.setEnabled(not delete)
