@@ -36,7 +36,12 @@ class IlarisOnlineLoginWrapper(QtCore.QObject):
         # password = Wolke.Settings.get("IlarisOnlinePassword", "leckerzorganpocken")
         client = APIClient()
         print("starting login")
-        def on_login(data):
+        def on_login(data, error=False, status=None):
+            if error:
+                print("Error in login")
+                print(error)
+                error_dia = QtWidgets.QMessageBox.critical(self.form, "Fehler", "Login fehlgeschlagen")
+                return
             print("logged in")
             print(data)
             if "token" in data:

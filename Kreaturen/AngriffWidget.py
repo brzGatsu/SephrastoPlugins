@@ -185,6 +185,6 @@ class Ui_Form(object):
         self.label_28.setText(QCoreApplication.translate("Form", u"VT", None))
         self.label_30.setText(QCoreApplication.translate("Form", u"H\u00e4rte", None))
         self.label_29.setText(QCoreApplication.translate("Form", u"LZ", None))
-        self.label_31.setText(QCoreApplication.translate("Form", u"Eigenschafgen: ", None))
+        self.label_31.setText(QCoreApplication.translate("Form", u"Eigenschaften: ", None))
     # retranslateUi
 

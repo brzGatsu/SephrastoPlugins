@@ -11,7 +11,7 @@ import copy
 from Kreaturen import IlarisOnlineDB
 from Kreaturen.IlarisOnlineApi import APIClient
 
-TYPEN = ["Alle", "humanoid", "tier", "elementar", "mythen", "fee", "geist", "untot", "daimonid", "daemon"]
+TYPEN = ["Alle", "humanoid", "tier", "elementar", "mythen", "fee", "geist", "untot", "daimonid", "daemon", "pflanze"]
 
 class KreaturOnlineDBWrapper(object):
     def __init__(self):
@@ -31,7 +31,10 @@ class KreaturOnlineDBWrapper(object):
 
         self.progressBar = QtWidgets.QProgressBar(self.form)
         self.progressBar.show()
-        self.api = APIClient()
+        self.api = APIClient(Wolke.Settings.get("IlarisOnlineToken"))
+        # TDOO: add token for persistent login
+        # self.api.token = Wolke.Settings.get("IlarisOnlineToken")
+        # print(f"setting token: {self.api.token}")
         self.api.request("ilaris/kreatur/", self.kreaturenLoaded)
 
         self.ui.cbTyp.addItems([t.capitalize() for t in TYPEN])
@@ -68,11 +71,16 @@ class KreaturOnlineDBWrapper(object):
             # self.ui.treeKreaturen.selectedItems()
         # lambda: self.ui.buttonBox.button(QtWidgets.QDialogButtonBox.Ok).setEnabled(len(self.ui.treeKreaturen.selectedItems()) > 0)
 
-    def kreaturLoaded(self, data):
+
+    def kreaturLoaded(self, data, error=None, status=None):
+        if error:
+            error_dia = QtWidgets.QMessageBox.critical(self.form, "Fehler", "API Request fehlgeschlagen")
         self.kreatur = data
         self.form.accept()
 
-    def kreaturenLoaded(self, data):
+    def kreaturenLoaded(self, data, error=None, status=None):
+        if error:
+            error_dia = QtWidgets.QMessageBox.critical(self.form, "Fehler", "API Request fehlgeschlagen")
         self.kreaturen = data
         self.progressBar.hide()
         # fill tree
