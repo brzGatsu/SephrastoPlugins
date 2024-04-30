@@ -3,8 +3,8 @@
    <!ENTITY nbsp "&#160;">
 ]>
 <Datenbank>
-  <Version>9</Version>
-  <Plugins>Manoeverkarten</Plugins>
+  <Version>10</Version>
+  <Plugins>FertigkeitenPlus,Manoeverkarten,RuestungenPlus,WaffenPlus</Plugins>
   <Einstellung name="Charakter aktualisieren Script">addTalent("Gebräuche: " + getHeimat(), 0)
 
 for idx in range(waffenCount()):
@@ -1827,43 +1827,43 @@ Profane Verborgenheit endet dadurch. &lt;b&gt;Unsichtbarkeit&lt;/b&gt; besteht i
 </Karte>
   <Remove name="Blut für Blut" typ="Talent"/>
   <Remove name="kein Malus als Nebenwaffe" typ="Waffeneigenschaft"/>
-  <Remove name="Hand" typ="Waffe"/>
   <Remove name="Fuß" typ="Waffe"/>
-  <Remove name="Freie Reaktion" typ="Regel"/>
-  <Remove name="Schildwall" typ="Regel"/>
-  <Remove name="Aktion Bewegung (einfach)" typ="Regel"/>
+  <Remove name="Hand" typ="Waffe"/>
   <Remove name="Klingentanz" typ="Regel"/>
-  <Remove name="Freie Aktion" typ="Regel"/>
-  <Remove name="Unterlaufen" typ="Regel"/>
-  <Remove name="Aktion Volle Offensive (voll)" typ="Regel"/>
-  <Remove name="Fernkampfmodifikatoren" typ="Regel"/>
-  <Remove name="Ausweichen" typ="Regel"/>
-  <Remove name="Aktion Konflikt (einfach)" typ="Regel"/>
-  <Remove name="Schnellschuss" typ="Regel"/>
+  <Remove name="Binden" typ="Regel"/>
   <Remove name="Umklammern" typ="Regel"/>
-  <Remove name="Doppelangriff" typ="Regel"/>
+  <Remove name="Aktion Konflikt (einfach)" typ="Regel"/>
   <Remove name="Aktion Bereit machen (einfach)" typ="Regel"/>
-  <Remove name="Entfernung verändern" typ="Regel"/>
-  <Remove name="Riposte" typ="Regel"/>
-  <Remove name="Sturmangriff" typ="Regel"/>
-  <Remove name="Überrennen" typ="Regel"/>
-  <Remove name="Nahkampfmodifikatoren" typ="Regel"/>
+  <Remove name="Aktion Volle Offensive (voll)" typ="Regel"/>
+  <Remove name="Aktion Verzögern (voll)" typ="Regel"/>
   <Remove name="Aktion Konzentration (voll)" typ="Regel"/>
   <Remove name="Wundschmerz" typ="Regel"/>
-  <Remove name="Aktion Verzögern (voll)" typ="Regel"/>
-  <Remove name="Binden" typ="Regel"/>
-  <Remove name="Aktion Volle Defensive (voll)" typ="Regel"/>
-  <Remove name="Befreiungsschlag" typ="Regel"/>
+  <Remove name="Schnellschuss" typ="Regel"/>
+  <Remove name="Freie Reaktion" typ="Regel"/>
+  <Remove name="Schildwall" typ="Regel"/>
   <Remove name="Auflaufen lassen" typ="Regel"/>
+  <Remove name="Doppelangriff" typ="Regel"/>
+  <Remove name="Überrennen" typ="Regel"/>
+  <Remove name="Fernkampfmodifikatoren" typ="Regel"/>
+  <Remove name="Freie Aktion" typ="Regel"/>
+  <Remove name="Nahkampfmodifikatoren" typ="Regel"/>
+  <Remove name="Sturmangriff" typ="Regel"/>
+  <Remove name="Riposte" typ="Regel"/>
+  <Remove name="Ausweichen" typ="Regel"/>
+  <Remove name="Aktion Bewegung (einfach)" typ="Regel"/>
+  <Remove name="Unterlaufen" typ="Regel"/>
+  <Remove name="Befreiungsschlag" typ="Regel"/>
+  <Remove name="Aktion Volle Defensive (voll)" typ="Regel"/>
+  <Remove name="Entfernung verändern" typ="Regel"/>
+  <Remove name="Binden" typ="Karte"/>
+  <Remove name="Umklammern" typ="Karte"/>
+  <Remove name="Aktion Konflikt (einfach)" typ="Karte"/>
+  <Remove name="Aktion Bewegung (einfach)" typ="Karte"/>
+  <Remove name="Aktion Bereit machen (einfach)" typ="Karte"/>
+  <Remove name="Aktion Volle Offensive (voll)" typ="Karte"/>
+  <Remove name="Aktion Verzögern (voll)" typ="Karte"/>
   <Remove name="Aktion Konzentration (voll)" typ="Karte"/>
   <Remove name="Wundschmerz" typ="Karte"/>
-  <Remove name="Aktion Bereit machen (einfach)" typ="Karte"/>
-  <Remove name="Aktion Verzögern (voll)" typ="Karte"/>
-  <Remove name="Binden" typ="Karte"/>
-  <Remove name="Aktion Bewegung (einfach)" typ="Karte"/>
-  <Remove name="Aktion Konflikt (einfach)" typ="Karte"/>
   <Remove name="Unterlaufen" typ="Karte"/>
-  <Remove name="Aktion Volle Offensive (voll)" typ="Karte"/>
   <Remove name="Aktion Volle Defensive (voll)" typ="Karte"/>
-  <Remove name="Umklammern" typ="Karte"/>
 </Datenbank>

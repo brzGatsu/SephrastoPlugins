@@ -19,7 +19,7 @@ class Plugin:
         self.db = params["datenbank"]
 
         dbe = self.db.einstellungen["Fertigkeiten: BW Script"]
-        dbe.text = "int(sum(sorted(getAttribute(), reverse=True)[:3])/3+0.5)"
+        dbe.text = "round(sum(sorted(getAttribute(), reverse=True)[:3])/3)"
 
     def dbeClassFertigkeitFilter(self, editorType, params):
         class DatenbankEditFertigkeitWrapperPlus(editorType):

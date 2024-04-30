@@ -2,5 +2,5 @@
   "name": "Tragkraft",
   "description": "Das Plugin setzt die Tragkraft der Regeln für Reisen von Alrik Normalpaktierer um (<a href='https://dsaforum.de/viewtopic.php?f=180&t=55321&hilit=reiseregeln'>dsaforum.de Thread</a>). Die Tragkraft und der resultierende BE-Modifikator werden in der ersten Inventarzeile angezeigt. Der BE-Modifikator wird nicht(!) bei der BE oder den Kampfwerten eingerechnet. Allen anderen Zeilen kann ein Platzbedarf zugewiesen werden.",
   "author": "Gatsu",
-  "version": "1"
+  "version": "2"
 }

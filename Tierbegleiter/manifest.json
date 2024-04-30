@@ -2,5 +2,5 @@
   "name": "Tierbegleiter",
   "description": "Dieses Plugin erlaubt das Erstellen von Tierbegleitern entsprechend des Ilaris Bestiariums und das Exportieren in den enthaltenen Tierbegleiterbogen. Optional können in der Regelbasis mittels der Einstellung \"Tierbegleiter Plugin: IA Zucht und Ausbildung\" die Ilaris Advanced Regeln zu Zucht und Ausbildung aktiviert werden (zusammen mit speziell angepassten Tierwerten).",
   "author": "Gatsu",
-  "version": "2"
+  "version": "3"
 }

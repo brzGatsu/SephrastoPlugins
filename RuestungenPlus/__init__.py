@@ -189,7 +189,7 @@ class Plugin:
         parameters = list(map(str.strip, match.group(1).split(";")))
         if not len(parameters) >= paramNb:
             raise Exception("Die Rüstungseigenschaft '" + self.currentEigenschaft + "' erfordert " + paramNb + " Parameter, aber es wurden nur " + len(parameters) + " gefunden. Parameter müssen mit Semikolon getrennt werden")
-        return parameters[paramNb-1]
+        return parameters[paramNb]
 
     def charakterAktualisierenHandler(self, params):
         if not self.db.einstellungen["RüstungenPlus Plugin: Rüstungseigenschaften"].wert:
