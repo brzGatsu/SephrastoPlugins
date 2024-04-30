@@ -154,7 +154,7 @@ Profanes='''
         e = DatenbankEinstellung()
         e.name = "Manöverkarten Plugin: Talente Schwierigkeit kürzen"
         e.beschreibung = "Bei Talenten wird die Schwierigkeit in den Untertitel eingetragen. Die Texte können dafür jedoch zu lang sein - hier kannst du Teile davon zum Beispiel durch Abkürzungen oder Icons (bspw. von game-icons.net) ersetzen. "\
-            "FontAwesome icons kannst du innerhalb eines <span>-Tags nutzen (werden hier nicht richtig dargestellt), beliebige andere Icons innerhalb eines <img>-Tags. "\
+            "FontAwesome icons kannst du innerhalb eines span-Tags nutzen (werden hier nicht richtig dargestellt), beliebige andere Icons innerhalb eines img-Tags. "\
             "Du kannst außerdem das Makro $plugins_dir$ verwenden, um deine Bilder in einem eigenen Ordner innerhalb des Pluginordners abzulegen."\
             "Wichtig: Die Reihenfolge kann eine Rolle Spielen, die Ersetzungen werden von oben nach unten durchgeführt, daher wird Zauberstab beim Ziel beispielsweise vor Zauber ersetzt."
         e.text = """\
@@ -173,7 +173,7 @@ Beschwörungsschwierigkeit des zu bannenden Wesens=Beschwörungsschwierigkeit"""
         e = DatenbankEinstellung()
         e.name = "Manöverkarten Plugin: Talente Zeit kürzen"
         e.beschreibung =  "Bei Talenten werden die Zauberdauer und Wirkungsdauer in die obere Leiste eingetragen. Die Texte können dafür jedoch zu lang sein - hier kannst du Teile davon zum Beispiel durch Abkürzungen oder Icons (bspw. von game-icons.net) ersetzen. "\
-            "FontAwesome icons kannst du innerhalb eines <span>-Tags nutzen (werden hier nicht richtig dargestellt), beliebige andere Icons innerhalb eines <img>-Tags."\
+            "FontAwesome icons kannst du innerhalb eines span-Tags nutzen (werden hier nicht richtig dargestellt), beliebige andere Icons innerhalb eines img-Tags."\
             "Du kannst außerdem das Makro $plugins_dir$ verwenden, um deine Bilder in einem eigenen Ordner innerhalb des Pluginordners abzulegen."\
             "Wichtig: 1. Leerzeichen spielen eine Rolle. 2. Die Reihenfolge kann eine Rolle Spielen, die Ersetzungen werden von oben nach unten durchgeführt, daher wird Zauberstab beim Ziel beispielsweise vor Zauber ersetzt."
         e.text = """\
@@ -220,7 +220,7 @@ mindestens =<span style='font-size: 6pt;'>\uf532</span>&nbsp;"""
         e = DatenbankEinstellung()
         e.name = "Manöverkarten Plugin: Talente Kosten kürzen"
         e.beschreibung = "Bei Talenten werden die Kosten in die obere Leiste eingetragen. Die Texte können dafür jedoch zu lang sein - hier kannst du Teile davon zum Beispiel durch Abkürzungen oder Icons (bspw. von game-icons.net) ersetzen. "\
-            "FontAwesome icons kannst du innerhalb eines <span>-Tags nutzen (werden hier nicht richtig dargestellt), beliebige andere Icons innerhalb eines <img>-Tags."\
+            "FontAwesome icons kannst du innerhalb eines span-Tags nutzen (werden hier nicht richtig dargestellt), beliebige andere Icons innerhalb eines img-Tags."\
             "Du kannst außerdem das Makro $plugins_dir$ verwenden, um deine Bilder in einem eigenen Ordner innerhalb des Pluginordners abzulegen."\
             "Wichtig: 1. Leerzeichen spielen eine Rolle. 2. Die Reihenfolge kann eine Rolle Spielen, die Ersetzungen werden von oben nach unten durchgeführt, daher wird Zauberstab beim Ziel beispielsweise vor Zauber ersetzt."
         e.text = """\
@@ -234,7 +234,7 @@ nach Vorhaben=<span>\uf83e</span>"""
         e = DatenbankEinstellung()
         e.name = "Manöverkarten Plugin: Talente Reichweite kürzen"
         e.beschreibung = "Bei Talenten wird die Reichweite in die obere Leiste eingetragen. Die Texte können dafür jedoch zu lang sein - hier kannst du Teile davon zum Beispiel durch Abkürzungen oder Icons (bspw. von game-icons.net) ersetzen. "\
-            "FontAwesome icons kannst du innerhalb eines <span>-Tags nutzen (werden hier nicht richtig dargestellt), beliebige andere Icons innerhalb eines <img>-Tags."\
+            "FontAwesome icons kannst du innerhalb eines span-Tags nutzen (werden hier nicht richtig dargestellt), beliebige andere Icons innerhalb eines img-Tags."\
             "Du kannst außerdem das Makro $plugins_dir$ verwenden, um deine Bilder in einem eigenen Ordner innerhalb des Pluginordners abzulegen."\
             "Wichtig: 1. Leerzeichen spielen eine Rolle. 2. Die Reihenfolge kann eine Rolle Spielen, die Ersetzungen werden von oben nach unten durchgeführt, daher wird Zauberstab beim Ziel beispielsweise vor Zauber ersetzt."
         e.text = """\
@@ -252,7 +252,7 @@ aventurienweit=<span>\uf0ac</span>"""
         e = DatenbankEinstellung()
         e.name = "Manöverkarten Plugin: Talente Ziel kürzen"
         e.beschreibung = "Bei Talenten wird das Ziel in die obere Leiste eingetragen. Die Texte können dafür jedoch zu lang sein - hier kannst du Teile davon zum Beispiel durch Abkürzungen oder Icons (bspw. von game-icons.net) ersetzen. "\
-            "FontAwesome icons kannst du innerhalb eines <span>-Tags nutzen (werden hier nicht richtig dargestellt), beliebige andere Icons innerhalb eines <img>-Tags."\
+            "FontAwesome icons kannst du innerhalb eines span-Tags nutzen (werden hier nicht richtig dargestellt), beliebige andere Icons innerhalb eines img-Tags."\
             "Du kannst außerdem das Makro $plugins_dir$ verwenden, um deine Bilder in einem eigenen Ordner innerhalb des Pluginordners abzulegen."\
             "Wichtig: 1. Leerzeichen spielen eine Rolle. 2. Die Reihenfolge kann eine Rolle Spielen, die Ersetzungen werden von oben nach unten durchgeführt, daher wird Zauberstab beispielsweise vor Zauber ersetzt."
         e.text = """\

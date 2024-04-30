@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'TierbegleiterMain.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.5.1
+## Created by: Qt User Interface Compiler version 6.7.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -19,7 +19,8 @@ from PySide6.QtWidgets import (QAbstractSpinBox, QApplication, QCheckBox, QCombo
     QFrame, QGridLayout, QGroupBox, QHBoxLayout,
     QLabel, QLayout, QLineEdit, QPlainTextEdit,
     QPushButton, QScrollArea, QSizePolicy, QSpacerItem,
-    QSpinBox, QTabWidget, QVBoxLayout, QWidget)
+    QSpinBox, QSplitter, QTabWidget, QVBoxLayout,
+    QWidget)
 
 class Ui_formMain(object):
     def setupUi(self, formMain):
@@ -27,7 +28,7 @@ class Ui_formMain(object):
             formMain.setObjectName(u"formMain")
         formMain.setWindowModality(Qt.ApplicationModal)
         formMain.resize(1312, 810)
-        sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(formMain.sizePolicy().hasHeightForWidth())
@@ -42,7 +43,10 @@ class Ui_formMain(object):
         self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 1288, 749))
         self.gridLayout_4 = QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout_4.setObjectName(u"gridLayout_4")
-        self.tabWidget = QTabWidget(self.scrollAreaWidgetContents)
+        self.splitter = QSplitter(self.scrollAreaWidgetContents)
+        self.splitter.setObjectName(u"splitter")
+        self.splitter.setOrientation(Qt.Horizontal)
+        self.tabWidget = QTabWidget(self.splitter)
         self.tabWidget.setObjectName(u"tabWidget")
         self.tab = QWidget()
         self.tab.setObjectName(u"tab")
@@ -58,11 +62,63 @@ class Ui_formMain(object):
         self.verticalLayout_9.setContentsMargins(20, 20, 20, 20)
         self.gridLayout_2 = QGridLayout()
         self.gridLayout_2.setObjectName(u"gridLayout_2")
-        self.teHintergrund = QPlainTextEdit(self.groupBox_2)
-        self.teHintergrund.setObjectName(u"teHintergrund")
-        self.teHintergrund.setMaximumSize(QSize(16777215, 70))
+        self.label_14 = QLabel(self.groupBox_2)
+        self.label_14.setObjectName(u"label_14")
+        self.label_14.setMinimumSize(QSize(0, 0))
+        self.label_14.setMaximumSize(QSize(250, 16777215))
+        font = QFont()
+        font.setBold(True)
+        self.label_14.setFont(font)
+        self.label_14.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignTop)
 
-        self.gridLayout_2.addWidget(self.teHintergrund, 3, 1, 1, 1)
+        self.gridLayout_2.addWidget(self.label_14, 1, 0, 1, 1)
+
+        self.leVorteile = QLineEdit(self.groupBox_2)
+        self.leVorteile.setObjectName(u"leVorteile")
+
+        self.gridLayout_2.addWidget(self.leVorteile, 9, 1, 1, 1)
+
+        self.verticalLayout_12 = QVBoxLayout()
+        self.verticalLayout_12.setObjectName(u"verticalLayout_12")
+        self.label_4 = QLabel(self.groupBox_2)
+        self.label_4.setObjectName(u"label_4")
+        self.label_4.setMaximumSize(QSize(250, 16777215))
+        self.label_4.setFont(font)
+
+        self.verticalLayout_12.addWidget(self.label_4)
+
+        self.label_23 = QLabel(self.groupBox_2)
+        self.label_23.setObjectName(u"label_23")
+        font1 = QFont()
+        font1.setPointSize(6)
+        self.label_23.setFont(font1)
+
+        self.verticalLayout_12.addWidget(self.label_23)
+
+        self.verticalSpacer_5 = QSpacerItem(20, 0, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.verticalLayout_12.addItem(self.verticalSpacer_5)
+
+
+        self.gridLayout_2.addLayout(self.verticalLayout_12, 8, 0, 1, 1)
+
+        self.label = QLabel(self.groupBox_2)
+        self.label.setObjectName(u"label")
+        self.label.setFont(font)
+
+        self.gridLayout_2.addWidget(self.label, 2, 0, 1, 1)
+
+        self.leNahrung = QLineEdit(self.groupBox_2)
+        self.leNahrung.setObjectName(u"leNahrung")
+
+        self.gridLayout_2.addWidget(self.leNahrung, 2, 1, 1, 1)
+
+        self.line = QFrame(self.groupBox_2)
+        self.line.setObjectName(u"line")
+        self.line.setFrameShape(QFrame.Shape.HLine)
+        self.line.setFrameShadow(QFrame.Shadow.Sunken)
+
+        self.gridLayout_2.addWidget(self.line, 6, 0, 1, 2)
 
         self.teAussehen = QPlainTextEdit(self.groupBox_2)
         self.teAussehen.setObjectName(u"teAussehen")
@@ -70,24 +126,25 @@ class Ui_formMain(object):
 
         self.gridLayout_2.addWidget(self.teAussehen, 5, 1, 1, 1)
 
-        self.leName = QLineEdit(self.groupBox_2)
-        self.leName.setObjectName(u"leName")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
-        sizePolicy1.setHorizontalStretch(0)
-        sizePolicy1.setVerticalStretch(0)
-        sizePolicy1.setHeightForWidth(self.leName.sizePolicy().hasHeightForWidth())
-        self.leName.setSizePolicy(sizePolicy1)
-
-        self.gridLayout_2.addWidget(self.leName, 0, 1, 1, 1)
-
         self.label_18 = QLabel(self.groupBox_2)
         self.label_18.setObjectName(u"label_18")
-        font = QFont()
-        font.setBold(True)
         self.label_18.setFont(font)
         self.label_18.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignTop)
 
         self.gridLayout_2.addWidget(self.label_18, 3, 0, 1, 1)
+
+        self.checkAutoHintergrund = QCheckBox(self.groupBox_2)
+        self.checkAutoHintergrund.setObjectName(u"checkAutoHintergrund")
+        self.checkAutoHintergrund.setLayoutDirection(Qt.RightToLeft)
+        self.checkAutoHintergrund.setChecked(True)
+
+        self.gridLayout_2.addWidget(self.checkAutoHintergrund, 4, 1, 1, 1)
+
+        self.teHintergrund = QPlainTextEdit(self.groupBox_2)
+        self.teHintergrund.setObjectName(u"teHintergrund")
+        self.teHintergrund.setMaximumSize(QSize(16777215, 70))
+
+        self.gridLayout_2.addWidget(self.teHintergrund, 3, 1, 1, 1)
 
         self.gridLayout_3 = QGridLayout()
         self.gridLayout_3.setObjectName(u"gridLayout_3")
@@ -247,43 +304,22 @@ class Ui_formMain(object):
         self.gridLayout_3.addWidget(self.sbKK, 0, 7, 1, 1)
 
 
-        self.gridLayout_2.addLayout(self.gridLayout_3, 7, 1, 1, 1)
-
-        self.label = QLabel(self.groupBox_2)
-        self.label.setObjectName(u"label")
-        self.label.setFont(font)
-
-        self.gridLayout_2.addWidget(self.label, 2, 0, 1, 1)
-
-        self.leNahrung = QLineEdit(self.groupBox_2)
-        self.leNahrung.setObjectName(u"leNahrung")
-
-        self.gridLayout_2.addWidget(self.leNahrung, 2, 1, 1, 1)
+        self.gridLayout_2.addLayout(self.gridLayout_3, 8, 1, 1, 1)
 
         self.label_17 = QLabel(self.groupBox_2)
         self.label_17.setObjectName(u"label_17")
+        self.label_17.setFont(font)
         self.label_17.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignTop)
 
         self.gridLayout_2.addWidget(self.label_17, 5, 0, 1, 1)
-
-        self.label_4 = QLabel(self.groupBox_2)
-        self.label_4.setObjectName(u"label_4")
-        self.label_4.setMaximumSize(QSize(250, 16777215))
-
-        self.gridLayout_2.addWidget(self.label_4, 7, 0, 1, 1)
-
-        self.label_14 = QLabel(self.groupBox_2)
-        self.label_14.setObjectName(u"label_14")
-        self.label_14.setMinimumSize(QSize(0, 0))
-        self.label_14.setMaximumSize(QSize(250, 16777215))
-        self.label_14.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignTop)
-
-        self.gridLayout_2.addWidget(self.label_14, 1, 0, 1, 1)
 
         self.verticalLayout_5 = QVBoxLayout()
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
         self.cbTier = QComboBox(self.groupBox_2)
         self.cbTier.setObjectName(u"cbTier")
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+        sizePolicy1.setHorizontalStretch(0)
+        sizePolicy1.setVerticalStretch(0)
         sizePolicy1.setHeightForWidth(self.cbTier.sizePolicy().hasHeightForWidth())
         self.cbTier.setSizePolicy(sizePolicy1)
 
@@ -291,7 +327,7 @@ class Ui_formMain(object):
 
         self.lblTier = QLabel(self.groupBox_2)
         self.lblTier.setObjectName(u"lblTier")
-        sizePolicy2 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
+        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
         sizePolicy2.setHorizontalStretch(0)
         sizePolicy2.setVerticalStretch(0)
         sizePolicy2.setHeightForWidth(self.lblTier.sizePolicy().hasHeightForWidth())
@@ -340,36 +376,36 @@ class Ui_formMain(object):
 
         self.gridLayout_2.addLayout(self.verticalLayout_5, 1, 1, 1, 1)
 
+        self.leName = QLineEdit(self.groupBox_2)
+        self.leName.setObjectName(u"leName")
+        sizePolicy1.setHeightForWidth(self.leName.sizePolicy().hasHeightForWidth())
+        self.leName.setSizePolicy(sizePolicy1)
+
+        self.gridLayout_2.addWidget(self.leName, 0, 1, 1, 1)
+
         self.label_2 = QLabel(self.groupBox_2)
         self.label_2.setObjectName(u"label_2")
         self.label_2.setMaximumSize(QSize(250, 16777215))
+        self.label_2.setFont(font)
 
         self.gridLayout_2.addWidget(self.label_2, 0, 0, 1, 1)
 
-        self.checkAutoHintergrund = QCheckBox(self.groupBox_2)
-        self.checkAutoHintergrund.setObjectName(u"checkAutoHintergrund")
-        self.checkAutoHintergrund.setLayoutDirection(Qt.RightToLeft)
-        self.checkAutoHintergrund.setChecked(True)
-
-        self.gridLayout_2.addWidget(self.checkAutoHintergrund, 4, 1, 1, 1)
-
-        self.line = QFrame(self.groupBox_2)
-        self.line.setObjectName(u"line")
-        self.line.setFrameShape(QFrame.HLine)
-        self.line.setFrameShadow(QFrame.Sunken)
-
-        self.gridLayout_2.addWidget(self.line, 6, 0, 1, 2)
-
+        self.horizontalLayout = QHBoxLayout()
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.label_19 = QLabel(self.groupBox_2)
         self.label_19.setObjectName(u"label_19")
+        self.label_19.setFont(font)
         self.label_19.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignVCenter)
 
-        self.gridLayout_2.addWidget(self.label_19, 8, 0, 1, 1)
+        self.horizontalLayout.addWidget(self.label_19)
 
-        self.leVorteile = QLineEdit(self.groupBox_2)
-        self.leVorteile.setObjectName(u"leVorteile")
+        self.label_24 = QLabel(self.groupBox_2)
+        self.label_24.setObjectName(u"label_24")
 
-        self.gridLayout_2.addWidget(self.leVorteile, 8, 1, 1, 1)
+        self.horizontalLayout.addWidget(self.label_24)
+
+
+        self.gridLayout_2.addLayout(self.horizontalLayout, 9, 0, 1, 1)
 
 
         self.verticalLayout_9.addLayout(self.gridLayout_2)
@@ -377,7 +413,7 @@ class Ui_formMain(object):
 
         self.gridLayout_5.addWidget(self.groupBox_2, 0, 0, 2, 1)
 
-        self.verticalSpacer_3 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.verticalSpacer_3 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.gridLayout_5.addItem(self.verticalSpacer_3, 2, 0, 1, 1)
 
@@ -415,6 +451,7 @@ class Ui_formMain(object):
         self.label_3 = QLabel(self.groupBox_4)
         self.label_3.setObjectName(u"label_3")
         self.label_3.setMaximumSize(QSize(250, 16777215))
+        self.label_3.setFont(font)
 
         self.gridLayout_9.addWidget(self.label_3, 7, 0, 1, 1)
 
@@ -502,8 +539,8 @@ class Ui_formMain(object):
 
         self.line_7 = QFrame(self.groupBox_4)
         self.line_7.setObjectName(u"line_7")
-        self.line_7.setFrameShape(QFrame.HLine)
-        self.line_7.setFrameShadow(QFrame.Sunken)
+        self.line_7.setFrameShape(QFrame.Shape.HLine)
+        self.line_7.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.gridLayout_9.addWidget(self.line_7, 6, 0, 1, 2)
 
@@ -548,6 +585,7 @@ class Ui_formMain(object):
         self.lblZucht = QLabel(self.groupBox_4)
         self.lblZucht.setObjectName(u"lblZucht")
         self.lblZucht.setMaximumSize(QSize(250, 16777215))
+        self.lblZucht.setFont(font)
 
         self.gridLayout_9.addWidget(self.lblZucht, 0, 0, 1, 1)
 
@@ -564,7 +602,7 @@ class Ui_formMain(object):
 
         self.verticalLayout.addWidget(self.groupBox_4)
 
-        self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.verticalLayout.addItem(self.verticalSpacer_2)
 
@@ -687,17 +725,18 @@ class Ui_formMain(object):
 
         self.verticalLayout_6.addWidget(self.gbInventar)
 
-        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.verticalLayout_6.addItem(self.verticalSpacer)
 
         self.tabWidget.addTab(self.tab_3, "")
-
-        self.gridLayout_4.addWidget(self.tabWidget, 0, 0, 1, 1)
-
-        self.verticalLayout_11 = QVBoxLayout()
+        self.splitter.addWidget(self.tabWidget)
+        self.widget = QWidget(self.splitter)
+        self.widget.setObjectName(u"widget")
+        self.verticalLayout_11 = QVBoxLayout(self.widget)
         self.verticalLayout_11.setObjectName(u"verticalLayout_11")
-        self.groupBox_3 = QGroupBox(self.scrollAreaWidgetContents)
+        self.verticalLayout_11.setContentsMargins(0, 0, 0, 0)
+        self.groupBox_3 = QGroupBox(self.widget)
         self.groupBox_3.setObjectName(u"groupBox_3")
         self.gridLayout_6 = QGridLayout(self.groupBox_3)
         self.gridLayout_6.setObjectName(u"gridLayout_6")
@@ -721,7 +760,7 @@ class Ui_formMain(object):
 
         self.verticalLayout_11.addWidget(self.groupBox_3)
 
-        self.groupBox = QGroupBox(self.scrollAreaWidgetContents)
+        self.groupBox = QGroupBox(self.widget)
         self.groupBox.setObjectName(u"groupBox")
         self.verticalLayout_8 = QVBoxLayout(self.groupBox)
         self.verticalLayout_8.setObjectName(u"verticalLayout_8")
@@ -738,7 +777,7 @@ class Ui_formMain(object):
 
         self.verticalLayout_11.addWidget(self.groupBox)
 
-        self.groupBox_5 = QGroupBox(self.scrollAreaWidgetContents)
+        self.groupBox_5 = QGroupBox(self.widget)
         self.groupBox_5.setObjectName(u"groupBox_5")
         self.gridLayout_7 = QGridLayout(self.groupBox_5)
         self.gridLayout_7.setObjectName(u"gridLayout_7")
@@ -758,7 +797,7 @@ class Ui_formMain(object):
 
         self.gridLayout_7.addWidget(self.label_20, 2, 0, 1, 1)
 
-        self.verticalSpacer_4 = QSpacerItem(20, 0, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.verticalSpacer_4 = QSpacerItem(20, 0, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.gridLayout_7.addItem(self.verticalSpacer_4, 6, 1, 1, 1)
 
@@ -786,8 +825,9 @@ class Ui_formMain(object):
 
         self.verticalLayout_11.addWidget(self.groupBox_5)
 
+        self.splitter.addWidget(self.widget)
 
-        self.gridLayout_4.addLayout(self.verticalLayout_11, 0, 1, 1, 1)
+        self.gridLayout_4.addWidget(self.splitter, 0, 0, 1, 1)
 
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
 
@@ -795,7 +835,7 @@ class Ui_formMain(object):
 
         self.horizontalLayout_3 = QHBoxLayout()
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
-        self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_3.addItem(self.horizontalSpacer_2)
 
@@ -853,7 +893,17 @@ class Ui_formMain(object):
     def retranslateUi(self, formMain):
         formMain.setWindowTitle(QCoreApplication.translate("formMain", u"Sephrasto - Tierbegleiter erstellen", None))
         self.groupBox_2.setTitle("")
+        self.label_14.setText(QCoreApplication.translate("formMain", u"Tier", None))
+        self.label_14.setProperty("class", QCoreApplication.translate("formMain", u"h4", None))
+        self.label_4.setText(QCoreApplication.translate("formMain", u"Attributs-Anpassungen", None))
+        self.label_4.setProperty("class", QCoreApplication.translate("formMain", u"h4", None))
+        self.label_23.setText(QCoreApplication.translate("formMain", u"(z.B. f\u00fcr Vertrautenmagie oder R\u00fcstungen)", None))
+        self.label_23.setProperty("class", QCoreApplication.translate("formMain", u"smallText", None))
+        self.label.setText(QCoreApplication.translate("formMain", u"Nahrung", None))
+        self.label.setProperty("class", QCoreApplication.translate("formMain", u"h4", None))
         self.label_18.setText(QCoreApplication.translate("formMain", u"Hintergrund", None))
+        self.label_18.setProperty("class", QCoreApplication.translate("formMain", u"h4", None))
+        self.checkAutoHintergrund.setText(QCoreApplication.translate("formMain", u"Automatisch bef\u00fcllen", None))
         self.label_11.setText(QCoreApplication.translate("formMain", u"KK", None))
         self.label_5.setText(QCoreApplication.translate("formMain", u"KO", None))
         self.label_13.setText(QCoreApplication.translate("formMain", u"GS", None))
@@ -865,19 +915,19 @@ class Ui_formMain(object):
         self.label_16.setText(QCoreApplication.translate("formMain", u"Kampfwerte", None))
         self.label_12.setText(QCoreApplication.translate("formMain", u"KL", None))
         self.label_10.setText(QCoreApplication.translate("formMain", u"GE", None))
-        self.label.setText(QCoreApplication.translate("formMain", u"Nahrung", None))
-        self.label_17.setText(QCoreApplication.translate("formMain", u"<html><head/><body><p><span style=\" font-weight:600;\">Aussehen</span></p></body></html>", None))
-        self.label_4.setText(QCoreApplication.translate("formMain", u"<html><head/><body><p><span style=\" font-weight:600;\">Attributs-Anpassungen</span></p><p><span style=\" font-size:6pt;\">(z.B. f\u00fcr Vertrautenmagie oder R\u00fcstungen)</span></p></body></html>", None))
-        self.label_14.setText(QCoreApplication.translate("formMain", u"<html><head/><body><p><span style=\" font-weight:600;\">Tier</span></p></body></html>", None))
+        self.label_17.setText(QCoreApplication.translate("formMain", u"Aussehen", None))
+        self.label_17.setProperty("class", QCoreApplication.translate("formMain", u"h4", None))
         self.lblTier.setText("")
         self.lblRK.setText(QCoreApplication.translate("formMain", u"Reiterkampfstil-Stufe", None))
         self.lblReiten.setText(QCoreApplication.translate("formMain", u"Reiten-PW - BE", None))
 #if QT_CONFIG(tooltip)
         self.sbReiten.setToolTip(QCoreApplication.translate("formMain", u"Trage hier deinen Reiten-PW abz\u00fcglich BE ein. Nicht vergessen - mit Reiterkampf II sinkt die BE um 1!", None))
 #endif // QT_CONFIG(tooltip)
-        self.label_2.setText(QCoreApplication.translate("formMain", u"<html><head/><body><p><span style=\" font-weight:600;\">Name</span></p></body></html>", None))
-        self.checkAutoHintergrund.setText(QCoreApplication.translate("formMain", u"Automatisch bef\u00fcllen", None))
-        self.label_19.setText(QCoreApplication.translate("formMain", u"<html><head/><body><p><span style=\" font-weight:600;\">Weitere Vorteile </span>(kommagetrennt)</p></body></html>", None))
+        self.label_2.setText(QCoreApplication.translate("formMain", u"Name", None))
+        self.label_2.setProperty("class", QCoreApplication.translate("formMain", u"h4", None))
+        self.label_19.setText(QCoreApplication.translate("formMain", u"Weitere Vorteile", None))
+        self.label_19.setProperty("class", QCoreApplication.translate("formMain", u"h4", None))
+        self.label_24.setText(QCoreApplication.translate("formMain", u"(kommagetrennt)", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QCoreApplication.translate("formMain", u"Beschreibung und Attribute", None))
         self.groupBox_4.setTitle("")
         self.cbZucht.setItemText(0, QCoreApplication.translate("formMain", u"Keine (1 Gute, 2 Schlechte Eigenschaften)", None))
@@ -889,7 +939,8 @@ class Ui_formMain(object):
         self.cbZucht.setItemText(6, QCoreApplication.translate("formMain", u"Herausragend (2 Gute Eigenschaften)", None))
         self.cbZucht.setItemText(7, QCoreApplication.translate("formMain", u"Einzigartig (3 Gute Eigenschaften)", None))
 
-        self.label_3.setText(QCoreApplication.translate("formMain", u"<html><head/><body><p><span style=\" font-weight:600;\">Ausbildung</span></p></body></html>", None))
+        self.label_3.setText(QCoreApplication.translate("formMain", u"Ausbildung", None))
+        self.label_3.setProperty("class", QCoreApplication.translate("formMain", u"h4", None))
         self.lblAusbildung.setText("")
         self.lblGuteEig2.setText("")
         self.lblSchlechteEig2.setText("")
@@ -897,7 +948,8 @@ class Ui_formMain(object):
         self.lblSchlechteEig1.setText("")
         self.lblGuteEig1.setText("")
         self.lblGuteEig3.setText("")
-        self.lblZucht.setText(QCoreApplication.translate("formMain", u"<html><head/><body><p><span style=\" font-weight:600;\">Zuchtqualit\u00e4t</span></p></body></html>", None))
+        self.lblZucht.setText(QCoreApplication.translate("formMain", u"Zuchtqualit\u00e4t", None))
+        self.lblZucht.setProperty("class", QCoreApplication.translate("formMain", u"h4", None))
         self.lblGuteEig.setText(QCoreApplication.translate("formMain", u"    Gute Tiereigenschaften", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), QCoreApplication.translate("formMain", u"Zucht und Ausbildung", None))
         self.gbInventar.setTitle("")

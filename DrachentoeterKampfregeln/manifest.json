@@ -2,8 +2,8 @@
   "name": "Drachentöter Kampfregeln",
   "description": "Dieses Plugin installiert die Hausregeln des Drachentöter Kampfregelwerks für Ilaris. Weitere Infos findest du auf <a href=\"https://dsaforum.de/viewtopic.php?t=59615\">dsaforum.de</a> und dem <a href=\"https://discord.gg/AF3WjqvMU9\">Drachentöter Discord Server</a>.",
   "author": "Gatsu, KleinerIrrer",
-  "version": "6",
+  "version": "7.1",
   "dependencies": [
-    { "name" : "Manoeverkarten", "version" : "1" }
+    { "name" : "Manoeverkarten", "version" : "2" }
   ]
 }

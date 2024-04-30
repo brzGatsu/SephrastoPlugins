@@ -3,6 +3,7 @@ from EventBus import EventBus
 from Wolke import Wolke
 from Core.DatenbankEinstellung import DatenbankEinstellung
 from Core.AbgeleiteterWert import AbgeleiteterWertDefinition
+from Hilfsmethoden import Hilfsmethoden
 
 class Plugin:
     def __init__(self):
@@ -67,13 +68,14 @@ class Plugin:
         if len(char.ausrüstungPlatzbedarf) > 0:
             pb = char.ausrüstungPlatzbedarf[0]
 
-        scriptAPI = {
+        scriptAPI = Hilfsmethoden.createScriptAPI()
+        scriptAPI.update({
             'getAttribut' : lambda attribut: char.attribute[attribut].wert,
             'getTK' : lambda: char.abgeleiteteWerte["TK"].wert,
             'getLast' : lambda: char.ausrüstungPlatzbedarf[1:] if len(char.ausrüstungPlatzbedarf) > 1 else [0],
             'be' : 0
-        }
-        exec(Wolke.DB.einstellungen["Tragkraft Plugin: Last BE Script"].wert, scriptAPI)
+        })
+        Wolke.DB.einstellungen["Tragkraft Plugin: Last BE Script"].executeScript(scriptAPI)
         text = f"Tragkraft {char.abgeleiteteWerte['TK'].wert}, Last {pb} -> zusätzliche BE {scriptAPI['be']}"
 
         if len(char.ausrüstung) == 0:

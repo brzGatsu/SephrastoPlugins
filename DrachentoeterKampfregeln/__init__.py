@@ -7,7 +7,7 @@ from EinstellungenWrapper import EinstellungenWrapper
 class Plugin:
     def __init__(self):
         rulesPath = Wolke.Settings["Pfad-Regeln"]
-        rulesFile = "Drachentöter6.xml"
+        rulesFile = "DrachentöterKampfregeln7.1.xml"
         rootdir = os.path.dirname(os.path.abspath(__file__))
         rulesFilePath = os.path.join(rootdir, "Data", rulesFile)
         rulesTargetPath = os.path.join(rulesPath, rulesFile)
