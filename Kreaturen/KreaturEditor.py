@@ -124,14 +124,6 @@ class KreaturEditor(object):
         self.ui.cbPublik.clicked.connect(self.allgemeinChanged)
 
 
-        # value change for werte spinboxes
-        # DONT update on each change or at least disable during loading
-        # for k in ATTRIBUTE + KAMPFWERTE:
-        #     if k in ["GSS_label", "GST_label"]:
-        #         self.ui.__getattribute__(f"le{k}").editingFinished.connect(self.werteChanged)
-        #         continue
-        #     self.ui.__getattribute__(f"sb{k}").valueChanged.connect(self.werteChanged)
-
         # second tab Eigenschaften
         self.ui.btnAddEigenschaft.clicked.connect(self.addEigenschaftClicked)
         # self.ui.btnAddInfo.clicked.connect(self.addInfoClicked)
@@ -143,7 +135,6 @@ class KreaturEditor(object):
         self.ui.btnAddTalent.clicked.connect(self.addTalentClicked)
         self.ui.btnAddZauberfertigkeit.clicked.connect(self.addZauberfertigkeitClicked)
         self.ui.tabWidget.setStyleSheet('QTabBar { font-weight: bold; font-size: ' + str(Wolke.Settings["FontHeadingSize"]) + 'pt; font-family: \"' + Wolke.Settings["FontHeading"] + '\"; }')
-        # self.vorteilCompleter = TextTagCompleter(self.ui.leVorteile, self.datenbank.tiervorteile.keys())
 
         # fourth tab Angriffe
         self.ui.btnAddAngriff.clicked.connect(self.addAngriffClicked)
@@ -232,13 +223,12 @@ class KreaturEditor(object):
         self.ui.btnDBSpeichern.setEnabled(False)
         self.ui.btnLogin.setText("Anmelden")
         self.ui.laStatus.setText("Nicht angemeldet")
-        print("status update")
-        print(Wolke.Settings.get("IlarisOnlineToken", False))
         if Wolke.Settings.get("IlarisOnlineToken", False) is not None:
             self.ui.btnDBSpeichern.setEnabled(True)
             self.ui.btnLogin.setText("Abmelden")
-            name = Wolke.Settings.get("IlarisOnlineUser", "Unbekannt")
-            self.ui.laStatus.setText(f"Hallo {name}!")
+            name = Wolke.Settings.get("IlarisOnlineUser")
+            if Wolke.Settings.get("IlarisOnlineUser", False):
+                self.ui.laStatus.setText(f"Hallo {Wolke.Settings["IlarisOnlineUser"]}!")
 
     def loadOnlineClickedHandler(self):
         print("load online click handler")
