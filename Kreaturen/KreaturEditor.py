@@ -228,7 +228,7 @@ class KreaturEditor(object):
             self.ui.btnLogin.setText("Abmelden")
             name = Wolke.Settings.get("IlarisOnlineUser")
             if Wolke.Settings.get("IlarisOnlineUser", False):
-                self.ui.laStatus.setText(f"Hallo {Wolke.Settings["IlarisOnlineUser"]}!")
+                self.ui.laStatus.setText(f"Hallo {Wolke.Settings['IlarisOnlineUser']}!")
 
     def loadOnlineClickedHandler(self):
         print("load online click handler")
