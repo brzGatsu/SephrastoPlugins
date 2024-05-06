@@ -89,19 +89,19 @@ Dämonischer Ritus.svg
 https://game-icons.net/1x1/skoll/pentacle.html by Skoll under CC BY 3.0
 
 Anrufung Blakharazs.svg
-by Lorc under CC BY 3.0 https://game-icons.net/1x1/lorc/eyeball.html
+by Lorc under CC BY 3.0 https://game-icons.net/1x1/lorc/gibbet.html
 
 Anrufung Belhalhars.svg
 by Lorc under CC BY 3.0 https://game-icons.net/1x1/lorc/dripping-knife.html
 
 Anrufung Lolgramoths.svg
-by Lorc under CC BY 3.0 https://game-icons.net/1x1/lorc/cycle.html
+by Lorc under CC BY 3.0 https://game-icons.net/1x1/lorc/sprint.html
 
 Anrufung Charyptoroths.svg
 by Lorc under CC BY 3.0 https://game-icons.net/1x1/lorc/octopus.html
 
 Anrufung Thargunitoths.svg
-by Skoll under CC BY 3.0 https://game-icons.net/1x1/skoll/raise-zombie.html
+by Delapouite under CC BY 3.0 https://game-icons.net/1x1/delapouite/skeletal-hand.html
 
 Anrufung Amazeroths.svg
 by Lorc under CC BY 3.0 https://game-icons.net/1x1/lorc/mirror-mirror.html
@@ -122,7 +122,7 @@ Anrufung Agrimoths.svg
 by Lorc under CC BY 3.0 https://game-icons.net/1x1/lorc/burning-tree.html
 
 Anrufung Belkelels.svg
-by Lorc under CC BY 3.0 https://game-icons.net/1x1/lorc/bleeding-heart.html
+by Lorc under CC BY 3.0 https://game-icons.net/1x1/lorc/rose.html
 
 Anrufung Aphasmayras.svg
 by Lorc under CC BY 3.0 https://game-icons.net/1x1/lorc/paw.html
@@ -191,7 +191,7 @@ Herrschaft.svg
 by Lorc under CC BY 3.0 https://game-icons.net/1x1/lorc/sharp-crown.html
 
 Verführung.svg
-by Lorc under CC BY 3.0 https://game-icons.net/1x1/lorc/chained-heart.html
+by Lorc under CC BY 3.0 https://game-icons.net/1x1/lorc/bleeding-heart.html
 
 Hass und Zerstörung.svg
 by Lorc under CC BY 3.0 https://game-icons.net/1x1/lorc/pyromaniac.html
