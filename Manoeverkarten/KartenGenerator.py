@@ -327,11 +327,6 @@ habe ich mit docsmagic.de gemacht, hier werden Sleeves mit farbigen Rückseiten 
 
             if self.isMultiLevel(element):
                 karte.titel = self.getBasename(element)
-                if karte.titel.startswith("Tradition der "):
-                    karte.titel = karte.titel[len("Tradition der "):]
-                    if karte.titel.endswith("geweihten"):
-                        karte.titel = karte.titel[:-1]
-
                 if "{listitem_separator}" in text:
                     text = "<ul><li class='checkbox'>" + text.replace("{listitem_separator}", "</li><li class='checkbox'>") + "</li></ul>"
                     listified = True
@@ -384,6 +379,8 @@ habe ich mit docsmagic.de gemacht, hier werden Sleeves mit farbigen Rückseiten 
             karte.text = element.text
             karte.subtitel = ""
             karte.fusszeile = "Waffeneigenschaft"
+
+        karte.titel = self.shorten(karte.titel, self.db.einstellungen["Manöverkarten Plugin: Titel kürzen"].wert)
 
         if overrideKarte is not None:
             if overrideKarte.löschen:

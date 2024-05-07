@@ -18,7 +18,7 @@ class KartenUtility:
     def getAnzeigename(name):
         anzeigename = name
         for typName in KartenTyp.TypNamen:
-            anzeigename = anzeigename.replace(f" ({typName})", "").replace(f" ({typName})", "")
+            anzeigename = anzeigename.replace(f" ({typName})", "")
         return anzeigename
 
     @staticmethod
