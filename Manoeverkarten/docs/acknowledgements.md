@@ -85,6 +85,12 @@ by Lorc under CC BY 3.0 https://game-icons.net/1x1/lorc/voodoo-doll.html
 wizard-staff.svg
 by Lorc under CC BY 3.0 https://game-icons.net/1x1/lorc/wizard-staff.html
 
+sword-hilt.svg
+by Lorc under CC BY 3.0 https://game-icons.net/1x1/lorc/sword-hilt.html
+
+fire-ring.svg
+by Lorc under CC BY 3.0 https://game-icons.net/1x1/lorc/fire-ring.html
+
 Dämonischer Ritus.svg
 https://game-icons.net/1x1/skoll/pentacle.html by Skoll under CC BY 3.0
 
@@ -195,3 +201,6 @@ by Lorc under CC BY 3.0 https://game-icons.net/1x1/lorc/bleeding-heart.html
 
 Hass und Zerstörung.svg
 by Lorc under CC BY 3.0 https://game-icons.net/1x1/lorc/pyromaniac.html
+
+Objekt.svg
+by Delapouite under CC BY 3.0 https://game-icons.net/1x1/delapouite/chest.html
