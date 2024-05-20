@@ -19,6 +19,7 @@ from WebEngineWrapper import WebEngineWrapper
 from QtUtils.SimpleSettingsDialog import SimpleSettingsDialog
 from VoraussetzungenListe import VoraussetzungenListe, VoraussetzungException
 from Serialization import Serialization
+from QtUtils.RichTextButton import RichTextToolButton
 
 class Plugin:
     def __init__(self):
@@ -46,10 +47,11 @@ class Plugin:
     def createCharakterButtons(self):
         if not Wolke.Settings["Manöverkarten_CharaktereditorButton"]:
            return []
-        self.exportChar = QtWidgets.QPushButton()
+        self.exportChar = RichTextToolButton()
         self.exportChar.setObjectName("checkManöverkartenEnable")
-        self.exportChar.setText("Manöverkarten erstellen")
-        self.exportChar.setToolTip("Erstellt eine Datei mit dem Regelanhang in Form von Manöverkarten, falls aktiviert.")
+        self.exportChar.setText("<span style='" + Wolke.FontAwesomeCSS + f"'>\uf1c1</span>&nbsp;&nbsp;Manöverkarten")
+        self.exportChar.setShortcut("Ctrl+M")
+        self.exportChar.setToolTip("Für den Charakter relevante Manöverkarten als PDF exportieren (" + self.exportChar.shortcut().toString(QtGui.QKeySequence.NativeText) + ")")
         self.exportChar.clicked.connect(self.writeCharakterKarten)
         return [self.exportChar]
 
