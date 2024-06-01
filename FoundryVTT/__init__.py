@@ -48,23 +48,23 @@ def waffe_item(w):
         "nebenwaffe": False,
         # TODO: make this a list in Foundry and write getters/checks if bools are required! #14
         # 'eigenschaften': w.eigenschaften,  # TODO: list of strings?
-        "eigenschaften": {
-            "kopflastig": False,
-            "niederwerfen": False,
-            "parierwaffe": False,
-            "reittier": False,
-            "ruestungsbrechend": False,
-            "schild": False,
-            "schwer_4": False,
-            "schwer_8": False,
-            "stumpf": False,
-            "unberechenbar": False,
-            "unzerstoerbar": False,
-            "wendig": False,
-            "zerbrechlich": False,
-            "zweihaendig": False,
-            "kein_malus_nebenwaffe": False
-        },
+        # "eigenschaften": {
+        #     "kopflastig": ("Kopflastig" in w.eigenschaften),
+        #     "niederwerfen": ("Niederwerfen" in w.eigenschaften),
+        #     "parierwaffe": ("Parierwaffe" in w.eigenschaften),
+        #     "reittier": ("Reittier" in w.eigenschaften),
+        #     "ruestungsbrechend": ("Rüstungsbrechend" in w.eigenschaften),
+        #     "schild": ("Schild" in w.eigenschaften),
+        #     "schwer_4": ("Schwer (4)" in w.eigenschaften),
+        #     "schwer_8": ("Schwer (8)" in w.eigenschaften),
+        #     "stumpf": ("Stumpf" in w.eigenschaften),
+        #     "unberechenbar": ("Unberechenbar" in w.eigenschaften),
+        #     "unzerstoerbar": ("Unzerstörbar" in w.eigenschaften),
+        #     "wendig": ("Wendig" in w.eigenschaften),
+        #     "zerbrechlich": ("Zerbrechlich" in w.eigenschaften),
+        #     "zweihaendig": ("Zweihändig" in w.eigenschaften),
+        #     "kein_malus_nebenwaffe": ("kein Malus als Nebenwaffe" in w.eigenschaften)
+        # },
         "text": "",
         "aufbewahrungs_ort": "tragend",
         "bewahrt_auf": [],
@@ -81,9 +81,40 @@ def waffe_item(w):
     if w.nahkampf:
         # w.anzeigename  -> is empty
         waffe = create_item(w.anzeigename, "nahkampfwaffe")
+        wdata['eigenschaften'] = {
+            "kopflastig": ("Kopflastig" in w.eigenschaften),
+            "niederwerfen": ("Niederwerfen" in w.eigenschaften),
+            "parierwaffe": ("Parierwaffe" in w.eigenschaften),
+            "reittier": ("Reittier" in w.eigenschaften),
+            "ruestungsbrechend": ("Rüstungsbrechend" in w.eigenschaften),
+            "schild": ("Schild" in w.eigenschaften),
+            "schwer_4": ("Schwer (4)" in w.eigenschaften),
+            "schwer_8": ("Schwer (8)" in w.eigenschaften),
+            "stumpf": ("Stumpf" in w.eigenschaften),
+            "unberechenbar": ("Unberechenbar" in w.eigenschaften),
+            "unzerstoerbar": ("Unzerstörbar" in w.eigenschaften),
+            "wendig": ("Wendig" in w.eigenschaften),
+            "zerbrechlich": ("Zerbrechlich" in w.eigenschaften),
+            "zweihaendig": ("Zweihändig" in w.eigenschaften),
+            "kein_malus_nebenwaffe": ("kein Malus als Nebenwaffe" in w.eigenschaften)
+        }
     else:
         waffe = create_item(w.anzeigename, "fernkampfwaffe")
-        wdata['lz'] = w.lz  # TODO: this correct for FK? Gatsu: yup
+        wdata['lz'] = w.lz
+        wdata['eigenschaften'] = {
+            "kein_reiter": ("kein Reittier" in w.eigenschaften),
+            "niederwerfen": ("Niederwerfen" in w.eigenschaften),
+            "niederwerfen_4": ("Niederwerfen (-4)" in w.eigenschaften),
+            "niederwerfen_8": ("Niederwerfen (-8)" in w.eigenschaften),
+            "schwer_4": ("Schwer (4)" in w.eigenschaften),
+            "schwer_8": ("Schwer (8)" in w.eigenschaften),
+            "stationaer": ("stationär" in w.eigenschaften),
+            "stumpf": ("Stumpf" in w.eigenschaften),
+            "umklammern_212": ("Umklammern (-2; 12)" in w.eigenschaften),
+            "umklammern_416": ("Umklammern (-4; 16)" in w.eigenschaften),
+            "umklammern_816": ("Umklammern (-8; 16)" in w.eigenschaften),
+            "zweihaendig": ("Zweihändig" in w.eigenschaften)
+        }
     waffe['data'] = wdata
     return waffe
 
