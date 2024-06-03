@@ -37,7 +37,10 @@ class ReplyHandler(QtCore.QObject):
         else:
             data = json_doc.toVariant()
         self.callback(data, error=error, status=status_code)
-        reply.deleteLater()
+        try:
+            reply.deleteLater()
+        except RuntimeError:
+            pass
 
 
 class APIClient:

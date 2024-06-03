@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'KreaturMain.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.5.3
+## Created by: Qt User Interface Compiler version 6.7.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -28,7 +28,7 @@ class Ui_formMain(object):
             formMain.setObjectName(u"formMain")
         formMain.setWindowModality(Qt.ApplicationModal)
         formMain.resize(1128, 708)
-        sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(formMain.sizePolicy().hasHeightForWidth())
@@ -47,7 +47,7 @@ class Ui_formMain(object):
         self.widget_5 = QWidget(self.scrollAreaWidgetContents_2)
         self.widget_5.setObjectName(u"widget_5")
         self.widget_5.setEnabled(True)
-        sizePolicy1 = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Preferred)
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Preferred)
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(0)
         sizePolicy1.setHeightForWidth(self.widget_5.sizePolicy().hasHeightForWidth())
@@ -58,7 +58,7 @@ class Ui_formMain(object):
         self.verticalLayout_14.setObjectName(u"verticalLayout_14")
         self.groupBox_3 = QGroupBox(self.widget_5)
         self.groupBox_3.setObjectName(u"groupBox_3")
-        sizePolicy2 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Maximum)
+        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Maximum)
         sizePolicy2.setHorizontalStretch(0)
         sizePolicy2.setVerticalStretch(0)
         sizePolicy2.setHeightForWidth(self.groupBox_3.sizePolicy().hasHeightForWidth())
@@ -150,14 +150,14 @@ class Ui_formMain(object):
 
         self.gridLayout_7.addWidget(self.checkEditierbar, 2, 0, 1, 1)
 
-        self.verticalSpacer_4 = QSpacerItem(20, 0, QSizePolicy.Minimum, QSizePolicy.Minimum)
+        self.verticalSpacer_4 = QSpacerItem(20, 0, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
 
         self.gridLayout_7.addItem(self.verticalSpacer_4, 4, 0, 1, 1)
 
 
         self.verticalLayout_14.addWidget(self.groupBox_5)
 
-        self.verticalSpacer_3 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.verticalSpacer_3 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.verticalLayout_14.addItem(self.verticalSpacer_3)
 
@@ -166,7 +166,7 @@ class Ui_formMain(object):
 
         self.tabWidget = QTabWidget(self.scrollAreaWidgetContents_2)
         self.tabWidget.setObjectName(u"tabWidget")
-        sizePolicy3 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        sizePolicy3 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         sizePolicy3.setHorizontalStretch(0)
         sizePolicy3.setVerticalStretch(0)
         sizePolicy3.setHeightForWidth(self.tabWidget.sizePolicy().hasHeightForWidth())
@@ -191,7 +191,7 @@ class Ui_formMain(object):
         self.gridLayout_12.setVerticalSpacing(6)
         self.leName = QLineEdit(self.groupBox_7)
         self.leName.setObjectName(u"leName")
-        sizePolicy4 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
+        sizePolicy4 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
         sizePolicy4.setHorizontalStretch(0)
         sizePolicy4.setVerticalStretch(0)
         sizePolicy4.setHeightForWidth(self.leName.sizePolicy().hasHeightForWidth())
@@ -229,13 +229,13 @@ class Ui_formMain(object):
 
         self.gridLayout_12.addWidget(self.leAbenteuer, 5, 2, 1, 3)
 
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.gridLayout_12.addItem(self.horizontalSpacer, 1, 4, 1, 1)
 
         self.cbTyp = QComboBox(self.groupBox_7)
         self.cbTyp.setObjectName(u"cbTyp")
-        sizePolicy5 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        sizePolicy5 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
         sizePolicy5.setHorizontalStretch(0)
         sizePolicy5.setVerticalStretch(0)
         sizePolicy5.setHeightForWidth(self.cbTyp.sizePolicy().hasHeightForWidth())
@@ -460,8 +460,8 @@ class Ui_formMain(object):
         self.line_2 = QFrame(self.groupBox_2)
         self.line_2.setObjectName(u"line_2")
         self.line_2.setLineWidth(3)
-        self.line_2.setFrameShape(QFrame.HLine)
-        self.line_2.setFrameShadow(QFrame.Sunken)
+        self.line_2.setFrameShape(QFrame.Shape.HLine)
+        self.line_2.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.gridLayout_3.addWidget(self.line_2, 2, 0, 1, 9)
 
@@ -581,8 +581,8 @@ class Ui_formMain(object):
 
         self.line = QFrame(self.groupBox_2)
         self.line.setObjectName(u"line")
-        self.line.setFrameShape(QFrame.HLine)
-        self.line.setFrameShadow(QFrame.Sunken)
+        self.line.setFrameShape(QFrame.Shape.HLine)
+        self.line.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.gridLayout_2.addWidget(self.line, 3, 0, 1, 2)
 
@@ -617,7 +617,7 @@ class Ui_formMain(object):
         self.treeEigenschaften = QTreeWidget(self.groupBox_6)
         self.treeEigenschaften.setObjectName(u"treeEigenschaften")
         self.treeEigenschaften.setEnabled(True)
-        sizePolicy6 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+        sizePolicy6 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
         sizePolicy6.setHorizontalStretch(2)
         sizePolicy6.setVerticalStretch(20)
         sizePolicy6.setHeightForWidth(self.treeEigenschaften.sizePolicy().hasHeightForWidth())
@@ -659,7 +659,7 @@ class Ui_formMain(object):
         self.gridLayout_8.setObjectName(u"gridLayout_8")
         self.treeTalente = QTreeWidget(self.groupBox_8)
         self.treeTalente.setObjectName(u"treeTalente")
-        sizePolicy7 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
+        sizePolicy7 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
         sizePolicy7.setHorizontalStretch(0)
         sizePolicy7.setVerticalStretch(0)
         sizePolicy7.setHeightForWidth(self.treeTalente.sizePolicy().hasHeightForWidth())
@@ -701,7 +701,7 @@ class Ui_formMain(object):
 
         self.verticalLayout_2.addWidget(self.widget_8)
 
-        self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.verticalLayout_2.addItem(self.verticalSpacer_2)
 
@@ -737,7 +737,7 @@ class Ui_formMain(object):
 
         self.verticalLayout_6.addWidget(self.widget_4)
 
-        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.verticalLayout_6.addItem(self.verticalSpacer)
 
@@ -754,7 +754,7 @@ class Ui_formMain(object):
         self.widget_6.setMaximumSize(QSize(16777215, 50))
         self.horizontalLayout_2 = QHBoxLayout(self.widget_6)
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
-        self.horizontalSpacer_2 = QSpacerItem(633, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontalSpacer_2 = QSpacerItem(633, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_2.addItem(self.horizontalSpacer_2)
 
@@ -775,7 +775,7 @@ class Ui_formMain(object):
 
         self.btnExport = QPushButton(self.widget_6)
         self.btnExport.setObjectName(u"btnExport")
-        self.btnExport.setEnabled(False)
+        self.btnExport.setEnabled(True)
         self.btnExport.setMinimumSize(QSize(100, 0))
         self.btnExport.setMaximumSize(QSize(16777214, 16777215))
 
@@ -906,6 +906,6 @@ class Ui_formMain(object):
         self.buttonLoad.setText(QCoreApplication.translate("formMain", u"Laden", None))
         self.buttonQuicksave.setText(QCoreApplication.translate("formMain", u"Speichern", None))
         self.buttonSave.setText(QCoreApplication.translate("formMain", u"Speichern unter...", None))
-        self.btnExport.setText(QCoreApplication.translate("formMain", u"PNG Export", None))
+        self.btnExport.setText(QCoreApplication.translate("formMain", u"Export", None))
     # retranslateUi
 

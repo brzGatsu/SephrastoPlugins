@@ -101,13 +101,13 @@ class KreaturEditor(object):
             self.formMain.resize(windowSize[0], windowSize[1])
 
         # main window
-        self.ui.btnExport.clicked.connect(self.exportClickedHandler)
         self.ui.btnLogin.clicked.connect(self.loginClickedHandler)
         self.ui.btnDBLaden.clicked.connect(self.loadOnlineClickedHandler)
         self.ui.btnDBSpeichern.clicked.connect(self.saveOnlineClickedHandler)
         self.ui.buttonLoad.clicked.connect(self.loadClickedHandler)
         self.ui.buttonSave.clicked.connect(self.saveClickedHandler)
         self.ui.buttonQuicksave.clicked.connect(self.quicksaveClickedHandler)
+        self.ui.btnExport.clicked.connect(self.buttonExportHtmlClicked)
         self.labelImageText = self.ui.labelImage.text()
         self.ui.buttonLoadImage.clicked.connect(self.buttonLoadImageClicked)
         self.ui.buttonDeleteImage.clicked.connect(self.buttonDeleteImageClicked)
@@ -227,16 +227,18 @@ class KreaturEditor(object):
             self.ui.btnDBSpeichern.setEnabled(True)
             self.ui.btnLogin.setText("Abmelden")
             name = Wolke.Settings.get("IlarisOnlineUser")
-            if Wolke.Settings.get("IlarisOnlineUser", False):
-                self.ui.laStatus.setText(f"Hallo {Wolke.Settings["IlarisOnlineUser"]}!")
+            if name:
+                self.ui.laStatus.setText(f"Hallo {name}!")
 
     def loadOnlineClickedHandler(self):
         print("load online click handler")
         diag = self.onlineDialog()
         print("dialog closed with data: ")
-        print(diag.kreatur['kampfwerte'])
         if diag.kreatur is not None:
+            print(diag.kreatur['kampfwerte'])
             self.data = diag.kreatur
+            if self.data.get("quelle", "x") is None:
+                self.data["quelle"] = {"name": ""}
             print(self.data['kampfwerte'])
             self.renderData()
 
@@ -570,3 +572,96 @@ class KreaturEditor(object):
 
     def ruleHeading(self, text):
         return "<h3>" + text + "</h3>"
+    
+    def buttonExportHtmlClicked(self):
+        html = self.exportHtml()
+
+        if self.savepath != "":
+            startDir = self.savepath
+        elif os.path.isdir(Wolke.Settings['Pfad-Chars']):
+            startDir = os.path.join(Wolke.Settings['Pfad-Chars'], self.ui.leName.text())
+        else:
+            startDir = ""
+        spath, _ = QtWidgets.QFileDialog.getSaveFileName(None,"Kreatur exportieren...",startDir,"HTML-Datei (*.html)")
+        if spath == "":
+            return
+        if ".html" not in spath:
+            spath = spath + ".html"
+            
+        self.savepath = spath
+        open(spath, "w", encoding="utf-8").write(html)
+        print(html)
+
+
+    def exportHtml(self):
+        css =  "body { font-family: Arial; font-size: 12pt; }"
+        html_start = f"<html><head><style>\n{css}\n</style></head><body>"
+        html_end = "</body></html>"
+        block = '<div class="statblock">'
+
+        def statreihe(html):
+            return f'<div class="statreihe">{html}</div>'
+
+        # Kreaturenkopf
+        block += '<div class="kreaturkopf">'
+        block += f'<h5>{self.data.get("name", "")}</h5>'
+        block += f'<span>{self.data.get("kurzbeschreibung", "")}</span>'
+        block += f'<img src="data:image/jpeg;base64,{self.data.get("bild", "")}"/>'
+        block += '</div>'  
+        block += '<div class="kreaturinfos">'
+        # Kampfwerte
+        kw = self.data["kampfwerte"]
+        row = ""
+        if kw.get("WSS"):
+            row += f'<div><b>Wundschwelle: </b>{kw.get("WS", "")}/{kw["WSS"]}</div>'
+        else:
+            row += f'<div><b>Wundschwelle: </b>{kw.get("WS", "")}</div>'
+        if kw.get("KOL"):
+            row += f'<div><b>Koloss: </b>{kw["KOL"]}</div>'
+        if kw.get("MR"):
+            row += f'<div><b>Magieresistenz: </b>{kw["MR"]}</div>'
+        gslist = []
+        if kw.get("GS"):
+            gslist.append(f'{kw["GSS"]}')
+        if kw.get("GSS"):
+            gslist.append(f'{kw["GSS"]} ({kw["GSS_label"]})')
+        if kw.get("GST"):
+            gslist.append(f'{kw["GST"]}, ({kw["GST_label"]})')
+        
+        row += f'<div><b>Geschwindigkeit: </b>{", ".join(gslist)}</div>'
+        if kw.get("INI"):
+            row += f'<div><b>Initiative: </b>{kw["INI"]}</div>'
+        block += statreihe(row)
+
+        # Allgemeine Eigenschaften
+        alglist = [e.get('name') for e in self.data["eigenschaften"] if e.get("kategorie") == "Allgemein"]
+        block += statreihe(", ".join(alglist))
+        # Angriffe
+        ag = ""
+        for a in self.data["angriffe"]:
+            ag += "<div>"
+            table = {
+                "": a.get("name", ""),
+                "RW: ": a.get("rw", ""),
+                "AT: ": a.get("at", ""),
+                "VT: ": a.get("vt", ""),
+                "TP: ": a.get("tp", ""),
+            }
+            ag += "".join([f'<div class="d-flex">{k}{v}</div>' for k, v in table.items()])
+            if a.get("eigenchaften"):
+                ag += f'<div class="angriffeigenschaften">{a.eigenschaften}</div>'
+            ag += "</div>"
+        for eigenschaft in self.data["eigenschaften"]:
+            if eigenschaft.get("kategorie") == "Allgemein":
+                alglist.append
+
+            block += self.ruleHeading(eigenschaft["name"])
+            block += f'<p>{eigenschaft["wert"]}</p>'
+        block += '</div>'
+        # TODO: Add more sections here, based on the structure of self.data
+        block += '</div>'
+
+
+
+        block += '</div>'  # kreaturinfos
+        return html_start + block + html_end
