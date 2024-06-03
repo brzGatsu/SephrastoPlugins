@@ -4,6 +4,7 @@ from Kreaturen import KreaturEditor
 from Kreaturen import KreaturMain
 from Kreaturen import IlarisOnlineDBWrapper
 from Kreaturen import IlarisOnlineLoginWrapper
+from Kreaturen import KreaturValidators
 from Hilfsmethoden import Hilfsmethoden
 
 class Plugin:

@@ -409,7 +409,7 @@
                    <string/>
                   </property>
                   <property name="placeholderText">
-                   <string>Liste von Abenteuern (kommagetrennt)</string>
+                   <string>Durch Komma getrennte Abkürzungen</string>
                   </property>
                  </widget>
                 </item>
@@ -449,7 +449,7 @@
                 <item row="5" column="0">
                  <widget class="QLabel" name="label_19">
                   <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Liste von Namen oder Abkürzungen der Abenteuer in denen die Kreatur vorkommt (durch Komma getrennt).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Liste von Abkürzungen der&lt;a href=&quot;https://ilaris-online.de/app/abenteuers/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Abenteuer&lt;/span&gt;&lt;/a&gt; in denen die Kreatur vorkommt (durch Komma getrennt). Nicht existierende Abenteuer werden automatisch erstellt.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                   </property>
                   <property name="text">
                    <string>Abenteuer</string>
@@ -1434,7 +1434,7 @@
       <item>
        <widget class="QPushButton" name="btnExport">
         <property name="enabled">
-         <bool>false</bool>
+         <bool>true</bool>
         </property>
         <property name="minimumSize">
          <size>
@@ -1449,7 +1449,7 @@
          </size>
         </property>
         <property name="text">
-         <string>PNG Export</string>
+         <string>Export</string>
         </property>
        </widget>
       </item>

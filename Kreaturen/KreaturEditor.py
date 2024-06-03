@@ -19,12 +19,14 @@ import shutil
 from QtUtils.ProgressDialogExt import ProgressDialogExt
 from Kreaturen.IlarisOnlineApi import APIClient
 from Kreaturen import AngriffWidget
+from Kreaturen.KreaturValidators import *
+from functools import partial
 
 
 ATTRIBUTE = ["KO", "MU", "GE", "KK", "IN", "KL", "CH", "FF"]
 KAMPFWERTE = ["WS", "WSE", "KOL", "MR", "INI", "GS", "GSS", "GST", "GSS_label", "GST_label"]
 TYPEN = ["humanoid", "tier", "elementar", "mythen", "fee", "geist", "untot", "daimonid", "daemon", "pflanze"]
-EIGENSCHAFTEN = ["ASDF", "BSDF"]
+EIGENSCHAFTEN = ["Eigenschaft 1", "Eigenschaft 2"]
 KATEGORIEN = ["Profan", "Kampf", "Übernatürlich", "Allgemein", "Info"]
 DATA = {
     "abenteuer": [],
@@ -118,11 +120,17 @@ class KreaturEditor(object):
         self.ui.laID.setText("ID: " + str(self.data.get("id")))
         self.ui.laID.setVisible(bool(self.data.get("id")))
         self.ui.leName.editingFinished.connect(self.allgemeinChanged)
+        self.ui.leName.setValidator(NameValidator())
+        self.ui.leName.textChanged.connect(partial(self.validateField, self.ui.leName))
         self.ui.cbTyp.addItems([t.capitalize() for t in TYPEN])
+        self.ui.leKurzbeschreibung.setValidator(NotEmptyValidator())
+        self.ui.leKurzbeschreibung.textChanged.connect(partial(self.validateField, self.ui.leKurzbeschreibung))
         self.ui.leKurzbeschreibung.editingFinished.connect(self.allgemeinChanged)
+        self.ui.leAbenteuer.editingFinished.connect(self.allgemeinChanged)
+        self.ui.leAbenteuer.setValidator(AbenteuerValidator())
+        self.ui.leAbenteuer.textChanged.connect(partial(self.validateField, self.ui.leAbenteuer))
         self.ui.cbNSC.clicked.connect(self.allgemeinChanged)
         self.ui.cbPublik.clicked.connect(self.allgemeinChanged)
-
 
         # second tab Eigenschaften
         self.ui.btnAddEigenschaft.clicked.connect(self.addEigenschaftClicked)
@@ -478,10 +486,7 @@ class KreaturEditor(object):
         """render self.data to the ui elements"""
         self.ui.laID.setText("ID: " + str(self.data.get("id")))
         self.ui.laID.setVisible(bool(self.data.get("id")))
-        print("render data")
-        print(self.data['kampfwerte'])
         self.renderAllgemein()
-        print(self.data['kampfwerte'])
         self.renderWerte()
         self.renderEigenschaften()
         self.renderTalente()
@@ -591,7 +596,12 @@ class KreaturEditor(object):
         self.savepath = spath
         open(spath, "w", encoding="utf-8").write(html)
         print(html)
-
+    
+    def validateField(self, field, text):
+        if not field.hasAcceptableInput():
+            field.setStyleSheet("border: 2px solid #910e0e; border-radius: 2px; padding: 1px;")
+        else:
+            field.setStyleSheet("")
 
     def exportHtml(self):
         css =  "body { font-family: Arial; font-size: 12pt; }"
