@@ -50,18 +50,22 @@ class SephMakroEditor(object):
         buttonSize = Hilfsmethoden.emToPixels(3.2)
         self.ui.buttonRun.setFixedSize(buttonSize, buttonSize)
         self.ui.buttonRun.setText("\uf04b")
+        self.setButtonShortcut(self.ui.buttonRun, "F5")
         self.ui.buttonRun.clicked.connect(self.run)
 
         self.ui.buttonNew.setFixedSize(buttonSize, buttonSize)
         self.ui.buttonNew.setText("\uf15b")
+        self.setButtonShortcut(self.ui.buttonNew, "CTRL+N")
         self.ui.buttonNew.clicked.connect(self.new)
 
         self.ui.buttonLoad.setFixedSize(buttonSize, buttonSize)
         self.ui.buttonLoad.setText("\uf07c")
+        self.setButtonShortcut(self.ui.buttonLoad, "CTRL+O")
         self.ui.buttonLoad.clicked.connect(self.load)
 
         self.ui.buttonSave.setFixedSize(buttonSize, buttonSize)
         self.ui.buttonSave.setText("\uf0c7")
+        self.setButtonShortcut(self.ui.buttonSave, "CTRL+S")
         self.ui.buttonSave.clicked.connect(self.save)
 
         self.ui.buttonSaveOutput.clicked.connect(self.saveOutput)
@@ -86,6 +90,10 @@ class SephMakroEditor(object):
     def onDbChange(self):
         Wolke.DB.loadFile(hausregeln = self.ui.comboDB.currentText(), isCharakterEditor = False)
 
+    def setButtonShortcut(self, button, shortcutStr):
+        button.setShortcut(shortcutStr)
+        button.setToolTip(button.toolTip() + " (" + button.shortcut().toString(QtGui.QKeySequence.NativeText) + ")")
+
     def updateWindowTitle(self):
         if self.savePath == "":
             self.formMain.setWindowTitle("SephMakro - Neues Makro")
@@ -96,6 +104,7 @@ class SephMakroEditor(object):
 
     def run(self):
         prevText = self.ui.buttonRun.text()
+        prevShortcut = self.ui.buttonRun.shortcut()
         self.ui.buttonRun.setText("\uf254")
         QtWidgets.QApplication.processEvents()
         with stdoutIO() as s:
@@ -108,6 +117,7 @@ class SephMakroEditor(object):
                 print("Error: " + str(e) + " (line " + str(traceback.extract_tb(tb)[-1][1]) + ")")
         self.ui.teOutput.setPlainText(s.getvalue())
         self.ui.buttonRun.setText(prevText)
+        self.ui.buttonRun.setShortcut(prevShortcut)
         self.formMain.activateWindow()
 
     def updateButtons(self):

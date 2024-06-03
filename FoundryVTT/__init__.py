@@ -48,23 +48,23 @@ def waffe_item(w):
         "nebenwaffe": False,
         # TODO: make this a list in Foundry and write getters/checks if bools are required! #14
         # 'eigenschaften': w.eigenschaften,  # TODO: list of strings?
-        "eigenschaften": {
-            "kopflastig": False,
-            "niederwerfen": False,
-            "parierwaffe": False,
-            "reittier": False,
-            "ruestungsbrechend": False,
-            "schild": False,
-            "schwer_4": False,
-            "schwer_8": False,
-            "stumpf": False,
-            "unberechenbar": False,
-            "unzerstoerbar": False,
-            "wendig": False,
-            "zerbrechlich": False,
-            "zweihaendig": False,
-            "kein_malus_nebenwaffe": False
-        },
+        # "eigenschaften": {
+        #     "kopflastig": ("Kopflastig" in w.eigenschaften),
+        #     "niederwerfen": ("Niederwerfen" in w.eigenschaften),
+        #     "parierwaffe": ("Parierwaffe" in w.eigenschaften),
+        #     "reittier": ("Reittier" in w.eigenschaften),
+        #     "ruestungsbrechend": ("Rüstungsbrechend" in w.eigenschaften),
+        #     "schild": ("Schild" in w.eigenschaften),
+        #     "schwer_4": ("Schwer (4)" in w.eigenschaften),
+        #     "schwer_8": ("Schwer (8)" in w.eigenschaften),
+        #     "stumpf": ("Stumpf" in w.eigenschaften),
+        #     "unberechenbar": ("Unberechenbar" in w.eigenschaften),
+        #     "unzerstoerbar": ("Unzerstörbar" in w.eigenschaften),
+        #     "wendig": ("Wendig" in w.eigenschaften),
+        #     "zerbrechlich": ("Zerbrechlich" in w.eigenschaften),
+        #     "zweihaendig": ("Zweihändig" in w.eigenschaften),
+        #     "kein_malus_nebenwaffe": ("kein Malus als Nebenwaffe" in w.eigenschaften)
+        # },
         "text": "",
         "aufbewahrungs_ort": "tragend",
         "bewahrt_auf": [],
@@ -81,9 +81,40 @@ def waffe_item(w):
     if w.nahkampf:
         # w.anzeigename  -> is empty
         waffe = create_item(w.anzeigename, "nahkampfwaffe")
+        wdata['eigenschaften'] = {
+            "kopflastig": ("Kopflastig" in w.eigenschaften),
+            "niederwerfen": ("Niederwerfen" in w.eigenschaften),
+            "parierwaffe": ("Parierwaffe" in w.eigenschaften),
+            "reittier": ("Reittier" in w.eigenschaften),
+            "ruestungsbrechend": ("Rüstungsbrechend" in w.eigenschaften),
+            "schild": ("Schild" in w.eigenschaften),
+            "schwer_4": ("Schwer (4)" in w.eigenschaften),
+            "schwer_8": ("Schwer (8)" in w.eigenschaften),
+            "stumpf": ("Stumpf" in w.eigenschaften),
+            "unberechenbar": ("Unberechenbar" in w.eigenschaften),
+            "unzerstoerbar": ("Unzerstörbar" in w.eigenschaften),
+            "wendig": ("Wendig" in w.eigenschaften),
+            "zerbrechlich": ("Zerbrechlich" in w.eigenschaften),
+            "zweihaendig": ("Zweihändig" in w.eigenschaften),
+            "kein_malus_nebenwaffe": ("kein Malus als Nebenwaffe" in w.eigenschaften)
+        }
     else:
         waffe = create_item(w.anzeigename, "fernkampfwaffe")
-        wdata['lz'] = w.lz  # TODO: this correct for FK? Gatsu: yup
+        wdata['lz'] = w.lz
+        wdata['eigenschaften'] = {
+            "kein_reiter": ("kein Reittier" in w.eigenschaften),
+            "niederwerfen": ("Niederwerfen" in w.eigenschaften),
+            "niederwerfen_4": ("Niederwerfen (-4)" in w.eigenschaften),
+            "niederwerfen_8": ("Niederwerfen (-8)" in w.eigenschaften),
+            "schwer_4": ("Schwer (4)" in w.eigenschaften),
+            "schwer_8": ("Schwer (8)" in w.eigenschaften),
+            "stationaer": ("stationär" in w.eigenschaften),
+            "stumpf": ("Stumpf" in w.eigenschaften),
+            "umklammern_212": ("Umklammern (-2; 12)" in w.eigenschaften),
+            "umklammern_416": ("Umklammern (-4; 16)" in w.eigenschaften),
+            "umklammern_816": ("Umklammern (-8; 16)" in w.eigenschaften),
+            "zweihaendig": ("Zweihändig" in w.eigenschaften)
+        }
     waffe['data'] = wdata
     return waffe
 
@@ -170,7 +201,7 @@ class Plugin:
             item["data"] = {
                 # "voraussetzung": ", ".join(vorteil.voraussetzungen),
                 "voraussetzung": v.voraussetzungen.anzeigetext(self.db),
-                "gruppe": v.kategorieName(Wolke.DB), # "Kampfvorteile" etc.
+                "gruppe": v.kategorie, # "Kampfvorteile" etc.
                 "text": Hilfsmethoden.fixHtml(v.text)
             }
             # print(self.char.vorteileVariable)
@@ -192,7 +223,7 @@ class Plugin:
                 "attribut_0": f.attribute[0],
                 "attribut_1": f.attribute[1],
                 "attribut_2": f.attribute[2],
-                "gruppe": f.kategorieName(Wolke.DB), # "Nahkampffertigkeiten" etc.
+                "gruppe": f.kategorie, # "Nahkampffertigkeiten" etc.
                 "text": Hilfsmethoden.fixHtml(f.text)
             }
             items.append(item)
@@ -226,7 +257,7 @@ class Plugin:
                 "attribut_0": uef.attribute[0],
                 "attribut_1": uef.attribute[1],
                 "attribut_2": uef.attribute[2],
-                "gruppe": uef.kategorieName(Wolke.DB), # "Traditionszauber" etc.
+                "gruppe": uef.kategorie, # "Traditionszauber" etc.
                 "text": Hilfsmethoden.fixHtml(uef.text),
                 "voraussetzung": uef.voraussetzungen.anzeigetext(self.db),
             }
@@ -240,7 +271,7 @@ class Plugin:
                 "fertigkeit_ausgewaehlt": "auto",
                 "fertigkeiten": ", ".join(t.fertigkeiten),
                 "text": Hilfsmethoden.fixHtml(t.text),
-                "gruppe": t.kategorieName(Wolke.DB), # "Liturgien" etc.
+                "gruppe": t.kategorie, # "Liturgien" etc.
                 "pw": -1,  # TODO: warum hat talent/zauber ein pw?? sollte aus fertigkeit kommen. Gatsu: t.probenwert ist der höchste pw aller fertigkeiten des talents
                 "vorbereitung" : t.vorbereitungszeit,
                 "reichweite" : t.reichweite,
