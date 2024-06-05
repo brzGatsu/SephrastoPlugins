@@ -37,13 +37,17 @@
                 footer.remove()
             }
             
-            //Done, callback to Sephrasto            
-            new QWebChannel(qt.webChannelTransport,
-                function(channel) {
-                    Bridge = channel.objects.Bridge;
-                    Bridge.htmlLoaded();
-                }
-            );  
+            //Done, callback to Sephrasto (but wait a bit)
+            window.requestIdleCallback(function(){
+                setTimeout(function() {         
+                    new QWebChannel(qt.webChannelTransport,
+                        function(channel) {
+                            Bridge = channel.objects.Bridge;
+                            Bridge.htmlLoaded();
+                        }
+                    );
+                }, 0);
+            });
         }
         </script>
         <style>

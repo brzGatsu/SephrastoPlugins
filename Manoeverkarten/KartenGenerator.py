@@ -710,6 +710,10 @@ habe ich mit docsmagic.de gemacht, hier werden Sleeves mit farbigen Rückseiten 
             with PdfSerializer.waitForSignal(timer.timeout):
                 timer.start(Wolke.Settings["Manöverkarten_ExportVerzögerungMs"])
 
+        QtWidgets.QApplication.processEvents()
+        webEngineView.update()
+        QtWidgets.QApplication.processEvents()
+
         pixmap = webEngineView.grab()
         pixmap.save(out_file, "JPG", 90)
 
