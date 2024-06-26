@@ -36,7 +36,7 @@ class Plugin:
                                           "Manöverkarten_Hintergrundbild" : True,
                                           "Manöverkarten_PrologAusgeben" : True,
                                           "Manöverkarten_CharaktereditorButton" : True,
-                                          "Manöverkarten_ExportVerzögerungMs" : 20,
+                                          "Manöverkarten_ExportVerzögerungMs" : 50,
                                           "Manöverkarten_FontTitle" : "Aniron",
                                           "Manöverkarten_Font" : Wolke.DefaultOSFont,
                                           "Manöverkarten_DeaktivierteKategorien" : []})

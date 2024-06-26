@@ -566,7 +566,7 @@ habe ich mit docsmagic.de gemacht, hier werden Sleeves mit farbigen Rückseiten 
     # I/O
     ###########################
 
-    def generateHtml(self, karte, forceHintergrund = False):
+    def generateHtml(self, karte, delay = 0, forceHintergrund = False):
         typName = KartenTyp.TypNamen[karte.typ]
         if karte.typ == KartenTyp.Benutzerdefiniert:
            typName = karte.subtyp
@@ -600,10 +600,12 @@ habe ich mit docsmagic.de gemacht, hier werden Sleeves mit farbigen Rückseiten 
         else:
             html = html.replace("{card_backgroundimage}", "none")
 
+        html = html.replace("{delay}", str(delay));
+
         return html, htmlPath
 
     def __writeTempPDF(self, webEngineView, karte):
-        html, htmlPath = self.generateHtml(karte)
+        html, htmlPath = self.generateHtml(karte, Wolke.Settings["Manöverkarten_ExportVerzögerungMs"])
             
         pl = QtGui.QPageLayout()
         pl.setPageSize(QtGui.QPageSize(QtCore.QSizeF(63, 88), QtGui.QPageSize.Millimeter, "", QtGui.QPageSize.ExactMatch))
@@ -612,7 +614,7 @@ habe ich mit docsmagic.de gemacht, hier werden Sleeves mit farbigen Rückseiten 
         pl.setRightMargin(0)
         pl.setBottomMargin(0)
         pl.setLeftMargin(0)
-        pfad = PdfSerializer.convertHtmlToPdf(html, htmlPath, pl, Wolke.Settings["Manöverkarten_ExportVerzögerungMs"], karte.farbe, None, webEngineView)
+        pfad = PdfSerializer.convertHtmlToPdf(html, htmlPath, pl, 0, karte.farbe, None, webEngineView)
         return [pfad, karte.titel]
 
     def cleanBookmarkName(self, name):
@@ -705,11 +707,6 @@ habe ich mit docsmagic.de gemacht, hier werden Sleeves mit farbigen Rückseiten 
         with PdfSerializer.waitForSignal(webEngineView.htmlLoaded):
             webEngineView.setHtml(html, htmlBaseUrl)
 
-        if Wolke.Settings["Manöverkarten_ExportVerzögerungMs"] > 0:
-            timer = QtCore.QTimer()
-            with PdfSerializer.waitForSignal(timer.timeout):
-                timer.start(Wolke.Settings["Manöverkarten_ExportVerzögerungMs"])
-
         QtWidgets.QApplication.processEvents()
         webEngineView.update()
         QtWidgets.QApplication.processEvents()
@@ -737,7 +734,7 @@ habe ich mit docsmagic.de gemacht, hier werden Sleeves mit farbigen Rückseiten 
 
             kartenName = nameFormat.replace("{deckname}", deckName).replace("{titel}", titel)
             path = os.path.join(os.path.dirname(spath), f"{kartenName}.jpg")
-            html, htmlPath = self.generateHtml(karte)
+            html, htmlPath = self.generateHtml(karte, Wolke.Settings["Manöverkarten_ExportVerzögerungMs"] + 150) #jpeg export seems to need a much higher delay
             self.__convertHtmlToJpg(webEngineView, path, html, htmlPath, 238, 332, 3, karte.farbe)
             progressDlg.setValue(progressDlg.value()+1)
             if progressDlg.shouldCancel():

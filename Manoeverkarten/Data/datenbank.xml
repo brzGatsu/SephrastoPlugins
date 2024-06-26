@@ -549,7 +549,7 @@ $regel:Aktion Verzögern (voll)$&lt;/p&gt;</Karte>
   <Karte name="Glück" typ="0" subtyp="0" titel="$original$" subtitel="" fusszeile="$original$" löschen="0" voraussetzungen="Vorteil Glück I">&lt;i&gt;Wirkung:&lt;/i&gt; Deine maximalen Schicksalspunkte steigen auf ...
 &lt;ul&gt;&lt;li class="checkbox"&gt;I: 5 Schicksalspunkte&lt;/li&gt;
 &lt;li class="checkbox"&gt;II: 6 Schicksalspunkte&lt;/ul&gt;</Karte>
-  <Karte name="Resistenzen und Immunitäten" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="0" voraussetzungen="Vorteil Resistenz gegen Hitze ODER Vorteil Resistenz gegen Kälte ODER Vorteil Resistenz gegen Gifte ODER Vorteil Resistenz gegen Krankheiten">&lt;b&gt;Temperatur&lt;/b&gt;
+  <Karte name="Resistenzen &amp; Immunitäten" typ="0" subtyp="0" titel="$original$" subtitel="$original$" fusszeile="$original$" löschen="0" voraussetzungen="Vorteil Resistenz gegen Hitze ODER Vorteil Resistenz gegen Kälte ODER Vorteil Resistenz gegen Gifte ODER Vorteil Resistenz gegen Krankheiten">&lt;b&gt;Temperatur&lt;/b&gt;
 &lt;ul&gt;
 &lt;li class="checkbox"&gt;Hitze: $vorteil:Resistenz gegen Hitze$&lt;/li&gt;
 &lt;li class="checkbox"&gt;Kälte: $vorteil:Resistenz gegen Kälte$&lt;/li&gt;

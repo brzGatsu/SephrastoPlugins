@@ -37,16 +37,23 @@
                 footer.remove()
             }
             
-            //Done, callback to Sephrasto (but wait a bit)
-            window.requestIdleCallback(function(){
-                setTimeout(function() {         
-                    new QWebChannel(qt.webChannelTransport,
-                        function(channel) {
-                            Bridge = channel.objects.Bridge;
-                            Bridge.htmlLoaded();
-                        }
-                    );
-                }, 0);
+            //Done, callback to Sephrasto (but wait a bit, we'll probably get a relayout)
+            var timeoutHandle = null;
+            var qtCallback = function() {
+                timeoutHandle = null;            
+                new QWebChannel(qt.webChannelTransport,
+                    function(channel) {
+                        Bridge = channel.objects.Bridge;
+                        Bridge.htmlLoaded();
+                    }
+                );
+            };
+            timeoutHandle = window.setTimeout(qtCallback, {delay});
+            window.requestAnimationFrame(function() {
+                if (timeoutHandle == null)
+                    return;
+                window.clearTimeout(timeoutHandle);
+                timeoutHandle = window.setTimeout(qtCallback, {delay});
             });
         }
         </script>

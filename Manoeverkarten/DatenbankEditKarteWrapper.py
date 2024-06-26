@@ -169,7 +169,7 @@ class DatenbankEditKarteWrapper(DatenbankElementEditorBase):
             if deckKarte is not None:
                 karte.farbe = deckKarte.farbe
 
-        html, htmlPath = generator.generateHtml(karte, forceHintergrund = True)
+        html, htmlPath = generator.generateHtml(karte, 0, forceHintergrund = True)
         self.webView.page().setBackgroundColor(karte.farbe)
         self.webView.setHtml(html, QtCore.QUrl.fromLocalFile(QtCore.QFileInfo(htmlPath).absoluteFilePath()))        
            
