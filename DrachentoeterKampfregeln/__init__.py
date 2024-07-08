@@ -21,9 +21,9 @@ class Plugin:
                 messagebox.setText("Die Drachentöter Hausregeln wurden in den Regelpfad kopiert (siehe Sephrasto-Einstellungen).\n"\
                     "Sollen sie jetzt in den Einstellungen als Standard für neue Charaktere gesetzt werden?")
                 messagebox.setIcon(QtWidgets.QMessageBox.Question)
-                messagebox.addButton("Ja", QtWidgets.QMessageBox.YesRole)
-                messagebox.addButton("Nein", QtWidgets.QMessageBox.NoRole)
+                messagebox.setStandardButtons(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+                messagebox.setDefaultButton(QtWidgets.QMessageBox.Yes)
                 result = messagebox.exec()
-                if result == 0:
+                if result == QtWidgets.QMessageBox.Yes:
                     Wolke.Settings["Datenbank"] = rulesFile
                     EinstellungenWrapper.save()

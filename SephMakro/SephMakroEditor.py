@@ -149,13 +149,12 @@ class SephMakroEditor(object):
             messagebox.setWindowTitle(action)
             messagebox.setText("Sollen die ausstehenden Änderungen gespeichert werden?")
             messagebox.setIcon(QtWidgets.QMessageBox.Question)
-            messagebox.addButton("Ja", QtWidgets.QMessageBox.YesRole)
-            messagebox.addButton("Nein", QtWidgets.QMessageBox.NoRole)
-            messagebox.addButton("Abbrechen", QtWidgets.QMessageBox.RejectRole)
+            messagebox.setStandardButtons(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No | QtWidgets.QMessageBox.Cancel)
+            messagebox.setDefaultButton(QtWidgets.QMessageBox.Yes)
             result = messagebox.exec()
-            if result == 0:
+            if result == QtWidgets.QMessageBox.Yes:
                 self.save()
-            elif result == 2:
+            elif result == QtWidgets.QMessageBox.Cancel:
                 return True
         return False
 

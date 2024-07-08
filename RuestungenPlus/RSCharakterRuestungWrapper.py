@@ -168,10 +168,10 @@ class RSCharakterRuestungWrapper(QtCore.QObject):
         infoBox.setIcon(QtWidgets.QMessageBox.Warning)
         infoBox.setText("Wenn du zwischen einfachem und Zonensystem wechselst, gilt das für alle Rüstungen. Dabei werden eventuell einige deiner Slots gelöscht, speichere deinen Charakter zur Sicherheit vorher ab. Möchtest du fortfahren?")
         infoBox.setWindowTitle("Wechsel des Rüstungssystems")
-        infoBox.addButton("Abbrechen", QtWidgets.QMessageBox.NoRole)
-        infoBox.addButton("Ja", QtWidgets.QMessageBox.YesRole)
+        infoBox.setStandardButtons(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.Cancel)
+        infoBox.setDefaultButton(QtWidgets.QMessageBox.Yes)
         result = infoBox.exec()
-        if result == 0:
+        if result == QtWidgets.QMessageBox.Cancel:
             self.ui.checkZonen.blockSignals(True)
             self.ui.checkZonen.setCheckState(QtCore.Qt.Unchecked if self.ui.checkZonen.isChecked() else QtCore.Qt.Checked)
             self.ui.checkZonen.blockSignals(False)
