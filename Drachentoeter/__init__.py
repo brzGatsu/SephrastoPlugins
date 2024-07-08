@@ -56,10 +56,10 @@ class Plugin:
                     "Sollen sie jetzt in den Einstellungen als Standard für neue Charaktere gesetzt werden?"\
                     "\n\nHinweis: Für bereits existierende Charaktere musst du Regeln und Charakterbogen manuell im Info-Tab des Charaktereditors ändern.")
                 messagebox.setIcon(QtWidgets.QMessageBox.Question)
-                messagebox.addButton("Ja", QtWidgets.QMessageBox.YesRole)
-                messagebox.addButton("Nein", QtWidgets.QMessageBox.NoRole)
+                messagebox.setStandardButtons(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+                messagebox.setDefaultButton(QtWidgets.QMessageBox.Yes)
                 result = messagebox.exec()
-                if result == 0:
+                if result == QtWidgets.QMessageBox.Yes:
                     Wolke.Settings["Datenbank"] = dtRulesFile
                     Wolke.Settings["Bogen"] = os.path.splitext(charakterbogenFile)[0]
                     EinstellungenWrapper.save()
