@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>karteDialog</class>
- <widget class="QDialog" name="karteDialog">
-  <property name="windowModality">
-   <enum>Qt::ApplicationModal</enum>
-  </property>
+ <widget class="QWidget" name="karteDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -16,8 +13,8 @@
   <property name="windowTitle">
    <string>Sephrasto - Manöverkarte bearbeiten...</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_2">
-   <item row="0" column="0">
+  <layout class="QVBoxLayout" name="verticalLayout_3">
+   <item>
     <widget class="QScrollArea" name="scrollArea">
      <property name="widgetResizable">
       <bool>true</bool>
@@ -27,34 +24,17 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>1012</width>
-        <height>625</height>
+        <width>1008</width>
+        <height>650</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout">
-       <item row="2" column="0">
+       <item row="1" column="0">
         <widget class="QGroupBox" name="gbEditor">
          <property name="title">
           <string>Editor</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_4">
-          <item row="7" column="1">
-           <widget class="QLineEdit" name="leFusszeile">
-            <property name="toolTip">
-             <string/>
-            </property>
-            <property name="text">
-             <string>$original$</string>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="0">
-           <widget class="QLabel" name="labelUntertitel">
-            <property name="text">
-             <string>Untertitel</string>
-            </property>
-           </widget>
-          </item>
           <item row="2" column="1">
            <widget class="QWidget" name="groupNewEditDelete" native="true">
             <layout class="QHBoxLayout" name="layoutEditDelete">
@@ -143,26 +123,6 @@
             </layout>
            </widget>
           </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="label">
-            <property name="minimumSize">
-             <size>
-              <width>140</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>Name</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0">
-           <widget class="QLabel" name="labelVoraussetzungen">
-            <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Voraussetzungen&lt;/p&gt;&lt;p&gt;(nur Charakterexport)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-           </widget>
-          </item>
           <item row="2" column="0">
            <widget class="QLabel" name="labelNewEditDelete">
             <property name="text">
@@ -177,6 +137,70 @@
               <width>16777215</width>
               <height>50</height>
              </size>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="leName"/>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="labelTyp">
+            <property name="text">
+             <string>Typ</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <widget class="QLabel" name="labelUntertitel">
+            <property name="text">
+             <string>Untertitel</string>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="1">
+           <widget class="QLineEdit" name="leFusszeile">
+            <property name="toolTip">
+             <string/>
+            </property>
+            <property name="text">
+             <string>$original$</string>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="1">
+           <layout class="QVBoxLayout" name="vlBeschreibung">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QPlainTextEdit" name="teBeschreibung">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="toolTip">
+               <string/>
+              </property>
+              <property name="plainText">
+               <string>$original$</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="labelTitel">
+            <property name="text">
+             <string>Titel</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="labelVoraussetzungen">
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Voraussetzungen&lt;/p&gt;&lt;p&gt;(nur Charakterexport)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
            </widget>
           </item>
@@ -314,27 +338,30 @@
             </item>
            </layout>
           </item>
-          <item row="4" column="1">
-           <widget class="QLineEdit" name="leTitel">
+          <item row="7" column="0">
+           <widget class="QLabel" name="labelFusszeile">
             <property name="text">
-             <string>$original$</string>
+             <string>Fußzeile</string>
             </property>
            </widget>
           </item>
-          <item row="0" column="1">
-           <widget class="QLineEdit" name="leName"/>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label">
+            <property name="minimumSize">
+             <size>
+              <width>140</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Name</string>
+            </property>
+           </widget>
           </item>
           <item row="6" column="0">
            <widget class="QLabel" name="labelText">
             <property name="text">
              <string>Beschreibung</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="0">
-           <widget class="QLabel" name="labelTitel">
-            <property name="text">
-             <string>Titel</string>
             </property>
            </widget>
           </item>
@@ -348,47 +375,17 @@
             </property>
            </widget>
           </item>
-          <item row="7" column="0">
-           <widget class="QLabel" name="labelFusszeile">
+          <item row="4" column="1">
+           <widget class="QLineEdit" name="leTitel">
             <property name="text">
-             <string>Fußzeile</string>
+             <string>$original$</string>
             </property>
            </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="labelTyp">
-            <property name="text">
-             <string>Typ</string>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="1">
-           <layout class="QVBoxLayout" name="vlBeschreibung">
-            <property name="spacing">
-             <number>0</number>
-            </property>
-            <item>
-             <widget class="QPlainTextEdit" name="teBeschreibung">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="toolTip">
-               <string/>
-              </property>
-              <property name="plainText">
-               <string>$original$</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
           </item>
          </layout>
         </widget>
        </item>
-       <item row="2" column="1">
+       <item row="1" column="1">
         <widget class="QGroupBox" name="gbPreview">
          <property name="title">
           <string>Vorschau</string>
@@ -396,74 +393,12 @@
          <layout class="QVBoxLayout" name="verticalLayout_2"/>
         </widget>
        </item>
-       <item row="0" column="0" colspan="2">
-        <widget class="QLabel" name="warning">
-         <property name="visible">
-          <bool>true</bool>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">background-color: rgb(255, 255, 0); color: black;</string>
-         </property>
-         <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Dies ist eine Standard-Manöverkarte. Sobald du hier etwas veränderst, bekommst du eine persönliche Kopie und das Original wird in den Hausregeln gelöscht. Damit erhältst du für diese Manöverkarte keine automatischen Updates mehr mit neuen Manöverkarten-Plugin-Versionen.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-         <property name="wordWrap">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
       </layout>
      </widget>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="QDialogButtonBox" name="buttonBox">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Save</set>
-     </property>
-     <property name="centerButtons">
-      <bool>true</bool>
-     </property>
     </widget>
    </item>
   </layout>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>buttonBox</sender>
-   <signal>accepted()</signal>
-   <receiver>karteDialog</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>219</x>
-     <y>308</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>219</x>
-     <y>166</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>buttonBox</sender>
-   <signal>rejected()</signal>
-   <receiver>karteDialog</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>219</x>
-     <y>308</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>219</x>
-     <y>166</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

@@ -18,7 +18,10 @@ class Ruestungseigenschaft:
 
     def deepequals(self, other): 
         if self.__class__ != other.__class__: return False
-        return self.__dict__ == other.__dict__
+        return self.name == other.name and \
+            self.text == other.text and \
+            self.script == other.script and \
+            self.scriptOnlyFirst == other.scriptOnlyFirst
 
     def finalize(self, db):
         self.scriptCompiled = compile_restricted(self.script or "", self.name + " Script", "exec")
@@ -42,7 +45,7 @@ class Ruestungseigenschaft:
             ser.set('scriptOnlyFirst', self.scriptOnlyFirst)
         EventBus.doAction("ruestungseigenschaft_serialisiert", { "object" : self, "serializer" : ser})
 
-    def deserialize(self, ser):
+    def deserialize(self, ser, referenceDB = None):
         self.name = ser.get('name')
         self.text = ser.get('text')
         self.script = ser.get('script', self.script)

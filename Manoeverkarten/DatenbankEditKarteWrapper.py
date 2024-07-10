@@ -16,10 +16,9 @@ import os
 
 class DatenbankEditKarteWrapper(DatenbankElementEditorBase):
     def __init__(self, datenbank, karte=None, readonly = False):
-        super().__init__()
+        super().__init__(datenbank, DatenbankEditKarte.Ui_karteDialog(), Karte, karte, readonly)
         self.beschreibungEditor = BeschreibungEditor(self, "text", "teBeschreibung", None)
         self.voraussetzungenEditor = VoraussetzungenEditor(self)
-        self.setupAndShow(datenbank, DatenbankEditKarte.Ui_karteDialog(), Karte, karte, readonly)
         
     def load(self, karte):
         super().load(karte)

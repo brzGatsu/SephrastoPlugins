@@ -93,15 +93,28 @@ class Karte:
         self.fusszeile = "$original$"
         self.löschen = False
         self.voraussetzungen = VoraussetzungenListe()
-        self.customData = {}
-        self.isUserAdded = True
 
         # Derived properties after deserialization
         self.farbe = "#000000"
+        self.customData = {}
 
     def deepequals(self, other): 
         if self.__class__ != other.__class__: return False
-        return self.__dict__ == other.__dict__
+        
+        farbeEquals = True
+        if self.typ == KartenTyp.Deck:
+            farbeEquals = self.farbe == other.farbe
+
+        return self.name == other.name and \
+            self.typ == other.typ and \
+            self.subtyp == other.subtyp and \
+            self.titel == other.titel and \
+            self.subtitel == other.subtitel and \
+            self.text == other.text and \
+            self.fusszeile == other.fusszeile and \
+            self.löschen == other.löschen and \
+            self.voraussetzungen == other.voraussetzungen and \
+            farbeEquals
 
     def finalize(self, db):
         pass
@@ -159,7 +172,7 @@ class Karte:
         ser.set('löschen', self.löschen)
         EventBus.doAction("karte_serialisiert", { "object" : self, "serializer" : ser})
 
-    def deserialize(self, ser):
+    def deserialize(self, ser, referenceDB = None):
         self.name = ser.get('name')
         self.text = ser.get('text')
         self.voraussetzungen.compile(ser.get('voraussetzungen', ''))

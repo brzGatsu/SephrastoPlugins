@@ -12,10 +12,9 @@ class RSDatenbankEditRuestungseigenschaftWrapper(DatenbankElementEditorBase):
     ScriptContext = 82
 
     def __init__(self, datenbank, ruestungseigenschaft=None, readonly = False):
-        super().__init__()
+        super().__init__(datenbank, RSDatenbankEditRuestungseigenschaft.Ui_ruestungseigenschaftDialog(), Ruestungseigenschaft.Ruestungseigenschaft, ruestungseigenschaft, readonly)
         self.beschreibungEditor = BeschreibungEditor(self)
         self.scriptEditor = ScriptEditor(self, lineLimit=2)
-        self.setupAndShow(datenbank, RSDatenbankEditRuestungseigenschaft.Ui_ruestungseigenschaftDialog(), Ruestungseigenschaft.Ruestungseigenschaft, ruestungseigenschaft, readonly)
 
     def onSetupUi(self):
         super().onSetupUi()

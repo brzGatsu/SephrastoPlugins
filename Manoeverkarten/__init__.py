@@ -411,7 +411,7 @@ bis die Bindung gelöst wird oder alle Pfeile ihr Ziel gefunden haben
             if name == "Karte":
                 k = Karte()
                 k.deserialize(deserializer)
-                self.db.loadElement(k, True, None)
+                self.db.loadElement(k)
 
     def datenbankEditorTypenHook(self, typen, params):
         typen[Karte] = DatenbankEditor.DatenbankTypWrapper(Karte, DatenbankEditKarteWrapper.DatenbankEditKarteWrapper, True)
