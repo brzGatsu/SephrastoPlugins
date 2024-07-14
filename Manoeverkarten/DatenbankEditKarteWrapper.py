@@ -15,8 +15,8 @@ from QtUtils.HtmlToolbar import HtmlToolbar
 import os
 
 class DatenbankEditKarteWrapper(DatenbankElementEditorBase):
-    def __init__(self, datenbank, karte=None, readonly = False):
-        super().__init__(datenbank, DatenbankEditKarte.Ui_karteDialog(), Karte, karte, readonly)
+    def __init__(self, datenbank, karte=None):
+        super().__init__(datenbank, DatenbankEditKarte.Ui_karteDialog(), Karte, karte)
         self.beschreibungEditor = BeschreibungEditor(self, "text", "teBeschreibung", None)
         self.voraussetzungenEditor = VoraussetzungenEditor(self)
         
