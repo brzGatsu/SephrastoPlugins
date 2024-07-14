@@ -23,8 +23,8 @@ class Plugin:
 
     def dbeClassFertigkeitFilter(self, editorType, params):
         class DatenbankEditFertigkeitWrapperPlus(editorType):
-            def __init__(self, datenbank, fertigkeit=None, readonly=False):
-                super().__init__(datenbank, fertigkeit, readonly)
+            def __init__(self, datenbank, fertigkeit=None):
+                super().__init__(datenbank, fertigkeit)
 
             def onSetupUi(self):
                 super().onSetupUi()
