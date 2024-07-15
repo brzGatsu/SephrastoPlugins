@@ -269,6 +269,8 @@ class Plugin:
                 self.ui.horizontalLayout_3.addWidget(self.ui.spinWMVT)
                 self.ui.comboTalent.currentTextChanged.connect(self.updateVTWM)
 
+                self.registerInput(self.ui.spinWMVT, self.ui.labelWM)
+
             def load(self, waffe):
                 self.ui.spinWMVT.setValue(waffe.wmVt)
                 super().load(waffe)

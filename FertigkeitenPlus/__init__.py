@@ -36,6 +36,8 @@ class Plugin:
                 self.ui.comboAttribut4.addItems(["-"] + attribute)
                 self.ui.horizontalLayout.insertWidget(5, self.ui.comboAttribut4Separator)
                 self.ui.horizontalLayout.insertWidget(6, self.ui.comboAttribut4)
+                
+                self.registerInput(self.ui.comboAttribut4, self.ui.labelAttribute)
 
             def load(self, fertigkeit):
                 super().load(fertigkeit)

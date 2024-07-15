@@ -32,7 +32,7 @@ class Ui_karteDialog(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 1008, 650))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 1012, 654))
         self.gridLayout = QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout.setObjectName(u"gridLayout")
         self.gbEditor = QGroupBox(self.scrollAreaWidgetContents)
@@ -195,16 +195,16 @@ class Ui_karteDialog(object):
 
         self.gridLayout_4.addWidget(self.labelFusszeile, 7, 0, 1, 1)
 
-        self.label = QLabel(self.gbEditor)
-        self.label.setObjectName(u"label")
-        self.label.setMinimumSize(QSize(140, 0))
+        self.labelName = QLabel(self.gbEditor)
+        self.labelName.setObjectName(u"labelName")
+        self.labelName.setMinimumSize(QSize(140, 0))
 
-        self.gridLayout_4.addWidget(self.label, 0, 0, 1, 1)
+        self.gridLayout_4.addWidget(self.labelName, 0, 0, 1, 1)
 
-        self.labelText = QLabel(self.gbEditor)
-        self.labelText.setObjectName(u"labelText")
+        self.labelBeschreibung = QLabel(self.gbEditor)
+        self.labelBeschreibung.setObjectName(u"labelBeschreibung")
 
-        self.gridLayout_4.addWidget(self.labelText, 6, 0, 1, 1)
+        self.gridLayout_4.addWidget(self.labelBeschreibung, 6, 0, 1, 1)
 
         self.leUntertitel = QLineEdit(self.gbEditor)
         self.leUntertitel.setObjectName(u"leUntertitel")
@@ -268,8 +268,8 @@ class Ui_karteDialog(object):
 
         self.labelFarbeGewaehlt.setText("")
         self.labelFusszeile.setText(QCoreApplication.translate("karteDialog", u"Fu\u00dfzeile", None))
-        self.label.setText(QCoreApplication.translate("karteDialog", u"Name", None))
-        self.labelText.setText(QCoreApplication.translate("karteDialog", u"Beschreibung", None))
+        self.labelName.setText(QCoreApplication.translate("karteDialog", u"Name", None))
+        self.labelBeschreibung.setText(QCoreApplication.translate("karteDialog", u"Beschreibung", None))
 #if QT_CONFIG(tooltip)
         self.leUntertitel.setToolTip("")
 #endif // QT_CONFIG(tooltip)

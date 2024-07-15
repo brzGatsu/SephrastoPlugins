@@ -32,13 +32,13 @@ class Ui_ruestungseigenschaftDialog(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents_2 = QWidget()
         self.scrollAreaWidgetContents_2.setObjectName(u"scrollAreaWidgetContents_2")
-        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 459, 571))
+        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 463, 575))
         self.gridLayout = QGridLayout(self.scrollAreaWidgetContents_2)
         self.gridLayout.setObjectName(u"gridLayout")
-        self.label = QLabel(self.scrollAreaWidgetContents_2)
-        self.label.setObjectName(u"label")
+        self.labelName = QLabel(self.scrollAreaWidgetContents_2)
+        self.labelName.setObjectName(u"labelName")
 
-        self.gridLayout.addWidget(self.label, 0, 0, 1, 1)
+        self.gridLayout.addWidget(self.labelName, 0, 0, 1, 1)
 
         self.leName = QLineEdit(self.scrollAreaWidgetContents_2)
         self.leName.setObjectName(u"leName")
@@ -83,15 +83,15 @@ class Ui_ruestungseigenschaftDialog(object):
 
         self.gridLayout.addWidget(self.tabWidget, 1, 1, 1, 1)
 
-        self.label_2 = QLabel(self.scrollAreaWidgetContents_2)
-        self.label_2.setObjectName(u"label_2")
+        self.labelScript = QLabel(self.scrollAreaWidgetContents_2)
+        self.labelScript.setObjectName(u"labelScript")
 
-        self.gridLayout.addWidget(self.label_2, 2, 0, 1, 1)
+        self.gridLayout.addWidget(self.labelScript, 2, 0, 1, 1)
 
-        self.label_5 = QLabel(self.scrollAreaWidgetContents_2)
-        self.label_5.setObjectName(u"label_5")
+        self.labelBeschreibung = QLabel(self.scrollAreaWidgetContents_2)
+        self.labelBeschreibung.setObjectName(u"labelBeschreibung")
 
-        self.gridLayout.addWidget(self.label_5, 1, 0, 1, 1)
+        self.gridLayout.addWidget(self.labelBeschreibung, 1, 0, 1, 1)
 
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.setObjectName(u"horizontalLayout")
@@ -123,12 +123,12 @@ class Ui_ruestungseigenschaftDialog(object):
 
     def retranslateUi(self, ruestungseigenschaftDialog):
         ruestungseigenschaftDialog.setWindowTitle(QCoreApplication.translate("ruestungseigenschaftDialog", u"Sephrasto - R\u00fcstungseigenschaft bearbeiten...", None))
-        self.label.setText(QCoreApplication.translate("ruestungseigenschaftDialog", u"Name", None))
+        self.labelName.setText(QCoreApplication.translate("ruestungseigenschaftDialog", u"Name", None))
         self.checkOnlyFirst.setText(QCoreApplication.translate("ruestungseigenschaftDialog", u"Script nur bei erster R\u00fcstung ausf\u00fchren", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QCoreApplication.translate("ruestungseigenschaftDialog", u"HTML", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), QCoreApplication.translate("ruestungseigenschaftDialog", u"Vorschau", None))
-        self.label_2.setText(QCoreApplication.translate("ruestungseigenschaftDialog", u"Script", None))
-        self.label_5.setText(QCoreApplication.translate("ruestungseigenschaftDialog", u"Beschreibung", None))
+        self.labelScript.setText(QCoreApplication.translate("ruestungseigenschaftDialog", u"Script", None))
+        self.labelBeschreibung.setText(QCoreApplication.translate("ruestungseigenschaftDialog", u"Beschreibung", None))
         self.buttonPickScript.setText(QCoreApplication.translate("ruestungseigenschaftDialog", u"+", None))
         self.buttonPickScript.setProperty("class", QCoreApplication.translate("ruestungseigenschaftDialog", u"iconSmall", None))
     # retranslateUi

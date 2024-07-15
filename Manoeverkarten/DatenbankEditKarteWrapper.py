@@ -13,12 +13,30 @@ from QtUtils.WebEngineViewPlus import WebEngineViewPlus
 from Manoeverkarten import KartenGenerator
 from QtUtils.HtmlToolbar import HtmlToolbar
 import os
+import shiboken6
 
 class DatenbankEditKarteWrapper(DatenbankElementEditorBase):
     def __init__(self, datenbank, karte=None):
         super().__init__(datenbank, DatenbankEditKarte.Ui_karteDialog(), Karte, karte)
         self.beschreibungEditor = BeschreibungEditor(self, "text", "teBeschreibung", None)
         self.voraussetzungenEditor = VoraussetzungenEditor(self)
+        
+    def onSetupUi(self):
+        super().onSetupUi()
+        
+        ui = self.ui
+        self.registerInput(ui.leName, ui.labelName)
+        self.registerInput(ui.comboTyp, ui.labelTyp)
+        self.registerInput(ui.comboSubtyp, ui.labelSubtyp)
+        self.registerInput(ui.labelFarbeGewaehlt, ui.labelFarbe)
+        self.registerInput(ui.leName, ui.labelNewEditDelete)
+        self.registerInput(ui.radioEdit, ui.labelName)
+        self.registerInput(ui.radioDelete, ui.labelName)
+        self.registerInput(ui.teVoraussetzungen, ui.labelVoraussetzungen)
+        self.registerInput(ui.leTitel, ui.labelTitel)
+        self.registerInput(ui.leUntertitel, ui.labelUntertitel)
+        self.registerInput(ui.teBeschreibung, ui.labelBeschreibung)
+        self.registerInput(ui.leFusszeile, ui.labelFusszeile)
         
     def load(self, karte):
         super().load(karte)
@@ -122,6 +140,9 @@ class DatenbankEditKarteWrapper(DatenbankElementEditorBase):
         self.updateTimer.start(1000)
 
     def updateWebView(self):
+        if not shiboken6.isValid(self.webView):
+            return
+
         karte = Karte()
         self.update(karte)
         original = KartenUtility.getOriginalElement(self.datenbank, karte.name, karte.typ)
@@ -238,7 +259,7 @@ class DatenbankEditKarteWrapper(DatenbankElementEditorBase):
         self.ui.leUntertitel.setEnabled(not delete)
         self.ui.labelVoraussetzungen.setEnabled(not delete)
         self.ui.teVoraussetzungen.setEnabled(not delete)
-        self.ui.labelText.setEnabled(not delete)
+        self.ui.labelBeschreibung.setEnabled(not delete)
         self.ui.teBeschreibung.setEnabled(not delete)
         self.ui.labelFusszeile.setEnabled(not delete)
         self.ui.leFusszeile.setEnabled(not delete)
