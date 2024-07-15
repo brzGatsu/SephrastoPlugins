@@ -16,6 +16,14 @@ from Scripts import Script, ScriptParameter
 # Add dynamic properties to WaffeDefinition and Waffe that work exactly like the implementation of "wm"
 # The only difference is that WaffeDefinition returns wm if wmVt was never set.
 WaffeDefinition.wmVt = property(lambda self: self._wmVt if hasattr(self, "_wmVt") else self.wm).setter(lambda self, v: setattr(self, "_wmVt", v))
+
+deepEqualsOld = WaffeDefinition.deepequals
+
+def deepequals(self, other): 
+    return deepEqualsOld(self, other) and self.wmVt == other.wmVt
+
+WaffeDefinition.deepequals = deepequals
+
 Waffe.wmVt = property(lambda self: self._wmVtOverride if hasattr(self, "_wmVtOverride") else self.definition.wmVt).setter(lambda self, v: setattr(self, "_wmVtOverride", v))
 
 class Plugin:
