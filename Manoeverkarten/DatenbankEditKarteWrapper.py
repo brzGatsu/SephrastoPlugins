@@ -202,6 +202,8 @@ class DatenbankEditKarteWrapper(DatenbankElementEditorBase):
         self.ui.comboSubtyp.setStyleSheet("")
         self.ui.comboSubtyp.setToolTip("")
         prevSubtypIndex = self.ui.comboSubtyp.currentIndex()
+        prevSubtypItems = [self.ui.comboSubtyp.itemText(i) for i in range(self.ui.comboSubtyp.count())]
+
         self.ui.comboSubtyp.clear()
         isNew = KartenUtility.isNew(self.datenbank, self.ui.leName.text(), self.ui.comboTyp.currentIndex())
         self.ui.comboSubtyp.setVisible(self.ui.comboTyp.currentIndex() != KartenTyp.Deck)
@@ -210,16 +212,10 @@ class DatenbankEditKarteWrapper(DatenbankElementEditorBase):
         originalElement = KartenUtility.getOriginalElement(self.datenbank, self.ui.leName.text(), self.ui.comboTyp.currentIndex())
         if self.ui.comboTyp.currentIndex() == KartenTyp.Vorteil:
             self.ui.comboSubtyp.addItems(self.datenbank.einstellungen["Vorteile: Kategorien"].wert.keyList)
-            if originalElement is not None:
-                self.ui.comboSubtyp.setCurrentIndex(originalElement.kategorie)
         elif self.ui.comboTyp.currentIndex() == KartenTyp.Regel:
             self.ui.comboSubtyp.addItems(self.datenbank.einstellungen["Regeln: Kategorien"].wert.keyList)
-            if originalElement is not None:
-                self.ui.comboSubtyp.setCurrentIndex(originalElement.kategorie)
         elif self.ui.comboTyp.currentIndex() == KartenTyp.Talent:
             self.ui.comboSubtyp.addItems(self.datenbank.einstellungen["Talente: Kategorien"].wert.keyList)
-            if originalElement is not None:
-                self.ui.comboSubtyp.setCurrentIndex(originalElement.kategorie)
         elif self.ui.comboTyp.currentIndex() == KartenTyp.Benutzerdefiniert:
             typen = KartenUtility.getBenutzerdefinierteTypen(self.datenbank)
             if len(typen) == 0:
@@ -228,7 +224,11 @@ class DatenbankEditKarteWrapper(DatenbankElementEditorBase):
                 self.ui.comboSubtyp.setToolTip("Erstelle erst ein neues Deck")
             else:
                 self.ui.comboSubtyp.addItems(typen)
-                self.ui.comboSubtyp.setCurrentIndex(prevSubtypIndex)
+                
+        if originalElement is not None:
+            self.ui.comboSubtyp.setCurrentIndex(originalElement.kategorie)
+        elif Hilfsmethoden.ArrayEqual([self.ui.comboSubtyp.itemText(i) for i in range(self.ui.comboSubtyp.count())], prevSubtypItems):
+            self.ui.comboSubtyp.setCurrentIndex(prevSubtypIndex)
 
         self.ui.labelTitel.setVisible(not isNew)
         self.ui.leTitel.setVisible(not isNew)
