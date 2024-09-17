@@ -16,11 +16,12 @@ from Scripts import Script, ScriptParameter
 # Add dynamic properties to WaffeDefinition and Waffe that work exactly like the implementation of "wm"
 # The only difference is that WaffeDefinition returns wm if wmVt was never set.
 WaffeDefinition.wmVt = property(lambda self: self._wmVt if hasattr(self, "_wmVt") else self.wm).setter(lambda self, v: setattr(self, "_wmVt", v))
+WaffeDefinition.preis = property(lambda self: self._preis if hasattr(self, "_preis") else 0).setter(lambda self, v: setattr(self, "_preis", v))
 
 deepEqualsOld = WaffeDefinition.deepequals
 
 def deepequals(self, other): 
-    return deepEqualsOld(self, other) and self.wmVt == other.wmVt
+    return deepEqualsOld(self, other) and self.wmVt == other.wmVt and self.preis == other.preis
 
 WaffeDefinition.deepequals = deepequals
 
@@ -44,7 +45,7 @@ class Plugin:
         return self.db.einstellungen["WaffenPlus Plugin: Separater VT-WM"].wert
 
     def changesDatabase(self):
-        return self.db.einstellungen["WaffenPlus Plugin: Separater VT-WM"].wert
+        return self.db.einstellungen["WaffenPlus Plugin: Separater VT-WM"].wert or self.db.einstellungen["WaffenPlus Plugin: Preis anzeigen"].wert
 
     def basisDatenbankGeladenHandler(self, params):
         self.db = params["datenbank"]
@@ -71,6 +72,20 @@ class Plugin:
         e.typ = "TextList"
         self.db.loadElement(e)
 
+        e = DatenbankEinstellung()
+        e.name = "WaffenPlus Plugin: Preis anzeigen"
+        e.beschreibung = "Ermöglicht es, im Datenbankeditor bei Waffen Preise anzugeben. Diese werden dann im Waffenauswahlfenster des Charaktereditors angezeigt."
+        e.text = "False"
+        e.typ = "Bool"
+        self.db.loadElement(e)
+
+        e = DatenbankEinstellung()
+        e.name = "WaffenPlus Plugin: Härte anzeigen"
+        e.beschreibung = "Ermöglicht es, im Datenbank- und im Charakereditor bei Waffen die Härte auszublenden."
+        e.text = "True"
+        e.typ = "Bool"
+        self.db.loadElement(e)
+
         e = self.db.einstellungen["Charakter aktualisieren Script"]
         e.text = e.text.replace("vt = pw + getKampfstilVT(kampfstil) + getWaffeWM(idx) - be",
                                 "vt = pw + getKampfstilVT(kampfstil) + getWaffeWMVT(idx) - be")
@@ -92,16 +107,19 @@ class Plugin:
         return scripts
 
     def waffedefinitionSerialisiertHandler(self, params):
-        if not self.db.einstellungen["WaffenPlus Plugin: Separater VT-WM"].wert:
-            return
         ser = params["serializer"]
         waffe = params["object"]
-        ser.set("wmVt", waffe.wmVt)
+    
+        if self.db.einstellungen["WaffenPlus Plugin: Separater VT-WM"].wert:
+            ser.set("wmVt", waffe.wmVt)
+        if self.db.einstellungen["WaffenPlus Plugin: Preis anzeigen"].wert:
+            ser.set("preis", waffe.preis)
 
     def waffedefinitionDeserialisiertHandler(self, params):
         ser = params["deserializer"]
         waffe = params["object"]
         waffe.wmVt = ser.getInt("wmVt", waffe.wm)
+        waffe.preis = ser.getInt("preis", waffe.preis)
 
     def waffeSerialisiertHandler(self, params):
         if not self.db.einstellungen["WaffenPlus Plugin: Separater VT-WM"].wert:
@@ -120,48 +138,56 @@ class Plugin:
     ############################
 
     def provideWaffenWrapperHook(self, base, params):
-        if not self.db.einstellungen["WaffenPlus Plugin: Separater VT-WM"].wert:
-            return base
-
         class IAWaffenWrapper(base):
             def __init__(self):
                 super().__init__()
-                self.ui.labelWM.setText("WM AT/VT")
-                self.spinWM2 = []
-                self.spinWM2Layout = []
-                for i in range(8):
-                    spin = QtWidgets.QSpinBox()
-                    spin.setAlignment(QtCore.Qt.AlignCenter)
-                    spin.setButtonSymbols(QtWidgets.QAbstractSpinBox.PlusMinus)
-                    spin.valueChanged.connect(self.updateWaffen)
-                    spin.setMinimum(-99)
-                    spin.setMaximum(99)
+                
+                if not Wolke.DB.einstellungen["WaffenPlus Plugin: Härte anzeigen"].wert:
+                   self.ui.labelHaerte.setVisible(False)
+                   for spin in self.spinHärte:
+                       spin.setVisible(False)
 
-                    layout = QtWidgets.QHBoxLayout()
-                    widgetItem = self.ui.Waffen.itemAtPosition(3 + i*4, 4)
-                    layout.addWidget(widgetItem.widget())
-                    layout.addWidget(QtWidgets.QLabel(" / "))
-                    layout.addWidget(spin)
-                    self.ui.Waffen.addLayout(layout, 3 + i*4, 4, 1, 1)
-                    self.spinWM2.append(spin)
-                    self.spinWM2Layout.append(layout)
+                if Wolke.DB.einstellungen["WaffenPlus Plugin: Separater VT-WM"].wert:
+                    self.ui.labelWM.setText("WM AT/VT")
+                    self.spinWM2 = []
+                    self.spinWM2Layout = []
+                    for i in range(8):
+                        spin = QtWidgets.QSpinBox()
+                        spin.setAlignment(QtCore.Qt.AlignCenter)
+                        spin.setButtonSymbols(QtWidgets.QAbstractSpinBox.PlusMinus)
+                        spin.valueChanged.connect(self.updateWaffen)
+                        spin.setMinimum(-99)
+                        spin.setMaximum(99)
 
-                    self.form.setTabOrder(self.spinWM[i], spin)
-                    self.form.setTabOrder(spin, self.spinLZ[i])
+                        layout = QtWidgets.QHBoxLayout()
+                        widgetItem = self.ui.Waffen.itemAtPosition(3 + i*4, 4)
+                        layout.addWidget(widgetItem.widget())
+                        layout.addWidget(QtWidgets.QLabel(" / "))
+                        layout.addWidget(spin)
+                        self.ui.Waffen.addLayout(layout, 3 + i*4, 4, 1, 1)
+                        self.spinWM2.append(spin)
+                        self.spinWM2Layout.append(layout)
+
+                        self.form.setTabOrder(self.spinWM[i], spin)
+                        self.form.setTabOrder(spin, self.spinLZ[i])
 
             def loadWeaponIntoFields(self, W, index):
                 super().loadWeaponIntoFields(W, index)
-                isEmpty = W.name == ""
-                vtVerboten = W.isVTVerboten(Wolke.DB)
-                self.spinWM2[index].setEnabled(not isEmpty and not vtVerboten)
-                if vtVerboten:
-                    self.spinWM2[index].setValue(0)
-                else:
-                    self.spinWM2[index].setValue(W.wmVt)
+                
+                if Wolke.DB.einstellungen["WaffenPlus Plugin: Separater VT-WM"].wert:
+                    isEmpty = W.name == ""
+                    vtVerboten = W.isVTVerboten(Wolke.DB)
+                    self.spinWM2[index].setEnabled(not isEmpty and not vtVerboten)
+                    if vtVerboten:
+                        self.spinWM2[index].setValue(0)
+                    else:
+                        self.spinWM2[index].setValue(W.wmVt)
 
             def createWaffe(self, index):
                 W = super().createWaffe(index)
-                W.wmVt = self.spinWM2[index].value()
+                
+                if Wolke.DB.einstellungen["WaffenPlus Plugin: Separater VT-WM"].wert:
+                    W.wmVt = self.spinWM2[index].value()
                 return W
 
             def diffWaffeDefinition(self, waffe):
@@ -175,7 +201,9 @@ class Plugin:
                     härteDiff = 0
 
                 atWMDiff = waffe.wm - waffe.definition.wm
-                vtWMDiff = waffe.wmVt - waffe.definition.wmVt
+                vtWMDiff = 0
+                if Wolke.DB.einstellungen["WaffenPlus Plugin: Separater VT-WM"].wert:
+                    vtWMDiff = waffe.wmVt - waffe.definition.wmVt
                 rwDiff = waffe.rw - waffe.definition.rw
                 lzDiff = 0
                 if waffe.fernkampf:
@@ -203,17 +231,20 @@ class Plugin:
                     diff.append("RW " + ("+" if rwDiff >= 0 else "") + str(rwDiff))
                 if atWMDiff != 0 or vtWMDiff != 0:
                     diff.append("WM ")
-                    if waffe.isATVerboten(Wolke.DB):
-                        diff[-1] += "-"
+                    if Wolke.DB.einstellungen["WaffenPlus Plugin: Separater VT-WM"].wert:
+                        if waffe.isATVerboten(Wolke.DB):
+                            diff[-1] += "-"
+                        else:
+                            diff[-1] += ("+" if atWMDiff >= 0 else "") + str(atWMDiff)
+                        if waffe.isVTVerboten(Wolke.DB):
+                            diff[-1] += "/-"
+                        else:
+                            diff[-1] += "/" + ("+" if vtWMDiff >= 0 else "") + str(vtWMDiff)
                     else:
                         diff[-1] += ("+" if atWMDiff >= 0 else "") + str(atWMDiff)
-                    if waffe.isVTVerboten(Wolke.DB):
-                        diff[-1] += "/-"
-                    else:
-                        diff[-1] += "/" + ("+" if vtWMDiff >= 0 else "") + str(vtWMDiff)
                 if lzDiff != 0:
                     diff.append("LZ " + ("+" if lzDiff >= 0 else "") + str(lzDiff))
-                if härteDiff != 0:
+                if Wolke.DB.einstellungen["WaffenPlus Plugin: Härte anzeigen"].wert and härteDiff != 0:
                     diff.append("Härte " + ("+" if härteDiff >= 0 else "") + str(härteDiff))
                 if len(eigPlusDiff) > 0:
                     diff.append(f"<span style='{Wolke.FontAwesomeCSS}'>\u002b</span>&nbsp;&nbsp;" + ", ".join(eigPlusDiff))
@@ -227,27 +258,45 @@ class Plugin:
         return IAWaffenWrapper
 
     def provideWaffenPickerWrapperHook(self, base, params):
-        if not self.db.einstellungen["WaffenPlus Plugin: Separater VT-WM"].wert:
-            return base
         class IAWaffenPicker(base):
             def __init__(self, W = None):
                 super().__init__(W)
+                
+            def onSetupUi(self):
+                super().onSetupUi()
+                if Wolke.DB.einstellungen["WaffenPlus Plugin: Preis anzeigen"].wert:
+                    self.ui.labelPreis = QtWidgets.QLabel()
+                    self.ui.labelPreis.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignVCenter)
+                    self.ui.formLayout.insertRow(11, "Preis", self.ui.labelPreis)
+                    
+                if not Wolke.DB.einstellungen["WaffenPlus Plugin: Härte anzeigen"].wert:
+                    self.ui.formLayout.setRowVisible(self.ui.labelHaerte, False)
 
             def updateInfo(self):
-                self.ui.labelWM_Text.setText("Waffenmodifikator AT/VT")
                 super().updateInfo()
+                if Wolke.DB.einstellungen["WaffenPlus Plugin: Separater VT-WM"].wert:
+                    self.ui.labelWM.setText("Waffenmodifikator AT/VT")
+                if Wolke.DB.einstellungen["WaffenPlus Plugin: Preis anzeigen"].wert:
+                    self.ui.labelPreis.setText("0 ST")
+                    
                 if self.current == "":
                     return
+
                 W = Wolke.DB.waffen[self.current]
-                wmAT = ("+" if W.wm > 0 else "") + str(W.wm)
-                wmVT = ("+" if W.wmVt > 0 else "") + str(W.wmVt)
+                
+                if Wolke.DB.einstellungen["WaffenPlus Plugin: Separater VT-WM"].wert:
+                    wmAT = ("+" if W.wm > 0 else "") + str(W.wm)
+                    wmVT = ("+" if W.wmVt > 0 else "") + str(W.wmVt)
 
-                if W.isATVerboten(Wolke.DB):
-                    wmAT = "-"
-                if W.isVTVerboten(Wolke.DB):
-                    wmVT = "-"
+                    if W.isATVerboten(Wolke.DB):
+                        wmAT = "-"
+                    if W.isVTVerboten(Wolke.DB):
+                        wmVT = "-"
 
-                self.ui.labelWM.setText(f"{wmAT}/{wmVT}")
+                    self.ui.labelWMWert.setText(f"{wmAT}/{wmVT}")
+                    
+                if Wolke.DB.einstellungen["WaffenPlus Plugin: Preis anzeigen"].wert:
+                    self.ui.labelPreis.setText(str(W.preis) + " ST")
 
         return IAWaffenPicker
 
@@ -256,43 +305,65 @@ class Plugin:
     ############################
 
     def dbeClassWaffeFilter(self, editorType, params):
-        if not self.db.einstellungen["WaffenPlus Plugin: Separater VT-WM"].wert:
-            return editorType
-
         class DatenbankEditWaffeWrapperPlus(editorType):
             def __init__(self, datenbank, fertigkeit=None):
                 super().__init__(datenbank, fertigkeit)
 
             def onSetupUi(self):
                 super().onSetupUi()
-                self.ui.labelWMSeparator = QtWidgets.QLabel()
-                self.ui.labelWMSeparator.setText("/")
-                self.ui.spinWMVT = QtWidgets.QSpinBox()
-                self.ui.spinWMVT.setMinimumSize(QtCore.QSize(50, 0))
-                self.ui.spinWMVT.setAlignment(QtCore.Qt.AlignCenter)
-                self.ui.spinWMVT.setButtonSymbols(QtWidgets.QAbstractSpinBox.PlusMinus)
-                self.ui.spinWMVT.setMinimum(-99)
-                self.ui.spinWMVT.setMaximum(99)
-                self.ui.horizontalLayout_3.addWidget(self.ui.labelWMSeparator)
-                self.ui.horizontalLayout_3.addWidget(self.ui.spinWMVT)
-                self.ui.comboTalent.currentTextChanged.connect(self.updateVTWM)
+                if self.datenbank.einstellungen["WaffenPlus Plugin: Separater VT-WM"].wert:
+                    self.ui.labelWMSeparator = QtWidgets.QLabel()
+                    self.ui.labelWMSeparator.setText("/")
+                    self.ui.spinWMVT = QtWidgets.QSpinBox()
+                    self.ui.spinWMVT.setMinimumSize(QtCore.QSize(50, 0))
+                    self.ui.spinWMVT.setAlignment(QtCore.Qt.AlignCenter)
+                    self.ui.spinWMVT.setButtonSymbols(QtWidgets.QAbstractSpinBox.PlusMinus)
+                    self.ui.spinWMVT.setMinimum(-99)
+                    self.ui.spinWMVT.setMaximum(99)
+                    self.ui.horizontalLayout_3.addWidget(self.ui.labelWMSeparator)
+                    self.ui.horizontalLayout_3.addWidget(self.ui.spinWMVT)
+                    self.ui.comboTalent.currentTextChanged.connect(self.updateVTWM)
+                    self.registerInput(self.ui.spinWMVT, self.ui.labelWM)
 
-                self.registerInput(self.ui.spinWMVT, self.ui.labelWM)
+                if self.datenbank.einstellungen["WaffenPlus Plugin: Preis anzeigen"].wert:
+                    self.ui.labelPreis = QtWidgets.QLabel("Preis")
+                    self.ui.spinPreis = QtWidgets.QSpinBox()
+                    self.ui.spinPreis.setMinimumSize(QtCore.QSize(50, 0))
+                    self.ui.spinPreis.setAlignment(QtCore.Qt.AlignCenter)
+                    self.ui.spinPreis.setButtonSymbols(QtWidgets.QAbstractSpinBox.PlusMinus)
+                    self.ui.spinPreis.setMinimum(0)
+                    self.ui.spinPreis.setMaximum(99999)
+                    self.ui.preisLayout = QtWidgets.QHBoxLayout()
+                    self.ui.preisLayout.addStretch()
+                    self.ui.preisLayout.addWidget(self.ui.spinPreis)
+                    self.ui.formLayout.insertRow(7, self.ui.labelPreis, self.ui.preisLayout)
+                    self.registerInput(self.ui.spinPreis, self.ui.labelPreis)
+
+                if not self.datenbank.einstellungen["WaffenPlus Plugin: Härte anzeigen"].wert:
+                    self.ui.formLayout.setRowVisible(self.ui.labelHaerte, False)
 
             def load(self, waffe):
-                self.ui.spinWMVT.setValue(waffe.wmVt)
+                if self.datenbank.einstellungen["WaffenPlus Plugin: Separater VT-WM"].wert:
+                    self.ui.spinWMVT.setValue(waffe.wmVt)
+                if self.datenbank.einstellungen["WaffenPlus Plugin: Preis anzeigen"].wert:
+                    self.ui.spinPreis.setValue(waffe.preis)
                 super().load(waffe)
 
             def update(self, waffe):
                 super().update(waffe)
-                if not waffe.isVTVerboten(self.datenbank):
-                    waffe.wmVt = int(self.ui.spinWMVT.value())
+                if self.datenbank.einstellungen["WaffenPlus Plugin: Separater VT-WM"].wert:
+                    if not waffe.isVTVerboten(self.datenbank):
+                        waffe.wmVt = int(self.ui.spinWMVT.value())
+                if self.datenbank.einstellungen["WaffenPlus Plugin: Preis anzeigen"].wert:
+                    waffe.preis = self.ui.spinPreis.value()
 
             def nameChanged(self):
                 super().nameChanged()
                 self.updateVTWM()
 
             def updateVTWM(self):
+                if not self.datenbank.einstellungen["WaffenPlus Plugin: Separater VT-WM"].wert:
+                    return
                 name = self.ui.leName.text()
                 talent = self.ui.comboTalent.currentText()
                 vtVerboten = talent in self.datenbank.einstellungen["Waffen: Talente VT verboten"].wert or \
