@@ -3,17 +3,25 @@ from PySide6 import QtWidgets, QtCore, QtGui
 from EventBus import EventBus
 from Core.DatenbankEinstellung import DatenbankEinstellung
 from Core.Ruestung import Ruestung, RuestungDefinition
-from Hilfsmethoden import Hilfsmethoden
+from Hilfsmethoden import Hilfsmethoden, SortedCategoryToListDict
 from RuestungenPlus.RSCharakterRuestungWrapper import RSCharakterRuestungWrapper
 from Wolke import Wolke
 import DatenbankEditor
 from RuestungenPlus import RSDatenbankEditRuestungseigenschaftWrapper, Ruestungseigenschaft
 import copy
 import re
-from Core.Ruestung import Ruestung
+from Core.Ruestung import RuestungDefinition, Ruestung
 from Scripts import Script, ScriptParameter
 
 # Add dynamic properties to Ruestung
+RuestungDefinition.preis = property(lambda self: self._preis if hasattr(self, "_preis") else 0).setter(lambda self, v: setattr(self, "_preis", v))
+
+deepEqualsOld = RuestungDefinition.deepequals
+def deepequals(self, other): 
+    return deepEqualsOld(self, other) and self.preis == other.preis
+
+RuestungDefinition.deepequals = deepequals
+
 def ruestungGetEigenschaften(self):
     if not hasattr(self, "_eigenschaften"):
         self._eigenschaften = []
@@ -45,8 +53,12 @@ class Plugin:
         EventBus.addAction("charakter_instanziiert", self.charakterInstanziiertHandler)
         EventBus.addAction("charakter_deserialisiert", self.charakterDeserialisiertHandler)
         EventBus.addAction("charakter_serialisiert", self.charakterSerialisiertHandler, 100)
-        EventBus.addAction("ruestung_deserialisiert", self.rüstungDeserialisiertHandler)
+        EventBus.addAction("ruestungdefinition_serialisiert", self.rüstungdefinitionSerialisiertHandler)
+        EventBus.addAction("ruestungdefinition_deserialisiert", self.rüstungdefinitionDeserialisiertHandler)
         EventBus.addAction("ruestung_serialisiert", self.rüstungSerialisiertHandler)
+        EventBus.addAction("ruestung_deserialisiert", self.rüstungDeserialisiertHandler)
+        
+        EventBus.addFilter("dbe_class_ruestungdefinition_wrapper", self.dbeClassRüstungFilter)
 
     def changesCharacter(self):
         return self.db.einstellungen["RüstungenPlus Plugin: Aktivieren"].wert
@@ -68,6 +80,13 @@ class Plugin:
         e.name = "RüstungenPlus Plugin: Rüstungseigenschaften"
         e.beschreibung = "Falls aktiviert, erhalten alle Rüstungsslots eine weitere Spalte für Rüstungseigenschaften. Diese können im Datenbankeditor angelegt und wie Waffeneigenschaften mit Scripts versehen werden. "+\
             "Die Eigenschaften werden dann im Beschreibungsfeld der Rüstungen angegeben. Die bestehenden Beschreibungen sollten also nach Aktivierung als erstes bei allen Rüstungen geleert werden."
+        e.text = "False"
+        e.typ = "Bool"
+        self.db.loadElement(e)
+
+        e = DatenbankEinstellung()
+        e.name = "RüstungenPlus Plugin: Preis anzeigen"
+        e.beschreibung = "Ermöglicht es, im Datenbankeditor bei Rüstungen Preise anzugeben. Diese werden dann im Rüstungsauswahlfenster des Charaktereditors angezeigt."
         e.text = "False"
         e.typ = "Bool"
         self.db.loadElement(e)
@@ -105,6 +124,18 @@ class Plugin:
             scripts.setters[script.name] = script
 
         return scripts
+    
+    def rüstungdefinitionSerialisiertHandler(self, params):
+        ser = params["serializer"]
+        rüstung = params["object"]
+    
+        if self.db.einstellungen["RüstungenPlus Plugin: Preis anzeigen"].wert:
+            ser.set("preis", rüstung.preis)
+
+    def rüstungdefinitionDeserialisiertHandler(self, params):
+        ser = params["deserializer"]
+        rüstung = params["object"]
+        rüstung.preis = ser.getInt("preis", rüstung.preis)
 
     def rüstungSerialisiertHandler(self, params):
         if not Wolke.DB.einstellungen["RüstungenPlus Plugin: Rüstungseigenschaften"].wert:
@@ -227,14 +258,65 @@ class Plugin:
                 self.ruestungErsetzen = True
                 self.filterType = filterType
                 super().__init__(ruestung, system)
+                
+            def onSetupUi(self):
+                super().onSetupUi()
+                if Wolke.DB.einstellungen["RüstungenPlus Plugin: Preis anzeigen"].wert:
+                    self.ui.labelPreis = QtWidgets.QLabel()
+                    self.ui.labelPreis.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignVCenter)
+                    self.ui.formLayout.insertRow(2, "Preis", self.ui.labelPreis)
 
             def populateTree(self):
-                super().populateTree()
-                root = self.ui.treeArmors.invisibleRootItem()
-                for idx in range(root.childCount()):
-                    name = root.child(idx).text(0)
-                    if root.child(idx).text(0) != self.filterType:
-                        root.child(idx).setHidden(True)
+                currSet = self.current != ""
+                self.ui.treeArmors.clear()
+
+                rüstungenByKategorie = SortedCategoryToListDict(Wolke.DB.einstellungen["Rüstungen: Kategorien"].wert)
+                rüstungenByKategorie.setNameFilter(self.ui.nameFilterEdit.text())
+                rüstungenByKategorie.setCategoryFilter([rüstungenByKategorie.categories.index(self.filterType)])
+                for r in Wolke.DB.rüstungen.values():
+                    if r.system != 0 and r.system != self.system:
+                        continue
+                    rüstungenByKategorie.append(r.kategorie, r.name)
+                rüstungenByKategorie.sortValues()
+
+                for kategorie, rüstungen in rüstungenByKategorie.items():
+                    if len(rüstungen) == 0:
+                        continue
+                    parent = QtWidgets.QTreeWidgetItem(self.ui.treeArmors)
+                    parent.setText(0, kategorie)
+                    parent.setExpanded(True)
+                    font = QtGui.QFont(Wolke.Settings["Font"], Wolke.FontHeadingSizeL3)
+                    font.setBold(True)
+                    font.setCapitalization(QtGui.QFont.SmallCaps)
+                    parent.setFont(0, font)
+                    for el in rüstungen:
+                        if not currSet:
+                            self.current = el
+                            currSet = True
+                        child = QtWidgets.QTreeWidgetItem(parent)
+                        if el.endswith(" (ZRS)"):
+                            child.setText(0, el[:-6])
+                        else:
+                            child.setText(0, el)
+
+                if self.current in Wolke.DB.rüstungen:
+                    found = self.ui.treeArmors.findItems(self.current, QtCore.Qt.MatchExactly | QtCore.Qt.MatchRecursive)
+                    if len(found) > 0:
+                        self.ui.treeArmors.setCurrentItem(found[0], 0, QtCore.QItemSelectionModel.Select | QtCore.QItemSelectionModel.Rows)
+                elif self.ui.treeArmors.topLevelItemCount() > 0 and self.ui.treeArmors.topLevelItem(0).childCount() > 0:
+                    self.ui.treeArmors.setCurrentItem(self.ui.treeArmors.topLevelItem(0).child(0), 0, QtCore.QItemSelectionModel.Select | QtCore.QItemSelectionModel.Rows)
+                self.changeHandler()
+                        
+            def updateInfo(self):
+                super().updateInfo()
+                if Wolke.DB.einstellungen["RüstungenPlus Plugin: Preis anzeigen"].wert:
+                    self.ui.labelPreis.setText("0 ST")
+                    
+                if self.current == "":
+                    return
+                R = Wolke.DB.rüstungen[self.current]
+                if Wolke.DB.einstellungen["RüstungenPlus Plugin: Preis anzeigen"].wert:
+                    self.ui.labelPreis.setText(str(R.preis) + " ST")
 
         return RSRuestungPicker
 
@@ -292,6 +374,40 @@ class Plugin:
         editor = RSDatenbankEditRuestungseigenschaftWrapper.RSDatenbankEditRuestungseigenschaftWrapper
         typen[typ] = DatenbankEditor.DatenbankTypWrapper(typ, editor, True)
         return typen
+    
+    def dbeClassRüstungFilter(self, editorType, params):
+        class DatenbankEditRüstungWrapperPlus(editorType):
+            def __init__(self, datenbank, rüstung=None):
+                super().__init__(datenbank, rüstung)
+
+            def onSetupUi(self):
+                super().onSetupUi()
+
+                if self.datenbank.einstellungen["RüstungenPlus Plugin: Preis anzeigen"].wert:
+                    self.ui.labelPreis = QtWidgets.QLabel("Preis")
+                    self.ui.spinPreis = QtWidgets.QSpinBox()
+                    self.ui.spinPreis.setMinimumSize(QtCore.QSize(50, 0))
+                    self.ui.spinPreis.setAlignment(QtCore.Qt.AlignCenter)
+                    self.ui.spinPreis.setButtonSymbols(QtWidgets.QAbstractSpinBox.PlusMinus)
+                    self.ui.spinPreis.setMinimum(0)
+                    self.ui.spinPreis.setMaximum(99999)
+                    self.ui.preisLayout = QtWidgets.QHBoxLayout()
+                    self.ui.preisLayout.addStretch()
+                    self.ui.preisLayout.addWidget(self.ui.spinPreis)
+                    self.ui.formLayout.insertRow(10, self.ui.labelPreis, self.ui.preisLayout)
+                    self.registerInput(self.ui.spinPreis, self.ui.labelPreis)
+
+            def load(self, rüstung):
+                if self.datenbank.einstellungen["RüstungenPlus Plugin: Preis anzeigen"].wert:
+                    self.ui.spinPreis.setValue(rüstung.preis)
+                super().load(rüstung)
+
+            def update(self, rüstung):
+                super().update(rüstung)
+                if self.datenbank.einstellungen["RüstungenPlus Plugin: Preis anzeigen"].wert:
+                    rüstung.preis = self.ui.spinPreis.value()
+
+        return DatenbankEditRüstungWrapperPlus
 
     ############################
     # PDF Export
