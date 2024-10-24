@@ -38,7 +38,7 @@ class Plugin:
                                           "Manöverkarten_CharaktereditorButton" : True,
                                           "Manöverkarten_ExportVerzögerungMs" : 50,
                                           "Manöverkarten_FontTitle" : "Aniron",
-                                          "Manöverkarten_Font" : Wolke.DefaultOSFont,
+                                          "Manöverkarten_Font" : "Minion Pro",
                                           "Manöverkarten_DeaktivierteKategorien" : []})
 
     def changesDatabase(self):
