@@ -294,6 +294,7 @@ class Plugin:
                             self.current = el
                             currSet = True
                         child = QtWidgets.QTreeWidgetItem(parent)
+                        child.setData(0, QtCore.Qt.UserRole, el)
                         if el.endswith(" (ZRS)"):
                             child.setText(0, el[:-6])
                         else:
