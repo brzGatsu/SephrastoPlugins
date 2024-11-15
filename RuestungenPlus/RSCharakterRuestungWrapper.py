@@ -32,6 +32,7 @@ class RSCharakterRuestungWrapper(QtCore.QObject):
 
         self.currentlyLoading = False
 
+        self.ui.checkZonen.setChecked(Wolke.Char.zonenSystemNutzen)
         self.ui.checkZonen.stateChanged.connect(self.checkZonenChanged)
 
         self.ruestungsKategorien = list(Wolke.DB.einstellungen["Rüstungen: Kategorien"].wert.keys())
@@ -153,11 +154,14 @@ class RSCharakterRuestungWrapper(QtCore.QObject):
             R = self.charTeilrüstungen[index]
             if index < len(self.ruestungsKategorien):
                 self.loadArmorIntoFields(R, index)
-
+                
+        checkZonenChanged = self.ui.checkZonen.isChecked() != Wolke.Char.zonenSystemNutzen
         self.ui.checkZonen.setChecked(Wolke.Char.zonenSystemNutzen)
         self.currentlyLoading = False
 
         self.refreshZRSVisibility()
+        if checkZonenChanged:
+            self.updateRuestungen()
 
     def checkZonenChanged(self):
         if self.currentlyLoading:
@@ -180,6 +184,7 @@ class RSCharakterRuestungWrapper(QtCore.QObject):
         Wolke.Char.zonenSystemNutzen = self.ui.checkZonen.isChecked()
         self.modified.emit()
         self.reloadRSTabs.emit()
+        self.updateRuestungen() # checkZonenChanged will be false
 
     def updateGesamtRuestung(self):
         if self.currentlyLoading:
@@ -387,4 +392,3 @@ class RSCharakterRuestungWrapper(QtCore.QObject):
                 self.loadArmorIntoFields(Ruestung(RuestungDefinition()), kategorie)
 
         self.currentlyLoading = False
-        self.updateRuestungen()
