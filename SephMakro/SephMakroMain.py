@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'SephMakroMain.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.7.0
+## Created by: Qt User Interface Compiler version 6.8.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -24,7 +24,7 @@ class Ui_formMain(object):
     def setupUi(self, formMain):
         if not formMain.objectName():
             formMain.setObjectName(u"formMain")
-        formMain.setWindowModality(Qt.ApplicationModal)
+        formMain.setWindowModality(Qt.WindowModality.ApplicationModal)
         formMain.resize(1016, 811)
         sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
         sizePolicy.setHorizontalStretch(0)
@@ -35,7 +35,7 @@ class Ui_formMain(object):
         self.gridLayout.setObjectName(u"gridLayout")
         self.splitter = QSplitter(formMain)
         self.splitter.setObjectName(u"splitter")
-        self.splitter.setOrientation(Qt.Vertical)
+        self.splitter.setOrientation(Qt.Orientation.Vertical)
         self.horizontalLayoutWidget = QWidget(self.splitter)
         self.horizontalLayoutWidget.setObjectName(u"horizontalLayoutWidget")
         self.horizontalLayout = QHBoxLayout(self.horizontalLayoutWidget)
@@ -53,21 +53,27 @@ class Ui_formMain(object):
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.buttonRun = QToolButton(formMain)
         self.buttonRun.setObjectName(u"buttonRun")
+        font = QFont()
+        font.setHintingPreference(QFont.PreferNoHinting)
+        self.buttonRun.setFont(font)
 
         self.horizontalLayout_2.addWidget(self.buttonRun)
 
         self.buttonLoad = QToolButton(formMain)
         self.buttonLoad.setObjectName(u"buttonLoad")
+        self.buttonLoad.setFont(font)
 
         self.horizontalLayout_2.addWidget(self.buttonLoad)
 
         self.buttonSave = QToolButton(formMain)
         self.buttonSave.setObjectName(u"buttonSave")
+        self.buttonSave.setFont(font)
 
         self.horizontalLayout_2.addWidget(self.buttonSave)
 
         self.buttonNew = QToolButton(formMain)
         self.buttonNew.setObjectName(u"buttonNew")
+        self.buttonNew.setFont(font)
 
         self.horizontalLayout_2.addWidget(self.buttonNew)
 
@@ -115,7 +121,7 @@ class Ui_formMain(object):
 #if QT_CONFIG(shortcut)
         self.buttonRun.setShortcut(QCoreApplication.translate("formMain", u"F5", None))
 #endif // QT_CONFIG(shortcut)
-        self.buttonRun.setProperty("class", QCoreApplication.translate("formMain", u"icon", None))
+        self.buttonRun.setProperty(u"class", QCoreApplication.translate("formMain", u"icon", None))
 #if QT_CONFIG(tooltip)
         self.buttonLoad.setToolTip(QCoreApplication.translate("formMain", u"Makro laden", None))
 #endif // QT_CONFIG(tooltip)
@@ -123,7 +129,7 @@ class Ui_formMain(object):
 #if QT_CONFIG(shortcut)
         self.buttonLoad.setShortcut(QCoreApplication.translate("formMain", u"Ctrl+O", None))
 #endif // QT_CONFIG(shortcut)
-        self.buttonLoad.setProperty("class", QCoreApplication.translate("formMain", u"icon", None))
+        self.buttonLoad.setProperty(u"class", QCoreApplication.translate("formMain", u"icon", None))
 #if QT_CONFIG(tooltip)
         self.buttonSave.setToolTip(QCoreApplication.translate("formMain", u"Makro speichern", None))
 #endif // QT_CONFIG(tooltip)
@@ -131,7 +137,7 @@ class Ui_formMain(object):
 #if QT_CONFIG(shortcut)
         self.buttonSave.setShortcut(QCoreApplication.translate("formMain", u"Ctrl+S", None))
 #endif // QT_CONFIG(shortcut)
-        self.buttonSave.setProperty("class", QCoreApplication.translate("formMain", u"icon", None))
+        self.buttonSave.setProperty(u"class", QCoreApplication.translate("formMain", u"icon", None))
 #if QT_CONFIG(tooltip)
         self.buttonNew.setToolTip(QCoreApplication.translate("formMain", u"Neues Makro", None))
 #endif // QT_CONFIG(tooltip)
@@ -139,7 +145,7 @@ class Ui_formMain(object):
 #if QT_CONFIG(shortcut)
         self.buttonNew.setShortcut(QCoreApplication.translate("formMain", u"Ctrl+N", None))
 #endif // QT_CONFIG(shortcut)
-        self.buttonNew.setProperty("class", QCoreApplication.translate("formMain", u"icon", None))
+        self.buttonNew.setProperty(u"class", QCoreApplication.translate("formMain", u"icon", None))
         self.label.setText(QCoreApplication.translate("formMain", u"Hausregeln:", None))
         self.buttonSaveOutput.setText(QCoreApplication.translate("formMain", u"Ausgabe speichern", None))
         self.makroListLayout.setTitle(QCoreApplication.translate("formMain", u"Makros", None))

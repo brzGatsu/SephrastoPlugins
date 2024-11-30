@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>876</width>
-    <height>101</height>
+    <height>135</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -24,6 +24,9 @@
           <width>50</width>
           <height>0</height>
          </size>
+        </property>
+        <property name="buttonSymbols">
+         <enum>QAbstractSpinBox::ButtonSymbols::PlusMinus</enum>
         </property>
        </widget>
       </item>
@@ -48,6 +51,9 @@
           <height>0</height>
          </size>
         </property>
+        <property name="buttonSymbols">
+         <enum>QAbstractSpinBox::ButtonSymbols::PlusMinus</enum>
+        </property>
        </widget>
       </item>
       <item row="2" column="6">
@@ -57,6 +63,9 @@
           <width>50</width>
           <height>0</height>
          </size>
+        </property>
+        <property name="buttonSymbols">
+         <enum>QAbstractSpinBox::ButtonSymbols::PlusMinus</enum>
         </property>
        </widget>
       </item>
@@ -104,6 +113,9 @@
           <height>0</height>
          </size>
         </property>
+        <property name="buttonSymbols">
+         <enum>QAbstractSpinBox::ButtonSymbols::PlusMinus</enum>
+        </property>
        </widget>
       </item>
       <item row="2" column="0" colspan="3">
@@ -136,6 +148,9 @@
           <width>50</width>
           <height>0</height>
          </size>
+        </property>
+        <property name="buttonSymbols">
+         <enum>QAbstractSpinBox::ButtonSymbols::PlusMinus</enum>
         </property>
        </widget>
       </item>

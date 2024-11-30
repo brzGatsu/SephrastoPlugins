@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'IlarisOnlineDB.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.7.0
+## Created by: Qt User Interface Compiler version 6.8.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -94,7 +94,7 @@ class Ui_Dialog(object):
         self.cbNSC.setText(QCoreApplication.translate("Dialog", u"NSCs anzeigen", None))
         self.leSuche.setPlaceholderText(QCoreApplication.translate("Dialog", u"Name und Beschreibung durchsuchen", None))
         self.label_4.setText(QCoreApplication.translate("Dialog", u"Kreaturen von Ilaris-Online.de", None))
-        self.label_4.setProperty("class", QCoreApplication.translate("Dialog", u"h2", None))
+        self.label_4.setProperty(u"class", QCoreApplication.translate("Dialog", u"h2", None))
         ___qtreewidgetitem = self.treeKreaturen.headerItem()
         ___qtreewidgetitem.setText(3, QCoreApplication.translate("Dialog", u"Von", None));
         ___qtreewidgetitem.setText(2, QCoreApplication.translate("Dialog", u"Beschreibung", None));

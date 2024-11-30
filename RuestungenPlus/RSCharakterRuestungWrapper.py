@@ -125,6 +125,9 @@ class RSCharakterRuestungWrapper(QtCore.QObject):
             addR = QtWidgets.QPushButton()
             addR.setText('\u002b')
             addR.setProperty("class", "iconSmall")
+            font = addR.font()
+            font.setHintingPreference(QtGui.QFont.PreferNoHinting)
+            addR.setFont(font)
             addR.clicked.connect(partial(self.selectArmor, index = index))
             self.buttons.append(addR)
             self.ui.Ruestungen.addWidget(addR, row, col, 1, 1)
@@ -262,15 +265,18 @@ class RSCharakterRuestungWrapper(QtCore.QObject):
             punkte = sum(R.rs) + R.zrsMod
             spinPunkte.setValue(punkte)
             if punkte % 6 != 0:
-                self.ui.spinGesamtPunkte.setStyleSheet("border: 1px solid orange;")
+                self.ui.spinGesamtPunkte.setProperty("warning", True)
                 missingPoints = 6 - punkte % 6
                 if missingPoints == 1:
                     self.ui.spinGesamtPunkte.setToolTip("Der Rüstung fehlt " + str(missingPoints) + " Punkt ZRS.")
                 else:
                     self.ui.spinGesamtPunkte.setToolTip("Der Rüstung fehlen " + str(missingPoints) + " Punkte ZRS.")
             else:
-                self.ui.spinGesamtPunkte.setStyleSheet("")
+                self.ui.spinGesamtPunkte.setProperty("warning", False)
                 self.ui.spinGesamtPunkte.setToolTip("")
+            
+            self.ui.spinGesamtPunkte.style().unpolish(self.ui.spinGesamtPunkte)
+            self.ui.spinGesamtPunkte.style().polish(self.ui.spinGesamtPunkte)
 
     def createRuestung(self, index):
         name = self.editRName[index].text()

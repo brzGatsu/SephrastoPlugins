@@ -160,11 +160,11 @@ class Plugin:
                         spin.setMaximum(99)
 
                         layout = QtWidgets.QHBoxLayout()
-                        widgetItem = self.ui.Waffen.itemAtPosition(3 + i*4, 4)
+                        widgetItem = self.ui.Waffen.itemAtPosition(3 + i*5, 4)
                         layout.addWidget(widgetItem.widget())
                         layout.addWidget(QtWidgets.QLabel(" / "))
                         layout.addWidget(spin)
-                        self.ui.Waffen.addLayout(layout, 3 + i*4, 4, 1, 1)
+                        self.ui.Waffen.addLayout(layout, 3 + i*5, 4, 1, 1)
                         self.spinWM2.append(spin)
                         self.spinWM2Layout.append(layout)
 

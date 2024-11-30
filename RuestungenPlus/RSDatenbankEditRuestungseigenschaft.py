@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'RSDatenbankEditRuestungseigenschaft.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.7.0
+## Created by: Qt User Interface Compiler version 6.8.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -32,7 +32,7 @@ class Ui_ruestungseigenschaftDialog(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents_2 = QWidget()
         self.scrollAreaWidgetContents_2.setObjectName(u"scrollAreaWidgetContents_2")
-        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 463, 575))
+        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 459, 571))
         self.gridLayout = QGridLayout(self.scrollAreaWidgetContents_2)
         self.gridLayout.setObjectName(u"gridLayout")
         self.labelName = QLabel(self.scrollAreaWidgetContents_2)
@@ -102,6 +102,9 @@ class Ui_ruestungseigenschaftDialog(object):
 
         self.buttonPickScript = QPushButton(self.scrollAreaWidgetContents_2)
         self.buttonPickScript.setObjectName(u"buttonPickScript")
+        font = QFont()
+        font.setHintingPreference(QFont.PreferNoHinting)
+        self.buttonPickScript.setFont(font)
 
         self.horizontalLayout.addWidget(self.buttonPickScript)
 
@@ -130,6 +133,6 @@ class Ui_ruestungseigenschaftDialog(object):
         self.labelScript.setText(QCoreApplication.translate("ruestungseigenschaftDialog", u"Script", None))
         self.labelBeschreibung.setText(QCoreApplication.translate("ruestungseigenschaftDialog", u"Beschreibung", None))
         self.buttonPickScript.setText(QCoreApplication.translate("ruestungseigenschaftDialog", u"+", None))
-        self.buttonPickScript.setProperty("class", QCoreApplication.translate("ruestungseigenschaftDialog", u"iconSmall", None))
+        self.buttonPickScript.setProperty(u"class", QCoreApplication.translate("ruestungseigenschaftDialog", u"iconSmall", None))
     # retranslateUi
 

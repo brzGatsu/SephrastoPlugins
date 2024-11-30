@@ -99,11 +99,6 @@ class TierbegleiterEditor(object):
         self.ui.spinRegelnGroesse.setValue(Wolke.Settings['Cheatsheet-Fontsize'])
         self.ui.checkEditierbar.setChecked(Wolke.Settings['Formular-Editierbarkeit'])
 
-        for i in range(self.ui.tabWidget.tabBar().count()):
-            self.ui.tabWidget.tabBar().setTabTextColor(i, QtGui.QColor(Wolke.HeadingColor))
-
-        self.ui.tabWidget.setStyleSheet('QTabBar { font-weight: bold; font-size: ' + str(Wolke.Settings["FontHeadingSize"]) + 'pt; font-family: \"' + Wolke.Settings["FontHeading"] + '\"; }')
-
         if not self.datenbank.iaZuchtAusbildung:
             if hasattr(self.ui.tabWidget, "setTabVisible"):
                 self.ui.tabWidget.setTabVisible(1, False)
@@ -708,43 +703,54 @@ class TierbegleiterEditor(object):
 
         if self.ui.cbSchlechteEig1.isVisible() and self.hasVorteil(self.ui.cbSchlechteEig1.currentText()):
             self.ui.cbSchlechteEig1.setToolTip("Es ist nicht erlaubt die gleiche Eigenschaft mehrmals zu wählen (eventuell ist sie auch bereits bei der Spezies enthalten).")
-            self.ui.cbSchlechteEig1.setStyleSheet("border: 1px solid red;")
+            self.ui.cbSchlechteEig1.setProperty("error", True)
             sEig1Valid= False
         else:
             self.ui.cbSchlechteEig1.setToolTip("")
-            self.ui.cbSchlechteEig1.setStyleSheet("")
+            self.ui.cbSchlechteEig1.setProperty("error", False)
 
         if self.ui.cbSchlechteEig2.isVisible() and (self.ui.cbSchlechteEig1.currentIndex() == self.ui.cbSchlechteEig2.currentIndex() or self.hasVorteil(self.ui.cbSchlechteEig2.currentText())):
             self.ui.cbSchlechteEig2.setToolTip("Es ist nicht erlaubt die gleiche Eigenschaft mehrmals zu wählen (eventuell ist sie auch bereits bei der Spezies enthalten).")
-            self.ui.cbSchlechteEig2.setStyleSheet("border: 1px solid red;")
+            self.ui.cbSchlechteEig2.setProperty("error", True)
             sEig2Valid= False
         else:
             self.ui.cbSchlechteEig2.setToolTip("")
-            self.ui.cbSchlechteEig2.setStyleSheet("")
+            self.ui.cbSchlechteEig2.setProperty("error", False)
 
         if self.ui.cbGuteEig1.isVisible() and self.hasVorteil(self.ui.cbGuteEig1.currentText()):
             self.ui.cbGuteEig1.setToolTip("Es ist nicht erlaubt die gleiche Eigenschaft mehrmals zu wählen (eventuell ist sie auch bereits bei der Spezies enthalten).")
-            self.ui.cbGuteEig1.setStyleSheet("border: 1px solid red;")
+            self.ui.cbGuteEig1.setProperty("error", True)
             gEig1Valid = False
         else:
             self.ui.cbGuteEig1.setToolTip("")
-            self.ui.cbGuteEig1.setStyleSheet("")
+            self.ui.cbGuteEig1.setProperty("error", False)
 
         if self.ui.cbGuteEig2.isVisible() and (self.ui.cbGuteEig1.currentIndex() == self.ui.cbGuteEig2.currentIndex() or self.hasVorteil(self.ui.cbGuteEig2.currentText())):
             self.ui.cbGuteEig2.setToolTip("Es ist nicht erlaubt die gleiche Eigenschaft mehrmals zu wählen (eventuell ist sie auch bereits bei der Spezies enthalten).")
-            self.ui.cbGuteEig2.setStyleSheet("border: 1px solid red;")
+            self.ui.cbGuteEig2.setProperty("error", True)
             gEig2Valid = False
         else:
             self.ui.cbGuteEig2.setToolTip("")
-            self.ui.cbGuteEig2.setStyleSheet("")
+            self.ui.cbGuteEig2.setProperty("error", False)
 
         if self.ui.cbGuteEig3.isVisible() and (self.ui.cbGuteEig3.currentIndex() == self.ui.cbGuteEig1.currentIndex() or self.ui.cbGuteEig3.currentIndex() == self.ui.cbGuteEig2.currentIndex() or self.hasVorteil(self.ui.cbGuteEig3.currentText())):
             self.ui.cbGuteEig3.setToolTip("Es ist nicht erlaubt die gleiche Eigenschaft mehrmals zu wählen (eventuell ist sie auch bereits bei der Spezies enthalten).")
-            self.ui.cbGuteEig3.setStyleSheet("border: 1px solid red;")
+            self.ui.cbGuteEig3.setProperty("error", True)
             gEig3Valid = False
         else:
             self.ui.cbGuteEig3.setToolTip("")
-            self.ui.cbGuteEig3.setStyleSheet("")
+            self.ui.cbGuteEig3.setProperty("error", False)
+            
+        self.ui.cbSchlechteEig1.style().unpolish(self.ui.cbSchlechteEig1)
+        self.ui.cbSchlechteEig1.style().polish(self.ui.cbSchlechteEig1)
+        self.ui.cbSchlechteEig2.style().unpolish(self.ui.cbSchlechteEig2)
+        self.ui.cbSchlechteEig2.style().polish(self.ui.cbSchlechteEig2)
+        self.ui.cbGuteEig1.style().unpolish(self.ui.cbGuteEig1)
+        self.ui.cbGuteEig1.style().polish(self.ui.cbGuteEig1)
+        self.ui.cbGuteEig2.style().unpolish(self.ui.cbGuteEig2)
+        self.ui.cbGuteEig2.style().polish(self.ui.cbGuteEig2)
+        self.ui.cbGuteEig3.style().unpolish(self.ui.cbGuteEig3)
+        self.ui.cbGuteEig3.style().polish(self.ui.cbGuteEig3)
 
         self.zuchteigenschaftenValid = sEig1Valid and sEig2Valid and gEig1Valid and gEig2Valid and gEig3Valid
 

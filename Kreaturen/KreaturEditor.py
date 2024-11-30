@@ -113,8 +113,6 @@ class KreaturEditor(object):
         self.labelImageText = self.ui.labelImage.text()
         self.ui.buttonLoadImage.clicked.connect(self.buttonLoadImageClicked)
         self.ui.buttonDeleteImage.clicked.connect(self.buttonDeleteImageClicked)
-        for i in range(self.ui.tabWidget.tabBar().count()):
-            self.ui.tabWidget.tabBar().setTabTextColor(i, QtGui.QColor(Wolke.HeadingColor))
 
         # first tab Allgemein
         self.ui.laID.setText("ID: " + str(self.data.get("id")))
@@ -142,7 +140,6 @@ class KreaturEditor(object):
         # third tab fertigkeiten
         self.ui.btnAddTalent.clicked.connect(self.addTalentClicked)
         self.ui.btnAddZauberfertigkeit.clicked.connect(self.addZauberfertigkeitClicked)
-        self.ui.tabWidget.setStyleSheet('QTabBar { font-weight: bold; font-size: ' + str(Wolke.Settings["FontHeadingSize"]) + 'pt; font-family: \"' + Wolke.Settings["FontHeading"] + '\"; }')
 
         # fourth tab Angriffe
         self.ui.btnAddAngriff.clicked.connect(self.addAngriffClicked)
@@ -599,9 +596,12 @@ class KreaturEditor(object):
     
     def validateField(self, field, text):
         if not field.hasAcceptableInput():
-            field.setStyleSheet("border: 2px solid #910e0e; border-radius: 2px; padding: 1px;")
+            field.setProperty("error", True)
         else:
-            field.setStyleSheet("")
+            field.setProperty("error", False)
+            
+        field.style().unpolish(field)
+        field.style().polish(field)
 
     def exportHtml(self):
         css =  "body { font-family: Arial; font-size: 12pt; }"

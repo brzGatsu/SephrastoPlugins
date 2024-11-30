@@ -17,6 +17,9 @@ class Plugin:
         self.mainWindowButton.setObjectName("buttonPlugin")
         self.mainWindowButton.setToolTip("Kreatur erstellen")
         self.mainWindowButton.setProperty("class", "icon")
+        font = self.mainWindowButton.font()
+        font.setHintingPreference(QtGui.QFont.PreferNoHinting)
+        self.mainWindowButton.setFont(font)
         self.mainWindowButton.setText("\uf6e2")    # \uf6f0 is horse
         self.mainWindowButton.clicked.connect(self.createKreaturEditor) 
         return [self.mainWindowButton]

@@ -1,7 +1,7 @@
 from EventBus import EventBus
 import os
 import datetime as dt
-from PySide6 import QtWidgets
+from PySide6 import QtWidgets, QtGui
 from QtUtils.SimpleSettingsDialog import SimpleSettingsDialog
 from EinstellungenWrapper import EinstellungenWrapper
 from Wolke import Wolke
@@ -48,6 +48,10 @@ class Plugin:
         dirField.setToolTip("Pfad zum Speichern der Charakterkopien. Relative Pfade werden relativ zum Charakterordner verstanden.")
         dirButton = QtWidgets.QPushButton('\uf07c')
         dirButton.setProperty("class", "icon")
+        font = dirButton.font()
+        font.setHintingPreference(QtGui.QFont.PreferNoHinting)
+        dirButton.setFont(font)
+
         dirButton.clicked.connect(lambda: self.selectDirectory(dirField))
         # dlg.addSetting("Historie_Ordner", "Kopien in Unterordner speichern", dirField)
         dirRow = QtWidgets.QHBoxLayout()

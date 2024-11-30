@@ -15,6 +15,9 @@ class Plugin:
         self.mainWindowButton.setObjectName("buttonPlugin")
         self.mainWindowButton.setToolTip("Tierbegleiter erstellen")
         self.mainWindowButton.setProperty("class", "icon")
+        font = self.mainWindowButton.font()
+        font.setHintingPreference(QtGui.QFont.PreferNoHinting)
+        self.mainWindowButton.setFont(font)
         self.mainWindowButton.setText("\uf6f0")
         self.mainWindowButton.clicked.connect(self.createTierbegleiterEditor) 
         return [self.mainWindowButton]

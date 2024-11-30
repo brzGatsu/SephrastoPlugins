@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'KartenExportDialog.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.7.0
+## Created by: Qt User Interface Compiler version 6.8.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -36,8 +36,8 @@ class Ui_Dialog(object):
         self.buttonBox = QDialogButtonBox(Dialog)
         self.buttonBox.setObjectName(u"buttonBox")
         self.buttonBox.setMaximumSize(QSize(16777215, 16777215))
-        self.buttonBox.setOrientation(Qt.Horizontal)
-        self.buttonBox.setStandardButtons(QDialogButtonBox.Cancel|QDialogButtonBox.Ok)
+        self.buttonBox.setOrientation(Qt.Orientation.Horizontal)
+        self.buttonBox.setStandardButtons(QDialogButtonBox.StandardButton.Cancel|QDialogButtonBox.StandardButton.Ok)
         self.buttonBox.setCenterButtons(True)
 
         self.gridLayout.addWidget(self.buttonBox, 14, 0, 1, 2)
@@ -54,7 +54,7 @@ class Ui_Dialog(object):
 
         self.checkEinzeln = QCheckBox(Dialog)
         self.checkEinzeln.setObjectName(u"checkEinzeln")
-        self.checkEinzeln.setLayoutDirection(Qt.RightToLeft)
+        self.checkEinzeln.setLayoutDirection(Qt.LayoutDirection.RightToLeft)
 
         self.gridLayout.addWidget(self.checkEinzeln, 11, 1, 1, 1)
 
@@ -73,14 +73,14 @@ class Ui_Dialog(object):
 
         self.checkHintergrund = QCheckBox(Dialog)
         self.checkHintergrund.setObjectName(u"checkHintergrund")
-        self.checkHintergrund.setLayoutDirection(Qt.RightToLeft)
+        self.checkHintergrund.setLayoutDirection(Qt.LayoutDirection.RightToLeft)
         self.checkHintergrund.setChecked(True)
 
         self.gridLayout.addWidget(self.checkHintergrund, 7, 1, 1, 1)
 
         self.checkOpen = QCheckBox(Dialog)
         self.checkOpen.setObjectName(u"checkOpen")
-        self.checkOpen.setLayoutDirection(Qt.RightToLeft)
+        self.checkOpen.setLayoutDirection(Qt.LayoutDirection.RightToLeft)
         self.checkOpen.setChecked(True)
 
         self.gridLayout.addWidget(self.checkOpen, 6, 1, 1, 1)
@@ -122,6 +122,9 @@ class Ui_Dialog(object):
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.buttonExpandToggle = QPushButton(Dialog)
         self.buttonExpandToggle.setObjectName(u"buttonExpandToggle")
+        font1 = QFont()
+        font1.setHintingPreference(QFont.PreferNoHinting)
+        self.buttonExpandToggle.setFont(font1)
 
         self.horizontalLayout.addWidget(self.buttonExpandToggle)
 
@@ -149,7 +152,7 @@ class Ui_Dialog(object):
         self.checkEinzeln.setText("")
         self.leNameFormat.setText(QCoreApplication.translate("Dialog", u"{deckname}_{titel}", None))
         self.label_4.setText(QCoreApplication.translate("Dialog", u"Man\u00f6verkarten Export", None))
-        self.label_4.setProperty("class", QCoreApplication.translate("Dialog", u"h2", None))
+        self.label_4.setProperty(u"class", QCoreApplication.translate("Dialog", u"h2", None))
 #if QT_CONFIG(tooltip)
         self.checkHintergrund.setToolTip(QCoreApplication.translate("Dialog", u"<html><head/><body><p>Wenn du die Karten ohne Hintergrundbild ausdruckst, sparst du Tinte.</p></body></html>", None))
 #endif // QT_CONFIG(tooltip)
@@ -162,6 +165,6 @@ class Ui_Dialog(object):
 
         self.labelBilder.setText(QCoreApplication.translate("Dialog", u"Format", None))
         self.buttonExpandToggle.setText(QCoreApplication.translate("Dialog", u"Expand Toggle", None))
-        self.buttonExpandToggle.setProperty("class", QCoreApplication.translate("Dialog", u"icon", None))
+        self.buttonExpandToggle.setProperty(u"class", QCoreApplication.translate("Dialog", u"icon", None))
     # retranslateUi
 

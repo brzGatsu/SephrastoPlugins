@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'KreaturMain.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.7.0
+## Created by: Qt User Interface Compiler version 6.8.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -26,8 +26,8 @@ class Ui_formMain(object):
     def setupUi(self, formMain):
         if not formMain.objectName():
             formMain.setObjectName(u"formMain")
-        formMain.setWindowModality(Qt.ApplicationModal)
-        formMain.resize(1128, 708)
+        formMain.setWindowModality(Qt.WindowModality.ApplicationModal)
+        formMain.resize(1128, 599)
         sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -41,7 +41,7 @@ class Ui_formMain(object):
         self.scrollArea_2.setWidgetResizable(True)
         self.scrollAreaWidgetContents_2 = QWidget()
         self.scrollAreaWidgetContents_2.setObjectName(u"scrollAreaWidgetContents_2")
-        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 1108, 641))
+        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, -154, 1087, 724))
         self.gridLayout_5 = QGridLayout(self.scrollAreaWidgetContents_2)
         self.gridLayout_5.setObjectName(u"gridLayout_5")
         self.widget_5 = QWidget(self.scrollAreaWidgetContents_2)
@@ -79,7 +79,7 @@ class Ui_formMain(object):
         self.labelImage = QLabel(self.groupBox_3)
         self.labelImage.setObjectName(u"labelImage")
         self.labelImage.setMinimumSize(QSize(0, 200))
-        self.labelImage.setAlignment(Qt.AlignCenter)
+        self.labelImage.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.gridLayout_6.addWidget(self.labelImage, 1, 0, 1, 2)
 
@@ -105,8 +105,8 @@ class Ui_formMain(object):
         self.lblWerte.setObjectName(u"lblWerte")
         sizePolicy2.setHeightForWidth(self.lblWerte.sizePolicy().hasHeightForWidth())
         self.lblWerte.setSizePolicy(sizePolicy2)
-        self.lblWerte.setTextFormat(Qt.RichText)
-        self.lblWerte.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignTop)
+        self.lblWerte.setTextFormat(Qt.TextFormat.RichText)
+        self.lblWerte.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
         self.lblWerte.setWordWrap(True)
 
         self.verticalLayout_8.addWidget(self.lblWerte)
@@ -171,7 +171,6 @@ class Ui_formMain(object):
         sizePolicy3.setVerticalStretch(0)
         sizePolicy3.setHeightForWidth(self.tabWidget.sizePolicy().hasHeightForWidth())
         self.tabWidget.setSizePolicy(sizePolicy3)
-        self.tabWidget.setMaximumSize(QSize(16777215, 99999))
         self.tab = QWidget()
         self.tab.setObjectName(u"tab")
         sizePolicy2.setHeightForWidth(self.tab.sizePolicy().hasHeightForWidth())
@@ -209,7 +208,7 @@ class Ui_formMain(object):
         self.label_14.setObjectName(u"label_14")
         self.label_14.setMinimumSize(QSize(0, 0))
         self.label_14.setMaximumSize(QSize(250, 16777215))
-        self.label_14.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignTop)
+        self.label_14.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
 
         self.gridLayout_12.addWidget(self.label_14, 1, 6, 1, 1)
 
@@ -255,7 +254,7 @@ class Ui_formMain(object):
 
         self.label_4 = QLabel(self.groupBox_7)
         self.label_4.setObjectName(u"label_4")
-        self.label_4.setTextFormat(Qt.MarkdownText)
+        self.label_4.setTextFormat(Qt.TextFormat.MarkdownText)
 
         self.gridLayout_12.addWidget(self.label_4, 4, 0, 1, 1)
 
@@ -289,12 +288,9 @@ class Ui_formMain(object):
 
         self.groupBox_2 = QGroupBox(self.tab)
         self.groupBox_2.setObjectName(u"groupBox_2")
-        self.groupBox_2.setMaximumSize(QSize(16777215, 200))
         self.verticalLayout_9 = QVBoxLayout(self.groupBox_2)
         self.verticalLayout_9.setObjectName(u"verticalLayout_9")
         self.verticalLayout_9.setContentsMargins(20, 20, 20, 20)
-        self.gridLayout_2 = QGridLayout()
-        self.gridLayout_2.setObjectName(u"gridLayout_2")
         self.gridLayout_3 = QGridLayout()
         self.gridLayout_3.setObjectName(u"gridLayout_3")
         self.leGSS_label = QLineEdit(self.groupBox_2)
@@ -305,14 +301,14 @@ class Ui_formMain(object):
 
         self.label_8 = QLabel(self.groupBox_2)
         self.label_8.setObjectName(u"label_8")
-        self.label_8.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.label_8.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout_3.addWidget(self.label_8, 0, 2, 1, 1)
 
         self.sbINI = QSpinBox(self.groupBox_2)
         self.sbINI.setObjectName(u"sbINI")
         self.sbINI.setMaximumSize(QSize(50, 16777215))
-        self.sbINI.setButtonSymbols(QAbstractSpinBox.PlusMinus)
+        self.sbINI.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.PlusMinus)
         self.sbINI.setMinimum(-99)
 
         self.gridLayout_3.addWidget(self.sbINI, 4, 3, 1, 1)
@@ -329,58 +325,58 @@ class Ui_formMain(object):
 
         self.label_7 = QLabel(self.groupBox_2)
         self.label_7.setObjectName(u"label_7")
-        self.label_7.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.label_7.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout_3.addWidget(self.label_7, 1, 4, 1, 1)
 
         self.label_25 = QLabel(self.groupBox_2)
         self.label_25.setObjectName(u"label_25")
-        self.label_25.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.label_25.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout_3.addWidget(self.label_25, 4, 0, 1, 1)
 
         self.label_12 = QLabel(self.groupBox_2)
         self.label_12.setObjectName(u"label_12")
-        self.label_12.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.label_12.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout_3.addWidget(self.label_12, 1, 2, 1, 1)
 
         self.label_9 = QLabel(self.groupBox_2)
         self.label_9.setObjectName(u"label_9")
-        self.label_9.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.label_9.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout_3.addWidget(self.label_9, 1, 6, 1, 1)
 
         self.sbKL = QSpinBox(self.groupBox_2)
         self.sbKL.setObjectName(u"sbKL")
         self.sbKL.setMaximumSize(QSize(50, 16777215))
-        self.sbKL.setButtonSymbols(QAbstractSpinBox.PlusMinus)
+        self.sbKL.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.PlusMinus)
         self.sbKL.setMinimum(-99)
 
         self.gridLayout_3.addWidget(self.sbKL, 1, 3, 1, 1)
 
         self.label_26 = QLabel(self.groupBox_2)
         self.label_26.setObjectName(u"label_26")
-        self.label_26.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.label_26.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout_3.addWidget(self.label_26, 3, 4, 1, 1)
 
         self.label_5 = QLabel(self.groupBox_2)
         self.label_5.setObjectName(u"label_5")
-        self.label_5.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.label_5.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout_3.addWidget(self.label_5, 0, 0, 1, 1)
 
         self.label_18 = QLabel(self.groupBox_2)
         self.label_18.setObjectName(u"label_18")
-        self.label_18.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.label_18.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout_3.addWidget(self.label_18, 3, 0, 1, 1)
 
         self.sbGE = QSpinBox(self.groupBox_2)
         self.sbGE.setObjectName(u"sbGE")
         self.sbGE.setMaximumSize(QSize(50, 16777215))
-        self.sbGE.setButtonSymbols(QAbstractSpinBox.PlusMinus)
+        self.sbGE.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.PlusMinus)
         self.sbGE.setMinimum(-99)
 
         self.gridLayout_3.addWidget(self.sbGE, 0, 5, 1, 1)
@@ -388,54 +384,54 @@ class Ui_formMain(object):
         self.sbKK = QSpinBox(self.groupBox_2)
         self.sbKK.setObjectName(u"sbKK")
         self.sbKK.setMaximumSize(QSize(50, 16777215))
-        self.sbKK.setButtonSymbols(QAbstractSpinBox.PlusMinus)
+        self.sbKK.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.PlusMinus)
         self.sbKK.setMinimum(-99)
 
         self.gridLayout_3.addWidget(self.sbKK, 0, 7, 1, 1)
 
         self.label_27 = QLabel(self.groupBox_2)
         self.label_27.setObjectName(u"label_27")
-        self.label_27.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.label_27.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout_3.addWidget(self.label_27, 4, 4, 1, 1)
 
         self.sbMR = QSpinBox(self.groupBox_2)
         self.sbMR.setObjectName(u"sbMR")
         self.sbMR.setMaximumSize(QSize(50, 16777215))
-        self.sbMR.setButtonSymbols(QAbstractSpinBox.PlusMinus)
+        self.sbMR.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.PlusMinus)
         self.sbMR.setMinimum(-99)
 
         self.gridLayout_3.addWidget(self.sbMR, 5, 1, 1, 1)
 
         self.label_24 = QLabel(self.groupBox_2)
         self.label_24.setObjectName(u"label_24")
-        self.label_24.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.label_24.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout_3.addWidget(self.label_24, 3, 6, 1, 1)
 
         self.sbIN = QSpinBox(self.groupBox_2)
         self.sbIN.setObjectName(u"sbIN")
         self.sbIN.setMaximumSize(QSize(50, 16777215))
-        self.sbIN.setButtonSymbols(QAbstractSpinBox.PlusMinus)
+        self.sbIN.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.PlusMinus)
         self.sbIN.setMinimum(-99)
 
         self.gridLayout_3.addWidget(self.sbIN, 1, 1, 1, 1)
 
         self.label_3 = QLabel(self.groupBox_2)
         self.label_3.setObjectName(u"label_3")
-        self.label_3.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.label_3.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout_3.addWidget(self.label_3, 5, 4, 1, 1)
 
         self.label_17 = QLabel(self.groupBox_2)
         self.label_17.setObjectName(u"label_17")
-        self.label_17.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.label_17.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout_3.addWidget(self.label_17, 3, 2, 1, 1)
 
         self.label_15 = QLabel(self.groupBox_2)
         self.label_15.setObjectName(u"label_15")
-        self.label_15.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.label_15.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout_3.addWidget(self.label_15, 4, 2, 1, 1)
 
@@ -443,7 +439,7 @@ class Ui_formMain(object):
         self.sbKO.setObjectName(u"sbKO")
         self.sbKO.setMinimumSize(QSize(0, 0))
         self.sbKO.setMaximumSize(QSize(50, 16777215))
-        self.sbKO.setButtonSymbols(QAbstractSpinBox.PlusMinus)
+        self.sbKO.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.PlusMinus)
         self.sbKO.setMinimum(-99)
 
         self.gridLayout_3.addWidget(self.sbKO, 0, 1, 1, 1)
@@ -452,7 +448,7 @@ class Ui_formMain(object):
         self.sbWS.setObjectName(u"sbWS")
         self.sbWS.setMinimumSize(QSize(0, 0))
         self.sbWS.setMaximumSize(QSize(50, 16777215))
-        self.sbWS.setButtonSymbols(QAbstractSpinBox.PlusMinus)
+        self.sbWS.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.PlusMinus)
         self.sbWS.setMinimum(-99)
 
         self.gridLayout_3.addWidget(self.sbWS, 3, 1, 1, 1)
@@ -467,7 +463,7 @@ class Ui_formMain(object):
 
         self.label_23 = QLabel(self.groupBox_2)
         self.label_23.setObjectName(u"label_23")
-        self.label_23.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.label_23.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout_3.addWidget(self.label_23, 5, 6, 1, 1)
 
@@ -479,14 +475,14 @@ class Ui_formMain(object):
         self.sbCH = QSpinBox(self.groupBox_2)
         self.sbCH.setObjectName(u"sbCH")
         self.sbCH.setMaximumSize(QSize(50, 16777215))
-        self.sbCH.setButtonSymbols(QAbstractSpinBox.PlusMinus)
+        self.sbCH.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.PlusMinus)
         self.sbCH.setMinimum(-99)
 
         self.gridLayout_3.addWidget(self.sbCH, 1, 5, 1, 1)
 
         self.label_10 = QLabel(self.groupBox_2)
         self.label_10.setObjectName(u"label_10")
-        self.label_10.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.label_10.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout_3.addWidget(self.label_10, 0, 4, 1, 1)
 
@@ -498,32 +494,32 @@ class Ui_formMain(object):
 
         self.label_6 = QLabel(self.groupBox_2)
         self.label_6.setObjectName(u"label_6")
-        self.label_6.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.label_6.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout_3.addWidget(self.label_6, 1, 0, 1, 1)
 
         self.label_13 = QLabel(self.groupBox_2)
         self.label_13.setObjectName(u"label_13")
-        self.label_13.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.label_13.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout_3.addWidget(self.label_13, 5, 0, 1, 1)
 
         self.label_16 = QLabel(self.groupBox_2)
         self.label_16.setObjectName(u"label_16")
-        self.label_16.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.label_16.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout_3.addWidget(self.label_16, 4, 6, 1, 1)
 
         self.label_11 = QLabel(self.groupBox_2)
         self.label_11.setObjectName(u"label_11")
-        self.label_11.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.label_11.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout_3.addWidget(self.label_11, 0, 6, 1, 1)
 
         self.sbGS = QSpinBox(self.groupBox_2)
         self.sbGS.setObjectName(u"sbGS")
         self.sbGS.setMaximumSize(QSize(50, 16777215))
-        self.sbGS.setButtonSymbols(QAbstractSpinBox.PlusMinus)
+        self.sbGS.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.PlusMinus)
         self.sbGS.setMinimum(-99)
 
         self.gridLayout_3.addWidget(self.sbGS, 3, 7, 1, 1)
@@ -531,7 +527,7 @@ class Ui_formMain(object):
         self.sbWSE = QSpinBox(self.groupBox_2)
         self.sbWSE.setObjectName(u"sbWSE")
         self.sbWSE.setMaximumSize(QSize(50, 16777215))
-        self.sbWSE.setButtonSymbols(QAbstractSpinBox.PlusMinus)
+        self.sbWSE.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.PlusMinus)
         self.sbWSE.setMinimum(-99)
 
         self.gridLayout_3.addWidget(self.sbWSE, 4, 1, 1, 1)
@@ -539,7 +535,7 @@ class Ui_formMain(object):
         self.sbKOL = QSpinBox(self.groupBox_2)
         self.sbKOL.setObjectName(u"sbKOL")
         self.sbKOL.setMaximumSize(QSize(50, 16777215))
-        self.sbKOL.setButtonSymbols(QAbstractSpinBox.PlusMinus)
+        self.sbKOL.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.PlusMinus)
         self.sbKOL.setMinimum(-99)
 
         self.gridLayout_3.addWidget(self.sbKOL, 3, 3, 1, 1)
@@ -547,7 +543,7 @@ class Ui_formMain(object):
         self.sbFF = QSpinBox(self.groupBox_2)
         self.sbFF.setObjectName(u"sbFF")
         self.sbFF.setMaximumSize(QSize(50, 16777215))
-        self.sbFF.setButtonSymbols(QAbstractSpinBox.PlusMinus)
+        self.sbFF.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.PlusMinus)
         self.sbFF.setMinimum(-99)
 
         self.gridLayout_3.addWidget(self.sbFF, 1, 7, 1, 1)
@@ -555,7 +551,7 @@ class Ui_formMain(object):
         self.sbMU = QSpinBox(self.groupBox_2)
         self.sbMU.setObjectName(u"sbMU")
         self.sbMU.setMaximumSize(QSize(50, 16777215))
-        self.sbMU.setButtonSymbols(QAbstractSpinBox.PlusMinus)
+        self.sbMU.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.PlusMinus)
         self.sbMU.setMinimum(-99)
 
         self.gridLayout_3.addWidget(self.sbMU, 0, 3, 1, 1)
@@ -563,7 +559,7 @@ class Ui_formMain(object):
         self.sbGST = QSpinBox(self.groupBox_2)
         self.sbGST.setObjectName(u"sbGST")
         self.sbGST.setMaximumSize(QSize(50, 16777215))
-        self.sbGST.setButtonSymbols(QAbstractSpinBox.PlusMinus)
+        self.sbGST.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.PlusMinus)
         self.sbGST.setMinimum(-99)
 
         self.gridLayout_3.addWidget(self.sbGST, 5, 7, 1, 1)
@@ -571,33 +567,20 @@ class Ui_formMain(object):
         self.sbGSS = QSpinBox(self.groupBox_2)
         self.sbGSS.setObjectName(u"sbGSS")
         self.sbGSS.setMaximumSize(QSize(50, 16777215))
-        self.sbGSS.setButtonSymbols(QAbstractSpinBox.PlusMinus)
+        self.sbGSS.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.PlusMinus)
         self.sbGSS.setMinimum(-99)
 
         self.gridLayout_3.addWidget(self.sbGSS, 4, 7, 1, 1)
 
 
-        self.gridLayout_2.addLayout(self.gridLayout_3, 4, 1, 1, 1)
-
-        self.line = QFrame(self.groupBox_2)
-        self.line.setObjectName(u"line")
-        self.line.setFrameShape(QFrame.Shape.HLine)
-        self.line.setFrameShadow(QFrame.Shadow.Sunken)
-
-        self.gridLayout_2.addWidget(self.line, 3, 0, 1, 2)
-
-
-        self.verticalLayout_9.addLayout(self.gridLayout_2)
+        self.verticalLayout_9.addLayout(self.gridLayout_3)
 
 
         self.gridLayout_4.addWidget(self.groupBox_2, 1, 0, 1, 1)
 
-        self.widget_7 = QWidget(self.tab)
-        self.widget_7.setObjectName(u"widget_7")
-        self.gridLayout_9 = QGridLayout(self.widget_7)
-        self.gridLayout_9.setObjectName(u"gridLayout_9")
+        self.verticalSpacer_5 = QSpacerItem(20, 0, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
-        self.gridLayout_4.addWidget(self.widget_7, 2, 0, 1, 1)
+        self.gridLayout_4.addItem(self.verticalSpacer_5, 2, 0, 1, 1)
 
         self.tabWidget.addTab(self.tab, "")
         self.Eigenschaften = QWidget()
@@ -609,7 +592,7 @@ class Ui_formMain(object):
         sizePolicy2.setHeightForWidth(self.groupBox_6.sizePolicy().hasHeightForWidth())
         self.groupBox_6.setSizePolicy(sizePolicy2)
         self.groupBox_6.setMaximumSize(QSize(800, 99999))
-        self.groupBox_6.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignTop)
+        self.groupBox_6.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
         self.groupBox_6.setFlat(True)
         self.gridLayout_18 = QGridLayout(self.groupBox_6)
         self.gridLayout_18.setObjectName(u"gridLayout_18")
@@ -624,8 +607,8 @@ class Ui_formMain(object):
         self.treeEigenschaften.setSizePolicy(sizePolicy6)
         self.treeEigenschaften.setMinimumSize(QSize(0, 50))
         self.treeEigenschaften.setMaximumSize(QSize(16777215, 900))
-        self.treeEigenschaften.setFrameShadow(QFrame.Plain)
-        self.treeEigenschaften.setSelectionMode(QAbstractItemView.SingleSelection)
+        self.treeEigenschaften.setFrameShadow(QFrame.Shadow.Plain)
+        self.treeEigenschaften.setSelectionMode(QAbstractItemView.SelectionMode.SingleSelection)
 
         self.gridLayout_18.addWidget(self.treeEigenschaften, 0, 0, 1, 1)
 
@@ -723,7 +706,7 @@ class Ui_formMain(object):
         self.boxAngriffe.setObjectName(u"boxAngriffe")
         sizePolicy2.setHeightForWidth(self.boxAngriffe.sizePolicy().hasHeightForWidth())
         self.boxAngriffe.setSizePolicy(sizePolicy2)
-        self.boxAngriffe.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignTop)
+        self.boxAngriffe.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
         self.layoutAngriffe = QVBoxLayout(self.boxAngriffe)
         self.layoutAngriffe.setObjectName(u"layoutAngriffe")
 

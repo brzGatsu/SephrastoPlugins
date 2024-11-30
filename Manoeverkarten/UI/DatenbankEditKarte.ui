@@ -24,8 +24,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>1012</width>
-        <height>654</height>
+        <width>1008</width>
+        <height>650</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout">
@@ -110,7 +110,7 @@
              <item>
               <spacer name="horizontalSpacer">
                <property name="orientation">
-                <enum>Qt::Horizontal</enum>
+                <enum>Qt::Orientation::Horizontal</enum>
                </property>
                <property name="sizeHint" stdset="0">
                 <size>
@@ -220,7 +220,7 @@
                  <string>Deckfarbe</string>
                 </property>
                 <property name="alignment">
-                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
                 </property>
                </widget>
               </item>
@@ -239,6 +239,11 @@
                 <width>20</width>
                 <height>20</height>
                </size>
+              </property>
+              <property name="font">
+               <font>
+                <hintingpreference>PreferNoHinting</hintingpreference>
+               </font>
               </property>
               <property name="text">
                <string>Wählen</string>

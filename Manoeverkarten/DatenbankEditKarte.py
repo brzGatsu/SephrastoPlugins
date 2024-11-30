@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'DatenbankEditKarte.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.7.0
+## Created by: Qt User Interface Compiler version 6.8.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -32,7 +32,7 @@ class Ui_karteDialog(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 1012, 654))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 1008, 650))
         self.gridLayout = QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout.setObjectName(u"gridLayout")
         self.gbEditor = QGroupBox(self.scrollAreaWidgetContents)
@@ -141,7 +141,7 @@ class Ui_karteDialog(object):
 
         self.labelFarbe = QLabel(self.gbEditor)
         self.labelFarbe.setObjectName(u"labelFarbe")
-        self.labelFarbe.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.labelFarbe.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.verticalLayout_4.addWidget(self.labelFarbe)
 
@@ -152,6 +152,9 @@ class Ui_karteDialog(object):
         self.buttonFarbe.setObjectName(u"buttonFarbe")
         self.buttonFarbe.setMinimumSize(QSize(20, 20))
         self.buttonFarbe.setMaximumSize(QSize(20, 20))
+        font = QFont()
+        font.setHintingPreference(QFont.PreferNoHinting)
+        self.buttonFarbe.setFont(font)
 
         self.gridLayout_3.addWidget(self.buttonFarbe, 0, 4, 1, 1)
 
@@ -257,7 +260,7 @@ class Ui_karteDialog(object):
         self.labelVoraussetzungen.setText(QCoreApplication.translate("karteDialog", u"<html><head/><body><p>Voraussetzungen</p><p>(nur Charakterexport)</p></body></html>", None))
         self.labelFarbe.setText(QCoreApplication.translate("karteDialog", u"Deckfarbe", None))
         self.buttonFarbe.setText(QCoreApplication.translate("karteDialog", u"W\u00e4hlen", None))
-        self.buttonFarbe.setProperty("class", QCoreApplication.translate("karteDialog", u"icon", None))
+        self.buttonFarbe.setProperty(u"class", QCoreApplication.translate("karteDialog", u"icon", None))
         self.labelSubtyp.setText(QCoreApplication.translate("karteDialog", u"Subtyp", None))
         self.comboTyp.setItemText(0, QCoreApplication.translate("karteDialog", u"Vorteil", None))
         self.comboTyp.setItemText(1, QCoreApplication.translate("karteDialog", u"Regel", None))

@@ -13,6 +13,9 @@ class Plugin:
         self.mainWindowButton.setObjectName("buttonPlugin")
         self.mainWindowButton.setToolTip("SephMakro")
         self.mainWindowButton.setProperty("class", "icon")
+        font = self.mainWindowButton.font()
+        font.setHintingPreference(QtGui.QFont.PreferNoHinting)
+        self.mainWindowButton.setFont(font)
         self.mainWindowButton.setText("\uf120")
         self.mainWindowButton.clicked.connect(self.createSephMakroEditor)
         return [self.mainWindowButton]

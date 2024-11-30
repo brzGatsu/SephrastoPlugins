@@ -24,8 +24,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>463</width>
-        <height>575</height>
+        <width>459</width>
+        <height>571</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout">
@@ -128,6 +128,11 @@
          </item>
          <item>
           <widget class="QPushButton" name="buttonPickScript">
+           <property name="font">
+            <font>
+             <hintingpreference>PreferNoHinting</hintingpreference>
+            </font>
+           </property>
            <property name="text">
             <string>+</string>
            </property>

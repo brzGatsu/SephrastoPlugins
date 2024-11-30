@@ -7,18 +7,14 @@ def span(text, color):
 
 def colorize(number):
     if number > 0:
-        return span(f"+{number}", COLOR_POSITIVE)
+        return span(f"+{number}", Wolke.ValidColor)
     if number < 0:
-        return span(number, COLOR_NEGATIVE)
+        return span(number, Wolke.ErrorColor)
 
-COLOR_DEFAULT = "black"
-COLOR_POSITIVE = "green"
-COLOR_NEGATIVE = "red"
-HINZUGEFÜGT = span("hinzugefügt", COLOR_POSITIVE)
-ENTFERNT = span("entfernt", COLOR_NEGATIVE)
-GEKAUFT = span("gekauft", COLOR_POSITIVE)
-GELÖSCHT = span("gelöscht", COLOR_NEGATIVE)
-
+HINZUGEFÜGT = span("hinzugefügt", Wolke.ValidColor)
+ENTFERNT = span("entfernt", Wolke.ErrorColor)
+GEKAUFT = span("gekauft", Wolke.ValidColor)
+GELÖSCHT = span("gelöscht", Wolke.ErrorColor)
 
 class Eintrag():
 

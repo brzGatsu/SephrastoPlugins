@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'AngriffWidget.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.7.0
+## Created by: Qt User Interface Compiler version 6.8.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -15,15 +15,15 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QGridLayout, QHBoxLayout, QLabel,
-    QLineEdit, QSizePolicy, QSpinBox, QVBoxLayout,
-    QWidget)
+from PySide6.QtWidgets import (QAbstractSpinBox, QApplication, QGridLayout, QHBoxLayout,
+    QLabel, QLineEdit, QSizePolicy, QSpinBox,
+    QVBoxLayout, QWidget)
 
 class Ui_Form(object):
     def setupUi(self, Form):
         if not Form.objectName():
             Form.setObjectName(u"Form")
-        Form.resize(876, 101)
+        Form.resize(876, 135)
         self.verticalLayout = QVBoxLayout(Form)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.wAngriff = QWidget(Form)
@@ -33,6 +33,7 @@ class Ui_Form(object):
         self.sbLZ = QSpinBox(self.wAngriff)
         self.sbLZ.setObjectName(u"sbLZ")
         self.sbLZ.setMinimumSize(QSize(50, 0))
+        self.sbLZ.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.PlusMinus)
 
         self.gridLayout_11.addWidget(self.sbLZ, 2, 7, 1, 1)
 
@@ -49,12 +50,14 @@ class Ui_Form(object):
         self.sbRW = QSpinBox(self.wAngriff)
         self.sbRW.setObjectName(u"sbRW")
         self.sbRW.setMinimumSize(QSize(50, 0))
+        self.sbRW.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.PlusMinus)
 
         self.gridLayout_11.addWidget(self.sbRW, 2, 4, 1, 1)
 
         self.sbVT = QSpinBox(self.wAngriff)
         self.sbVT.setObjectName(u"sbVT")
         self.sbVT.setMinimumSize(QSize(50, 0))
+        self.sbVT.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.PlusMinus)
 
         self.gridLayout_11.addWidget(self.sbVT, 2, 6, 1, 1)
 
@@ -88,6 +91,7 @@ class Ui_Form(object):
         self.sbAT = QSpinBox(self.wAngriff)
         self.sbAT.setObjectName(u"sbAT")
         self.sbAT.setMinimumSize(QSize(50, 0))
+        self.sbAT.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.PlusMinus)
 
         self.gridLayout_11.addWidget(self.sbAT, 2, 5, 1, 1)
 
@@ -108,6 +112,7 @@ class Ui_Form(object):
         self.sbHT = QSpinBox(self.wAngriff)
         self.sbHT.setObjectName(u"sbHT")
         self.sbHT.setMinimumSize(QSize(50, 0))
+        self.sbHT.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.PlusMinus)
 
         self.gridLayout_11.addWidget(self.sbHT, 2, 8, 1, 1)
 

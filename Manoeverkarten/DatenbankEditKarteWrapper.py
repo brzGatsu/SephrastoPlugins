@@ -88,7 +88,7 @@ class DatenbankEditKarteWrapper(DatenbankElementEditorBase):
         self.ui.radioEdit.clicked.connect(self.updateWebViewTimer)
         self.ui.comboTyp.currentIndexChanged.connect(self.updateWebViewTimer)
         self.ui.comboSubtyp.currentIndexChanged.connect(self.updateWebViewTimer)
-        self.ui.buttonFarbe.clicked.connect(self.chooseColor)
+        self.ui.buttonFarbe.clicked.connect(self.chooseColor)          
         self.ui.buttonFarbe.setText("\uf53f")
         buttonSize = Hilfsmethoden.emToPixels(2.3)
         self.ui.buttonFarbe.setMinimumSize(buttonSize, buttonSize)
@@ -199,7 +199,7 @@ class DatenbankEditKarteWrapper(DatenbankElementEditorBase):
 
     def typChanged(self):
         self.validator["Benutzerdefiniert"] = True
-        self.ui.comboSubtyp.setStyleSheet("")
+        self.ui.comboSubtyp.setProperty("error", False)
         self.ui.comboSubtyp.setToolTip("")
         prevSubtypIndex = self.ui.comboSubtyp.currentIndex()
         prevSubtypItems = [self.ui.comboSubtyp.itemText(i) for i in range(self.ui.comboSubtyp.count())]
@@ -220,7 +220,7 @@ class DatenbankEditKarteWrapper(DatenbankElementEditorBase):
             typen = KartenUtility.getBenutzerdefinierteTypen(self.datenbank)
             if len(typen) == 0:
                 self.validator["Benutzerdefiniert"] = False
-                self.ui.comboSubtyp.setStyleSheet("border: 1px solid red;")
+                self.ui.comboSubtyp.setProperty("error", True)
                 self.ui.comboSubtyp.setToolTip("Erstelle erst ein neues Deck")
             else:
                 self.ui.comboSubtyp.addItems(typen)
@@ -229,6 +229,9 @@ class DatenbankEditKarteWrapper(DatenbankElementEditorBase):
             self.ui.comboSubtyp.setCurrentIndex(originalElement.kategorie)
         elif Hilfsmethoden.ArrayEqual([self.ui.comboSubtyp.itemText(i) for i in range(self.ui.comboSubtyp.count())], prevSubtypItems):
             self.ui.comboSubtyp.setCurrentIndex(prevSubtypIndex)
+            
+        self.ui.comboSubtyp.style().unpolish(self.ui.comboSubtyp)
+        self.ui.comboSubtyp.style().polish(self.ui.comboSubtyp)
 
         self.ui.labelTitel.setVisible(not isNew)
         self.ui.leTitel.setVisible(not isNew)

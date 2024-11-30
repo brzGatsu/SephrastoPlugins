@@ -38,12 +38,7 @@ class SephMakroEditor(object):
         self.ui.horizontalLayout.layout().addWidget(self.editor)
 
         # Just monospace doesn't work, have to specify fonts... seems to be an issue in chromium
-        cssOutput = """\
-        QPlainTextEdit
-        {
-        font-family: Consolas,'Lucida Console','Liberation Mono','DejaVu Sans Mono','Bitstream Vera Sans Mono','Courier New',monospace,sans-serif;
-        }"""
-        self.ui.teOutput.setStyleSheet(cssOutput)
+        self.ui.teOutput.setProperty("class", "monospace")
 
         self.loadedText = ""
 

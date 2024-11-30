@@ -3,7 +3,7 @@
  <class>formMain</class>
  <widget class="QWidget" name="formMain">
   <property name="windowModality">
-   <enum>Qt::ApplicationModal</enum>
+   <enum>Qt::WindowModality::ApplicationModal</enum>
   </property>
   <property name="geometry">
    <rect>
@@ -26,7 +26,7 @@
    <item row="1" column="2">
     <widget class="QSplitter" name="splitter">
      <property name="orientation">
-      <enum>Qt::Vertical</enum>
+      <enum>Qt::Orientation::Vertical</enum>
      </property>
      <widget class="QWidget" name="horizontalLayoutWidget">
       <layout class="QHBoxLayout" name="horizontalLayout"/>
@@ -42,6 +42,11 @@
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
       <widget class="QToolButton" name="buttonRun">
+       <property name="font">
+        <font>
+         <hintingpreference>PreferNoHinting</hintingpreference>
+        </font>
+       </property>
        <property name="toolTip">
         <string>Makro ausführen</string>
        </property>
@@ -58,6 +63,11 @@
      </item>
      <item>
       <widget class="QToolButton" name="buttonLoad">
+       <property name="font">
+        <font>
+         <hintingpreference>PreferNoHinting</hintingpreference>
+        </font>
+       </property>
        <property name="toolTip">
         <string>Makro laden</string>
        </property>
@@ -74,6 +84,11 @@
      </item>
      <item>
       <widget class="QToolButton" name="buttonSave">
+       <property name="font">
+        <font>
+         <hintingpreference>PreferNoHinting</hintingpreference>
+        </font>
+       </property>
        <property name="toolTip">
         <string>Makro speichern</string>
        </property>
@@ -90,6 +105,11 @@
      </item>
      <item>
       <widget class="QToolButton" name="buttonNew">
+       <property name="font">
+        <font>
+         <hintingpreference>PreferNoHinting</hintingpreference>
+        </font>
+       </property>
        <property name="toolTip">
         <string>Neues Makro</string>
        </property>
@@ -117,7 +137,7 @@
      <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+        <enum>Qt::Orientation::Horizontal</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>

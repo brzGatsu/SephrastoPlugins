@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'RSCharakterRuestung.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.7.0
+## Created by: Qt User Interface Compiler version 6.8.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -268,7 +268,7 @@ class Ui_formAusruestung(object):
         formAusruestung.setWindowTitle(QCoreApplication.translate("formAusruestung", u"Form", None))
         self.gbRstungen.setTitle("")
         self.labelRarm.setText(QCoreApplication.translate("formAusruestung", u"R. Arm", None))
-        self.labelRarm.setProperty("class", QCoreApplication.translate("formAusruestung", u"h4", None))
+        self.labelRarm.setProperty(u"class", QCoreApplication.translate("formAusruestung", u"h4", None))
 #if QT_CONFIG(tooltip)
         self.spinGesamtBauch.setToolTip(QCoreApplication.translate("formAusruestung", u"Die R\u00fcstungswerte werden automatisch aus allen Slots berechnet.", None))
 #endif // QT_CONFIG(tooltip)
@@ -276,9 +276,9 @@ class Ui_formAusruestung(object):
         self.spinGesamtKopf.setToolTip(QCoreApplication.translate("formAusruestung", u"Die R\u00fcstungswerte werden automatisch aus allen Slots berechnet.", None))
 #endif // QT_CONFIG(tooltip)
         self.label.setText(QCoreApplication.translate("formAusruestung", u"Slots", None))
-        self.label.setProperty("class", QCoreApplication.translate("formAusruestung", u"h4", None))
+        self.label.setProperty(u"class", QCoreApplication.translate("formAusruestung", u"h4", None))
         self.labelPunkte.setText(QCoreApplication.translate("formAusruestung", u"Punkte", None))
-        self.labelPunkte.setProperty("class", QCoreApplication.translate("formAusruestung", u"h4", None))
+        self.labelPunkte.setProperty(u"class", QCoreApplication.translate("formAusruestung", u"h4", None))
         self.label_2.setText(QCoreApplication.translate("formAusruestung", u"Gesamte R\u00fcstung", None))
 #if QT_CONFIG(tooltip)
         self.spinGesamtLarm.setToolTip(QCoreApplication.translate("formAusruestung", u"Die R\u00fcstungswerte werden automatisch aus allen Slots berechnet.", None))
@@ -287,16 +287,16 @@ class Ui_formAusruestung(object):
         self.labelRS.setToolTip(QCoreApplication.translate("formAusruestung", u"R\u00fcstungsschutz", None))
 #endif // QT_CONFIG(tooltip)
         self.labelRS.setText(QCoreApplication.translate("formAusruestung", u"RS", None))
-        self.labelRS.setProperty("class", QCoreApplication.translate("formAusruestung", u"h4", None))
+        self.labelRS.setProperty(u"class", QCoreApplication.translate("formAusruestung", u"h4", None))
         self.labelLarm.setText(QCoreApplication.translate("formAusruestung", u"L. Arm", None))
-        self.labelLarm.setProperty("class", QCoreApplication.translate("formAusruestung", u"h4", None))
+        self.labelLarm.setProperty(u"class", QCoreApplication.translate("formAusruestung", u"h4", None))
         self.labelKopf.setText(QCoreApplication.translate("formAusruestung", u"Kopf", None))
-        self.labelKopf.setProperty("class", QCoreApplication.translate("formAusruestung", u"h4", None))
+        self.labelKopf.setProperty(u"class", QCoreApplication.translate("formAusruestung", u"h4", None))
 #if QT_CONFIG(tooltip)
         self.labelBE.setToolTip(QCoreApplication.translate("formAusruestung", u"Behinderung", None))
 #endif // QT_CONFIG(tooltip)
         self.labelBE.setText(QCoreApplication.translate("formAusruestung", u"BE", None))
-        self.labelBE.setProperty("class", QCoreApplication.translate("formAusruestung", u"h4", None))
+        self.labelBE.setProperty(u"class", QCoreApplication.translate("formAusruestung", u"h4", None))
 #if QT_CONFIG(tooltip)
         self.spinGesamtBein.setToolTip(QCoreApplication.translate("formAusruestung", u"Die R\u00fcstungswerte werden automatisch aus allen Slots berechnet.", None))
 #endif // QT_CONFIG(tooltip)
@@ -313,17 +313,17 @@ class Ui_formAusruestung(object):
         self.spinGesamtBE.setToolTip(QCoreApplication.translate("formAusruestung", u"Die R\u00fcstungswerte werden automatisch aus allen Slots berechnet.", None))
 #endif // QT_CONFIG(tooltip)
         self.labelBauch.setText(QCoreApplication.translate("formAusruestung", u"Bauch", None))
-        self.labelBauch.setProperty("class", QCoreApplication.translate("formAusruestung", u"h4", None))
+        self.labelBauch.setProperty(u"class", QCoreApplication.translate("formAusruestung", u"h4", None))
         self.labelBrust.setText(QCoreApplication.translate("formAusruestung", u"Brust", None))
-        self.labelBrust.setProperty("class", QCoreApplication.translate("formAusruestung", u"h4", None))
+        self.labelBrust.setProperty(u"class", QCoreApplication.translate("formAusruestung", u"h4", None))
         self.labelBein.setText(QCoreApplication.translate("formAusruestung", u"Bein", None))
-        self.labelBein.setProperty("class", QCoreApplication.translate("formAusruestung", u"h4", None))
+        self.labelBein.setProperty(u"class", QCoreApplication.translate("formAusruestung", u"h4", None))
         self.label_3.setText("")
 #if QT_CONFIG(tooltip)
         self.spinGesamtRarm.setToolTip(QCoreApplication.translate("formAusruestung", u"Die R\u00fcstungswerte werden automatisch aus allen Slots berechnet.", None))
 #endif // QT_CONFIG(tooltip)
         self.labelRName.setText(QCoreApplication.translate("formAusruestung", u"Name", None))
-        self.labelRName.setProperty("class", QCoreApplication.translate("formAusruestung", u"h4", None))
+        self.labelRName.setProperty(u"class", QCoreApplication.translate("formAusruestung", u"h4", None))
         self.checkZonen.setText(QCoreApplication.translate("formAusruestung", u"Zonenr\u00fcstungssystem bei allen R\u00fcstungen benutzen", None))
         self.labelHinweis.setText(QCoreApplication.translate("formAusruestung", u"Hinweis: Nur R\u00fcstung 1 wird zur Berechnung der WS* usw. verwendet.", None))
     # retranslateUi
