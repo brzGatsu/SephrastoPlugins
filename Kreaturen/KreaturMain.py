@@ -19,160 +19,38 @@ from PySide6.QtWidgets import (QAbstractItemView, QAbstractSpinBox, QApplication
     QComboBox, QFrame, QGridLayout, QGroupBox,
     QHBoxLayout, QHeaderView, QLabel, QLineEdit,
     QPushButton, QScrollArea, QSizePolicy, QSpacerItem,
-    QSpinBox, QTabWidget, QTreeWidget, QTreeWidgetItem,
-    QVBoxLayout, QWidget)
+    QSpinBox, QSplitter, QTabWidget, QTreeWidget,
+    QTreeWidgetItem, QVBoxLayout, QWidget)
 
 class Ui_formMain(object):
     def setupUi(self, formMain):
         if not formMain.objectName():
             formMain.setObjectName(u"formMain")
         formMain.setWindowModality(Qt.WindowModality.ApplicationModal)
-        formMain.resize(1128, 599)
+        formMain.resize(1062, 696)
         sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(formMain.sizePolicy().hasHeightForWidth())
         formMain.setSizePolicy(sizePolicy)
         formMain.setLocale(QLocale(QLocale.German, QLocale.Germany))
-        self.gridLayout = QGridLayout(formMain)
-        self.gridLayout.setObjectName(u"gridLayout")
-        self.scrollArea_2 = QScrollArea(formMain)
-        self.scrollArea_2.setObjectName(u"scrollArea_2")
-        self.scrollArea_2.setWidgetResizable(True)
-        self.scrollAreaWidgetContents_2 = QWidget()
-        self.scrollAreaWidgetContents_2.setObjectName(u"scrollAreaWidgetContents_2")
-        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, -154, 1087, 724))
-        self.gridLayout_5 = QGridLayout(self.scrollAreaWidgetContents_2)
-        self.gridLayout_5.setObjectName(u"gridLayout_5")
-        self.widget_5 = QWidget(self.scrollAreaWidgetContents_2)
-        self.widget_5.setObjectName(u"widget_5")
-        self.widget_5.setEnabled(True)
-        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Preferred)
+        self.verticalLayout_3 = QVBoxLayout(formMain)
+        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
+        self.splitter = QSplitter(formMain)
+        self.splitter.setObjectName(u"splitter")
+        self.splitter.setOrientation(Qt.Orientation.Horizontal)
+        self.tabWidget = QTabWidget(self.splitter)
+        self.tabWidget.setObjectName(u"tabWidget")
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(0)
-        sizePolicy1.setHeightForWidth(self.widget_5.sizePolicy().hasHeightForWidth())
-        self.widget_5.setSizePolicy(sizePolicy1)
-        self.widget_5.setMinimumSize(QSize(200, 0))
-        self.widget_5.setMaximumSize(QSize(200, 16777215))
-        self.verticalLayout_14 = QVBoxLayout(self.widget_5)
-        self.verticalLayout_14.setObjectName(u"verticalLayout_14")
-        self.groupBox_3 = QGroupBox(self.widget_5)
-        self.groupBox_3.setObjectName(u"groupBox_3")
+        sizePolicy1.setHeightForWidth(self.tabWidget.sizePolicy().hasHeightForWidth())
+        self.tabWidget.setSizePolicy(sizePolicy1)
+        self.tab = QWidget()
+        self.tab.setObjectName(u"tab")
         sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Maximum)
         sizePolicy2.setHorizontalStretch(0)
         sizePolicy2.setVerticalStretch(0)
-        sizePolicy2.setHeightForWidth(self.groupBox_3.sizePolicy().hasHeightForWidth())
-        self.groupBox_3.setSizePolicy(sizePolicy2)
-        self.groupBox_3.setMaximumSize(QSize(16777215, 300))
-        self.gridLayout_6 = QGridLayout(self.groupBox_3)
-        self.gridLayout_6.setObjectName(u"gridLayout_6")
-        self.buttonDeleteImage = QPushButton(self.groupBox_3)
-        self.buttonDeleteImage.setObjectName(u"buttonDeleteImage")
-
-        self.gridLayout_6.addWidget(self.buttonDeleteImage, 2, 1, 1, 1)
-
-        self.buttonLoadImage = QPushButton(self.groupBox_3)
-        self.buttonLoadImage.setObjectName(u"buttonLoadImage")
-
-        self.gridLayout_6.addWidget(self.buttonLoadImage, 2, 0, 1, 1)
-
-        self.labelImage = QLabel(self.groupBox_3)
-        self.labelImage.setObjectName(u"labelImage")
-        self.labelImage.setMinimumSize(QSize(0, 200))
-        self.labelImage.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
-        self.gridLayout_6.addWidget(self.labelImage, 1, 0, 1, 2)
-
-
-        self.verticalLayout_14.addWidget(self.groupBox_3)
-
-        self.groupBox = QGroupBox(self.widget_5)
-        self.groupBox.setObjectName(u"groupBox")
-        sizePolicy2.setHeightForWidth(self.groupBox.sizePolicy().hasHeightForWidth())
-        self.groupBox.setSizePolicy(sizePolicy2)
-        self.groupBox.setMinimumSize(QSize(0, 100))
-        self.groupBox.setMaximumSize(QSize(16777215, 300))
-        self.verticalLayout_8 = QVBoxLayout(self.groupBox)
-        self.verticalLayout_8.setObjectName(u"verticalLayout_8")
-        self.laStatus = QLabel(self.groupBox)
-        self.laStatus.setObjectName(u"laStatus")
-        sizePolicy2.setHeightForWidth(self.laStatus.sizePolicy().hasHeightForWidth())
-        self.laStatus.setSizePolicy(sizePolicy2)
-
-        self.verticalLayout_8.addWidget(self.laStatus)
-
-        self.lblWerte = QLabel(self.groupBox)
-        self.lblWerte.setObjectName(u"lblWerte")
-        sizePolicy2.setHeightForWidth(self.lblWerte.sizePolicy().hasHeightForWidth())
-        self.lblWerte.setSizePolicy(sizePolicy2)
-        self.lblWerte.setTextFormat(Qt.TextFormat.RichText)
-        self.lblWerte.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
-        self.lblWerte.setWordWrap(True)
-
-        self.verticalLayout_8.addWidget(self.lblWerte)
-
-        self.widget_3 = QWidget(self.groupBox)
-        self.widget_3.setObjectName(u"widget_3")
-        sizePolicy2.setHeightForWidth(self.widget_3.sizePolicy().hasHeightForWidth())
-        self.widget_3.setSizePolicy(sizePolicy2)
-        self.verticalLayout_7 = QVBoxLayout(self.widget_3)
-        self.verticalLayout_7.setObjectName(u"verticalLayout_7")
-        self.btnLogin = QPushButton(self.widget_3)
-        self.btnLogin.setObjectName(u"btnLogin")
-
-        self.verticalLayout_7.addWidget(self.btnLogin)
-
-        self.btnDBLaden = QPushButton(self.widget_3)
-        self.btnDBLaden.setObjectName(u"btnDBLaden")
-
-        self.verticalLayout_7.addWidget(self.btnDBLaden)
-
-        self.btnDBSpeichern = QPushButton(self.widget_3)
-        self.btnDBSpeichern.setObjectName(u"btnDBSpeichern")
-
-        self.verticalLayout_7.addWidget(self.btnDBSpeichern)
-
-
-        self.verticalLayout_8.addWidget(self.widget_3)
-
-
-        self.verticalLayout_14.addWidget(self.groupBox)
-
-        self.groupBox_5 = QGroupBox(self.widget_5)
-        self.groupBox_5.setObjectName(u"groupBox_5")
-        sizePolicy2.setHeightForWidth(self.groupBox_5.sizePolicy().hasHeightForWidth())
-        self.groupBox_5.setSizePolicy(sizePolicy2)
-        self.gridLayout_7 = QGridLayout(self.groupBox_5)
-        self.gridLayout_7.setObjectName(u"gridLayout_7")
-        self.checkEditierbar = QCheckBox(self.groupBox_5)
-        self.checkEditierbar.setObjectName(u"checkEditierbar")
-        self.checkEditierbar.setEnabled(False)
-
-        self.gridLayout_7.addWidget(self.checkEditierbar, 2, 0, 1, 1)
-
-        self.verticalSpacer_4 = QSpacerItem(20, 0, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
-
-        self.gridLayout_7.addItem(self.verticalSpacer_4, 4, 0, 1, 1)
-
-
-        self.verticalLayout_14.addWidget(self.groupBox_5)
-
-        self.verticalSpacer_3 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
-
-        self.verticalLayout_14.addItem(self.verticalSpacer_3)
-
-
-        self.gridLayout_5.addWidget(self.widget_5, 0, 3, 1, 1)
-
-        self.tabWidget = QTabWidget(self.scrollAreaWidgetContents_2)
-        self.tabWidget.setObjectName(u"tabWidget")
-        sizePolicy3 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        sizePolicy3.setHorizontalStretch(0)
-        sizePolicy3.setVerticalStretch(0)
-        sizePolicy3.setHeightForWidth(self.tabWidget.sizePolicy().hasHeightForWidth())
-        self.tabWidget.setSizePolicy(sizePolicy3)
-        self.tab = QWidget()
-        self.tab.setObjectName(u"tab")
         sizePolicy2.setHeightForWidth(self.tab.sizePolicy().hasHeightForWidth())
         self.tab.setSizePolicy(sizePolicy2)
         self.gridLayout_4 = QGridLayout(self.tab)
@@ -190,11 +68,11 @@ class Ui_formMain(object):
         self.gridLayout_12.setVerticalSpacing(6)
         self.leName = QLineEdit(self.groupBox_7)
         self.leName.setObjectName(u"leName")
-        sizePolicy4 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
-        sizePolicy4.setHorizontalStretch(0)
-        sizePolicy4.setVerticalStretch(0)
-        sizePolicy4.setHeightForWidth(self.leName.sizePolicy().hasHeightForWidth())
-        self.leName.setSizePolicy(sizePolicy4)
+        sizePolicy3 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
+        sizePolicy3.setHorizontalStretch(0)
+        sizePolicy3.setVerticalStretch(0)
+        sizePolicy3.setHeightForWidth(self.leName.sizePolicy().hasHeightForWidth())
+        self.leName.setSizePolicy(sizePolicy3)
         self.leName.setMinimumSize(QSize(300, 0))
 
         self.gridLayout_12.addWidget(self.leName, 1, 2, 1, 1)
@@ -234,11 +112,11 @@ class Ui_formMain(object):
 
         self.cbTyp = QComboBox(self.groupBox_7)
         self.cbTyp.setObjectName(u"cbTyp")
-        sizePolicy5 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
-        sizePolicy5.setHorizontalStretch(0)
-        sizePolicy5.setVerticalStretch(0)
-        sizePolicy5.setHeightForWidth(self.cbTyp.sizePolicy().hasHeightForWidth())
-        self.cbTyp.setSizePolicy(sizePolicy5)
+        sizePolicy4 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+        sizePolicy4.setHorizontalStretch(0)
+        sizePolicy4.setVerticalStretch(0)
+        sizePolicy4.setHeightForWidth(self.cbTyp.sizePolicy().hasHeightForWidth())
+        self.cbTyp.setSizePolicy(sizePolicy4)
 
         self.gridLayout_12.addWidget(self.cbTyp, 1, 7, 1, 1)
 
@@ -274,8 +152,8 @@ class Ui_formMain(object):
 
         self.leKurzbeschreibung = QLineEdit(self.groupBox_7)
         self.leKurzbeschreibung.setObjectName(u"leKurzbeschreibung")
-        sizePolicy5.setHeightForWidth(self.leKurzbeschreibung.sizePolicy().hasHeightForWidth())
-        self.leKurzbeschreibung.setSizePolicy(sizePolicy5)
+        sizePolicy4.setHeightForWidth(self.leKurzbeschreibung.sizePolicy().hasHeightForWidth())
+        self.leKurzbeschreibung.setSizePolicy(sizePolicy4)
         self.leKurzbeschreibung.setFrame(True)
 
         self.gridLayout_12.addWidget(self.leKurzbeschreibung, 3, 2, 1, 6)
@@ -587,6 +465,7 @@ class Ui_formMain(object):
         self.Eigenschaften.setObjectName(u"Eigenschaften")
         self.gridLayout_15 = QGridLayout(self.Eigenschaften)
         self.gridLayout_15.setObjectName(u"gridLayout_15")
+        self.gridLayout_15.setContentsMargins(20, 20, 20, 20)
         self.groupBox_6 = QGroupBox(self.Eigenschaften)
         self.groupBox_6.setObjectName(u"groupBox_6")
         sizePolicy2.setHeightForWidth(self.groupBox_6.sizePolicy().hasHeightForWidth())
@@ -600,11 +479,11 @@ class Ui_formMain(object):
         self.treeEigenschaften = QTreeWidget(self.groupBox_6)
         self.treeEigenschaften.setObjectName(u"treeEigenschaften")
         self.treeEigenschaften.setEnabled(True)
-        sizePolicy6 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
-        sizePolicy6.setHorizontalStretch(2)
-        sizePolicy6.setVerticalStretch(20)
-        sizePolicy6.setHeightForWidth(self.treeEigenschaften.sizePolicy().hasHeightForWidth())
-        self.treeEigenschaften.setSizePolicy(sizePolicy6)
+        sizePolicy5 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
+        sizePolicy5.setHorizontalStretch(2)
+        sizePolicy5.setVerticalStretch(20)
+        sizePolicy5.setHeightForWidth(self.treeEigenschaften.sizePolicy().hasHeightForWidth())
+        self.treeEigenschaften.setSizePolicy(sizePolicy5)
         self.treeEigenschaften.setMinimumSize(QSize(0, 50))
         self.treeEigenschaften.setMaximumSize(QSize(16777215, 900))
         self.treeEigenschaften.setFrameShadow(QFrame.Shadow.Plain)
@@ -627,14 +506,8 @@ class Ui_formMain(object):
         self.tab_4.setSizePolicy(sizePolicy2)
         self.verticalLayout_2 = QVBoxLayout(self.tab_4)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.widget_8 = QWidget(self.tab_4)
-        self.widget_8.setObjectName(u"widget_8")
-        sizePolicy2.setHeightForWidth(self.widget_8.sizePolicy().hasHeightForWidth())
-        self.widget_8.setSizePolicy(sizePolicy2)
-        self.gridLayout_14 = QGridLayout(self.widget_8)
-        self.gridLayout_14.setObjectName(u"gridLayout_14")
-        self.gridLayout_14.setContentsMargins(-1, 0, -1, -1)
-        self.groupBox_8 = QGroupBox(self.widget_8)
+        self.verticalLayout_2.setContentsMargins(20, 20, 20, 20)
+        self.groupBox_8 = QGroupBox(self.tab_4)
         self.groupBox_8.setObjectName(u"groupBox_8")
         sizePolicy2.setHeightForWidth(self.groupBox_8.sizePolicy().hasHeightForWidth())
         self.groupBox_8.setSizePolicy(sizePolicy2)
@@ -642,11 +515,11 @@ class Ui_formMain(object):
         self.gridLayout_8.setObjectName(u"gridLayout_8")
         self.treeTalente = QTreeWidget(self.groupBox_8)
         self.treeTalente.setObjectName(u"treeTalente")
-        sizePolicy7 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
-        sizePolicy7.setHorizontalStretch(0)
-        sizePolicy7.setVerticalStretch(0)
-        sizePolicy7.setHeightForWidth(self.treeTalente.sizePolicy().hasHeightForWidth())
-        self.treeTalente.setSizePolicy(sizePolicy7)
+        sizePolicy6 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
+        sizePolicy6.setHorizontalStretch(0)
+        sizePolicy6.setVerticalStretch(0)
+        sizePolicy6.setHeightForWidth(self.treeTalente.sizePolicy().hasHeightForWidth())
+        self.treeTalente.setSizePolicy(sizePolicy6)
         self.treeTalente.setMaximumSize(QSize(16777215, 200))
 
         self.gridLayout_8.addWidget(self.treeTalente, 0, 0, 1, 1)
@@ -657,9 +530,9 @@ class Ui_formMain(object):
         self.gridLayout_8.addWidget(self.btnAddTalent, 1, 0, 1, 1)
 
 
-        self.gridLayout_14.addWidget(self.groupBox_8, 0, 0, 1, 1)
+        self.verticalLayout_2.addWidget(self.groupBox_8)
 
-        self.groupBox_9 = QGroupBox(self.widget_8)
+        self.groupBox_9 = QGroupBox(self.tab_4)
         self.groupBox_9.setObjectName(u"groupBox_9")
         sizePolicy2.setHeightForWidth(self.groupBox_9.sizePolicy().hasHeightForWidth())
         self.groupBox_9.setSizePolicy(sizePolicy2)
@@ -667,8 +540,8 @@ class Ui_formMain(object):
         self.gridLayout_10.setObjectName(u"gridLayout_10")
         self.treeZauberfertigkeiten = QTreeWidget(self.groupBox_9)
         self.treeZauberfertigkeiten.setObjectName(u"treeZauberfertigkeiten")
-        sizePolicy7.setHeightForWidth(self.treeZauberfertigkeiten.sizePolicy().hasHeightForWidth())
-        self.treeZauberfertigkeiten.setSizePolicy(sizePolicy7)
+        sizePolicy6.setHeightForWidth(self.treeZauberfertigkeiten.sizePolicy().hasHeightForWidth())
+        self.treeZauberfertigkeiten.setSizePolicy(sizePolicy6)
         self.treeZauberfertigkeiten.setMaximumSize(QSize(16777215, 200))
 
         self.gridLayout_10.addWidget(self.treeZauberfertigkeiten, 0, 0, 1, 1)
@@ -679,10 +552,7 @@ class Ui_formMain(object):
         self.gridLayout_10.addWidget(self.btnAddZauberfertigkeit, 1, 0, 1, 1)
 
 
-        self.gridLayout_14.addWidget(self.groupBox_9, 1, 0, 1, 1)
-
-
-        self.verticalLayout_2.addWidget(self.widget_8)
+        self.verticalLayout_2.addWidget(self.groupBox_9)
 
         self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
@@ -696,41 +566,162 @@ class Ui_formMain(object):
         self.verticalLayout_6 = QVBoxLayout(self.tab_3)
         self.verticalLayout_6.setObjectName(u"verticalLayout_6")
         self.verticalLayout_6.setContentsMargins(20, 20, 20, 20)
-        self.widget_4 = QWidget(self.tab_3)
-        self.widget_4.setObjectName(u"widget_4")
-        sizePolicy2.setHeightForWidth(self.widget_4.sizePolicy().hasHeightForWidth())
-        self.widget_4.setSizePolicy(sizePolicy2)
-        self.gridLayout_11 = QGridLayout(self.widget_4)
-        self.gridLayout_11.setObjectName(u"gridLayout_11")
-        self.boxAngriffe = QGroupBox(self.widget_4)
+        self.groupBox_4 = QGroupBox(self.tab_3)
+        self.groupBox_4.setObjectName(u"groupBox_4")
+        self.verticalLayout_5 = QVBoxLayout(self.groupBox_4)
+        self.verticalLayout_5.setObjectName(u"verticalLayout_5")
+        self.verticalLayout_5.setContentsMargins(0, 0, 0, 0)
+        self.scrollArea_2 = QScrollArea(self.groupBox_4)
+        self.scrollArea_2.setObjectName(u"scrollArea_2")
+        self.scrollArea_2.setFrameShape(QFrame.Shape.NoFrame)
+        self.scrollArea_2.setWidgetResizable(True)
+        self.scrollAreaWidgetContents_2 = QWidget()
+        self.scrollAreaWidgetContents_2.setObjectName(u"scrollAreaWidgetContents_2")
+        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 741, 505))
+        self.verticalLayout_4 = QVBoxLayout(self.scrollAreaWidgetContents_2)
+        self.verticalLayout_4.setObjectName(u"verticalLayout_4")
+        self.boxAngriffe = QWidget(self.scrollAreaWidgetContents_2)
         self.boxAngriffe.setObjectName(u"boxAngriffe")
         sizePolicy2.setHeightForWidth(self.boxAngriffe.sizePolicy().hasHeightForWidth())
         self.boxAngriffe.setSizePolicy(sizePolicy2)
-        self.boxAngriffe.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
         self.layoutAngriffe = QVBoxLayout(self.boxAngriffe)
         self.layoutAngriffe.setObjectName(u"layoutAngriffe")
 
-        self.gridLayout_11.addWidget(self.boxAngriffe, 0, 0, 1, 1)
-
-        self.btnAddAngriff = QPushButton(self.widget_4)
-        self.btnAddAngriff.setObjectName(u"btnAddAngriff")
-
-        self.gridLayout_11.addWidget(self.btnAddAngriff, 1, 0, 1, 1)
-
-
-        self.verticalLayout_6.addWidget(self.widget_4)
+        self.verticalLayout_4.addWidget(self.boxAngriffe)
 
         self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
-        self.verticalLayout_6.addItem(self.verticalSpacer)
-
-        self.tabWidget.addTab(self.tab_3, "")
-
-        self.gridLayout_5.addWidget(self.tabWidget, 0, 2, 1, 1)
+        self.verticalLayout_4.addItem(self.verticalSpacer)
 
         self.scrollArea_2.setWidget(self.scrollAreaWidgetContents_2)
 
-        self.gridLayout.addWidget(self.scrollArea_2, 0, 0, 1, 1)
+        self.verticalLayout_5.addWidget(self.scrollArea_2)
+
+
+        self.verticalLayout_6.addWidget(self.groupBox_4)
+
+        self.btnAddAngriff = QPushButton(self.tab_3)
+        self.btnAddAngriff.setObjectName(u"btnAddAngriff")
+
+        self.verticalLayout_6.addWidget(self.btnAddAngriff)
+
+        self.tabWidget.addTab(self.tab_3, "")
+        self.splitter.addWidget(self.tabWidget)
+        self.scrollArea = QScrollArea(self.splitter)
+        self.scrollArea.setObjectName(u"scrollArea")
+        self.scrollArea.setFrameShape(QFrame.Shape.NoFrame)
+        self.scrollArea.setWidgetResizable(True)
+        self.scrollAreaWidgetContents = QWidget()
+        self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 249, 630))
+        self.verticalLayout = QVBoxLayout(self.scrollAreaWidgetContents)
+        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.groupBox_3 = QGroupBox(self.scrollAreaWidgetContents)
+        self.groupBox_3.setObjectName(u"groupBox_3")
+        sizePolicy2.setHeightForWidth(self.groupBox_3.sizePolicy().hasHeightForWidth())
+        self.groupBox_3.setSizePolicy(sizePolicy2)
+        self.groupBox_3.setMaximumSize(QSize(16777215, 300))
+        self.gridLayout_6 = QGridLayout(self.groupBox_3)
+        self.gridLayout_6.setObjectName(u"gridLayout_6")
+        self.buttonDeleteImage = QPushButton(self.groupBox_3)
+        self.buttonDeleteImage.setObjectName(u"buttonDeleteImage")
+
+        self.gridLayout_6.addWidget(self.buttonDeleteImage, 2, 1, 1, 1)
+
+        self.labelImage = QLabel(self.groupBox_3)
+        self.labelImage.setObjectName(u"labelImage")
+        self.labelImage.setMinimumSize(QSize(0, 200))
+        self.labelImage.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.gridLayout_6.addWidget(self.labelImage, 1, 0, 1, 2)
+
+        self.buttonLoadImage = QPushButton(self.groupBox_3)
+        self.buttonLoadImage.setObjectName(u"buttonLoadImage")
+
+        self.gridLayout_6.addWidget(self.buttonLoadImage, 2, 0, 1, 1)
+
+
+        self.verticalLayout.addWidget(self.groupBox_3)
+
+        self.groupBox = QGroupBox(self.scrollAreaWidgetContents)
+        self.groupBox.setObjectName(u"groupBox")
+        sizePolicy2.setHeightForWidth(self.groupBox.sizePolicy().hasHeightForWidth())
+        self.groupBox.setSizePolicy(sizePolicy2)
+        self.groupBox.setMinimumSize(QSize(0, 100))
+        self.groupBox.setMaximumSize(QSize(16777215, 300))
+        self.verticalLayout_8 = QVBoxLayout(self.groupBox)
+        self.verticalLayout_8.setObjectName(u"verticalLayout_8")
+        self.laStatus = QLabel(self.groupBox)
+        self.laStatus.setObjectName(u"laStatus")
+        sizePolicy2.setHeightForWidth(self.laStatus.sizePolicy().hasHeightForWidth())
+        self.laStatus.setSizePolicy(sizePolicy2)
+
+        self.verticalLayout_8.addWidget(self.laStatus)
+
+        self.lblWerte = QLabel(self.groupBox)
+        self.lblWerte.setObjectName(u"lblWerte")
+        sizePolicy2.setHeightForWidth(self.lblWerte.sizePolicy().hasHeightForWidth())
+        self.lblWerte.setSizePolicy(sizePolicy2)
+        self.lblWerte.setTextFormat(Qt.TextFormat.RichText)
+        self.lblWerte.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+        self.lblWerte.setWordWrap(True)
+
+        self.verticalLayout_8.addWidget(self.lblWerte)
+
+        self.widget_3 = QWidget(self.groupBox)
+        self.widget_3.setObjectName(u"widget_3")
+        sizePolicy2.setHeightForWidth(self.widget_3.sizePolicy().hasHeightForWidth())
+        self.widget_3.setSizePolicy(sizePolicy2)
+        self.verticalLayout_7 = QVBoxLayout(self.widget_3)
+        self.verticalLayout_7.setObjectName(u"verticalLayout_7")
+        self.btnLogin = QPushButton(self.widget_3)
+        self.btnLogin.setObjectName(u"btnLogin")
+
+        self.verticalLayout_7.addWidget(self.btnLogin)
+
+        self.btnDBLaden = QPushButton(self.widget_3)
+        self.btnDBLaden.setObjectName(u"btnDBLaden")
+
+        self.verticalLayout_7.addWidget(self.btnDBLaden)
+
+        self.btnDBSpeichern = QPushButton(self.widget_3)
+        self.btnDBSpeichern.setObjectName(u"btnDBSpeichern")
+
+        self.verticalLayout_7.addWidget(self.btnDBSpeichern)
+
+
+        self.verticalLayout_8.addWidget(self.widget_3)
+
+
+        self.verticalLayout.addWidget(self.groupBox)
+
+        self.groupBox_5 = QGroupBox(self.scrollAreaWidgetContents)
+        self.groupBox_5.setObjectName(u"groupBox_5")
+        sizePolicy2.setHeightForWidth(self.groupBox_5.sizePolicy().hasHeightForWidth())
+        self.groupBox_5.setSizePolicy(sizePolicy2)
+        self.gridLayout_7 = QGridLayout(self.groupBox_5)
+        self.gridLayout_7.setObjectName(u"gridLayout_7")
+        self.checkEditierbar = QCheckBox(self.groupBox_5)
+        self.checkEditierbar.setObjectName(u"checkEditierbar")
+        self.checkEditierbar.setEnabled(False)
+
+        self.gridLayout_7.addWidget(self.checkEditierbar, 2, 0, 1, 1)
+
+        self.verticalSpacer_4 = QSpacerItem(20, 0, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
+
+        self.gridLayout_7.addItem(self.verticalSpacer_4, 4, 0, 1, 1)
+
+
+        self.verticalLayout.addWidget(self.groupBox_5)
+
+        self.verticalSpacer_3 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.verticalLayout.addItem(self.verticalSpacer_3)
+
+        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
+        self.splitter.addWidget(self.scrollArea)
+
+        self.verticalLayout_3.addWidget(self.splitter)
 
         self.widget_6 = QWidget(formMain)
         self.widget_6.setObjectName(u"widget_6")
@@ -765,7 +756,7 @@ class Ui_formMain(object):
         self.horizontalLayout_2.addWidget(self.btnExport)
 
 
-        self.gridLayout.addWidget(self.widget_6, 1, 0, 1, 1)
+        self.verticalLayout_3.addWidget(self.widget_6)
 
         QWidget.setTabOrder(self.leName, self.leKurzbeschreibung)
         QWidget.setTabOrder(self.leKurzbeschreibung, self.cbTyp)
@@ -796,7 +787,7 @@ class Ui_formMain(object):
 
         self.retranslateUi(formMain)
 
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(3)
 
 
         QMetaObject.connectSlotsByName(formMain)
@@ -804,19 +795,7 @@ class Ui_formMain(object):
 
     def retranslateUi(self, formMain):
         formMain.setWindowTitle(QCoreApplication.translate("formMain", u"Sephrasto - Kreatur erstellen", None))
-        self.groupBox_3.setTitle(QCoreApplication.translate("formMain", u"Bild", None))
-        self.buttonDeleteImage.setText(QCoreApplication.translate("formMain", u"Bild L\u00f6schen", None))
-        self.buttonLoadImage.setText(QCoreApplication.translate("formMain", u"Bild Laden", None))
-        self.labelImage.setText(QCoreApplication.translate("formMain", u"Bild-Aufl\u00f6sung: 193x254 px\n"
-"(wird automatisch angepasst)", None))
-        self.groupBox.setTitle(QCoreApplication.translate("formMain", u"ilaris-online.de", None))
-        self.laStatus.setText(QCoreApplication.translate("formMain", u"Angemeldet: ", None))
-        self.lblWerte.setText(QCoreApplication.translate("formMain", u"<html><head/><body><p><br/></p></body></html>", None))
-        self.btnLogin.setText(QCoreApplication.translate("formMain", u"Anmelden", None))
-        self.btnDBLaden.setText(QCoreApplication.translate("formMain", u"Aus Datenbank Laden", None))
-        self.btnDBSpeichern.setText(QCoreApplication.translate("formMain", u"In Datenbank Speichern", None))
-        self.groupBox_5.setTitle(QCoreApplication.translate("formMain", u"Einstellungen", None))
-        self.checkEditierbar.setText(QCoreApplication.translate("formMain", u"Zus\u00e4tzliche Infok\u00e4sten", None))
+        self.tabWidget.setProperty(u"class", QCoreApplication.translate("formMain", u"tabNavigation", None))
         self.groupBox_7.setTitle(QCoreApplication.translate("formMain", u"Allgemein", None))
         self.leName.setPlaceholderText(QCoreApplication.translate("formMain", u"Name (erforderlich)", None))
         self.leQuelle.setPlaceholderText(QCoreApplication.translate("formMain", u"Quelle", None))
@@ -883,9 +862,24 @@ class Ui_formMain(object):
         ___qtreewidgetitem2.setText(0, QCoreApplication.translate("formMain", u"Fertigkeit", None));
         self.btnAddZauberfertigkeit.setText(QCoreApplication.translate("formMain", u"Hinzuf\u00fcgen", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_4), QCoreApplication.translate("formMain", u"Fertigkeiten", None))
-        self.boxAngriffe.setTitle(QCoreApplication.translate("formMain", u"Angriffe", None))
+        self.groupBox_4.setTitle(QCoreApplication.translate("formMain", u"Angriffe", None))
+        self.scrollArea_2.setProperty(u"class", QCoreApplication.translate("formMain", u"transparent", None))
         self.btnAddAngriff.setText(QCoreApplication.translate("formMain", u"Hinzuf\u00fcgen", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), QCoreApplication.translate("formMain", u"Angriffe", None))
+        self.scrollArea.setProperty(u"class", QCoreApplication.translate("formMain", u"transparent", None))
+        self.groupBox_3.setTitle(QCoreApplication.translate("formMain", u"Bild", None))
+        self.buttonDeleteImage.setText(QCoreApplication.translate("formMain", u"Bild L\u00f6schen", None))
+        self.labelImage.setText(QCoreApplication.translate("formMain", u"Bild-Aufl\u00f6sung: 193x254 px\n"
+"(wird automatisch angepasst)", None))
+        self.buttonLoadImage.setText(QCoreApplication.translate("formMain", u"Bild Laden", None))
+        self.groupBox.setTitle(QCoreApplication.translate("formMain", u"ilaris-online.de", None))
+        self.laStatus.setText(QCoreApplication.translate("formMain", u"Angemeldet: ", None))
+        self.lblWerte.setText(QCoreApplication.translate("formMain", u"<html><head/><body><p><br/></p></body></html>", None))
+        self.btnLogin.setText(QCoreApplication.translate("formMain", u"Anmelden", None))
+        self.btnDBLaden.setText(QCoreApplication.translate("formMain", u"Aus Datenbank Laden", None))
+        self.btnDBSpeichern.setText(QCoreApplication.translate("formMain", u"In Datenbank Speichern", None))
+        self.groupBox_5.setTitle(QCoreApplication.translate("formMain", u"Einstellungen", None))
+        self.checkEditierbar.setText(QCoreApplication.translate("formMain", u"Zus\u00e4tzliche Infok\u00e4sten", None))
         self.buttonLoad.setText(QCoreApplication.translate("formMain", u"Laden", None))
         self.buttonQuicksave.setText(QCoreApplication.translate("formMain", u"Speichern", None))
         self.buttonSave.setText(QCoreApplication.translate("formMain", u"Speichern unter...", None))

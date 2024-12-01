@@ -339,7 +339,6 @@ class Plugin:
                     wrapper.modified.connect(self.onModified)
                     wrapper.reloadRSTabs.connect(self.reloadRSTabs)
                     self.ui.tabs.insertTab(1+i, wrapper.form, "Rüstung " + str(i+1))
-                    self.ui.tabs.tabBar().setTabTextColor(1+i, QtGui.QColor(Wolke.HeadingColor))
                     self.ruestungWrapper.append(wrapper)
             
             def load(self):

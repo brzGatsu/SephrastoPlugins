@@ -37,10 +37,14 @@ class TierbegleiterEditor(object):
         self.characterImage = None
         self.currentlyLoading = False
 
-    def setupMainForm(self): 
+    def setupMainForm(self):
         if "WindowSize-TierbegleiterPlugin" in Wolke.Settings:
             windowSize = Wolke.Settings["WindowSize-TierbegleiterPlugin"]
             self.formMain.resize(windowSize[0], windowSize[1])
+
+        self.ui.splitter.adjustSize()
+        width = self.ui.splitter.size().width()
+        self.ui.splitter.setSizes([int(width*0.6), int(width*0.4)])
 
         self.inventory = [self.ui.leAusruestung1, self.ui.leAusruestung2, self.ui.leAusruestung3, self.ui.leAusruestung4, self.ui.leAusruestung5, self.ui.leAusruestung6, self.ui.leAusruestung7, self.ui.leAusruestung8, self.ui.leAusruestung9, self.ui.leAusruestung10,
                      self.ui.leAusruestung11, self.ui.leAusruestung12, self.ui.leAusruestung13, self.ui.leAusruestung14, self.ui.leAusruestung15, self.ui.leAusruestung16, self.ui.leAusruestung17, self.ui.leAusruestung18, self.ui.leAusruestung19, self.ui.leAusruestung20]

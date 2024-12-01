@@ -102,6 +102,10 @@ class KreaturEditor(object):
             windowSize = Wolke.Settings["WindowSize-KreaturenPlugin"]
             self.formMain.resize(windowSize[0], windowSize[1])
 
+        self.ui.splitter.adjustSize()
+        width = self.ui.splitter.size().width()
+        self.ui.splitter.setSizes([int(width*0.6), int(width*0.4)])
+
         # main window
         self.ui.btnLogin.clicked.connect(self.loginClickedHandler)
         self.ui.btnDBLaden.clicked.connect(self.loadOnlineClickedHandler)

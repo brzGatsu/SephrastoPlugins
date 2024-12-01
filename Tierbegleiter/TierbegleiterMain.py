@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'TierbegleiterMain.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.7.0
+## Created by: Qt User Interface Compiler version 6.8.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -26,26 +26,18 @@ class Ui_formMain(object):
     def setupUi(self, formMain):
         if not formMain.objectName():
             formMain.setObjectName(u"formMain")
-        formMain.setWindowModality(Qt.ApplicationModal)
-        formMain.resize(1312, 810)
+        formMain.setWindowModality(Qt.WindowModality.ApplicationModal)
+        formMain.resize(1042, 636)
         sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(formMain.sizePolicy().hasHeightForWidth())
         formMain.setSizePolicy(sizePolicy)
-        self.gridLayout = QGridLayout(formMain)
-        self.gridLayout.setObjectName(u"gridLayout")
-        self.scrollArea = QScrollArea(formMain)
-        self.scrollArea.setObjectName(u"scrollArea")
-        self.scrollArea.setWidgetResizable(True)
-        self.scrollAreaWidgetContents = QWidget()
-        self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 1288, 749))
-        self.gridLayout_4 = QGridLayout(self.scrollAreaWidgetContents)
-        self.gridLayout_4.setObjectName(u"gridLayout_4")
-        self.splitter = QSplitter(self.scrollAreaWidgetContents)
+        self.verticalLayout_14 = QVBoxLayout(formMain)
+        self.verticalLayout_14.setObjectName(u"verticalLayout_14")
+        self.splitter = QSplitter(formMain)
         self.splitter.setObjectName(u"splitter")
-        self.splitter.setOrientation(Qt.Horizontal)
+        self.splitter.setOrientation(Qt.Orientation.Horizontal)
         self.tabWidget = QTabWidget(self.splitter)
         self.tabWidget.setObjectName(u"tabWidget")
         self.tab = QWidget()
@@ -69,7 +61,7 @@ class Ui_formMain(object):
         font = QFont()
         font.setBold(True)
         self.label_14.setFont(font)
-        self.label_14.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignTop)
+        self.label_14.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
 
         self.gridLayout_2.addWidget(self.label_14, 1, 0, 1, 1)
 
@@ -129,13 +121,13 @@ class Ui_formMain(object):
         self.label_18 = QLabel(self.groupBox_2)
         self.label_18.setObjectName(u"label_18")
         self.label_18.setFont(font)
-        self.label_18.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignTop)
+        self.label_18.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
 
         self.gridLayout_2.addWidget(self.label_18, 3, 0, 1, 1)
 
         self.checkAutoHintergrund = QCheckBox(self.groupBox_2)
         self.checkAutoHintergrund.setObjectName(u"checkAutoHintergrund")
-        self.checkAutoHintergrund.setLayoutDirection(Qt.RightToLeft)
+        self.checkAutoHintergrund.setLayoutDirection(Qt.LayoutDirection.RightToLeft)
         self.checkAutoHintergrund.setChecked(True)
 
         self.gridLayout_2.addWidget(self.checkAutoHintergrund, 4, 1, 1, 1)
@@ -151,7 +143,7 @@ class Ui_formMain(object):
         self.sbCH = QSpinBox(self.groupBox_2)
         self.sbCH.setObjectName(u"sbCH")
         self.sbCH.setMaximumSize(QSize(50, 16777215))
-        self.sbCH.setButtonSymbols(QAbstractSpinBox.PlusMinus)
+        self.sbCH.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.PlusMinus)
         self.sbCH.setMinimum(-99)
 
         self.gridLayout_3.addWidget(self.sbCH, 1, 5, 1, 1)
@@ -159,47 +151,47 @@ class Ui_formMain(object):
         self.sbGS = QSpinBox(self.groupBox_2)
         self.sbGS.setObjectName(u"sbGS")
         self.sbGS.setMaximumSize(QSize(50, 16777215))
-        self.sbGS.setButtonSymbols(QAbstractSpinBox.PlusMinus)
+        self.sbGS.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.PlusMinus)
         self.sbGS.setMinimum(-99)
 
         self.gridLayout_3.addWidget(self.sbGS, 2, 3, 1, 1)
 
         self.label_11 = QLabel(self.groupBox_2)
         self.label_11.setObjectName(u"label_11")
-        self.label_11.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.label_11.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout_3.addWidget(self.label_11, 0, 6, 1, 1)
 
         self.sbRS = QSpinBox(self.groupBox_2)
         self.sbRS.setObjectName(u"sbRS")
         self.sbRS.setMaximumSize(QSize(50, 16777215))
-        self.sbRS.setButtonSymbols(QAbstractSpinBox.PlusMinus)
+        self.sbRS.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.PlusMinus)
         self.sbRS.setMinimum(-99)
 
         self.gridLayout_3.addWidget(self.sbRS, 2, 5, 1, 1)
 
         self.label_5 = QLabel(self.groupBox_2)
         self.label_5.setObjectName(u"label_5")
-        self.label_5.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.label_5.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout_3.addWidget(self.label_5, 0, 0, 1, 1)
 
         self.label_13 = QLabel(self.groupBox_2)
         self.label_13.setObjectName(u"label_13")
-        self.label_13.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.label_13.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout_3.addWidget(self.label_13, 2, 2, 1, 1)
 
         self.label_7 = QLabel(self.groupBox_2)
         self.label_7.setObjectName(u"label_7")
-        self.label_7.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.label_7.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout_3.addWidget(self.label_7, 1, 4, 1, 1)
 
         self.sbIN = QSpinBox(self.groupBox_2)
         self.sbIN.setObjectName(u"sbIN")
         self.sbIN.setMaximumSize(QSize(50, 16777215))
-        self.sbIN.setButtonSymbols(QAbstractSpinBox.PlusMinus)
+        self.sbIN.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.PlusMinus)
         self.sbIN.setMinimum(-99)
 
         self.gridLayout_3.addWidget(self.sbIN, 1, 1, 1, 1)
@@ -207,7 +199,7 @@ class Ui_formMain(object):
         self.sbMU = QSpinBox(self.groupBox_2)
         self.sbMU.setObjectName(u"sbMU")
         self.sbMU.setMaximumSize(QSize(50, 16777215))
-        self.sbMU.setButtonSymbols(QAbstractSpinBox.PlusMinus)
+        self.sbMU.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.PlusMinus)
         self.sbMU.setMinimum(-99)
 
         self.gridLayout_3.addWidget(self.sbMU, 0, 3, 1, 1)
@@ -215,7 +207,7 @@ class Ui_formMain(object):
         self.sbKL = QSpinBox(self.groupBox_2)
         self.sbKL.setObjectName(u"sbKL")
         self.sbKL.setMaximumSize(QSize(50, 16777215))
-        self.sbKL.setButtonSymbols(QAbstractSpinBox.PlusMinus)
+        self.sbKL.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.PlusMinus)
         self.sbKL.setMinimum(-99)
 
         self.gridLayout_3.addWidget(self.sbKL, 1, 3, 1, 1)
@@ -223,65 +215,65 @@ class Ui_formMain(object):
         self.sbFF = QSpinBox(self.groupBox_2)
         self.sbFF.setObjectName(u"sbFF")
         self.sbFF.setMaximumSize(QSize(50, 16777215))
-        self.sbFF.setButtonSymbols(QAbstractSpinBox.PlusMinus)
+        self.sbFF.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.PlusMinus)
         self.sbFF.setMinimum(-99)
 
         self.gridLayout_3.addWidget(self.sbFF, 1, 7, 1, 1)
 
         self.label_6 = QLabel(self.groupBox_2)
         self.label_6.setObjectName(u"label_6")
-        self.label_6.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.label_6.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout_3.addWidget(self.label_6, 1, 0, 1, 1)
 
         self.label_9 = QLabel(self.groupBox_2)
         self.label_9.setObjectName(u"label_9")
-        self.label_9.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.label_9.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout_3.addWidget(self.label_9, 1, 6, 1, 1)
 
         self.label_8 = QLabel(self.groupBox_2)
         self.label_8.setObjectName(u"label_8")
-        self.label_8.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.label_8.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout_3.addWidget(self.label_8, 0, 2, 1, 1)
 
         self.label_15 = QLabel(self.groupBox_2)
         self.label_15.setObjectName(u"label_15")
-        self.label_15.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.label_15.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout_3.addWidget(self.label_15, 2, 4, 1, 1)
 
         self.label_16 = QLabel(self.groupBox_2)
         self.label_16.setObjectName(u"label_16")
-        self.label_16.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.label_16.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout_3.addWidget(self.label_16, 2, 0, 1, 1)
 
         self.label_12 = QLabel(self.groupBox_2)
         self.label_12.setObjectName(u"label_12")
-        self.label_12.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.label_12.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout_3.addWidget(self.label_12, 1, 2, 1, 1)
 
         self.sbGE = QSpinBox(self.groupBox_2)
         self.sbGE.setObjectName(u"sbGE")
         self.sbGE.setMaximumSize(QSize(50, 16777215))
-        self.sbGE.setButtonSymbols(QAbstractSpinBox.PlusMinus)
+        self.sbGE.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.PlusMinus)
         self.sbGE.setMinimum(-99)
 
         self.gridLayout_3.addWidget(self.sbGE, 0, 5, 1, 1)
 
         self.label_10 = QLabel(self.groupBox_2)
         self.label_10.setObjectName(u"label_10")
-        self.label_10.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.label_10.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout_3.addWidget(self.label_10, 0, 4, 1, 1)
 
         self.sbKampfwerte = QSpinBox(self.groupBox_2)
         self.sbKampfwerte.setObjectName(u"sbKampfwerte")
         self.sbKampfwerte.setMaximumSize(QSize(50, 16777215))
-        self.sbKampfwerte.setButtonSymbols(QAbstractSpinBox.PlusMinus)
+        self.sbKampfwerte.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.PlusMinus)
         self.sbKampfwerte.setMinimum(-99)
 
         self.gridLayout_3.addWidget(self.sbKampfwerte, 2, 1, 1, 1)
@@ -290,7 +282,7 @@ class Ui_formMain(object):
         self.sbKO.setObjectName(u"sbKO")
         self.sbKO.setMinimumSize(QSize(0, 0))
         self.sbKO.setMaximumSize(QSize(50, 16777215))
-        self.sbKO.setButtonSymbols(QAbstractSpinBox.PlusMinus)
+        self.sbKO.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.PlusMinus)
         self.sbKO.setMinimum(-99)
 
         self.gridLayout_3.addWidget(self.sbKO, 0, 1, 1, 1)
@@ -298,7 +290,7 @@ class Ui_formMain(object):
         self.sbKK = QSpinBox(self.groupBox_2)
         self.sbKK.setObjectName(u"sbKK")
         self.sbKK.setMaximumSize(QSize(50, 16777215))
-        self.sbKK.setButtonSymbols(QAbstractSpinBox.PlusMinus)
+        self.sbKK.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.PlusMinus)
         self.sbKK.setMinimum(-99)
 
         self.gridLayout_3.addWidget(self.sbKK, 0, 7, 1, 1)
@@ -309,7 +301,7 @@ class Ui_formMain(object):
         self.label_17 = QLabel(self.groupBox_2)
         self.label_17.setObjectName(u"label_17")
         self.label_17.setFont(font)
-        self.label_17.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignTop)
+        self.label_17.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
 
         self.gridLayout_2.addWidget(self.label_17, 5, 0, 1, 1)
 
@@ -340,14 +332,14 @@ class Ui_formMain(object):
         self.hlReiten.setObjectName(u"hlReiten")
         self.lblRK = QLabel(self.groupBox_2)
         self.lblRK.setObjectName(u"lblRK")
-        self.lblRK.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.lblRK.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.hlReiten.addWidget(self.lblRK)
 
         self.sbRK = QSpinBox(self.groupBox_2)
         self.sbRK.setObjectName(u"sbRK")
         self.sbRK.setMaximumSize(QSize(50, 16777215))
-        self.sbRK.setButtonSymbols(QAbstractSpinBox.PlusMinus)
+        self.sbRK.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.PlusMinus)
         self.sbRK.setMaximum(3)
 
         self.hlReiten.addWidget(self.sbRK)
@@ -356,7 +348,7 @@ class Ui_formMain(object):
         self.lblReiten.setObjectName(u"lblReiten")
         sizePolicy.setHeightForWidth(self.lblReiten.sizePolicy().hasHeightForWidth())
         self.lblReiten.setSizePolicy(sizePolicy)
-        self.lblReiten.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.lblReiten.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.hlReiten.addWidget(self.lblReiten)
 
@@ -365,7 +357,7 @@ class Ui_formMain(object):
         sizePolicy1.setHeightForWidth(self.sbReiten.sizePolicy().hasHeightForWidth())
         self.sbReiten.setSizePolicy(sizePolicy1)
         self.sbReiten.setMaximumSize(QSize(50, 16777215))
-        self.sbReiten.setButtonSymbols(QAbstractSpinBox.PlusMinus)
+        self.sbReiten.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.PlusMinus)
         self.sbReiten.setMinimum(-10)
 
         self.hlReiten.addWidget(self.sbReiten)
@@ -395,7 +387,7 @@ class Ui_formMain(object):
         self.label_19 = QLabel(self.groupBox_2)
         self.label_19.setObjectName(u"label_19")
         self.label_19.setFont(font)
-        self.label_19.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignVCenter)
+        self.label_19.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
 
         self.horizontalLayout.addWidget(self.label_19)
 
@@ -506,7 +498,7 @@ class Ui_formMain(object):
         self.lblSchlechteEig = QLabel(self.groupBox_4)
         self.lblSchlechteEig.setObjectName(u"lblSchlechteEig")
         self.lblSchlechteEig.setMaximumSize(QSize(250, 16777215))
-        self.lblSchlechteEig.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignTop)
+        self.lblSchlechteEig.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
         self.lblSchlechteEig.setIndent(0)
 
         self.gridLayout_9.addWidget(self.lblSchlechteEig, 4, 0, 1, 1)
@@ -592,7 +584,7 @@ class Ui_formMain(object):
         self.lblGuteEig = QLabel(self.groupBox_4)
         self.lblGuteEig.setObjectName(u"lblGuteEig")
         self.lblGuteEig.setMaximumSize(QSize(250, 16777215))
-        self.lblGuteEig.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignTop)
+        self.lblGuteEig.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
 
         self.gridLayout_9.addWidget(self.lblGuteEig, 1, 0, 1, 1)
 
@@ -617,7 +609,7 @@ class Ui_formMain(object):
         self.gbInventar.setFlat(False)
         self.gridLayout_10 = QGridLayout(self.gbInventar)
         self.gridLayout_10.setObjectName(u"gridLayout_10")
-        self.gridLayout_10.setSizeConstraint(QLayout.SetDefaultConstraint)
+        self.gridLayout_10.setSizeConstraint(QLayout.SizeConstraint.SetDefaultConstraint)
         self.gridLayout_10.setContentsMargins(20, 20, 20, 20)
         self.leAusruestung17 = QLineEdit(self.gbInventar)
         self.leAusruestung17.setObjectName(u"leAusruestung17")
@@ -673,7 +665,7 @@ class Ui_formMain(object):
         self.leAusruestung1 = QLineEdit(self.gbInventar)
         self.leAusruestung1.setObjectName(u"leAusruestung1")
         self.leAusruestung1.setMinimumSize(QSize(320, 0))
-        self.leAusruestung1.setCursor(QCursor(Qt.IBeamCursor))
+        self.leAusruestung1.setCursor(QCursor(Qt.CursorShape.IBeamCursor))
 
         self.gridLayout_10.addWidget(self.leAusruestung1, 0, 0, 1, 1)
 
@@ -731,12 +723,17 @@ class Ui_formMain(object):
 
         self.tabWidget.addTab(self.tab_3, "")
         self.splitter.addWidget(self.tabWidget)
-        self.widget = QWidget(self.splitter)
-        self.widget.setObjectName(u"widget")
-        self.verticalLayout_11 = QVBoxLayout(self.widget)
-        self.verticalLayout_11.setObjectName(u"verticalLayout_11")
-        self.verticalLayout_11.setContentsMargins(0, 0, 0, 0)
-        self.groupBox_3 = QGroupBox(self.widget)
+        self.scrollArea = QScrollArea(self.splitter)
+        self.scrollArea.setObjectName(u"scrollArea")
+        self.scrollArea.setFrameShape(QFrame.Shape.NoFrame)
+        self.scrollArea.setWidgetResizable(True)
+        self.scrollAreaWidgetContents_3 = QWidget()
+        self.scrollAreaWidgetContents_3.setObjectName(u"scrollAreaWidgetContents_3")
+        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 263, 586))
+        self.verticalLayout_13 = QVBoxLayout(self.scrollAreaWidgetContents_3)
+        self.verticalLayout_13.setObjectName(u"verticalLayout_13")
+        self.verticalLayout_13.setContentsMargins(0, 0, -1, 0)
+        self.groupBox_3 = QGroupBox(self.scrollAreaWidgetContents_3)
         self.groupBox_3.setObjectName(u"groupBox_3")
         self.gridLayout_6 = QGridLayout(self.groupBox_3)
         self.gridLayout_6.setObjectName(u"gridLayout_6")
@@ -753,14 +750,14 @@ class Ui_formMain(object):
         self.labelImage = QLabel(self.groupBox_3)
         self.labelImage.setObjectName(u"labelImage")
         self.labelImage.setMinimumSize(QSize(0, 200))
-        self.labelImage.setAlignment(Qt.AlignCenter)
+        self.labelImage.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.gridLayout_6.addWidget(self.labelImage, 1, 0, 1, 2)
 
 
-        self.verticalLayout_11.addWidget(self.groupBox_3)
+        self.verticalLayout_13.addWidget(self.groupBox_3)
 
-        self.groupBox = QGroupBox(self.widget)
+        self.groupBox = QGroupBox(self.scrollAreaWidgetContents_3)
         self.groupBox.setObjectName(u"groupBox")
         self.verticalLayout_8 = QVBoxLayout(self.groupBox)
         self.verticalLayout_8.setObjectName(u"verticalLayout_8")
@@ -768,16 +765,16 @@ class Ui_formMain(object):
         self.lblWerte.setObjectName(u"lblWerte")
         sizePolicy.setHeightForWidth(self.lblWerte.sizePolicy().hasHeightForWidth())
         self.lblWerte.setSizePolicy(sizePolicy)
-        self.lblWerte.setTextFormat(Qt.RichText)
-        self.lblWerte.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignTop)
+        self.lblWerte.setTextFormat(Qt.TextFormat.RichText)
+        self.lblWerte.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
         self.lblWerte.setWordWrap(True)
 
         self.verticalLayout_8.addWidget(self.lblWerte)
 
 
-        self.verticalLayout_11.addWidget(self.groupBox)
+        self.verticalLayout_13.addWidget(self.groupBox)
 
-        self.groupBox_5 = QGroupBox(self.widget)
+        self.groupBox_5 = QGroupBox(self.scrollAreaWidgetContents_3)
         self.groupBox_5.setObjectName(u"groupBox_5")
         self.gridLayout_7 = QGridLayout(self.groupBox_5)
         self.gridLayout_7.setObjectName(u"gridLayout_7")
@@ -785,7 +782,7 @@ class Ui_formMain(object):
         self.spinRegelnGroesse.setObjectName(u"spinRegelnGroesse")
         self.spinRegelnGroesse.setMinimumSize(QSize(60, 0))
         self.spinRegelnGroesse.setMaximumSize(QSize(60, 16777215))
-        self.spinRegelnGroesse.setButtonSymbols(QAbstractSpinBox.PlusMinus)
+        self.spinRegelnGroesse.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.PlusMinus)
         self.spinRegelnGroesse.setMinimum(6)
         self.spinRegelnGroesse.setMaximum(18)
         self.spinRegelnGroesse.setValue(8)
@@ -823,15 +820,12 @@ class Ui_formMain(object):
         self.gridLayout_7.addWidget(self.checkEditierbar, 4, 1, 1, 1)
 
 
-        self.verticalLayout_11.addWidget(self.groupBox_5)
+        self.verticalLayout_13.addWidget(self.groupBox_5)
 
-        self.splitter.addWidget(self.widget)
+        self.scrollArea.setWidget(self.scrollAreaWidgetContents_3)
+        self.splitter.addWidget(self.scrollArea)
 
-        self.gridLayout_4.addWidget(self.splitter, 0, 0, 1, 1)
-
-        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
-
-        self.gridLayout.addWidget(self.scrollArea, 1, 0, 1, 1)
+        self.verticalLayout_14.addWidget(self.splitter)
 
         self.horizontalLayout_3 = QHBoxLayout()
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
@@ -863,7 +857,7 @@ class Ui_formMain(object):
         self.horizontalLayout_3.addWidget(self.btnSavePdf)
 
 
-        self.gridLayout.addLayout(self.horizontalLayout_3, 6, 0, 1, 1)
+        self.verticalLayout_14.addLayout(self.horizontalLayout_3)
 
         QWidget.setTabOrder(self.leName, self.cbTier)
         QWidget.setTabOrder(self.cbTier, self.sbRK)
@@ -892,17 +886,18 @@ class Ui_formMain(object):
 
     def retranslateUi(self, formMain):
         formMain.setWindowTitle(QCoreApplication.translate("formMain", u"Sephrasto - Tierbegleiter erstellen", None))
+        self.tabWidget.setProperty(u"class", QCoreApplication.translate("formMain", u"tabNavigation", None))
         self.groupBox_2.setTitle("")
         self.label_14.setText(QCoreApplication.translate("formMain", u"Tier", None))
-        self.label_14.setProperty("class", QCoreApplication.translate("formMain", u"h4", None))
+        self.label_14.setProperty(u"class", QCoreApplication.translate("formMain", u"h4", None))
         self.label_4.setText(QCoreApplication.translate("formMain", u"Attributs-Anpassungen", None))
-        self.label_4.setProperty("class", QCoreApplication.translate("formMain", u"h4", None))
+        self.label_4.setProperty(u"class", QCoreApplication.translate("formMain", u"h4", None))
         self.label_23.setText(QCoreApplication.translate("formMain", u"(z.B. f\u00fcr Vertrautenmagie oder R\u00fcstungen)", None))
-        self.label_23.setProperty("class", QCoreApplication.translate("formMain", u"smallText", None))
+        self.label_23.setProperty(u"class", QCoreApplication.translate("formMain", u"smallText", None))
         self.label.setText(QCoreApplication.translate("formMain", u"Nahrung", None))
-        self.label.setProperty("class", QCoreApplication.translate("formMain", u"h4", None))
+        self.label.setProperty(u"class", QCoreApplication.translate("formMain", u"h4", None))
         self.label_18.setText(QCoreApplication.translate("formMain", u"Hintergrund", None))
-        self.label_18.setProperty("class", QCoreApplication.translate("formMain", u"h4", None))
+        self.label_18.setProperty(u"class", QCoreApplication.translate("formMain", u"h4", None))
         self.checkAutoHintergrund.setText(QCoreApplication.translate("formMain", u"Automatisch bef\u00fcllen", None))
         self.label_11.setText(QCoreApplication.translate("formMain", u"KK", None))
         self.label_5.setText(QCoreApplication.translate("formMain", u"KO", None))
@@ -916,7 +911,7 @@ class Ui_formMain(object):
         self.label_12.setText(QCoreApplication.translate("formMain", u"KL", None))
         self.label_10.setText(QCoreApplication.translate("formMain", u"GE", None))
         self.label_17.setText(QCoreApplication.translate("formMain", u"Aussehen", None))
-        self.label_17.setProperty("class", QCoreApplication.translate("formMain", u"h4", None))
+        self.label_17.setProperty(u"class", QCoreApplication.translate("formMain", u"h4", None))
         self.lblTier.setText("")
         self.lblRK.setText(QCoreApplication.translate("formMain", u"Reiterkampfstil-Stufe", None))
         self.lblReiten.setText(QCoreApplication.translate("formMain", u"Reiten-PW - BE", None))
@@ -924,9 +919,9 @@ class Ui_formMain(object):
         self.sbReiten.setToolTip(QCoreApplication.translate("formMain", u"Trage hier deinen Reiten-PW abz\u00fcglich BE ein. Nicht vergessen - mit Reiterkampf II sinkt die BE um 1!", None))
 #endif // QT_CONFIG(tooltip)
         self.label_2.setText(QCoreApplication.translate("formMain", u"Name", None))
-        self.label_2.setProperty("class", QCoreApplication.translate("formMain", u"h4", None))
+        self.label_2.setProperty(u"class", QCoreApplication.translate("formMain", u"h4", None))
         self.label_19.setText(QCoreApplication.translate("formMain", u"Weitere Vorteile", None))
-        self.label_19.setProperty("class", QCoreApplication.translate("formMain", u"h4", None))
+        self.label_19.setProperty(u"class", QCoreApplication.translate("formMain", u"h4", None))
         self.label_24.setText(QCoreApplication.translate("formMain", u"(kommagetrennt)", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QCoreApplication.translate("formMain", u"Beschreibung und Attribute", None))
         self.groupBox_4.setTitle("")
@@ -940,7 +935,7 @@ class Ui_formMain(object):
         self.cbZucht.setItemText(7, QCoreApplication.translate("formMain", u"Einzigartig (3 Gute Eigenschaften)", None))
 
         self.label_3.setText(QCoreApplication.translate("formMain", u"Ausbildung", None))
-        self.label_3.setProperty("class", QCoreApplication.translate("formMain", u"h4", None))
+        self.label_3.setProperty(u"class", QCoreApplication.translate("formMain", u"h4", None))
         self.lblAusbildung.setText("")
         self.lblGuteEig2.setText("")
         self.lblSchlechteEig2.setText("")
@@ -949,12 +944,13 @@ class Ui_formMain(object):
         self.lblGuteEig1.setText("")
         self.lblGuteEig3.setText("")
         self.lblZucht.setText(QCoreApplication.translate("formMain", u"Zuchtqualit\u00e4t", None))
-        self.lblZucht.setProperty("class", QCoreApplication.translate("formMain", u"h4", None))
+        self.lblZucht.setProperty(u"class", QCoreApplication.translate("formMain", u"h4", None))
         self.lblGuteEig.setText(QCoreApplication.translate("formMain", u"    Gute Tiereigenschaften", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), QCoreApplication.translate("formMain", u"Zucht und Ausbildung", None))
         self.gbInventar.setTitle("")
         self.leAusruestung1.setText("")
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), QCoreApplication.translate("formMain", u"Ausr\u00fcstung", None))
+        self.scrollArea.setProperty(u"class", QCoreApplication.translate("formMain", u"transparent", None))
         self.groupBox_3.setTitle(QCoreApplication.translate("formMain", u"Bild", None))
         self.buttonLoadImage.setText(QCoreApplication.translate("formMain", u"Bild Laden", None))
         self.buttonDeleteImage.setText(QCoreApplication.translate("formMain", u"Bild L\u00f6schen", None))
