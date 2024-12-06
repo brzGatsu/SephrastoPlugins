@@ -90,7 +90,34 @@
              <property name="verticalSpacing">
               <number>6</number>
              </property>
-             <item row="1" column="2">
+             <item row="2" column="1" colspan="3">
+              <widget class="QLineEdit" name="leQuelle">
+               <property name="placeholderText">
+                <string>Quelle</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="label">
+               <property name="mouseTracking">
+                <bool>true</bool>
+               </property>
+               <property name="text">
+                <string>Kurzbeschreibung</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="QLabel" name="label_19">
+               <property name="toolTip">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Liste von Abkürzungen der&lt;a href=&quot;https://ilaris-online.de/app/abenteuers/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Abenteuer&lt;/span&gt;&lt;/a&gt; in denen die Kreatur vorkommt (durch Komma getrennt). Nicht existierende Abenteuer werden automatisch erstellt.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="text">
+                <string>Abenteuer</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
               <widget class="QLineEdit" name="leName">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -109,14 +136,83 @@
                </property>
               </widget>
              </item>
-             <item row="4" column="2" colspan="3">
-              <widget class="QLineEdit" name="leQuelle">
-               <property name="placeholderText">
-                <string>Quelle</string>
+             <item row="0" column="5">
+              <widget class="QComboBox" name="cbTyp">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
                </property>
               </widget>
              </item>
-             <item row="1" column="6">
+             <item row="0" column="2">
+              <widget class="QLabel" name="laID">
+               <property name="text">
+                <string>ID: </string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="3">
+              <spacer name="horizontalSpacer">
+               <property name="orientation">
+                <enum>Qt::Orientation::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="3" column="1" colspan="3">
+              <widget class="QLineEdit" name="leAbenteuer">
+               <property name="text">
+                <string/>
+               </property>
+               <property name="placeholderText">
+                <string>Durch Komma getrennte Abkürzungen</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="label_4">
+               <property name="text">
+                <string>Quelle</string>
+               </property>
+               <property name="textFormat">
+                <enum>Qt::TextFormat::MarkdownText</enum>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="5">
+              <widget class="QCheckBox" name="cbPublik">
+               <property name="toolTip">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Veröffentliche Kreaturen sind online für alle sichtbar und sollten einzigartig im Namen sein. Mit der Veröffentlichung ermöglichst du zudem anderen die Kreatur zu bearbeiten.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="text">
+                <string>Öffentlich</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1" colspan="5">
+              <widget class="QLineEdit" name="leKurzbeschreibung">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="frame">
+                <bool>true</bool>
+               </property>
+               <property name="placeholderText">
+                <string>Kompakte Beschreibung der Kreatur (erforderlich)</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="4">
               <widget class="QLabel" name="label_14">
                <property name="minimumSize">
                 <size>
@@ -138,17 +234,7 @@
                </property>
               </widget>
              </item>
-             <item row="4" column="7">
-              <widget class="QCheckBox" name="cbPublik">
-               <property name="toolTip">
-                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Veröffentliche Kreaturen sind online für alle sichtbar und sollten einzigartig im Namen sein. Mit der Veröffentlichung ermöglichst du zudem anderen die Kreatur zu bearbeiten.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-               </property>
-               <property name="text">
-                <string>Öffentlich</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="0">
+             <item row="0" column="0">
               <widget class="QLabel" name="label_2">
                <property name="maximumSize">
                 <size>
@@ -161,104 +247,13 @@
                </property>
               </widget>
              </item>
-             <item row="5" column="2" colspan="3">
-              <widget class="QLineEdit" name="leAbenteuer">
-               <property name="text">
-                <string/>
-               </property>
-               <property name="placeholderText">
-                <string>Durch Komma getrennte Abkürzungen</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="4">
-              <spacer name="horizontalSpacer">
-               <property name="orientation">
-                <enum>Qt::Orientation::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-             <item row="1" column="7">
-              <widget class="QComboBox" name="cbTyp">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-              </widget>
-             </item>
-             <item row="5" column="7">
+             <item row="3" column="5">
               <widget class="QCheckBox" name="cbNSC">
                <property name="toolTip">
                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Kreaturen werden dann als NSCs gekennzeichnet, wenn ihre Beschreibung eher für ein Individuum (zB Helme Hafax) als für eine ganze Gruppe einer Art oder eines Archetypen gilt (zB Erfahrener Heerführer). Als Faustregel: Bestimmter Artikel -&amp;gt; NSC, unbestimmter Artikel -&amp;gt; kein NSC.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                </property>
                <property name="text">
                 <string>NSC</string>
-               </property>
-              </widget>
-             </item>
-             <item row="5" column="0">
-              <widget class="QLabel" name="label_19">
-               <property name="toolTip">
-                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Liste von Abkürzungen der&lt;a href=&quot;https://ilaris-online.de/app/abenteuers/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Abenteuer&lt;/span&gt;&lt;/a&gt; in denen die Kreatur vorkommt (durch Komma getrennt). Nicht existierende Abenteuer werden automatisch erstellt.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-               </property>
-               <property name="text">
-                <string>Abenteuer</string>
-               </property>
-              </widget>
-             </item>
-             <item row="4" column="0">
-              <widget class="QLabel" name="label_4">
-               <property name="text">
-                <string>Quelle</string>
-               </property>
-               <property name="textFormat">
-                <enum>Qt::TextFormat::MarkdownText</enum>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="0">
-              <widget class="QLabel" name="label">
-               <property name="font">
-                <font>
-                 <bold>true</bold>
-                </font>
-               </property>
-               <property name="mouseTracking">
-                <bool>true</bool>
-               </property>
-               <property name="text">
-                <string>Kurzbeschreibung</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="3">
-              <widget class="QLabel" name="laID">
-               <property name="text">
-                <string>ID: </string>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="2" colspan="6">
-              <widget class="QLineEdit" name="leKurzbeschreibung">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="frame">
-                <bool>true</bool>
-               </property>
-               <property name="placeholderText">
-                <string>Kompakte Beschreibung der Kreatur (erforderlich)</string>
                </property>
               </widget>
              </item>
@@ -1122,8 +1117,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>741</width>
-                <height>505</height>
+                <width>98</width>
+                <height>51</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -1183,8 +1178,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>249</width>
-         <height>630</height>
+         <width>245</width>
+         <height>702</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout">

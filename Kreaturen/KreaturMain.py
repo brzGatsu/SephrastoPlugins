@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'KreaturMain.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.8.0
+## Created by: Qt User Interface Compiler version 6.8.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -66,6 +66,22 @@ class Ui_formMain(object):
         self.gridLayout_12 = QGridLayout()
         self.gridLayout_12.setObjectName(u"gridLayout_12")
         self.gridLayout_12.setVerticalSpacing(6)
+        self.leQuelle = QLineEdit(self.groupBox_7)
+        self.leQuelle.setObjectName(u"leQuelle")
+
+        self.gridLayout_12.addWidget(self.leQuelle, 2, 1, 1, 3)
+
+        self.label = QLabel(self.groupBox_7)
+        self.label.setObjectName(u"label")
+        self.label.setMouseTracking(True)
+
+        self.gridLayout_12.addWidget(self.label, 1, 0, 1, 1)
+
+        self.label_19 = QLabel(self.groupBox_7)
+        self.label_19.setObjectName(u"label_19")
+
+        self.gridLayout_12.addWidget(self.label_19, 3, 0, 1, 1)
+
         self.leName = QLineEdit(self.groupBox_7)
         self.leName.setObjectName(u"leName")
         sizePolicy3 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
@@ -75,40 +91,7 @@ class Ui_formMain(object):
         self.leName.setSizePolicy(sizePolicy3)
         self.leName.setMinimumSize(QSize(300, 0))
 
-        self.gridLayout_12.addWidget(self.leName, 1, 2, 1, 1)
-
-        self.leQuelle = QLineEdit(self.groupBox_7)
-        self.leQuelle.setObjectName(u"leQuelle")
-
-        self.gridLayout_12.addWidget(self.leQuelle, 4, 2, 1, 3)
-
-        self.label_14 = QLabel(self.groupBox_7)
-        self.label_14.setObjectName(u"label_14")
-        self.label_14.setMinimumSize(QSize(0, 0))
-        self.label_14.setMaximumSize(QSize(250, 16777215))
-        self.label_14.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
-
-        self.gridLayout_12.addWidget(self.label_14, 1, 6, 1, 1)
-
-        self.cbPublik = QCheckBox(self.groupBox_7)
-        self.cbPublik.setObjectName(u"cbPublik")
-
-        self.gridLayout_12.addWidget(self.cbPublik, 4, 7, 1, 1)
-
-        self.label_2 = QLabel(self.groupBox_7)
-        self.label_2.setObjectName(u"label_2")
-        self.label_2.setMaximumSize(QSize(250, 16777215))
-
-        self.gridLayout_12.addWidget(self.label_2, 1, 0, 1, 1)
-
-        self.leAbenteuer = QLineEdit(self.groupBox_7)
-        self.leAbenteuer.setObjectName(u"leAbenteuer")
-
-        self.gridLayout_12.addWidget(self.leAbenteuer, 5, 2, 1, 3)
-
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.gridLayout_12.addItem(self.horizontalSpacer, 1, 4, 1, 1)
+        self.gridLayout_12.addWidget(self.leName, 0, 1, 1, 1)
 
         self.cbTyp = QComboBox(self.groupBox_7)
         self.cbTyp.setObjectName(u"cbTyp")
@@ -118,37 +101,32 @@ class Ui_formMain(object):
         sizePolicy4.setHeightForWidth(self.cbTyp.sizePolicy().hasHeightForWidth())
         self.cbTyp.setSizePolicy(sizePolicy4)
 
-        self.gridLayout_12.addWidget(self.cbTyp, 1, 7, 1, 1)
+        self.gridLayout_12.addWidget(self.cbTyp, 0, 5, 1, 1)
 
-        self.cbNSC = QCheckBox(self.groupBox_7)
-        self.cbNSC.setObjectName(u"cbNSC")
+        self.laID = QLabel(self.groupBox_7)
+        self.laID.setObjectName(u"laID")
 
-        self.gridLayout_12.addWidget(self.cbNSC, 5, 7, 1, 1)
+        self.gridLayout_12.addWidget(self.laID, 0, 2, 1, 1)
 
-        self.label_19 = QLabel(self.groupBox_7)
-        self.label_19.setObjectName(u"label_19")
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
-        self.gridLayout_12.addWidget(self.label_19, 5, 0, 1, 1)
+        self.gridLayout_12.addItem(self.horizontalSpacer, 0, 3, 1, 1)
+
+        self.leAbenteuer = QLineEdit(self.groupBox_7)
+        self.leAbenteuer.setObjectName(u"leAbenteuer")
+
+        self.gridLayout_12.addWidget(self.leAbenteuer, 3, 1, 1, 3)
 
         self.label_4 = QLabel(self.groupBox_7)
         self.label_4.setObjectName(u"label_4")
         self.label_4.setTextFormat(Qt.TextFormat.MarkdownText)
 
-        self.gridLayout_12.addWidget(self.label_4, 4, 0, 1, 1)
+        self.gridLayout_12.addWidget(self.label_4, 2, 0, 1, 1)
 
-        self.label = QLabel(self.groupBox_7)
-        self.label.setObjectName(u"label")
-        font = QFont()
-        font.setBold(True)
-        self.label.setFont(font)
-        self.label.setMouseTracking(True)
+        self.cbPublik = QCheckBox(self.groupBox_7)
+        self.cbPublik.setObjectName(u"cbPublik")
 
-        self.gridLayout_12.addWidget(self.label, 3, 0, 1, 1)
-
-        self.laID = QLabel(self.groupBox_7)
-        self.laID.setObjectName(u"laID")
-
-        self.gridLayout_12.addWidget(self.laID, 1, 3, 1, 1)
+        self.gridLayout_12.addWidget(self.cbPublik, 2, 5, 1, 1)
 
         self.leKurzbeschreibung = QLineEdit(self.groupBox_7)
         self.leKurzbeschreibung.setObjectName(u"leKurzbeschreibung")
@@ -156,7 +134,26 @@ class Ui_formMain(object):
         self.leKurzbeschreibung.setSizePolicy(sizePolicy4)
         self.leKurzbeschreibung.setFrame(True)
 
-        self.gridLayout_12.addWidget(self.leKurzbeschreibung, 3, 2, 1, 6)
+        self.gridLayout_12.addWidget(self.leKurzbeschreibung, 1, 1, 1, 5)
+
+        self.label_14 = QLabel(self.groupBox_7)
+        self.label_14.setObjectName(u"label_14")
+        self.label_14.setMinimumSize(QSize(0, 0))
+        self.label_14.setMaximumSize(QSize(250, 16777215))
+        self.label_14.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.gridLayout_12.addWidget(self.label_14, 0, 4, 1, 1)
+
+        self.label_2 = QLabel(self.groupBox_7)
+        self.label_2.setObjectName(u"label_2")
+        self.label_2.setMaximumSize(QSize(250, 16777215))
+
+        self.gridLayout_12.addWidget(self.label_2, 0, 0, 1, 1)
+
+        self.cbNSC = QCheckBox(self.groupBox_7)
+        self.cbNSC.setObjectName(u"cbNSC")
+
+        self.gridLayout_12.addWidget(self.cbNSC, 3, 5, 1, 1)
 
 
         self.gridLayout_16.addLayout(self.gridLayout_12, 0, 0, 1, 1)
@@ -577,7 +574,7 @@ class Ui_formMain(object):
         self.scrollArea_2.setWidgetResizable(True)
         self.scrollAreaWidgetContents_2 = QWidget()
         self.scrollAreaWidgetContents_2.setObjectName(u"scrollAreaWidgetContents_2")
-        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 741, 505))
+        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 98, 51))
         self.verticalLayout_4 = QVBoxLayout(self.scrollAreaWidgetContents_2)
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
         self.boxAngriffe = QWidget(self.scrollAreaWidgetContents_2)
@@ -613,7 +610,7 @@ class Ui_formMain(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 249, 630))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 245, 702))
         self.verticalLayout = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.groupBox_3 = QGroupBox(self.scrollAreaWidgetContents)
@@ -787,7 +784,7 @@ class Ui_formMain(object):
 
         self.retranslateUi(formMain)
 
-        self.tabWidget.setCurrentIndex(3)
+        self.tabWidget.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(formMain)
@@ -797,28 +794,28 @@ class Ui_formMain(object):
         formMain.setWindowTitle(QCoreApplication.translate("formMain", u"Sephrasto - Kreatur erstellen", None))
         self.tabWidget.setProperty(u"class", QCoreApplication.translate("formMain", u"tabNavigation", None))
         self.groupBox_7.setTitle(QCoreApplication.translate("formMain", u"Allgemein", None))
-        self.leName.setPlaceholderText(QCoreApplication.translate("formMain", u"Name (erforderlich)", None))
         self.leQuelle.setPlaceholderText(QCoreApplication.translate("formMain", u"Quelle", None))
-        self.label_14.setText(QCoreApplication.translate("formMain", u"<html><head/><body><p><span style=\" font-weight:600;\">Typ</span></p></body></html>", None))
-#if QT_CONFIG(tooltip)
-        self.cbPublik.setToolTip(QCoreApplication.translate("formMain", u"<html><head/><body><p>Ver\u00f6ffentliche Kreaturen sind online f\u00fcr alle sichtbar und sollten einzigartig im Namen sein. Mit der Ver\u00f6ffentlichung erm\u00f6glichst du zudem anderen die Kreatur zu bearbeiten.</p></body></html>", None))
-#endif // QT_CONFIG(tooltip)
-        self.cbPublik.setText(QCoreApplication.translate("formMain", u"\u00d6ffentlich", None))
-        self.label_2.setText(QCoreApplication.translate("formMain", u"<html><head/><body><p><span style=\" font-weight:600;\">Name</span></p></body></html>", None))
-        self.leAbenteuer.setText("")
-        self.leAbenteuer.setPlaceholderText(QCoreApplication.translate("formMain", u"Durch Komma getrennte Abk\u00fcrzungen", None))
-#if QT_CONFIG(tooltip)
-        self.cbNSC.setToolTip(QCoreApplication.translate("formMain", u"<html><head/><body><p>Kreaturen werden dann als NSCs gekennzeichnet, wenn ihre Beschreibung eher f\u00fcr ein Individuum (zB Helme Hafax) als f\u00fcr eine ganze Gruppe einer Art oder eines Archetypen gilt (zB Erfahrener Heerf\u00fchrer). Als Faustregel: Bestimmter Artikel -&gt; NSC, unbestimmter Artikel -&gt; kein NSC.</p></body></html>", None))
-#endif // QT_CONFIG(tooltip)
-        self.cbNSC.setText(QCoreApplication.translate("formMain", u"NSC", None))
+        self.label.setText(QCoreApplication.translate("formMain", u"Kurzbeschreibung", None))
 #if QT_CONFIG(tooltip)
         self.label_19.setToolTip(QCoreApplication.translate("formMain", u"<html><head/><body><p>Liste von Abk\u00fcrzungen der<a href=\"https://ilaris-online.de/app/abenteuers/\"><span style=\" text-decoration: underline; color:#0000ff;\">Abenteuer</span></a> in denen die Kreatur vorkommt (durch Komma getrennt). Nicht existierende Abenteuer werden automatisch erstellt.</p></body></html>", None))
 #endif // QT_CONFIG(tooltip)
         self.label_19.setText(QCoreApplication.translate("formMain", u"Abenteuer", None))
-        self.label_4.setText(QCoreApplication.translate("formMain", u"Quelle", None))
-        self.label.setText(QCoreApplication.translate("formMain", u"Kurzbeschreibung", None))
+        self.leName.setPlaceholderText(QCoreApplication.translate("formMain", u"Name (erforderlich)", None))
         self.laID.setText(QCoreApplication.translate("formMain", u"ID: ", None))
+        self.leAbenteuer.setText("")
+        self.leAbenteuer.setPlaceholderText(QCoreApplication.translate("formMain", u"Durch Komma getrennte Abk\u00fcrzungen", None))
+        self.label_4.setText(QCoreApplication.translate("formMain", u"Quelle", None))
+#if QT_CONFIG(tooltip)
+        self.cbPublik.setToolTip(QCoreApplication.translate("formMain", u"<html><head/><body><p>Ver\u00f6ffentliche Kreaturen sind online f\u00fcr alle sichtbar und sollten einzigartig im Namen sein. Mit der Ver\u00f6ffentlichung erm\u00f6glichst du zudem anderen die Kreatur zu bearbeiten.</p></body></html>", None))
+#endif // QT_CONFIG(tooltip)
+        self.cbPublik.setText(QCoreApplication.translate("formMain", u"\u00d6ffentlich", None))
         self.leKurzbeschreibung.setPlaceholderText(QCoreApplication.translate("formMain", u"Kompakte Beschreibung der Kreatur (erforderlich)", None))
+        self.label_14.setText(QCoreApplication.translate("formMain", u"<html><head/><body><p><span style=\" font-weight:600;\">Typ</span></p></body></html>", None))
+        self.label_2.setText(QCoreApplication.translate("formMain", u"<html><head/><body><p><span style=\" font-weight:600;\">Name</span></p></body></html>", None))
+#if QT_CONFIG(tooltip)
+        self.cbNSC.setToolTip(QCoreApplication.translate("formMain", u"<html><head/><body><p>Kreaturen werden dann als NSCs gekennzeichnet, wenn ihre Beschreibung eher f\u00fcr ein Individuum (zB Helme Hafax) als f\u00fcr eine ganze Gruppe einer Art oder eines Archetypen gilt (zB Erfahrener Heerf\u00fchrer). Als Faustregel: Bestimmter Artikel -&gt; NSC, unbestimmter Artikel -&gt; kein NSC.</p></body></html>", None))
+#endif // QT_CONFIG(tooltip)
+        self.cbNSC.setText(QCoreApplication.translate("formMain", u"NSC", None))
         self.groupBox_2.setTitle(QCoreApplication.translate("formMain", u"Werte", None))
         self.leGSS_label.setPlaceholderText(QCoreApplication.translate("formMain", u"Schwimmend", None))
         self.label_8.setText(QCoreApplication.translate("formMain", u"MU", None))
