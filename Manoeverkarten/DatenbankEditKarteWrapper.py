@@ -226,7 +226,8 @@ class DatenbankEditKarteWrapper(DatenbankElementEditorBase):
                 self.ui.comboSubtyp.addItems(typen)
                 
         if originalElement is not None:
-            self.ui.comboSubtyp.setCurrentIndex(originalElement.kategorie)
+            if hasattr(originalElement, "kategorie"):
+                self.ui.comboSubtyp.setCurrentIndex(originalElement.kategorie)
         elif Hilfsmethoden.ArrayEqual([self.ui.comboSubtyp.itemText(i) for i in range(self.ui.comboSubtyp.count())], prevSubtypItems):
             self.ui.comboSubtyp.setCurrentIndex(prevSubtypIndex)
             
