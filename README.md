@@ -3,6 +3,13 @@ In diesem Repo sammle ich alle meine Plugins für den Ilaris-Charaktergenerator 
 Grundsätzlich unterstützen die Plugins immer die neueste Sephrasto-Version, ältere Versionen ohne Gewähr.
 
 ## Installationsanleitung
+
+1. Öffne Sephrastos Einstellungen über den Zahnrad-Button im Startfenster.
+2. Wechsle auf den Tab Plugins
+3. Wähle das gewünschte Plugin aus und clicke auf "Installieren".
+4. Starte Sephrasto neu.
+
+### Sephrasto vor Version 4.4
 1. Clicke auf github rechts auf "Releases".
 2. Suche den passenden Download für deine Sephrastoversion und lade die Zipdatei unter "Assets" herunter.
 3. Starte Sephrasto, gehe in die Einstellungen und notiere dir den Speicherpfad für Plugins
