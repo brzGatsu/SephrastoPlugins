@@ -1,7 +1,7 @@
 import os
 import shutil
 
-version = "5.0.1"
+version = "5.1.0"
 dir_path = os.path.dirname(os.path.realpath(__file__))
 build_path = os.path.join(dir_path,  "build")
 os.makedirs(build_path)
@@ -21,7 +21,8 @@ includes = [
     "Tragkraft",
     "WaffenPlus",
     "Zaubertricks",
-    "Historie"
+    "Historie",
+    "Kreaturen"
 ]
 
 print("Copying plugins to build folder")

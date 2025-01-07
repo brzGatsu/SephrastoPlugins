@@ -2,6 +2,6 @@
   "name": "Historie",
   "description": "In der Historie werden Änderungen des Charakters in Textform gespeichert. Über einen Extra-Tab im Charakter-Editor lässt sich der EP Verlauf und die Änderungen von übernatürlichen, freien und profanen Fertigkeiten und Talenten, Eigenheiten, Zaubern, Vorteilen und Attributen nach verfolgen. Das Inventar und Beschreibungen, die nicht ausschlaggebend für die Generierung sind, werden nicht aufgezeichnet.\nAus dem aufgezeichneten Verlauf ist es nicht möglich alte Versionen des Charakters wieder herzustellen. Zu diesem Zweck bietet das Plugin jedoch die Möglichkeit automatische Backups nach EP-Stand oder Datum anzulegen. Verschiedene Dateien können mit dem charakter_diff-Makro verglichen werden.",
   "author": "Lukr",
-  "version": "2",
+  "version": "3",
   "hasSettings": true
 }
