@@ -1,6 +1,0 @@
-{
-  "name": "Tragkraft",
-  "description": "Das Plugin setzt die Tragkraft der Regeln für Reisen von Alrik Normalpaktierer um (<a href='https://dsaforum.de/viewtopic.php?f=180&t=55321&hilit=reiseregeln'>dsaforum.de Thread</a>). Es wird in der Datenbank automatisch ein abgeleiteter Wert für die Tragkraftberechnung angelegt und im Inventar kann bei jeder Zeile die Last angegeben werden.",
-  "author": "Gatsu",
-  "version": "3"
-}

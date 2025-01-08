@@ -18,7 +18,6 @@ includes = [
     "SephMakro",
     "SephMakroScripts",
     "Tierbegleiter",
-    "Tragkraft",
     "WaffenPlus",
     "Zaubertricks",
     "Historie",

@@ -1,6 +1,5 @@
 # SephrastoPlugins
-In diesem Repo sammle ich alle meine Plugins für den Ilaris-Charaktergenerator Sephrasto. Plugins und andere Beiträge von anderen Entwicklern sind gerne gesehen, kontaktiert mich einfach auf dem Ilaris Tools Discord.
-Grundsätzlich unterstützen die Plugins immer die neueste Sephrasto-Version, ältere Versionen ohne Gewähr.
+Dieses Repo ist die offizielle Plugin-Quelle für den Ilaris-Charaktergenerator Sephrasto. Plugins und andere Beiträge von anderen Entwicklern sind gerne gesehen, kontaktiert mich einfach auf dem Ilaris Tools Discord.
 
 ## Installationsanleitung
 
@@ -50,6 +49,9 @@ In der Historie werden Änderungen des Charakters in Textform gespeichert. Über
 
 Aus dem aufgezeichneten Verlauf ist es nicht möglich alte Versionen des Charakters wieder herzustellen. Zu diesem Zweck bietet das Plugin jedoch die Möglichkeit automatische Backups nach EP-Stand oder Datum anzulegen. Verschiedene Dateien können mit dem charakter_diff-Makro verglichen werden.
 
+### Kreaturen
+Mit dem Kreaturen Plugin können neben Charakteren auch Kreaturen als Gegner oder NSCs erstellt werden. Die Generierung ist weniger kompliziert und folgt keinen Regeln. Fertige Kreaturen können als Statblock exportiert oder mit dem IlarisOnline Plugin auf ilaris-online.de veröffentlicht werden.
+
 ### Manoeverkarten
 Das Plugin gibt im Charaktereditor den Regelanhang eines Charakters und im Datenbankeditor die ganze Sephrastodatenbank in Manöverkarten aus. Im Datenbankeditor erscheint außerdem ein zusätzliches Datenbankelement "Manöverkarte" mit dem eigene Karten erstellt und automatisch generierte Karten angepasst werden können. Eine Anleitung kann im Hilfemenu des Datenbankeditors gefunden werden.
 
@@ -80,9 +82,6 @@ Hier findest du einige nützliche scripts für Sephmakro.
 
 ### Tierbegleiter
 Dieses Plugin erlaubt das Erstellen von Tierbegleitern entsprechend des Ilaris Bestiariums und das Exportieren in den enthaltenen Tierbegleiterbogen. Optional können in der Regelbasis mittels der Einstellung "Tierbegleiter Plugin: IA Zucht und Ausbildung" die Ilaris Advanced Regeln zu Zucht und Ausbildung aktiviert werden (zusammen mit speziell angepassten Tierwerten).
-
-### Tragkraft
-Das Plugin setzt die Tragkraft der Regeln für Reisen von Alrik Normalpaktierer um (https://dsaforum.de/viewtopic.php?f=180&t=55321&hilit=reiseregeln). Die Tragkraft und der resultierende BE-Modifikator werden in der ersten Inventarzeile angezeigt. Der BE-Modifikator wird nicht(!) bei der BE oder den Kampfwerten eingerechnet. Allen anderen Zeilen kann ein Platzbedarf zugewiesen werden.
 
 ### WaffenPlus
 Dieses Plugin schafft einige Anpassungsmöglichkeiten für Waffen:
