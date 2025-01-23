@@ -125,6 +125,19 @@ class Plugin:
                     if self.currentTalent in self.talenteGrundwissen:
                         self.talenteGrundwissen.remove(self.currentTalent)
 
+            def updateErfahrungsgradLabels(self):
+                if not self.erfahrungsgrad:
+                    return
+                if not self.currentTalent:
+                    return
+                kosten = self.talentKosten[self.currentTalent]
+                self.rbGrundwissen.setText(f"Grundwissen (PW): {str(int(kosten/2))} EP")
+                self.rbTalent.setText(f"Talent (PW(T)): {str(kosten)} EP")
+
+            def spinChanged(self):
+                super().spinChanged()
+                self.updateErfahrungsgradLabels()
+
             def updateFields(self, tal):
                 super().updateFields(tal)
                 if not self.erfahrungsgrad:
@@ -134,10 +147,8 @@ class Plugin:
 
                 self.rbGrundwissen.setChecked(tal in self.talenteGrundwissen)
                 self.rbTalent.setChecked(tal not in self.talenteGrundwissen)
-                
-                talent = Wolke.DB.talente[tal]
-                self.rbGrundwissen.setText(f"Grundwissen (PW): {str(int(talent.kosten/2))} EP")
-                self.rbTalent.setText(f"Talent (PW(T)): {str(talent.kosten)} EP")
+                self.updateErfahrungsgradLabels()
+
 
 
         return FertigkeitenPlusTalentPickerWrapper
