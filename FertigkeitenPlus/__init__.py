@@ -105,6 +105,7 @@ class Plugin:
                     return
 
                 self.gbErfahrungsgrad = QtWidgets.QGroupBox("Erfahrungsgrad")
+                self.gbErfahrungsgrad.setVisible(False)
                 layout = QtWidgets.QVBoxLayout()
                 self.rbGrundwissen = QtWidgets.QRadioButton("Grundwissen (PW)")
                 self.rbGrundwissen.toggled.connect(self.grundwissenToggled)
@@ -143,13 +144,18 @@ class Plugin:
                 if not self.erfahrungsgrad:
                     return
                 if tal is None:
+                    self.gbErfahrungsgrad.setVisible(False)
                     return
+                showErfahrungsgrad = not tal.lower().endswith("(passiv)")
+
+                self.gbErfahrungsgrad.setVisible(showErfahrungsgrad)
+                if not showErfahrungsgrad:
+                    self.rbGrundwissen.setChecked(False)
+                    self.rbTalent.setChecked(True)
 
                 self.rbGrundwissen.setChecked(tal in self.talenteGrundwissen)
                 self.rbTalent.setChecked(tal not in self.talenteGrundwissen)
                 self.updateErfahrungsgradLabels()
-
-
 
         return FertigkeitenPlusTalentPickerWrapper
 
