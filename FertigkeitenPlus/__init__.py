@@ -5,7 +5,7 @@ from PySide6 import QtWidgets, QtCore
 from Core.Talent import Talent
 from Core.DatenbankEinstellung import DatenbankEinstellung
 
-Talent.grundwissen = property(lambda self: self._grundwissen if hasattr(self, "_grundwissen") else False).setter(lambda self, v: setattr(self, "_grundwissen", v))
+Talent.unerfahren = property(lambda self: self._unerfahren if hasattr(self, "_unerfahren") else False).setter(lambda self, v: setattr(self, "_unerfahren", v))
 
 aktualisierenOld = Talent.aktualisieren
 
@@ -21,7 +21,7 @@ def aktualisieren(self):
         if not fertName in fertigkeiten:
             continue
         nextFert = fertigkeiten[fertName]
-        fertPW = nextFert.probenwert if self.grundwissen else nextFert.probenwertTalent
+        fertPW = nextFert.probenwert if self.unerfahren else nextFert.probenwertTalent
         self.probenwert = max(self.probenwert, fertPW + nextFert.basiswertMod)
 
 Talent.aktualisieren = aktualisieren
@@ -49,14 +49,14 @@ class Plugin:
         e.text = "round(sum(sorted(getAttribute(), reverse=True)[:3])/3)"
 
         e = DatenbankEinstellung()
-        e.name = "FertigkeitenPlus Plugin: Talente Grundwissen Aktivieren"
+        e.name = "FertigkeitenPlus Plugin: Talente Erfahrungsgrade Aktivieren"
         e.beschreibung = ""
         e.text = "False"
         e.typ = "Bool"
         self.db.loadElement(e)
 
         e = DatenbankEinstellung()
-        e.name = "FertigkeitenPlus Plugin: Talente Grundwissen EP Multi"
+        e.name = "FertigkeitenPlus Plugin: Talente Unerfahren EP Multi"
         e.beschreibung = ""
         e.text = "0.5"
         e.typ = "Float"
@@ -66,22 +66,22 @@ class Plugin:
         ser = params["serializer"]
         talent = params["object"]
 
-        ser.set("grundwissen", talent.grundwissen)
+        ser.set("unerfahren", talent.unerfahren)
 
     def talentKostenFilter(self, kosten, params):
         charakter = params["charakter"]
         talentName = params["talent"]
-        if talentName in charakter.talente and charakter.talente[talentName].grundwissen:
-            return int(kosten * self.db.einstellungen["FertigkeitenPlus Plugin: Talente Grundwissen EP Multi"].wert)
+        if talentName in charakter.talente and charakter.talente[talentName].unerfahren:
+            return int(kosten * self.db.einstellungen["FertigkeitenPlus Plugin: Talente Unerfahren EP Multi"].wert)
         return kosten
 
     def talentDeserialisiertHook(self, params):
         ser = params["deserializer"]
         talent = params["object"]
-        talent.grundwissen = ser.getBool('grundwissen', talent.grundwissen)
+        talent.unerfahren = ser.getBool('unerfahren', talent.unerfahren)
 
     def talentPickerFilter(self, talentPickerClass, params):
-        enable = self.db.einstellungen["FertigkeitenPlus Plugin: Talente Grundwissen Aktivieren"].wert
+        enable = self.db.einstellungen["FertigkeitenPlus Plugin: Talente Erfahrungsgrade Aktivieren"].wert
         if not enable:
             return talentPickerClass
 
@@ -90,41 +90,41 @@ class Plugin:
                 self.erfahrungsgrad = enable
                 if not ueber:
                     self.erfahrungsgrad = False
-                    self.talenteGrundwissen = []
+                    self.talenteUnerfahren = []
                 else:
-                    self.talenteGrundwissen = [t.name for t in Wolke.Char.talente.values() if t.grundwissen]
+                    self.talenteUnerfahren = [t.name for t in Wolke.Char.talente.values() if t.unerfahren]
                 super().__init__(fert, ueber)
 
                 if self.gekaufteTalente is not None:
                     for talent in self.gekaufteTalente:
-                        Wolke.Char.talente[talent].grundwissen = talent in self.talenteGrundwissen
+                        Wolke.Char.talente[talent].unerfahren = talent in self.talenteUnerfahren
 
             def onSetupUi(self):
                 super().onSetupUi()
                 if not self.erfahrungsgrad:
                     return
 
-                self.gbErfahrungsgrad = QtWidgets.QGroupBox("Erfahrungsgrad")
+                self.gbErfahrungsgrad = QtWidgets.QGroupBox("Grad")
                 self.gbErfahrungsgrad.setVisible(False)
                 layout = QtWidgets.QVBoxLayout()
-                self.rbGrundwissen = QtWidgets.QRadioButton("Grundwissen (PW)")
-                self.rbGrundwissen.toggled.connect(self.grundwissenToggled)
-                self.rbTalent = QtWidgets.QRadioButton("Talent (PW(T))")
+                self.rbUnerfahren = QtWidgets.QRadioButton("Unerfahren (PW)")
+                self.rbUnerfahren.toggled.connect(self.unerfahrenToggled)
+                self.rbTalent = QtWidgets.QRadioButton("Erfahren (PW(T))")
                 self.rbTalent.setChecked(True)
-                layout.addWidget(self.rbGrundwissen)
+                layout.addWidget(self.rbUnerfahren)
                 layout.addWidget(self.rbTalent)
                 self.gbErfahrungsgrad.setLayout(layout)
 
                 layout = self.ui.scrollAreaWidgetContents.layout()
                 layout.addWidget(self.gbErfahrungsgrad, layout.rowCount(), 0, 1, -1)
 
-            def grundwissenToggled(self, checked):
+            def unerfahrenToggled(self, checked):
                 if checked:
-                    if self.currentTalent not in self.talenteGrundwissen:
-                        self.talenteGrundwissen.append(self.currentTalent)
+                    if self.currentTalent not in self.talenteUnerfahren:
+                        self.talenteUnerfahren.append(self.currentTalent)
                 else:
-                    if self.currentTalent in self.talenteGrundwissen:
-                        self.talenteGrundwissen.remove(self.currentTalent)
+                    if self.currentTalent in self.talenteUnerfahren:
+                        self.talenteUnerfahren.remove(self.currentTalent)
 
             def updateErfahrungsgradLabels(self):
                 if not self.erfahrungsgrad:
@@ -132,8 +132,8 @@ class Plugin:
                 if not self.currentTalent:
                     return
                 kosten = self.talentKosten[self.currentTalent]
-                self.rbGrundwissen.setText(f"Grundwissen (PW): {str(int(kosten/2))} EP")
-                self.rbTalent.setText(f"Talent (PW(T)): {str(kosten)} EP")
+                self.rbUnerfahren.setText(f"Unerfahren (PW): {str(int(kosten/2))} EP")
+                self.rbTalent.setText(f"Erfahren (PW(T)): {str(kosten)} EP")
 
             def spinChanged(self):
                 super().spinChanged()
@@ -150,11 +150,11 @@ class Plugin:
 
                 self.gbErfahrungsgrad.setVisible(showErfahrungsgrad)
                 if not showErfahrungsgrad:
-                    self.rbGrundwissen.setChecked(False)
+                    self.rbUnerfahren.setChecked(False)
                     self.rbTalent.setChecked(True)
 
-                self.rbGrundwissen.setChecked(tal in self.talenteGrundwissen)
-                self.rbTalent.setChecked(tal not in self.talenteGrundwissen)
+                self.rbUnerfahren.setChecked(tal in self.talenteUnerfahren)
+                self.rbTalent.setChecked(tal not in self.talenteUnerfahren)
                 self.updateErfahrungsgradLabels()
 
         return FertigkeitenPlusTalentPickerWrapper
