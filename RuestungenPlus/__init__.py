@@ -35,6 +35,7 @@ Ruestung.zrsMod = property(lambda self: self._zrsMod if hasattr(self, "_zrsMod")
 
 class Plugin:
     def __init__(self):
+        EventBus.addAction("datenbank_laden", self.datenbankLadenHook)
         EventBus.addAction("basisdatenbank_geladen", self.basisDatenbankGeladenHandler)
 
         # Rüstungseigenschaften
@@ -66,9 +67,12 @@ class Plugin:
     def changesDatabase(self):
         return True
 
-    def basisDatenbankGeladenHandler(self, params):
+    def datenbankLadenHook(self, params):
         self.db = params["datenbank"]
+        self.db.ruestungseigenschaften = {}       
+        self.db.insertTable(Ruestungseigenschaft.Ruestungseigenschaft, self.db.ruestungseigenschaften)
 
+    def basisDatenbankGeladenHandler(self, params):
         e = DatenbankEinstellung()
         e.name = "RüstungenPlus Plugin: Aktivieren"
         e.beschreibung = "Hiermit kannst du das RüstungenPlus-Plugin nur für diese Hausregeln deaktivieren und es trotzdem allgemein in den Sephrasto-Einstellungen aktiviert lassen."
@@ -90,9 +94,6 @@ class Plugin:
         e.text = "False"
         e.typ = "Bool"
         self.db.loadElement(e)
-
-        self.db.ruestungseigenschaften = {}       
-        self.db.insertTable(Ruestungseigenschaft.Ruestungseigenschaft, self.db.ruestungseigenschaften)
 
     def charakterInstanziiertHandler(self, params):
         if not self.db.einstellungen["RüstungenPlus Plugin: Aktivieren"].wert:

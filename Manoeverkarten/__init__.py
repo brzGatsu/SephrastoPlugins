@@ -23,6 +23,7 @@ from QtUtils.RichTextButton import RichTextToolButton
 
 class Plugin:
     def __init__(self):
+        EventBus.addAction("datenbank_laden", self.datenbankLadenHook)
         EventBus.addAction("basisdatenbank_geladen", self.basisDatenbankGeladenHook)
         EventBus.addFilter("datenbank_editor_typen", self.datenbankEditorTypenHook)
         EventBus.addFilter("datenbank_verify", self.datenbankVerifyHook)
@@ -106,9 +107,12 @@ class Plugin:
             self.helpWindow.form.show()
             self.helpWindow.form.activateWindow()
 
-    def basisDatenbankGeladenHook(self, params):
+    def datenbankLadenHook(self, params):
         self.db = params["datenbank"]
+        self.db.karten = {}
+        self.db.insertTable(Karte, self.db.karten)
 
+    def basisDatenbankGeladenHook(self, params):
         self.kartenGenerator = KartenGenerator.KartenGenerator(self.db)
 
         e = DatenbankEinstellung()
@@ -401,17 +405,17 @@ bis die Bindung gelöst wird oder alle Pfeile ihr Ziel gefunden haben
         e.strip = False
         self.db.loadElement(e)
 
-        self.db.karten = {}     
-        self.db.insertTable(Karte, self.db.karten)
-
-        deserializer = Serialization.getDeserializer(".xml")
-        dbFilePath = os.path.join(os.path.dirname(os.path.abspath(__file__)), "Data", "datenbank.xml")
-        deserializer.readFile(dbFilePath)
-        for name in deserializer.listTags():
-            if name == "Karte":
-                k = Karte()
-                k.deserialize(deserializer)
-                self.db.loadElement(k)
+        # only load plugin db if the main db doesn't contain cards already
+        # this can happen if it is a merged db
+        if len(self.db.karten) == 0:
+            deserializer = Serialization.getDeserializer(".xml")
+            dbFilePath = os.path.join(os.path.dirname(os.path.abspath(__file__)), "Data", "datenbank.xml")
+            deserializer.readFile(dbFilePath)
+            for name in deserializer.listTags():
+                if name == "Karte":
+                    k = Karte()
+                    k.deserialize(deserializer)
+                    self.db.loadElement(k)
 
     def datenbankEditorTypenHook(self, typen, params):
         typen[Karte] = DatenbankEditor.DatenbankTypWrapper(Karte, DatenbankEditKarteWrapper.DatenbankEditKarteWrapper, True)
