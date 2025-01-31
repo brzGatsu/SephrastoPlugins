@@ -34,7 +34,7 @@ class Plugin:
         EventBus.addFilter("class_talentpicker_wrapper", self.talentPickerFilter)
         EventBus.addAction("talent_serialisiert", self.talentSerialisiertHook)
         EventBus.addAction("talent_deserialisiert", self.talentDeserialisiertHook)
-        EventBus.addFilter("talent_kosten", self.talentKostenFilter)
+        EventBus.addAction("post_charakter_aktualisieren", self.postCharakterAktualisierenHook)
 
     def changesCharacter(self):
         return True
@@ -68,17 +68,25 @@ class Plugin:
 
         ser.set("unerfahren", talent.unerfahren)
 
-    def talentKostenFilter(self, kosten, params):
-        charakter = params["charakter"]
-        talentName = params["talent"]
-        if talentName in charakter.talente and charakter.talente[talentName].unerfahren:
-            return int(kosten * self.db.einstellungen["FertigkeitenPlus Plugin: Talente Unerfahren EP Multi"].wert)
-        return kosten
-
     def talentDeserialisiertHook(self, params):
         ser = params["deserializer"]
         talent = params["object"]
         talent.unerfahren = ser.getBool('unerfahren', talent.unerfahren)
+
+    def postCharakterAktualisierenHook(self, params):
+        char = params["charakter"]
+        for talent in char.talente.values():
+            if not talent.unerfahren:
+                continue
+            
+            erfahrenKosten = talent.kosten
+            unerfahrenKosten = int(erfahrenKosten * self.db.einstellungen["FertigkeitenPlus Plugin: Talente Unerfahren EP Multi"].wert)
+            gutschrift = erfahrenKosten - unerfahrenKosten
+            char.epAusgegeben -= gutschrift
+            if talent.spezialTalent:
+                char.epÜbernatürlichTalente -= gutschrift
+            else:
+                char.epFertigkeitenTalente -= gutschrift
 
     def talentPickerFilter(self, talentPickerClass, params):
         enable = self.db.einstellungen["FertigkeitenPlus Plugin: Talente Erfahrungsgrade Aktivieren"].wert
