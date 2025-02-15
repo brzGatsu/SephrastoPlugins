@@ -23,8 +23,7 @@ from QtUtils.ProgressDialogExt import ProgressDialogExt
 class TierbegleiterEditor(object):
     def __init__(self):
         self.datenbank = TierbegleiterDatenbank.TierbegleiterDatenbank()
-        self.zuchteigenschaftenValid = True
-        self.attribute = ["KO", "MU", "GE", "KK", "IN", "KL", "CH", "FF", "WS", "RS", "WS*", "MR", "GS", "GS2", "TP", "INI", "WM"]
+        self.attribute = ["KO", "MU", "GE", "KK", "IN", "KL", "CH", "FF", "WS", "RS", "BE", "WS*", "MR", "GS", "GS2", "TP", "INI", "AT", "VT"]
         self.charakterbogen = Charakterbogen() # use default settings
         self.charakterbogen.load(os.path.join(os.path.dirname(os.path.abspath(__file__)), "Data", "Tierbegleiterbogen.ini"))
 
@@ -48,33 +47,35 @@ class TierbegleiterEditor(object):
 
         self.inventory = [self.ui.leAusruestung1, self.ui.leAusruestung2, self.ui.leAusruestung3, self.ui.leAusruestung4, self.ui.leAusruestung5, self.ui.leAusruestung6, self.ui.leAusruestung7, self.ui.leAusruestung8, self.ui.leAusruestung9, self.ui.leAusruestung10,
                      self.ui.leAusruestung11, self.ui.leAusruestung12, self.ui.leAusruestung13, self.ui.leAusruestung14, self.ui.leAusruestung15, self.ui.leAusruestung16, self.ui.leAusruestung17, self.ui.leAusruestung18, self.ui.leAusruestung19, self.ui.leAusruestung20]
+        
+        self.vorteile = []
+        self.vorteilCompleter = []
+        for i in range(1, 15):
+            leVorteil = getattr(self.ui, "leVorteil" + str(i))
+            leVorteil.editingFinished.connect(self.stateChanged)
+            self.vorteilCompleter.append(TextTagCompleter(leVorteil, self.datenbank.tiervorteile.keys()))
+            self.vorteile.append(leVorteil)
+
+        self.talente = []
+        self.talentCompleter = []
+        for i in range(1, 9):
+            leTalent = getattr(self.ui, "leTalent" + str(i))
+            leTalent.editingFinished.connect(self.stateChanged)
+            self.talentCompleter.append(TextTagCompleter(leTalent, self.datenbank.talente))
+            self.talente.append(leTalent)
+
+        self.talentWerte = []
+        for i in range(1, 9):
+            sbTalent = getattr(self.ui, "sbTalent" + str(i))
+            sbTalent.valueChanged.connect(self.stateChanged)
+            self.talentWerte.append(sbTalent)
+        
         self.ui.cbTier.addItems(sorted(self.datenbank.tierbegleiter.keys()))
         self.ui.cbTier.setCurrentIndex(0)
-        self.ui.cbZucht.setCurrentIndex(3)
-        self.ui.cbGuteEig1.addItems(sorted(self.datenbank.guteZuchteigenschaften.keys()))
-        self.ui.cbGuteEig1.setCurrentIndex(0)
-        self.ui.cbGuteEig2.addItems(sorted(self.datenbank.guteZuchteigenschaften.keys()))
-        self.ui.cbGuteEig2.setCurrentIndex(1)
-        self.ui.cbGuteEig3.addItems(sorted(self.datenbank.guteZuchteigenschaften.keys()))
-        self.ui.cbGuteEig3.setCurrentIndex(2)
-        self.ui.cbSchlechteEig1.addItems(sorted(self.datenbank.schlechteZuchteigenschaften.keys()))
-        self.ui.cbSchlechteEig1.setCurrentIndex(0)
-        self.ui.cbSchlechteEig2.addItems(sorted(self.datenbank.schlechteZuchteigenschaften.keys()))
-        self.ui.cbSchlechteEig2.setCurrentIndex(1)
-        self.updateAusbildungen()
+        self.updateTier()
 
-        self.ui.checkAutoHintergrund.stateChanged.connect(self.stateChanged)
-        self.ui.cbTier.currentIndexChanged.connect(self.updateAusbildungen)
         self.ui.cbTier.currentIndexChanged.connect(self.updateTier)
         self.ui.cbTier.currentIndexChanged.connect(self.stateChanged)
-        self.ui.cbZucht.currentIndexChanged.connect(self.stateChanged)
-        self.ui.cbGuteEig1.currentIndexChanged.connect(self.stateChanged)
-        self.ui.cbGuteEig2.currentIndexChanged.connect(self.stateChanged)
-        self.ui.cbGuteEig3.currentIndexChanged.connect(self.stateChanged)
-        self.ui.cbSchlechteEig1.currentIndexChanged.connect(self.stateChanged)
-        self.ui.cbSchlechteEig2.currentIndexChanged.connect(self.stateChanged)
-        self.ui.cbAusbildung.currentIndexChanged.connect(self.ausbildungChanged)
-        self.ui.cbAusbildung.currentIndexChanged.connect(self.stateChanged)
         self.ui.sbReiten.valueChanged.connect(self.stateChanged)
         self.ui.sbRK.valueChanged.connect(self.stateChanged)
         self.ui.sbKO.valueChanged.connect(self.stateChanged)
@@ -85,10 +86,15 @@ class TierbegleiterEditor(object):
         self.ui.sbKL.valueChanged.connect(self.stateChanged)
         self.ui.sbCH.valueChanged.connect(self.stateChanged)
         self.ui.sbFF.valueChanged.connect(self.stateChanged)
-        self.ui.sbKampfwerte.valueChanged.connect(self.stateChanged)
+        self.ui.sbAT.valueChanged.connect(self.stateChanged)
+        self.ui.sbVT.valueChanged.connect(self.stateChanged)
         self.ui.sbGS.valueChanged.connect(self.stateChanged)
         self.ui.sbRS.valueChanged.connect(self.stateChanged)
-        self.ui.leVorteile.editingFinished.connect(self.stateChanged)
+        self.ui.sbBE.valueChanged.connect(self.stateChanged)
+        self.ui.sbTP.valueChanged.connect(self.stateChanged)
+        self.ui.sbINI.valueChanged.connect(self.stateChanged)
+        self.ui.sbMR.valueChanged.connect(self.stateChanged)
+        self.ui.sbWS.valueChanged.connect(self.stateChanged)
 
         self.ui.btnSavePdf.clicked.connect(self.savePdfClickedHandler)
         self.ui.buttonLoad.clicked.connect(self.loadClickedHandler)
@@ -102,14 +108,6 @@ class TierbegleiterEditor(object):
         self.ui.checkRegeln.setChecked(Wolke.Settings['Cheatsheet'])
         self.ui.spinRegelnGroesse.setValue(Wolke.Settings['Cheatsheet-Fontsize'])
         self.ui.checkEditierbar.setChecked(Wolke.Settings['Formular-Editierbarkeit'])
-
-        if not self.datenbank.iaZuchtAusbildung:
-            if hasattr(self.ui.tabWidget, "setTabVisible"):
-                self.ui.tabWidget.setTabVisible(1, False)
-            self.ui.checkAutoHintergrund.setVisible(False)
-            self.ui.groupBox.setTitle("Vorschau")
-
-        self.vorteilCompleter = TextTagCompleter(self.ui.leVorteile, self.datenbank.tiervorteile.keys())
 
         self.stateChanged()
         self.updateTitlebar()
@@ -139,20 +137,10 @@ class TierbegleiterEditor(object):
         self.ui.leName.setText(root.find('Name').text)
         self.ui.teAussehen.setPlainText(root.find('Aussehen').text)
         self.ui.leNahrung.setText(root.find('Nahrung').text)
-        self.ui.checkAutoHintergrund.setChecked(root.find('AutoHintergrund').text == "1")
         self.ui.teHintergrund.setPlainText(root.find('Hintergrund').text)
         self.ui.cbTier.setCurrentText(root.find('Tier').text)
         self.ui.sbRK.setValue(int(root.find('Reiterkampf').text))
         self.ui.sbReiten.setValue(int(root.find('ReitenPW').text))
-        self.ui.cbZucht.setCurrentIndex(int(root.find('Zucht').text))
-        guteEigenschaften = root.findall('GuteEigenschaften/Eigenschaft')
-        self.ui.cbGuteEig1.setCurrentText(guteEigenschaften[0].text)
-        self.ui.cbGuteEig2.setCurrentText(guteEigenschaften[1].text)
-        self.ui.cbGuteEig3.setCurrentText(guteEigenschaften[2].text)
-        schlechteEigenschaften = root.findall('SchlechteEigenschaften/Eigenschaft')
-        self.ui.cbSchlechteEig1.setCurrentText(schlechteEigenschaften[0].text)
-        self.ui.cbSchlechteEig2.setCurrentText(schlechteEigenschaften[1].text)
-        self.ui.cbAusbildung.setCurrentText(root.find('Ausbildung').text)
 
         self.ui.sbKO.setValue(int(root.find('KO').text))
         self.ui.sbMU.setValue(int(root.find('MU').text))
@@ -162,11 +150,32 @@ class TierbegleiterEditor(object):
         self.ui.sbKL.setValue(int(root.find('KL').text))
         self.ui.sbCH.setValue(int(root.find('CH').text))
         self.ui.sbFF.setValue(int(root.find('FF').text))
-        self.ui.sbKampfwerte.setValue(int(root.find('WM').text))
+        self.ui.sbAT.setValue(int(root.find('AT').text))
+        self.ui.sbVT.setValue(int(root.find('VT').text))
         self.ui.sbGS.setValue(int(root.find('GS').text))
         self.ui.sbRS.setValue(int(root.find('RS').text))
+        self.ui.sbBE.setValue(int(root.find('BE').text))
+        self.ui.sbTP.setValue(int(root.find('TP').text))
+        self.ui.sbINI.setValue(int(root.find('INI').text))
+        self.ui.sbMR.setValue(int(root.find('MR').text))
+        self.ui.sbWS.setValue(int(root.find('WS').text))
 
-        self.ui.leVorteile.setText(root.find('WeitereVorteile').text)
+        i = 0
+        for vorteilNode in root.findall('Vorteile/'):
+            self.vorteile[i].setText(vorteilNode.attrib['name'])
+            i += 1
+            if i == len(self.vorteile):
+                break
+
+        i = 0
+        for talentNode in root.findall('Talente/'):
+            self.talente[i].setText(talentNode.attrib['name'])
+            self.talentWerte[i].setValue(int(talentNode.attrib['wert']))
+            i += 1
+            if i == len(self.talente):
+                break
+
+        #self.ui.leVorteile.setText(root.find('WeitereVorteile').text)
 
         if root.find('bild') is not None:
             byteArray = bytes(root.find('bild').text, 'utf-8')
@@ -229,19 +238,9 @@ class TierbegleiterEditor(object):
         etree.SubElement(root, 'Nahrung').text = self.ui.leNahrung.text()
         etree.SubElement(root, 'Aussehen').text = self.ui.teAussehen.toPlainText()
         etree.SubElement(root, 'Tier').text = self.ui.cbTier.currentText()
-        etree.SubElement(root, 'AutoHintergrund').text = "1" if self.ui.checkAutoHintergrund.isChecked() else "0"
         etree.SubElement(root, 'Hintergrund').text = self.ui.teHintergrund.toPlainText()
         etree.SubElement(root, 'Reiterkampf').text = str(self.ui.sbRK.value())
         etree.SubElement(root, 'ReitenPW').text = str(self.ui.sbReiten.value())
-        etree.SubElement(root, 'Zucht').text = str(self.ui.cbZucht.currentIndex())
-        guteEigenschaften = etree.SubElement(root, 'GuteEigenschaften')
-        etree.SubElement(guteEigenschaften, 'Eigenschaft').text = self.ui.cbGuteEig1.currentText()
-        etree.SubElement(guteEigenschaften, 'Eigenschaft').text = self.ui.cbGuteEig2.currentText()
-        etree.SubElement(guteEigenschaften, 'Eigenschaft').text = self.ui.cbGuteEig3.currentText()
-        schlechteEigenschaften = etree.SubElement(root, 'SchlechteEigenschaften')
-        etree.SubElement(schlechteEigenschaften, 'Eigenschaft').text = self.ui.cbSchlechteEig1.currentText()
-        etree.SubElement(schlechteEigenschaften, 'Eigenschaft').text = self.ui.cbSchlechteEig2.currentText()
-        etree.SubElement(root, 'Ausbildung').text = self.ui.cbAusbildung.currentText()
 
         etree.SubElement(root, 'KO').text = str(self.ui.sbKO.value())
         etree.SubElement(root, 'MU').text = str(self.ui.sbMU.value())
@@ -251,11 +250,31 @@ class TierbegleiterEditor(object):
         etree.SubElement(root, 'KL').text = str(self.ui.sbKL.value())
         etree.SubElement(root, 'CH').text = str(self.ui.sbCH.value())
         etree.SubElement(root, 'FF').text = str(self.ui.sbFF.value())
-        etree.SubElement(root, 'WM').text = str(self.ui.sbKampfwerte.value())
+        etree.SubElement(root, 'AT').text = str(self.ui.sbAT.value())
+        etree.SubElement(root, 'VT').text = str(self.ui.sbVT.value())
         etree.SubElement(root, 'GS').text = str(self.ui.sbGS.value())
         etree.SubElement(root, 'RS').text = str(self.ui.sbRS.value())
+        etree.SubElement(root, 'BE').text = str(self.ui.sbBE.value())
+        etree.SubElement(root, 'TP').text = str(self.ui.sbTP.value())
+        etree.SubElement(root, 'INI').text = str(self.ui.sbINI.value())
+        etree.SubElement(root, 'MR').text = str(self.ui.sbMR.value())
+        etree.SubElement(root, 'WS').text = str(self.ui.sbWS.value())
         
-        etree.SubElement(root, 'WeitereVorteile').text = self.ui.leVorteile.text()
+        vorteileNode = etree.SubElement(root, 'Vorteile')
+        for leVorteil in self.vorteile:
+            vorteil = leVorteil.text()
+            etree.SubElement(vorteileNode, 'Vorteil').attrib['name'] = vorteil
+
+        talenteNode = etree.SubElement(root, 'Talente')
+        for i in range(0, len(self.talente)):
+            leTalent = self.talente[i]
+            sbTalent = self.talentWerte[i]
+            
+            talentNode = etree.SubElement(talenteNode, 'Talent')
+            talentNode.attrib['name'] = leTalent.text()
+            talentNode.attrib['wert'] = str(sbTalent.value())
+
+        #etree.SubElement(root, 'WeitereVorteile').text = self.ui.leVorteile.text()
 
         if self.characterImage:
             buffer = QtCore.QBuffer()
@@ -323,68 +342,10 @@ class TierbegleiterEditor(object):
         groessen = ["Winziges", "Sehr kleines", "Kleines", "Mittelgroßes", "Großes", "Sehr großes"]
         self.ui.teAussehen.setPlainText(groessen[tier.groesse] + " Tier")
 
-    def updateAusbildungen(self):
-        ausbildungen = []
-        tier = self.datenbank.tierbegleiter[self.ui.cbTier.currentText()]
-        for key, ausbildung in self.datenbank.ausbildungen.items():
-            if ausbildung.kategorie == 0 or ausbildung.kategorie == tier.kategorie:
-                ausbildungen.append(key)
-        
-        ausbildungen = sorted(ausbildungen, key=lambda ausbildung: ausbildung if ausbildung != "Keine Ausbildung" else "###") #"Keine" is always first
-        self.ui.cbAusbildung.blockSignals(True)
-        self.ui.cbAusbildung.clear()
-        self.ui.cbAusbildung.addItems(ausbildungen)
-        self.ui.cbAusbildung.blockSignals(False)
-        self.ui.cbAusbildung.setCurrentIndex(0)
         self.ui.lblReiten.setVisible(tier.reittier == 1)
         self.ui.sbReiten.setVisible(tier.reittier == 1)
         self.ui.lblRK.setVisible(tier.reittier == 1)
         self.ui.sbRK.setVisible(tier.reittier == 1)
-
-    def updateZucht(self):
-        zucht = self.ui.cbZucht.currentIndex()
-        numGuteEig = 3
-        numSchlechteEig = 3
-
-        if zucht == 0: #keine
-            numGuteEig = 1
-            numSchlechteEig = 2
-        elif zucht == 1: #keine verrechnet
-            numGuteEig = 0
-            numSchlechteEig = 1
-        elif zucht == 2: #gewöhnlich
-            numGuteEig = 1
-            numSchlechteEig = 1
-        elif zucht == 3: #gewöhnlich verrechnet
-            numGuteEig = 0
-            numSchlechteEig = 0
-        elif zucht == 4: #aussergewöhnlich
-            numGuteEig = 2
-            numSchlechteEig = 1
-        elif zucht == 5: #aussergewöhnlich verrechnet
-            numGuteEig = 1
-            numSchlechteEig = 0
-        elif zucht == 6: #herausragend
-            numGuteEig = 2
-            numSchlechteEig = 0
-        elif zucht == 7: #einzigartig
-            numGuteEig = 3
-            numSchlechteEig = 0
-
-        self.ui.lblGuteEig.setVisible(numGuteEig >= 1)
-        self.ui.cbGuteEig1.setVisible(numGuteEig >= 1)
-        self.ui.lblGuteEig1.setVisible(numGuteEig >= 1)
-        self.ui.cbGuteEig2.setVisible(numGuteEig >= 2)
-        self.ui.lblGuteEig2.setVisible(numGuteEig >= 2)
-        self.ui.cbGuteEig3.setVisible(numGuteEig >= 3)
-        self.ui.lblGuteEig3.setVisible(numGuteEig >= 3)
-        self.ui.lblSchlechteEig.setVisible(numSchlechteEig >= 1)
-        self.ui.cbSchlechteEig1.setVisible(numSchlechteEig >= 1)
-        self.ui.lblSchlechteEig1.setVisible(numSchlechteEig >= 1)
-        self.ui.cbSchlechteEig2.setVisible(numSchlechteEig >= 2)
-        self.ui.lblSchlechteEig2.setVisible(numSchlechteEig >= 2)
-
-        self.validateZuchteigenschaften()
 
     def initKey(self, dict, key):
         if not key in dict:
@@ -455,82 +416,23 @@ class TierbegleiterEditor(object):
         self.gatherModifiers(modifiers, attributModifiers, talentModifiers, vorteilModifiers)
         label.setText(self.modifiersToString(attributModifiers, talentModifiers, vorteilModifiers, [], summary))
 
-    def ausbildungChanged(self):
-        ausbildung = self.datenbank.ausbildungen[self.ui.cbAusbildung.currentText()]
-        if ausbildung.weiterevorteile:
-            self.ui.leVorteile.setText(ausbildung.weiterevorteile)
-            self.vorteilCompleter.popup().hide()
-
     def stateChanged(self):
         if self.currentlyLoading:
             return
-        self.updateZucht()
-
-        if self.datenbank.iaZuchtAusbildung and self.ui.checkAutoHintergrund.isChecked():
-            zucht = self.ui.cbZucht.currentText()
-            if zucht.find(" (") != -1:
-                zucht = zucht[:zucht.find(" (")]
-            eigenschaften = [self.ui.cbGuteEig1, self.ui.cbGuteEig2, self.ui.cbGuteEig3, self.ui.cbSchlechteEig1, self.ui.cbSchlechteEig2]
-            # "or not hidden", WTF? Need to do this because the form might not be visible yet, resulting in all children not being visible...
-            eigenschaften = [e.currentText() for e in eigenschaften if e.isVisible() or not e.isHidden()]
-            if len(eigenschaften) > 0:
-                zucht += " (" + ", ".join(eigenschaften) + ")"
-            ausbildung = self.ui.cbAusbildung.currentText()
-            if ausbildung.endswith(" Ausbildung"):
-                ausbildung = ausbildung[:-len(" Ausbildung")]
-
-            self.ui.teHintergrund.setPlainText(f"Zucht: {zucht}\nAusbildung: {ausbildung} ")
-        self.ui.teHintergrund.setEnabled(not self.datenbank.iaZuchtAusbildung or not self.ui.checkAutoHintergrund.isChecked())
 
         allModifiers = []
-        self.ui.lblGuteEig1.setText("")
-        self.ui.lblGuteEig2.setText("")
-        self.ui.lblGuteEig3.setText("")
-        self.ui.lblSchlechteEig1.setText("")
-        self.ui.lblSchlechteEig2.setText("")
-        self.ui.lblAusbildung.setText("")
         self.ui.lblTier.setText("")
 
-        if self.ui.cbGuteEig1.isVisible() or not self.ui.cbGuteEig1.isHidden():
-            eig = self.datenbank.guteZuchteigenschaften[self.ui.cbGuteEig1.currentText()]
-            allModifiers.extend(eig.modifikatoren)
-            self.updatePreview(self.ui.lblGuteEig1, eig.modifikatoren)
-
-        if self.ui.cbGuteEig2.isVisible() or not self.ui.cbGuteEig2.isHidden():
-            eig = self.datenbank.guteZuchteigenschaften[self.ui.cbGuteEig2.currentText()]
-            allModifiers.extend(eig.modifikatoren)
-            self.updatePreview(self.ui.lblGuteEig2, eig.modifikatoren)
-
-        if self.ui.cbGuteEig3.isVisible() or not self.ui.cbGuteEig3.isHidden():
-            eig = self.datenbank.guteZuchteigenschaften[self.ui.cbGuteEig3.currentText()]
-            allModifiers.extend(eig.modifikatoren)
-            self.updatePreview(self.ui.lblGuteEig3, eig.modifikatoren)
-
-        if self.ui.cbSchlechteEig1.isVisible() or not self.ui.cbSchlechteEig1.isHidden():
-            eig = self.datenbank.schlechteZuchteigenschaften[self.ui.cbSchlechteEig1.currentText()]
-            allModifiers.extend(eig.modifikatoren)
-            self.updatePreview(self.ui.lblSchlechteEig1, eig.modifikatoren)
-
-        if self.ui.cbSchlechteEig2.isVisible() or not self.ui.cbSchlechteEig2.isHidden():
-            eig = self.datenbank.schlechteZuchteigenschaften[self.ui.cbSchlechteEig2.currentText()]
-            allModifiers.extend(eig.modifikatoren)
-            self.updatePreview(self.ui.lblSchlechteEig2, eig.modifikatoren)
-
-        ausbildung = self.datenbank.ausbildungen[self.ui.cbAusbildung.currentText()]
-        allModifiers.extend(ausbildung.modifikatoren)
-        self.updatePreview(self.ui.lblAusbildung, ausbildung.modifikatoren, True)
-
-        if self.ui.leVorteile.text():
-            weitereVorteile = list(map(str.strip, self.ui.leVorteile.text().split(",")))
-            for vorteil in weitereVorteile:
-                if not vorteil:
-                    continue
-                if vorteil in self.datenbank.tiervorteile:
-                    allModifiers.append(self.datenbank.tiervorteile[vorteil])
-                else:
-                    mod = TierbegleiterTypes.Modifikator()
-                    mod.name = vorteil
-                    allModifiers.append(mod)        
+        for leVorteil in self.vorteile:
+            vorteil = leVorteil.text()
+            if not vorteil:
+                continue
+            if vorteil in self.datenbank.tiervorteile:
+                allModifiers.append(self.datenbank.tiervorteile[vorteil])
+            else:
+                mod = TierbegleiterTypes.Modifikator()
+                mod.name = vorteil
+                allModifiers.append(mod)    
 
         attributModifiers = {}
         talentModifiers = {}
@@ -539,7 +441,7 @@ class TierbegleiterEditor(object):
 
         self.gatherModifiers(allModifiers, attributModifiers, talentModifiers, vorteilModifiers)
 
-        # Default values
+        # Default werte
         for attribut in self.attribute:
             if attribut != "GS2":
                 self.initKey(attributModifiers, attribut)
@@ -553,40 +455,34 @@ class TierbegleiterEditor(object):
         attributModifiers["KL"] += self.ui.sbKL.value()
         attributModifiers["CH"] += self.ui.sbCH.value()
         attributModifiers["FF"] += self.ui.sbFF.value()
-        attributModifiers["WM"] += self.ui.sbKampfwerte.value()
+        attributModifiers["AT"] += self.ui.sbAT.value()
+        attributModifiers["VT"] += self.ui.sbVT.value()
         attributModifiers["GS"] += self.ui.sbGS.value()
         attributModifiers["RS"] += self.ui.sbRS.value()
+        attributModifiers["BE"] += self.ui.sbBE.value()
+        attributModifiers["TP"] += self.ui.sbTP.value()
+        attributModifiers["INI"] += self.ui.sbINI.value()
+        attributModifiers["MR"] += self.ui.sbMR.value()
+        attributModifiers["WS"] += self.ui.sbWS.value()
 
-        # Abgeleitete Werte
+        for i in range(0, len(self.talente)):
+            leTalent = self.talente[i]
+            if not leTalent.text():
+                continue
+            sbTalent = self.talentWerte[i] 
+            talentModifiers[leTalent.text()] = sbTalent.value()
+
+        # Label
         tier = self.datenbank.tierbegleiter[self.ui.cbTier.currentText()]
 
         tierLabelText = ""
         if tier.rassen:
             tierLabelText += tier.rassen + ". "
 
-        if self.datenbank.iaZuchtAusbildung:
-            if tier.groesse >= 5:
-                attributModifiers["KK"] *= 4
-                attributModifiers["KO"] *= 4
-            elif tier.groesse == 4:
-                attributModifiers["KK"] *= 2
-                attributModifiers["KO"] *= 2
-
-            attributModifiers["MR"] += int(attributModifiers["MU"] / 4);
-            attributModifiers["TP"] += int(attributModifiers["KK"] / 2);
-            attributModifiers["WS"] += int(attributModifiers["KO"] / 2);
-            attributModifiers["GS"] += int(attributModifiers["GE"] / 2);
-            attributModifiers["INI"] += attributModifiers["IN"];
-
-            if tier.groesse == 4:
-                tierLabelText += "Großes Tier, KO und KK-Bonusse werden in der Endberechnung verdoppelt."
-            elif tier.groesse >= 5:
-                tierLabelText += "Sehr großes Tier, KO und KK-Bonusse werden in der Endberechnung vervierfacht."
-
         self.ui.lblTier.setVisible(tierLabelText != "")
         self.ui.lblTier.setText(tierLabelText)
 
-        #Ausbildung, Zucht etc inkl. abgeleiteter Werte sind berechnet, jetzt tier attribute hinzufügen
+        # Attribute
         modGS = attributModifiers["GS"]
         del attributModifiers["GS"]
         self.gatherModifiers(tier.modifikatoren, attributModifiers, talentModifiers, vorteilModifiers)
@@ -600,9 +496,11 @@ class TierbegleiterEditor(object):
         attributModifiers["WS*"] = attributModifiers["WS"] + attributModifiers["RS"]
         del attributModifiers["RS"]
 
-        reiterkampfWM = 0
+        reiterkampfAT = 0
+        reiterkampfVT = 0
         if "Reiterkampf WM" in talentModifiers:
-            reiterkampfWM = talentModifiers["Reiterkampf WM"] + attributModifiers["WM"]
+            reiterkampfAT = talentModifiers["Reiterkampf WM"] + attributModifiers["AT"] - attributModifiers["BE"]
+            reiterkampfVT = talentModifiers["Reiterkampf WM"] + attributModifiers["VT"] - attributModifiers["BE"]
             del talentModifiers["Reiterkampf WM"]
 
         waffen = copy.deepcopy(tier.waffen)
@@ -610,16 +508,16 @@ class TierbegleiterEditor(object):
             if waffe.plus is not None:
                 waffe.plus += attributModifiers["TP"]
             if waffe.at is not None:
-                waffe.at += attributModifiers["WM"]
+                waffe.at += attributModifiers["AT"] - attributModifiers["BE"]
             if waffe.vt is not None:
-                waffe.vt += attributModifiers["WM"]
+                waffe.vt += attributModifiers["VT"] - attributModifiers["BE"]
 
         if tier.reittier == 1:
             if len(waffen) > 0 :
                 reitenWaffe = copy.copy(waffen[0])
                 reitenWaffe.name = "Reiterkampf (" + reitenWaffe.name + ")"
-                reitenWaffe.at = self.ui.sbReiten.value() + reiterkampfWM + self.ui.sbRK.value()
-                reitenWaffe.vt = self.ui.sbReiten.value() + reiterkampfWM + self.ui.sbRK.value()
+                reitenWaffe.at = self.ui.sbReiten.value() + reiterkampfAT + self.ui.sbRK.value()
+                reitenWaffe.vt = self.ui.sbReiten.value() + reiterkampfVT + self.ui.sbRK.value()
                 reitenWaffe.plus += self.ui.sbRK.value()
                 if reitenWaffe.eigenschaften:
                     reitenWaffe.eigenschaften += ", "
@@ -629,25 +527,12 @@ class TierbegleiterEditor(object):
             vorteilModifiers.append(copy.copy(self.datenbank.tiervorteile["Sturmangriff (Reiterkampf)"]))
             if self.ui.sbRK.value() == 0:
                 vorteilModifiers[-1].name = vorteilModifiers[-1].name[:-1] + "-Stufe nicht ausreichend)"
-
-            if self.datenbank.iaZuchtAusbildung:
-                for vorteilMod in vorteilModifiers:
-                    if vorteilMod.name == "Überrennen (Reiterkampf)" and self.ui.sbRK.value() < 3:
-                        vorteilMod.name = vorteilMod.name[:-1] + "-Stufe nicht ausreichend)"
-                    if vorteilMod.name == "Befreiungsschlag (Reiterkampf)" and self.ui.sbRK.value() < 3:
-                        vorteilMod.name = vorteilMod.name[:-1] + "-Stufe nicht ausreichend)"
-                    if vorteilMod.name == "Ausfall (Reiterkampf)" and self.ui.sbRK.value() < 2:
-                        vorteilMod.name = vorteilMod.name[:-1] + "-Stufe nicht ausreichend)"
-                    if vorteilMod.name == "Hammerschlag (Reiterkampf)" and self.ui.sbRK.value() < 2:
-                        vorteilMod.name = vorteilMod.name[:-1] + "-Stufe nicht ausreichend)"
-                    if vorteilMod.name == "Trampeln (Reiterkampf)" and self.ui.sbRK.value() < 2:
-                        vorteilMod.name = vorteilMod.name[:-1] + "-Stufe nicht ausreichend)"
-            else:
-                if self.ui.sbRK.value() > 2:
-                    vorteilModifiers.append(self.datenbank.tiervorteile["Überrennen (Reiterkampf)"])
+            elif self.ui.sbRK.value() > 2:
+                vorteilModifiers.append(self.datenbank.tiervorteile["Überrennen (Reiterkampf)"])
 
         del attributModifiers["TP"]
-        del attributModifiers["WM"]
+        del attributModifiers["AT"]
+        del attributModifiers["VT"]
 
         for (key, value) in list(attributModifiers.items()):
             if value == 0:
@@ -663,23 +548,6 @@ class TierbegleiterEditor(object):
         self.waffen = waffen
 
         text = self.modifiersToString(attributModifiers, talentModifiers, vorteilModifiers, waffen, True)
-        if self.datenbank.iaZuchtAusbildung:
-            text += '<p><b>Preis: </b>'
-            preis = tier.preis
-            zucht = self.ui.cbZucht.currentIndex()
-            if zucht == 0 or zucht == 1:
-                preis *= 0.5
-            elif zucht == 4 or zucht == 5:
-                preis *= 2
-            elif self.ui.cbZucht.currentIndex() == 6:
-                preis *= 4
-            elif self.ui.cbZucht.currentIndex() == 7:
-                preis *= 8
-            preis += ausbildung.preis
-            text += str(int(preis)) + " Dukaten"
-            if tier.preis == 0:
-                   text += " (der Basispreis des Tiers liegt bei 0)"
-            text += "</p>"
         self.ui.lblWerte.setText(text)
 
         tooltip = ""
@@ -697,66 +565,6 @@ class TierbegleiterEditor(object):
             if vorteilMod.name == name:
                 return True
         return False
-
-    def validateZuchteigenschaften(self):
-        sEig1Valid = True
-        sEig2Valid = True
-        gEig1Valid = True
-        gEig2Valid = True
-        gEig3Valid = True
-
-        if self.ui.cbSchlechteEig1.isVisible() and self.hasVorteil(self.ui.cbSchlechteEig1.currentText()):
-            self.ui.cbSchlechteEig1.setToolTip("Es ist nicht erlaubt die gleiche Eigenschaft mehrmals zu wählen (eventuell ist sie auch bereits bei der Spezies enthalten).")
-            self.ui.cbSchlechteEig1.setProperty("error", True)
-            sEig1Valid= False
-        else:
-            self.ui.cbSchlechteEig1.setToolTip("")
-            self.ui.cbSchlechteEig1.setProperty("error", False)
-
-        if self.ui.cbSchlechteEig2.isVisible() and (self.ui.cbSchlechteEig1.currentIndex() == self.ui.cbSchlechteEig2.currentIndex() or self.hasVorteil(self.ui.cbSchlechteEig2.currentText())):
-            self.ui.cbSchlechteEig2.setToolTip("Es ist nicht erlaubt die gleiche Eigenschaft mehrmals zu wählen (eventuell ist sie auch bereits bei der Spezies enthalten).")
-            self.ui.cbSchlechteEig2.setProperty("error", True)
-            sEig2Valid= False
-        else:
-            self.ui.cbSchlechteEig2.setToolTip("")
-            self.ui.cbSchlechteEig2.setProperty("error", False)
-
-        if self.ui.cbGuteEig1.isVisible() and self.hasVorteil(self.ui.cbGuteEig1.currentText()):
-            self.ui.cbGuteEig1.setToolTip("Es ist nicht erlaubt die gleiche Eigenschaft mehrmals zu wählen (eventuell ist sie auch bereits bei der Spezies enthalten).")
-            self.ui.cbGuteEig1.setProperty("error", True)
-            gEig1Valid = False
-        else:
-            self.ui.cbGuteEig1.setToolTip("")
-            self.ui.cbGuteEig1.setProperty("error", False)
-
-        if self.ui.cbGuteEig2.isVisible() and (self.ui.cbGuteEig1.currentIndex() == self.ui.cbGuteEig2.currentIndex() or self.hasVorteil(self.ui.cbGuteEig2.currentText())):
-            self.ui.cbGuteEig2.setToolTip("Es ist nicht erlaubt die gleiche Eigenschaft mehrmals zu wählen (eventuell ist sie auch bereits bei der Spezies enthalten).")
-            self.ui.cbGuteEig2.setProperty("error", True)
-            gEig2Valid = False
-        else:
-            self.ui.cbGuteEig2.setToolTip("")
-            self.ui.cbGuteEig2.setProperty("error", False)
-
-        if self.ui.cbGuteEig3.isVisible() and (self.ui.cbGuteEig3.currentIndex() == self.ui.cbGuteEig1.currentIndex() or self.ui.cbGuteEig3.currentIndex() == self.ui.cbGuteEig2.currentIndex() or self.hasVorteil(self.ui.cbGuteEig3.currentText())):
-            self.ui.cbGuteEig3.setToolTip("Es ist nicht erlaubt die gleiche Eigenschaft mehrmals zu wählen (eventuell ist sie auch bereits bei der Spezies enthalten).")
-            self.ui.cbGuteEig3.setProperty("error", True)
-            gEig3Valid = False
-        else:
-            self.ui.cbGuteEig3.setToolTip("")
-            self.ui.cbGuteEig3.setProperty("error", False)
-            
-        self.ui.cbSchlechteEig1.style().unpolish(self.ui.cbSchlechteEig1)
-        self.ui.cbSchlechteEig1.style().polish(self.ui.cbSchlechteEig1)
-        self.ui.cbSchlechteEig2.style().unpolish(self.ui.cbSchlechteEig2)
-        self.ui.cbSchlechteEig2.style().polish(self.ui.cbSchlechteEig2)
-        self.ui.cbGuteEig1.style().unpolish(self.ui.cbGuteEig1)
-        self.ui.cbGuteEig1.style().polish(self.ui.cbGuteEig1)
-        self.ui.cbGuteEig2.style().unpolish(self.ui.cbGuteEig2)
-        self.ui.cbGuteEig2.style().polish(self.ui.cbGuteEig2)
-        self.ui.cbGuteEig3.style().unpolish(self.ui.cbGuteEig3)
-        self.ui.cbGuteEig3.style().polish(self.ui.cbGuteEig3)
-
-        self.zuchteigenschaftenValid = sEig1Valid and sEig2Valid and gEig1Valid and gEig2Valid and gEig3Valid
 
     def setImage(self, pixmap):
         self.ui.labelImage.setPixmap(pixmap.scaled(self.ui.labelImage.size(), QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation))
@@ -839,7 +647,6 @@ class TierbegleiterEditor(object):
             for i in range(len(self.inventory)):
                 fields['Ausruestung.' + str(i)] = self.inventory[i].text()
 
-            tiereigenschaften = [vorteilMod for vorteilMod in self.vorteilModifiers if vorteilMod.name in self.datenbank.guteZuchteigenschaften or vorteilMod.name in self.datenbank.schlechteZuchteigenschaften]
             tiervorteile = [vorteilMod for vorteilMod in self.vorteilModifiers if vorteilMod.name in self.datenbank.tiervorteile]
             for waffe in self.waffen:
                 eigenschaften = list(map(str.strip, waffe.eigenschaften.split(",")))
@@ -856,7 +663,7 @@ class TierbegleiterEditor(object):
                         tiervorteile.append(self.datenbank.tiervorteile[name])
             tiervorteile = sorted(tiervorteile, key = lambda vort: vort.name)
 
-            addRules = self.ui.checkRegeln.isChecked() and (len(tiervorteile) + len(tiereigenschaften) > 0)
+            addRules = self.ui.checkRegeln.isChecked() and (len(tiervorteile) > 0)
             handle, tmpTierbegleiterPath = tempfile.mkstemp()
             os.close(handle)
 
@@ -890,18 +697,9 @@ class TierbegleiterEditor(object):
                 dlg.setValue(50)
                 fields = {}
                 rules = ["<h1>Regeln für " + self.ui.leName.text() + "</h1>"]
-                if len(tiereigenschaften) > 0:
-                    rules.append(self.categoryHeading("Tiereigenschaften"))
-                    for vorteilMod in tiereigenschaften:
-                        rules.append("<article>")
-                        rules.append(self.ruleHeading(vorteilMod.name))
-                        rules.append(vorteilMod.wirkung)
-                        rules.append("</article>")
 
                 if sum(1 for v in self.vorteilModifiers if not v.manöver) > 0:
                     rules.append(self.categoryHeading("Tiervorteile"))
-                    if self.datenbank.iaZuchtAusbildung:
-                        rules.append("Der Einsatz eines Vorteils, der nicht passiv ist, erfordert eine Probe auf Tiere beeinflussen (20). Kampfmanöver gelten immer als passiv.\n\n")
                     for vorteilMod in tiervorteile:
                         if vorteilMod.wirkung and not vorteilMod.manöver:
                             rules.append("<article>")

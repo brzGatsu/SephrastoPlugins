@@ -1,47 +1,21 @@
 import lxml.etree as etree
 import os.path
-from Wolke import Wolke
 from Tierbegleiter import TierbegleiterTypes
-from Datenbank import Datenbank
-
-class DatabaseException(Exception):
-    pass
 
 class TierbegleiterDatenbank():
     def __init__(self):
-        sephrastoDB = Datenbank()
-        sephrastoDB.loadFile(hausregeln = Wolke.Settings['Datenbank'], isCharakterEditor = True)
-        self.iaZuchtAusbildung = sephrastoDB.einstellungen["Tierbegleiter Plugin: IA Zucht und Ausbildung"].wert
-
-        self.guteZuchteigenschaften = {}
-        self.schlechteZuchteigenschaften = {}
-        self.ausbildungen = {}
         self.tierbegleiter = {}
         self.tiervorteile = {}
+        self.talente = []
         self.xmlLaden()              
 
     def xmlLaden(self):
         rootdir = os.path.dirname(os.path.abspath(__file__))
-        ausbildungenPath = os.path.join(rootdir, "Data", "Ausbildungen.xml")
-        guteZuchteigenschaftenPath = os.path.join(rootdir, "Data", "GuteZuchteigenschaften.xml")
-        schlechteZuchteigenschaftenPath = os.path.join(rootdir, "Data", "SchlechteZuchteigenschaften.xml")
-
-        
-        if self.iaZuchtAusbildung:
-            tierbegleiterPath = os.path.join(rootdir, "Data", "IATierbegleiter.xml")
-            vorteilePath = os.path.join(rootdir, "Data", "IATiervorteile.xml")
-        else:
-            tierbegleiterPath = os.path.join(rootdir, "Data", "Tierbegleiter.xml")
-            vorteilePath = os.path.join(rootdir, "Data", "Tiervorteile.xml")
+        tierbegleiterPath = os.path.join(rootdir, "Data", "Tierbegleiter.xml")
+        vorteilePath = os.path.join(rootdir, "Data", "Tiervorteile.xml")
         
         if os.path.isfile(vorteilePath):
             self.tiervorteile = self.xmlTiervorteileLaden(vorteilePath)
-        if os.path.isfile(ausbildungenPath):
-            self.ausbildungen = self.xmlAusbildungenLaden(ausbildungenPath)
-        if os.path.isfile(guteZuchteigenschaftenPath):
-            self.guteZuchteigenschaften = self.xmlZuchteigenschaftenLaden(guteZuchteigenschaftenPath)
-        if os.path.isfile(schlechteZuchteigenschaftenPath):
-            self.schlechteZuchteigenschaften = self.xmlZuchteigenschaftenLaden(schlechteZuchteigenschaftenPath)
         if os.path.isfile(tierbegleiterPath):
             self.tierbegleiter = self.xmlTierbegleiterLaden(tierbegleiterPath)
 
@@ -49,59 +23,13 @@ class TierbegleiterDatenbank():
         result = {}
         root = etree.parse(file).getroot()
 
-        ausbildungNodes = root.findall('Vorteil')
-        for node in ausbildungNodes:
+        vorteilNodes = root.findall('Vorteil')
+        for node in vorteilNodes:
             vorteil = TierbegleiterTypes.Modifikator()
             vorteil.name = node.get('name')
             vorteil.wirkung = node.text
             vorteil.manöver = node.get('manöver') == "1"
             result.update({vorteil.name: vorteil})
-        return result
-
-    def xmlAusbildungenLaden(self, file):
-        result = {}
-        root = etree.parse(file).getroot()
-
-        ausbildungNodes = root.findall('Ausbildung')
-        for node in ausbildungNodes:
-            ausbildung = TierbegleiterTypes.Ausbildung()
-            ausbildung.name = node.get('name')
-            ausbildung.kategorie = int(node.get('kategorie')) if node.get('kategorie') else 0
-            ausbildung.preis = int(node.get('preis')) if node.get('preis') else 0
-            ausbildung.weiterevorteile = node.get('weiterevorteile')
-            modNodes = node.findall('Modifikatoren/Modifikator')
-            for modNode in modNodes:
-                name = modNode.get('name')
-                if name in self.tiervorteile:
-                    ausbildung.modifikatoren.append(self.tiervorteile[name])
-                else:
-                    mod = TierbegleiterTypes.Modifikator()
-                    mod.name = name
-                    if modNode.get('mod'):
-                        mod.mod = int(modNode.get('mod'))
-                    mod.wirkung = modNode.text
-                    ausbildung.modifikatoren.append(mod)
-            result.update({ausbildung.name: ausbildung})
-        return result
-
-    def xmlZuchteigenschaftenLaden(self, file):
-        result = {}
-        root = etree.parse(file).getroot()
-
-        zuchtNodes = root.findall('Zuchteigenschaft')
-        for node in zuchtNodes:
-            zucht = TierbegleiterTypes.Zuchteigenschaft()
-            zucht.name = node.get('name')
-            modNodes = node.findall('Modifikatoren/Modifikator')
-            for modNode in modNodes:
-                mod = TierbegleiterTypes.Modifikator()
-                mod.name = modNode.get('name')
-                if modNode.get('mod'):
-                    mod.mod = int(modNode.get('mod'))
-                mod.wirkung = modNode.text
-
-                zucht.modifikatoren.append(mod)
-            result.update({zucht.name: zucht})
         return result
 
     def xmlTierbegleiterLaden(self, file):
@@ -138,6 +66,8 @@ class TierbegleiterDatenbank():
                     mod.name = name
                     if modNode.get('mod'):
                         mod.mod = int(modNode.get('mod'))
+                        if mod.name not in self.talente:
+                            self.talente.append(mod.name)
                     tier.modifikatoren.append(mod)
 
             waffenNodes = node.findall('Waffen/Waffe')

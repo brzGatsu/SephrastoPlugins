@@ -5,18 +5,6 @@ class Modifikator(object):
         self.manöver = False
         self.mod = None       
 
-class Ausbildung(object):
-    def __init__(self):
-        self.name = ''
-        self.kategorie = 0 # 1 = pferde, 2 = kamele
-        self.modifikatoren = []
-        self.weiterevorteile = None
-
-class Zuchteigenschaft(object):
-    def __init__(self):
-        self.name = ''
-        self.modifikatoren = []
-
 class Waffe(object):
     def __init__(self):
         self.name = ''
