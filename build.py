@@ -7,7 +7,6 @@ build_path = os.path.join(dir_path,  "build")
 os.makedirs(build_path)
 
 includes = [
-    "CharakterAssistent",
     "CharakterToText",
     "DrachentoeterKampfregeln",
     "FertigkeitenPlus",
