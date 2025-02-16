@@ -54,12 +54,6 @@ class Ui_formMain(object):
         self.verticalLayout_9.setContentsMargins(20, 20, 20, 20)
         self.gridLayout_2 = QGridLayout()
         self.gridLayout_2.setObjectName(u"gridLayout_2")
-        self.teHintergrund = QPlainTextEdit(self.groupBox_2)
-        self.teHintergrund.setObjectName(u"teHintergrund")
-        self.teHintergrund.setMaximumSize(QSize(16777215, 70))
-
-        self.gridLayout_2.addWidget(self.teHintergrund, 3, 1, 1, 1)
-
         self.verticalLayout_5 = QVBoxLayout()
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
         self.cbTier = QComboBox(self.groupBox_2)
@@ -83,85 +77,93 @@ class Ui_formMain(object):
 
         self.verticalLayout_5.addWidget(self.lblTier)
 
-        self.hlReiten = QHBoxLayout()
-        self.hlReiten.setObjectName(u"hlReiten")
-        self.lblRK = QLabel(self.groupBox_2)
-        self.lblRK.setObjectName(u"lblRK")
-        self.lblRK.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
-
-        self.hlReiten.addWidget(self.lblRK)
-
-        self.sbRK = QSpinBox(self.groupBox_2)
-        self.sbRK.setObjectName(u"sbRK")
-        self.sbRK.setMaximumSize(QSize(50, 16777215))
-        self.sbRK.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.PlusMinus)
-        self.sbRK.setMaximum(3)
-
-        self.hlReiten.addWidget(self.sbRK)
-
-        self.lblReiten = QLabel(self.groupBox_2)
+        self.hlReittier = QWidget(self.groupBox_2)
+        self.hlReittier.setObjectName(u"hlReittier")
+        self.horizontalLayout_2 = QHBoxLayout(self.hlReittier)
+        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
+        self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
+        self.lblReiten = QLabel(self.hlReittier)
         self.lblReiten.setObjectName(u"lblReiten")
         sizePolicy.setHeightForWidth(self.lblReiten.sizePolicy().hasHeightForWidth())
         self.lblReiten.setSizePolicy(sizePolicy)
-        self.lblReiten.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
-        self.hlReiten.addWidget(self.lblReiten)
+        self.horizontalLayout_2.addWidget(self.lblReiten)
 
-        self.sbReiten = QSpinBox(self.groupBox_2)
+        self.sbReiten = QSpinBox(self.hlReittier)
         self.sbReiten.setObjectName(u"sbReiten")
-        sizePolicy1.setHeightForWidth(self.sbReiten.sizePolicy().hasHeightForWidth())
-        self.sbReiten.setSizePolicy(sizePolicy1)
-        self.sbReiten.setMaximumSize(QSize(50, 16777215))
         self.sbReiten.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.PlusMinus)
         self.sbReiten.setMinimum(-10)
 
-        self.hlReiten.addWidget(self.sbReiten)
+        self.horizontalLayout_2.addWidget(self.sbReiten)
+
+        self.lblRK = QLabel(self.hlReittier)
+        self.lblRK.setObjectName(u"lblRK")
+
+        self.horizontalLayout_2.addWidget(self.lblRK)
+
+        self.sbRK = QSpinBox(self.hlReittier)
+        self.sbRK.setObjectName(u"sbRK")
+        self.sbRK.setMinimumSize(QSize(44, 0))
+        self.sbRK.setMaximumSize(QSize(50, 16777215))
+        self.sbRK.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.PlusMinus)
+        self.sbRK.setMaximum(4)
+
+        self.horizontalLayout_2.addWidget(self.sbRK)
+
+        self.hlRK4 = QWidget(self.hlReittier)
+        self.hlRK4.setObjectName(u"hlRK4")
+        self.horizontalLayout = QHBoxLayout(self.hlRK4)
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
+        self.label_30 = QLabel(self.hlRK4)
+        self.label_30.setObjectName(u"label_30")
+
+        self.horizontalLayout.addWidget(self.label_30)
+
+        self.sbRK4TP = QSpinBox(self.hlRK4)
+        self.sbRK4TP.setObjectName(u"sbRK4TP")
+        self.sbRK4TP.setMinimumSize(QSize(44, 0))
+        self.sbRK4TP.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.PlusMinus)
+
+        self.horizontalLayout.addWidget(self.sbRK4TP)
+
+        self.sbRK4AT = QSpinBox(self.hlRK4)
+        self.sbRK4AT.setObjectName(u"sbRK4AT")
+        self.sbRK4AT.setMinimumSize(QSize(44, 0))
+        self.sbRK4AT.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.PlusMinus)
+
+        self.horizontalLayout.addWidget(self.sbRK4AT)
+
+        self.sbRK4VT = QSpinBox(self.hlRK4)
+        self.sbRK4VT.setObjectName(u"sbRK4VT")
+        self.sbRK4VT.setMinimumSize(QSize(44, 0))
+        self.sbRK4VT.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.PlusMinus)
+
+        self.horizontalLayout.addWidget(self.sbRK4VT)
 
 
-        self.verticalLayout_5.addLayout(self.hlReiten)
+        self.horizontalLayout_2.addWidget(self.hlRK4)
+
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_2.addItem(self.horizontalSpacer)
+
+
+        self.verticalLayout_5.addWidget(self.hlReittier)
 
 
         self.gridLayout_2.addLayout(self.verticalLayout_5, 1, 1, 1, 1)
 
-        self.leNahrung = QLineEdit(self.groupBox_2)
-        self.leNahrung.setObjectName(u"leNahrung")
-
-        self.gridLayout_2.addWidget(self.leNahrung, 2, 1, 1, 1)
-
-        self.label = QLabel(self.groupBox_2)
-        self.label.setObjectName(u"label")
+        self.label_14 = QLabel(self.groupBox_2)
+        self.label_14.setObjectName(u"label_14")
+        self.label_14.setMinimumSize(QSize(0, 0))
+        self.label_14.setMaximumSize(QSize(250, 16777215))
         font = QFont()
         font.setBold(True)
-        self.label.setFont(font)
+        self.label_14.setFont(font)
+        self.label_14.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
 
-        self.gridLayout_2.addWidget(self.label, 2, 0, 1, 1)
-
-        self.label_2 = QLabel(self.groupBox_2)
-        self.label_2.setObjectName(u"label_2")
-        self.label_2.setMaximumSize(QSize(250, 16777215))
-        self.label_2.setFont(font)
-
-        self.gridLayout_2.addWidget(self.label_2, 0, 0, 1, 1)
-
-        self.leName = QLineEdit(self.groupBox_2)
-        self.leName.setObjectName(u"leName")
-        sizePolicy1.setHeightForWidth(self.leName.sizePolicy().hasHeightForWidth())
-        self.leName.setSizePolicy(sizePolicy1)
-
-        self.gridLayout_2.addWidget(self.leName, 0, 1, 1, 1)
-
-        self.label_18 = QLabel(self.groupBox_2)
-        self.label_18.setObjectName(u"label_18")
-        self.label_18.setFont(font)
-        self.label_18.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
-
-        self.gridLayout_2.addWidget(self.label_18, 3, 0, 1, 1)
-
-        self.teAussehen = QPlainTextEdit(self.groupBox_2)
-        self.teAussehen.setObjectName(u"teAussehen")
-        self.teAussehen.setMaximumSize(QSize(16777215, 70))
-
-        self.gridLayout_2.addWidget(self.teAussehen, 4, 1, 1, 1)
+        self.gridLayout_2.addWidget(self.label_14, 1, 0, 1, 1)
 
         self.label_17 = QLabel(self.groupBox_2)
         self.label_17.setObjectName(u"label_17")
@@ -170,14 +172,49 @@ class Ui_formMain(object):
 
         self.gridLayout_2.addWidget(self.label_17, 4, 0, 1, 1)
 
-        self.label_14 = QLabel(self.groupBox_2)
-        self.label_14.setObjectName(u"label_14")
-        self.label_14.setMinimumSize(QSize(0, 0))
-        self.label_14.setMaximumSize(QSize(250, 16777215))
-        self.label_14.setFont(font)
-        self.label_14.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+        self.label_18 = QLabel(self.groupBox_2)
+        self.label_18.setObjectName(u"label_18")
+        self.label_18.setFont(font)
+        self.label_18.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
 
-        self.gridLayout_2.addWidget(self.label_14, 1, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.label_18, 3, 0, 1, 1)
+
+        self.label = QLabel(self.groupBox_2)
+        self.label.setObjectName(u"label")
+        self.label.setFont(font)
+
+        self.gridLayout_2.addWidget(self.label, 2, 0, 1, 1)
+
+        self.leNahrung = QLineEdit(self.groupBox_2)
+        self.leNahrung.setObjectName(u"leNahrung")
+
+        self.gridLayout_2.addWidget(self.leNahrung, 2, 1, 1, 1)
+
+        self.teHintergrund = QPlainTextEdit(self.groupBox_2)
+        self.teHintergrund.setObjectName(u"teHintergrund")
+        self.teHintergrund.setMaximumSize(QSize(16777215, 70))
+
+        self.gridLayout_2.addWidget(self.teHintergrund, 3, 1, 1, 1)
+
+        self.teAussehen = QPlainTextEdit(self.groupBox_2)
+        self.teAussehen.setObjectName(u"teAussehen")
+        self.teAussehen.setMaximumSize(QSize(16777215, 70))
+
+        self.gridLayout_2.addWidget(self.teAussehen, 4, 1, 1, 1)
+
+        self.leName = QLineEdit(self.groupBox_2)
+        self.leName.setObjectName(u"leName")
+        sizePolicy1.setHeightForWidth(self.leName.sizePolicy().hasHeightForWidth())
+        self.leName.setSizePolicy(sizePolicy1)
+
+        self.gridLayout_2.addWidget(self.leName, 0, 1, 1, 1)
+
+        self.label_2 = QLabel(self.groupBox_2)
+        self.label_2.setObjectName(u"label_2")
+        self.label_2.setMaximumSize(QSize(250, 16777215))
+        self.label_2.setFont(font)
+
+        self.gridLayout_2.addWidget(self.label_2, 0, 0, 1, 1)
 
 
         self.verticalLayout_9.addLayout(self.gridLayout_2)
@@ -809,6 +846,53 @@ class Ui_formMain(object):
         self.verticalLayout_6.addItem(self.verticalSpacer)
 
         self.tabWidget.addTab(self.tab_3, "")
+        self.tab_4 = QWidget()
+        self.tab_4.setObjectName(u"tab_4")
+        self.gridLayout_9 = QGridLayout(self.tab_4)
+        self.gridLayout_9.setObjectName(u"gridLayout_9")
+        self.gridLayout_9.setContentsMargins(20, 20, 20, 20)
+        self.checkEditierbar = QCheckBox(self.tab_4)
+        self.checkEditierbar.setObjectName(u"checkEditierbar")
+
+        self.gridLayout_9.addWidget(self.checkEditierbar, 2, 1, 1, 1)
+
+        self.checkRegeln = QCheckBox(self.tab_4)
+        self.checkRegeln.setObjectName(u"checkRegeln")
+        self.checkRegeln.setChecked(True)
+
+        self.gridLayout_9.addWidget(self.checkRegeln, 0, 1, 1, 1)
+
+        self.label_20 = QLabel(self.tab_4)
+        self.label_20.setObjectName(u"label_20")
+
+        self.gridLayout_9.addWidget(self.label_20, 1, 0, 1, 1)
+
+        self.label_21 = QLabel(self.tab_4)
+        self.label_21.setObjectName(u"label_21")
+
+        self.gridLayout_9.addWidget(self.label_21, 0, 0, 1, 1)
+
+        self.sbRegelnGroesse = QSpinBox(self.tab_4)
+        self.sbRegelnGroesse.setObjectName(u"sbRegelnGroesse")
+        self.sbRegelnGroesse.setMinimumSize(QSize(60, 0))
+        self.sbRegelnGroesse.setMaximumSize(QSize(60, 16777215))
+        self.sbRegelnGroesse.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.PlusMinus)
+        self.sbRegelnGroesse.setMinimum(6)
+        self.sbRegelnGroesse.setMaximum(18)
+        self.sbRegelnGroesse.setValue(8)
+
+        self.gridLayout_9.addWidget(self.sbRegelnGroesse, 1, 1, 1, 1)
+
+        self.label_22 = QLabel(self.tab_4)
+        self.label_22.setObjectName(u"label_22")
+
+        self.gridLayout_9.addWidget(self.label_22, 2, 0, 1, 1)
+
+        self.verticalSpacer_5 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.gridLayout_9.addItem(self.verticalSpacer_5, 3, 0, 1, 1)
+
+        self.tabWidget.addTab(self.tab_4, "")
         self.splitter.addWidget(self.tabWidget)
         self.scrollArea = QScrollArea(self.splitter)
         self.scrollArea.setObjectName(u"scrollArea")
@@ -858,56 +942,12 @@ class Ui_formMain(object):
 
         self.verticalLayout_8.addWidget(self.lblWerte)
 
-
-        self.verticalLayout_13.addWidget(self.groupBox)
-
-        self.groupBox_5 = QGroupBox(self.scrollAreaWidgetContents_3)
-        self.groupBox_5.setObjectName(u"groupBox_5")
-        self.gridLayout_7 = QGridLayout(self.groupBox_5)
-        self.gridLayout_7.setObjectName(u"gridLayout_7")
-        self.spinRegelnGroesse = QSpinBox(self.groupBox_5)
-        self.spinRegelnGroesse.setObjectName(u"spinRegelnGroesse")
-        self.spinRegelnGroesse.setMinimumSize(QSize(60, 0))
-        self.spinRegelnGroesse.setMaximumSize(QSize(60, 16777215))
-        self.spinRegelnGroesse.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.PlusMinus)
-        self.spinRegelnGroesse.setMinimum(6)
-        self.spinRegelnGroesse.setMaximum(18)
-        self.spinRegelnGroesse.setValue(8)
-
-        self.gridLayout_7.addWidget(self.spinRegelnGroesse, 2, 1, 1, 1)
-
-        self.label_20 = QLabel(self.groupBox_5)
-        self.label_20.setObjectName(u"label_20")
-
-        self.gridLayout_7.addWidget(self.label_20, 2, 0, 1, 1)
-
         self.verticalSpacer_4 = QSpacerItem(20, 0, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
-        self.gridLayout_7.addItem(self.verticalSpacer_4, 6, 1, 1, 1)
-
-        self.checkRegeln = QCheckBox(self.groupBox_5)
-        self.checkRegeln.setObjectName(u"checkRegeln")
-        self.checkRegeln.setChecked(True)
-
-        self.gridLayout_7.addWidget(self.checkRegeln, 1, 1, 1, 1)
-
-        self.label_21 = QLabel(self.groupBox_5)
-        self.label_21.setObjectName(u"label_21")
-
-        self.gridLayout_7.addWidget(self.label_21, 1, 0, 1, 1)
-
-        self.label_22 = QLabel(self.groupBox_5)
-        self.label_22.setObjectName(u"label_22")
-
-        self.gridLayout_7.addWidget(self.label_22, 4, 0, 1, 1)
-
-        self.checkEditierbar = QCheckBox(self.groupBox_5)
-        self.checkEditierbar.setObjectName(u"checkEditierbar")
-
-        self.gridLayout_7.addWidget(self.checkEditierbar, 4, 1, 1, 1)
+        self.verticalLayout_8.addItem(self.verticalSpacer_4)
 
 
-        self.verticalLayout_13.addWidget(self.groupBox_5)
+        self.verticalLayout_13.addWidget(self.groupBox)
 
         self.scrollArea.setWidget(self.scrollAreaWidgetContents_3)
         self.splitter.addWidget(self.scrollArea)
@@ -946,19 +986,14 @@ class Ui_formMain(object):
 
         self.verticalLayout_14.addLayout(self.horizontalLayout_3)
 
-        QWidget.setTabOrder(self.spinRegelnGroesse, self.checkRegeln)
-        QWidget.setTabOrder(self.checkRegeln, self.cbTier)
-        QWidget.setTabOrder(self.cbTier, self.checkEditierbar)
-        QWidget.setTabOrder(self.checkEditierbar, self.buttonLoadImage)
+        QWidget.setTabOrder(self.cbTier, self.buttonLoadImage)
         QWidget.setTabOrder(self.buttonLoadImage, self.buttonLoad)
         QWidget.setTabOrder(self.buttonLoad, self.buttonQuicksave)
-        QWidget.setTabOrder(self.buttonQuicksave, self.sbRK)
-        QWidget.setTabOrder(self.sbRK, self.buttonSave)
+        QWidget.setTabOrder(self.buttonQuicksave, self.buttonSave)
         QWidget.setTabOrder(self.buttonSave, self.btnSavePdf)
         QWidget.setTabOrder(self.btnSavePdf, self.leName)
         QWidget.setTabOrder(self.leName, self.buttonDeleteImage)
-        QWidget.setTabOrder(self.buttonDeleteImage, self.sbReiten)
-        QWidget.setTabOrder(self.sbReiten, self.scrollArea)
+        QWidget.setTabOrder(self.buttonDeleteImage, self.scrollArea)
         QWidget.setTabOrder(self.scrollArea, self.leAusruestung1)
         QWidget.setTabOrder(self.leAusruestung1, self.leAusruestung2)
         QWidget.setTabOrder(self.leAusruestung2, self.leAusruestung3)
@@ -997,21 +1032,22 @@ class Ui_formMain(object):
         self.tabWidget.setProperty(u"class", QCoreApplication.translate("formMain", u"tabNavigation", None))
         self.groupBox_2.setTitle("")
         self.lblTier.setText("")
-        self.lblRK.setText(QCoreApplication.translate("formMain", u"Reiterkampfstil-Stufe", None))
         self.lblReiten.setText(QCoreApplication.translate("formMain", u"Reiten-PW - BE", None))
 #if QT_CONFIG(tooltip)
         self.sbReiten.setToolTip(QCoreApplication.translate("formMain", u"Trage hier deinen Reiten-PW abz\u00fcglich BE ein. Nicht vergessen - mit Reiterkampf II sinkt die BE um 1!", None))
 #endif // QT_CONFIG(tooltip)
+        self.lblRK.setText(QCoreApplication.translate("formMain", u"Reiterkampfstil-Stufe", None))
+        self.label_30.setText(QCoreApplication.translate("formMain", u"Stufe IV Bonus TP/AT/VT", None))
+        self.label_14.setText(QCoreApplication.translate("formMain", u"Tier", None))
+        self.label_14.setProperty(u"class", QCoreApplication.translate("formMain", u"h4", None))
+        self.label_17.setText(QCoreApplication.translate("formMain", u"Aussehen", None))
+        self.label_17.setProperty(u"class", QCoreApplication.translate("formMain", u"h4", None))
+        self.label_18.setText(QCoreApplication.translate("formMain", u"Hintergrund", None))
+        self.label_18.setProperty(u"class", QCoreApplication.translate("formMain", u"h4", None))
         self.label.setText(QCoreApplication.translate("formMain", u"Nahrung", None))
         self.label.setProperty(u"class", QCoreApplication.translate("formMain", u"h4", None))
         self.label_2.setText(QCoreApplication.translate("formMain", u"Name", None))
         self.label_2.setProperty(u"class", QCoreApplication.translate("formMain", u"h4", None))
-        self.label_18.setText(QCoreApplication.translate("formMain", u"Hintergrund", None))
-        self.label_18.setProperty(u"class", QCoreApplication.translate("formMain", u"h4", None))
-        self.label_17.setText(QCoreApplication.translate("formMain", u"Aussehen", None))
-        self.label_17.setProperty(u"class", QCoreApplication.translate("formMain", u"h4", None))
-        self.label_14.setText(QCoreApplication.translate("formMain", u"Tier", None))
-        self.label_14.setProperty(u"class", QCoreApplication.translate("formMain", u"h4", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QCoreApplication.translate("formMain", u"Beschreibung", None))
         self.label_3.setText(QCoreApplication.translate("formMain", u"Attribute", None))
         self.label_3.setProperty(u"class", QCoreApplication.translate("formMain", u"h2", None))
@@ -1048,6 +1084,12 @@ class Ui_formMain(object):
         self.gbInventar.setTitle("")
         self.leAusruestung1.setText("")
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), QCoreApplication.translate("formMain", u"Ausr\u00fcstung", None))
+        self.checkEditierbar.setText("")
+        self.checkRegeln.setText("")
+        self.label_20.setText(QCoreApplication.translate("formMain", u"Regelschriftgr\u00f6\u00dfe", None))
+        self.label_21.setText(QCoreApplication.translate("formMain", u"Relevante Regeln anh\u00e4ngen", None))
+        self.label_22.setText(QCoreApplication.translate("formMain", u"Formularfelder editierbar", None))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_4), QCoreApplication.translate("formMain", u"Einstellungen", None))
         self.scrollArea.setProperty(u"class", QCoreApplication.translate("formMain", u"transparent", None))
         self.groupBox_3.setTitle(QCoreApplication.translate("formMain", u"Bild", None))
         self.buttonLoadImage.setText(QCoreApplication.translate("formMain", u"Bild Laden", None))
@@ -1056,12 +1098,6 @@ class Ui_formMain(object):
 "(wird automatisch angepasst)", None))
         self.groupBox.setTitle(QCoreApplication.translate("formMain", u"Vorschau", None))
         self.lblWerte.setText(QCoreApplication.translate("formMain", u"<html><head/><body><p><br/></p></body></html>", None))
-        self.groupBox_5.setTitle(QCoreApplication.translate("formMain", u"Einstellungen", None))
-        self.label_20.setText(QCoreApplication.translate("formMain", u"Regelschriftgr\u00f6\u00dfe", None))
-        self.checkRegeln.setText("")
-        self.label_21.setText(QCoreApplication.translate("formMain", u"Relevante Regeln anh\u00e4ngen", None))
-        self.label_22.setText(QCoreApplication.translate("formMain", u"Formularfelder editierbar", None))
-        self.checkEditierbar.setText("")
         self.buttonLoad.setText(QCoreApplication.translate("formMain", u"Laden", None))
         self.buttonQuicksave.setText(QCoreApplication.translate("formMain", u"Speichern", None))
         self.buttonSave.setText(QCoreApplication.translate("formMain", u"Speichern unter...", None))
