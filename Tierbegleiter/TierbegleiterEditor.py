@@ -10,20 +10,31 @@ from PySide6.QtGui import QPixmap
 from QtUtils.TextTagCompleter import TextTagCompleter
 from Charakterbogen import Charakterbogen
 from QtUtils.FocusWatcher import FocusWatcher
+from QtUtils.RichTextButton import RichTextPushButton, RichTextToolButton
+from EinstellungenWrapper import EinstellungenWrapper
+from QtUtils.ProgressDialogExt import ProgressDialogExt
+from Tierbegleiter import TierbegleiterMain
 
 class TierbegleiterEditor(object):
     def __init__(self):
         self.datenbank = TierbegleiterDatenbank.TierbegleiterDatenbank()
+        self.dbOptions = EinstellungenWrapper.getDatenbanken(Wolke.Settings['Pfad-Regeln'])
         self.charakterbogen = Charakterbogen() # use default settings
         self.charakterbogen.load(os.path.join(os.path.dirname(os.path.abspath(__file__)), "Data", "Tierbegleiterbogen.ini"))
         self.savepath = ""
-        self.tierbegleiter = Tierbegleiter.Tierbegleiter()
+        self.tierbegleiter = None
         self.pdfExporter = TierbegleiterPdfExporter.TierbegleiterPdfExporter()
 
         self.characterImage = None
         self.currentlyLoading = False
 
-    def setupMainForm(self):
+    def show(self):
+        self.formMain = QtWidgets.QWidget()
+
+        self.ui = TierbegleiterMain.Ui_formMain()
+        self.ui.setupUi(self.formMain)
+        self.formMain.setStyleSheet(QtWidgets.QApplication.instance().styleSheet())
+
         if "WindowSize-TierbegleiterPlugin" in Wolke.Settings:
             windowSize = Wolke.Settings["WindowSize-TierbegleiterPlugin"]
             self.formMain.resize(windowSize[0], windowSize[1])
@@ -32,9 +43,16 @@ class TierbegleiterEditor(object):
         width = self.ui.splitter.size().width()
         self.ui.splitter.setSizes([int(width*0.6), int(width*0.4)])
 
+        self.ui.cbHausregeln.addItems(self.dbOptions)
+        self.ui.cbHausregeln.setCurrentText(self.tierbegleiter.hausregeln)
+        self.ui.cbHausregeln.currentIndexChanged.connect(self.onDbChanging)
+
+        self.ui.sbEP.valueChanged.connect(self.update)
+        self.ui.sbEP.valueChanged.connect(self.loadEP)
+
         self.vorteile = []
         self.vorteilCompleter = []
-        for i in range(1, 15):
+        for i in range(1, 16):
             leVorteil = getattr(self.ui, "leVorteil" + str(i))
             leVorteil.editingFinished.connect(self.update)
             self.vorteilCompleter.append(TextTagCompleter(leVorteil, self.datenbank.tiervorteile.keys()))
@@ -42,14 +60,14 @@ class TierbegleiterEditor(object):
 
         self.talente = []
         self.talentCompleter = []
-        for i in range(1, 9):
+        for i in range(1, 10):
             leTalent = getattr(self.ui, "leTalent" + str(i))
             leTalent.editingFinished.connect(self.update)
-            self.talentCompleter.append(TextTagCompleter(leTalent, self.datenbank.talente))
+            self.talentCompleter.append(TextTagCompleter(leTalent, []))
             self.talente.append(leTalent)
 
         self.talentWerte = []
-        for i in range(1, 9):
+        for i in range(1, 10):
             sbTalent = getattr(self.ui, "sbTalent" + str(i))
             sbTalent.valueChanged.connect(self.update)
             self.talentWerte.append(sbTalent)
@@ -57,23 +75,26 @@ class TierbegleiterEditor(object):
         self.ausruestung = []
         for i in range(1, 21):
             leAusruestung = getattr(self.ui, "leAusruestung" + str(i))
-            leAusruestung.editingFinished.connect(lambda: setattr(self.tierbegleiter, "ausruestung", [aus.text() for aus in self.ausruestung]))
+            leAusruestung.editingFinished.connect(self.update)
             self.ausruestung.append(leAusruestung)
         
         self.ui.cbTier.addItems(sorted(self.datenbank.tierbegleiter.keys()))
         self.ui.cbTier.setCurrentIndex(0)
 
-        self.ui.leName.editingFinished.connect(lambda: setattr(self.tierbegleiter, "name", self.ui.leName.text()))
-        self.ui.leNahrung.editingFinished.connect(lambda: setattr(self.tierbegleiter, "nahrung", self.ui.leNahrung.text()))
+        self.ui.leName.editingFinished.connect(self.update)
+        self.ui.leNahrung.editingFinished.connect(self.update)
 
-        self.aussehenEditingFinished = FocusWatcher(lambda: setattr(self.tierbegleiter, "aussehen", self.ui.teAussehen.toPlainText()))
+        self.aussehenEditingFinished = FocusWatcher(self.update)
         self.ui.teAussehen.installEventFilter(self.aussehenEditingFinished)
 
-        self.hintergrundEditingFinished = FocusWatcher(lambda: setattr(self.tierbegleiter, "hintergrund", self.ui.teHintergrund.toPlainText()))
+        self.hintergrundEditingFinished = FocusWatcher(self.update)
         self.ui.teHintergrund.installEventFilter(self.hintergrundEditingFinished)
 
         self.ui.cbTier.currentIndexChanged.connect(self.handleTierChanged)
         self.ui.cbTier.currentIndexChanged.connect(self.update)
+
+        self.ui.cbZucht.currentIndexChanged.connect(self.update)
+
         self.ui.sbReiten.valueChanged.connect(self.update)
         self.ui.sbRK.valueChanged.connect(self.handleReiterkampfChanged)
         self.ui.sbRK.valueChanged.connect(self.update)
@@ -86,29 +107,114 @@ class TierbegleiterEditor(object):
             self.attribute[attribut] = getattr(self.ui, "sb" + attribut)
             self.attribute[attribut].valueChanged.connect(self.update)
 
-        self.ui.btnSavePdf.clicked.connect(self.savePdfClickedHandler)
-        self.ui.buttonLoad.clicked.connect(self.loadClickedHandler)
-        self.ui.buttonSave.clicked.connect(self.saveClickedHandler)
-        self.ui.buttonQuicksave.clicked.connect(self.quicksaveClickedHandler)
-
         self.labelImageText = self.ui.labelImage.text()
         self.ui.buttonLoadImage.clicked.connect(self.buttonLoadImageClicked)
         self.ui.buttonDeleteImage.clicked.connect(self.buttonDeleteImageClicked)
-        
+
         self.ui.checkRegeln.setChecked(self.tierbegleiter.regelnAnhaengen)
-        self.ui.checkRegeln.stateChanged.connect(lambda: setattr(self.tierbegleiter, "regelnAnhaengen", self.ui.checkRegeln.isChecked()))
+        self.ui.checkRegeln.stateChanged.connect(self.update)
 
         self.ui.sbRegelnGroesse.setValue(self.tierbegleiter.regelnGroesse)
-        self.ui.sbRegelnGroesse.valueChanged.connect(lambda: setattr(self.tierbegleiter, "regelnGroesse", self.ui.sbRegelnGroesse.value()))
+        self.ui.sbRegelnGroesse.valueChanged.connect(self.update)     
 
         self.ui.checkEditierbar.setChecked(self.tierbegleiter.formularEditierbar)
-        self.ui.checkEditierbar.stateChanged.connect(lambda: setattr(self.tierbegleiter, "formularEditierbar", self.ui.checkEditierbar.isChecked()))
+        self.ui.checkEditierbar.stateChanged.connect(self.update)
+            
+
+        self.ui.buttonLoad = RichTextPushButton()
+        self.ui.buttonLoad.setText("<span style='" + Wolke.FontAwesomeCSS + f"'>\uf07c</span>&nbsp;&nbsp;Laden")
+        self.ui.buttonLoad.setShortcut("Ctrl+L")
+        self.ui.buttonLoad.setToolTip("Tierbegleiterdatei laden (" + self.ui.buttonLoad.shortcut().toString(QtGui.QKeySequence.NativeText) + ")")
+        self.ui.buttonLoad.clicked.connect(self.loadClickedHandler)
+        self.ui.layoutBottomBar.addWidget(self.ui.buttonLoad)
+
+        self.ui.buttonQuicksave = RichTextToolButton()
+        self.ui.buttonQuicksave.setText("&nbsp;<span style='" + Wolke.FontAwesomeCSS + f"'>\uf0c7</span>&nbsp;&nbsp;Speichern")
+        self.ui.buttonQuicksave.setShortcut("Ctrl+S")
+        self.ui.buttonQuicksave.setToolTip("Tierbegleiterdatei speichern (" + self.ui.buttonQuicksave.shortcut().toString(QtGui.QKeySequence.NativeText) + ")")
+        self.ui.buttonQuicksave.clicked.connect(self.quicksaveClickedHandler)
+        self.ui.layoutBottomBar.addWidget(self.ui.buttonQuicksave)
+        self.ui.buttonQuicksave.setPopupMode(QtWidgets.QToolButton.MenuButtonPopup)
+        self.saveMenu = QtWidgets.QMenu()
+        action = self.saveMenu.addAction("Speichern unter...")
+        action.setShortcut("Ctrl+Shift+S")
+        action.triggered.connect(self.saveClickedHandler)
+        self.ui.buttonQuicksave.setMenu(self.saveMenu)
+
+        self.ui.buttonSavePDF = RichTextPushButton()
+        self.ui.buttonSavePDF.setText("<span style='" + Wolke.FontAwesomeCSS + f"'>\uf1c1</span>&nbsp;&nbsp;Export")
+        self.ui.buttonSavePDF.setShortcut("Ctrl+E")
+        self.ui.buttonSavePDF.setToolTip("Tierbegleiter als PDF exportieren (" + self.ui.buttonSavePDF.shortcut().toString(QtGui.QKeySequence.NativeText) + ")")
+        self.ui.buttonSavePDF.clicked.connect(self.savePdfClickedHandler)
+        self.ui.layoutBottomBar.addWidget(self.ui.buttonSavePDF)
 
         self.handleTierChanged()
-        self.update()
-        self.updateTitlebar()
+        self.onDbChanged()
 
         self.formMain.closeEvent = self.closeEvent
+        self.formMain.show()
+
+    def newCharacter(self):
+        try:
+            dlg = ProgressDialogExt(minimum = 0, maximum = 100)
+            dlg.disableCancel()
+            dlg.setWindowTitle("Neuen Tierbegleiter erstellen")    
+            dlg.show()
+            dlg.setLabelText("Lade Datenbank")
+            dlg.setValue(0, True)
+
+            self.tierbegleiter = Tierbegleiter.Tierbegleiter()
+            if self.tierbegleiter.hausregeln not in self.dbOptions:
+                self.tierbegleiter.hausregeln = self.dbOptions[0]
+            self.datenbank.loadFile(hausregeln = self.tierbegleiter.hausregeln, isCharakterEditor = False)
+            self.tierbegleiter.definition = self.datenbank.tierbegleiter[sorted(self.datenbank.tierbegleiter.keys())[0]]
+            self.tierbegleiter.aktualisieren(self.datenbank)
+
+            dlg.setLabelText("Starte Editor")
+            dlg.setValue(80, True)
+            self.show()
+        finally:
+            dlg.hide()
+            dlg.deleteLater()
+
+    def onDbChanging(self):
+        self.tierbegleiter.hausregeln = self.ui.cbHausregeln.currentText()
+        self.datenbank.loadFile(hausregeln = self.tierbegleiter.hausregeln, isCharakterEditor = False)
+        self.onDbChanged()
+
+    def onDbChanged(self):        
+        talente = self.datenbank.getTalenteProfan()
+        for completer in self.talentCompleter:
+            completer.setTags(talente)
+
+        self.tierbegleiter.aktualisieren(self.datenbank)
+
+        self.ui.labelEPInfo.setText(self.datenbank.einstellungen["Tierbegleiter Plugin: EP-Kosten Infotext"].wert)
+
+        zuchtEinstellung = self.datenbank.einstellungen["Tierbegleiter Plugin: Zucht"].wert
+        self.ui.labelZucht.setVisible(len(zuchtEinstellung) > 0)
+
+        self.ui.cbZucht.blockSignals(True)
+        self.ui.cbZucht.setVisible(len(zuchtEinstellung) > 0)
+        self.ui.cbZucht.clear()
+
+        if len(zuchtEinstellung) > 0:
+            self.ui.cbZucht.addItems(list(zuchtEinstellung.keys()))
+            if self.tierbegleiter.zucht is None:
+                for k,v in zuchtEinstellung.items():
+                    if float(v) == 1.0:
+                        self.ui.cbZucht.setCurrentText(k)
+                        break
+            else:
+                self.ui.cbZucht.setCurrentIndex(self.tierbegleiter.zucht)
+        else:
+            self.tierbegleiter.zucht = None
+        self.ui.cbZucht.blockSignals(False)
+
+        self.loadEP()
+        self.updateTitlebar()
+        self.updateInfo()
+
 
     def closeEvent(self,event):
         Wolke.Settings["WindowSize-TierbegleiterPlugin"] = [self.formMain.size().width(), self.formMain.size().height()]
@@ -117,9 +223,15 @@ class TierbegleiterEditor(object):
         file = " - Neuer Tierbegleiter"
         if self.savepath:
             file = " - " + os.path.basename(self.savepath)
-        self.formMain.setWindowTitle("Sephrasto" + file)
+
+        if self.tierbegleiter.hausregeln and self.tierbegleiter.hausregeln != 'Keine':
+           file += " (" + os.path.splitext(os.path.basename(self.tierbegleiter.hausregeln))[0] + ")"
+
+        self.formMain.setWindowTitle(self.datenbank.einstellungen["Tierbegleiter Plugin: Fenstertitel"].wert + file)
 
     def load(self):
+        self.currentlyLoading = True
+
         tb = self.tierbegleiter
         self.ui.leName.setText(tb.name)
         self.ui.teAussehen.setPlainText(tb.aussehen)
@@ -168,15 +280,37 @@ class TierbegleiterEditor(object):
             self.characterImage.loadFromData(self.tierbegleiter.bild)
             self.setImage(self.characterImage)     
 
+        self.ui.cbHausregeln.setCurrentText(self.tierbegleiter.hausregeln)
         self.ui.checkRegeln.setChecked(self.tierbegleiter.regelnAnhaengen)
         self.ui.sbRegelnGroesse.setValue(self.tierbegleiter.regelnGroesse)
         self.ui.checkEditierbar.setChecked(self.tierbegleiter.formularEditierbar)
 
+        self.onDbChanging()
+
+        self.currentlyLoading = False
+
     def update(self):
         if self.currentlyLoading:
             return
+
         tier = self.datenbank.tierbegleiter[self.ui.cbTier.currentText()]
         self.tierbegleiter.definition = tier
+
+        self.tierbegleiter.epGesamt = self.ui.sbEP.value()
+        self.tierbegleiter.regelnAnhaengen = self.ui.checkRegeln.isChecked()
+        self.tierbegleiter.regelnGroesse = self.ui.sbRegelnGroesse.value()
+        self.tierbegleiter.formularEditierbar = self.ui.checkEditierbar.isChecked()
+        self.tierbegleiter.ausruestung = [aus.text() for aus in self.ausruestung]
+        self.tierbegleiter.name = self.ui.leName.text()
+        self.tierbegleiter.nahrung = self.ui.leNahrung.text()
+        self.tierbegleiter.aussehen = self.ui.teAussehen.toPlainText()
+        self.tierbegleiter.hintergrund = self.ui.teHintergrund.toPlainText()
+
+        zuchtEinstellung = self.datenbank.einstellungen["Tierbegleiter Plugin: Zucht"].wert
+        if len(zuchtEinstellung) > 0:
+            self.tierbegleiter.zucht = self.ui.cbZucht.currentIndex()
+        else:
+            self.tierbegleiter.zucht = None
 
         attributMods = {}
         talentMods = []
@@ -229,12 +363,13 @@ class TierbegleiterEditor(object):
         self.tierbegleiter.talentMods = talentMods
         self.tierbegleiter.vorteilMods = vorteilMods
 
-        self.tierbegleiter.aktualisieren()
+        self.tierbegleiter.aktualisieren(self.datenbank)
 
+        self.loadEP()
         self.updateInfo()
 
     def updateInfo(self):
-        text = self.tierbegleiter.modifiersToString(True)
+        text = self.tierbegleiter.modifiersToString(self.datenbank)
         self.ui.lblWerte.setText(text)
 
         tooltip = ""
@@ -262,13 +397,26 @@ class TierbegleiterEditor(object):
             self.tierbegleiter.nahrung = tier.futter
             self.ui.leNahrung.setText(self.tierbegleiter.nahrung)
 
-            groessen = ["Winziges", "Sehr kleines", "Kleines", "Mittelgroßes", "Großes", "Sehr großes"]
+            groessen = ["Winziges", "Sehr kleines", "Kleines", "Mittelgroßes", "Großes", "Sehr großes", "Gigantisches"]
             self.tierbegleiter.aussehen = groessen[tier.groesse] + " Tier"
             self.ui.teAussehen.setPlainText(self.tierbegleiter.aussehen)
 
     def handleReiterkampfChanged(self):
         tier = self.datenbank.tierbegleiter[self.ui.cbTier.currentText()]
         self.ui.hlRK4.setVisible(self.ui.sbRK.value() == 4)
+
+    def loadEP(self):
+        self.ui.sbEP.blockSignals(True)
+        self.ui.sbEP.setValue(self.tierbegleiter.epGesamt)
+        self.ui.sbEP.blockSignals(False)
+        self.ui.sbRemaining.setValue(self.tierbegleiter.epGesamt - self.tierbegleiter.epAusgegeben)
+        if self.tierbegleiter.epGesamt < self.tierbegleiter.epAusgegeben:
+            self.ui.sbRemaining.setProperty("error", True)
+        else:
+            self.ui.sbRemaining.setProperty("error", False)
+        self.ui.sbRemaining.style().unpolish(self.ui.sbRemaining)
+        self.ui.sbRemaining.style().polish(self.ui.sbRemaining)
+        self.ui.sbSpent.setValue(self.tierbegleiter.epAusgegeben)
 
     def setImage(self, pixmap):
         self.ui.labelImage.setPixmap(pixmap.scaled(self.ui.labelImage.size(), QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation))
@@ -307,12 +455,11 @@ class TierbegleiterEditor(object):
         self.savepath = spath
         if not self.savepath:
             return
-        self.currentlyLoading = True
 
         root = etree.parse(self.savepath).getroot()
         self.tierbegleiter.deserialize(root, self.datenbank)
         self.load()
-        self.currentlyLoading = False
+        self.loadEP()
         self.updateTitlebar()
         self.updateInfo()
 

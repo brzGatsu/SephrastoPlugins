@@ -30,8 +30,9 @@ class TierbegleiterPdfExporter:
             fields = copy.copy(tierbegleiter.attributModsMerged)
             fields["WSStern"] = fields["WS*"]
 
-            if "KO" in fields:
-                fields["DH"] = int(int(fields["KO"]) / 2)
+            scriptAPI = Hilfsmethoden.createScriptAPI()
+            scriptAPI.update({ "WS" : tierbegleiter.attributModsMerged["WS"], "KO" : tierbegleiter.attributModsMerged["KO"] })
+            fields["DH"] = datenbank.einstellungen["Tierbegleiter Plugin: DH Script"].evaluateScript(scriptAPI)
 
             talentModifierList = sorted([mod for mod in tierbegleiter.talentModsMerged if mod.name.strip()], key = lambda mod: mod.name) 
             for i in range(0, charakterbogen.maxFertigkeiten):
@@ -59,14 +60,25 @@ class TierbegleiterPdfExporter:
                 text[-1] += " " * (int(charsPerLine * 1.5) - len(text[-1])) # space has less width, so add 50%
             fields["Aussehen"] = "\n".join(text)
 
+            waffen = copy.copy(tierbegleiter.waffenMerged)
+            while len(waffen) > 3:
+                removed = False
+                for w in waffen:
+                    if not "Reiterkampf" in w.name and ("Zerbrechlich" in w.eigenschaften or "Verletzlich" in w.eigenschaften):
+                        waffen.remove(w)
+                        removed = True
+                        break
+                if not removed:
+                    break
+
             for i in range(0, 3):
-                if i < len(tierbegleiter.waffenMerged):
-                    fields['Waffe.' + str(i)] = tierbegleiter.waffenMerged[i].name
-                    fields['WaffeRW.' + str(i)] = tierbegleiter.waffenMerged[i].rw
-                    fields['WaffeEig.' + str(i)] = tierbegleiter.waffenMerged[i].eigenschaften
-                    fields['WaffeAT.' + str(i)] = tierbegleiter.waffenMerged[i].at if tierbegleiter.waffenMerged[i].at is not None else "-"
-                    fields['WaffeVT.' + str(i)] = tierbegleiter.waffenMerged[i].vt if tierbegleiter.waffenMerged[i].vt is not None else "-"
-                    fields['WaffeTP.' + str(i)] = tierbegleiter.waffenMerged[i].getTP()
+                if i < len(waffen):
+                    fields['Waffe.' + str(i)] = waffen[i].name
+                    fields['WaffeRW.' + str(i)] = waffen[i].rw
+                    fields['WaffeEig.' + str(i)] = waffen[i].eigenschaften
+                    fields['WaffeAT.' + str(i)] = waffen[i].at if waffen[i].at is not None else "-"
+                    fields['WaffeVT.' + str(i)] = waffen[i].vt if waffen[i].vt is not None else "-"
+                    fields['WaffeTP.' + str(i)] = waffen[i].getTP()
 
             for i in range(len(tierbegleiter.ausruestung)):
                 fields['Ausruestung.' + str(i)] = tierbegleiter.ausruestung[i]

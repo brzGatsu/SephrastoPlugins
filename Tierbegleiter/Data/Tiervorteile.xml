@@ -1,45 +1,45 @@
 <Datenbank>
-  <Vorteil name="Koloss I">Wenn das Tier eine Wunde erleiden würde, erleidet der es nur einen Kratzer. Zwei Kratzer bedeuten eine Wunde mit den üblichen Auswirkungen.</Vorteil>
-  <Vorteil name="Koloss II">Wenn das Tier eine Wunde erleiden würde, erleidet der es nur einen Kratzer. Vier Kratzer bedeuten eine Wunde mit den üblichen Auswirkungen.</Vorteil>
-  <Vorteil name="Astralsinn">Erlaubt es der Kreatur, ihre Umgebung magisch wahrzunehmen. Sie erleidet keine Abzüge durch schlechte Sicht. Der Astralsinn kann durch Antimagie, zum Beispiel Hellsicht trüben in der Modifikation Magie unterdrücken, gestört werden. Die Schwierigkeit dafür liegt mindestens bei 20, bei mächtigen Wesen deutlich höher.</Vorteil>
-  <Vorteil name="Flieger">Flieger bewegen sich üblicherweise fliegend, die angegebenen Werte gelten für Angriffe und Bewegung in der Luft. Am Boden stellen solche Kreaturen meist keine Gefahr dar.</Vorteil>
-  <Vorteil name="Flugfähig">Flugfähige Tiere sind bei Angriffen und Bewegung in der Luft und am Boden gleichermaßen gewandt.</Vorteil>
-  <Vorteil name="Angepasst I (Dunkelheit)">Das Tier ist an schlechte Lichtverhältnisse gewöhnt. Abzüge hierdurch insbesondere im Kampf, sinken für um eine Stufe.</Vorteil>
-  <Vorteil name="Angepasst II (Dunkelheit)">Das Tier ist an schlechte Lichtverhältnisse gewöhnt. Abzüge hierdurch insbesondere im Kampf, sinken für um zwei Stufen.</Vorteil>
-  <Vorteil name="Niederwerfen" manöver="1">Ermöglicht das Manöver Niederwerfen (AT –4).
+  <Vorteil name="Koloss I" kosten="1">Wenn das Tier eine Wunde erleiden würde, erleidet der es nur einen Kratzer. Zwei Kratzer bedeuten eine Wunde mit den üblichen Auswirkungen.</Vorteil>
+  <Vorteil name="Koloss II" kosten="1">Wenn das Tier eine Wunde erleiden würde, erleidet der es nur einen Kratzer. Vier Kratzer bedeuten eine Wunde mit den üblichen Auswirkungen.</Vorteil>
+  <Vorteil name="Astralsinn" kosten="1">Erlaubt es der Kreatur, ihre Umgebung magisch wahrzunehmen. Sie erleidet keine Abzüge durch schlechte Sicht. Der Astralsinn kann durch Antimagie, zum Beispiel Hellsicht trüben in der Modifikation Magie unterdrücken, gestört werden. Die Schwierigkeit dafür liegt mindestens bei 20, bei mächtigen Wesen deutlich höher.</Vorteil>
+  <Vorteil name="Flieger" kosten="1">Flieger bewegen sich üblicherweise fliegend, die angegebenen Werte gelten für Angriffe und Bewegung in der Luft. Am Boden stellen solche Kreaturen meist keine Gefahr dar.</Vorteil>
+  <Vorteil name="Flugfähig" kosten="1">Flugfähige Tiere sind bei Angriffen und Bewegung in der Luft und am Boden gleichermaßen gewandt.</Vorteil>
+  <Vorteil name="Angepasst I (Dunkelheit)" kosten="1">Das Tier ist an schlechte Lichtverhältnisse gewöhnt. Abzüge hierdurch insbesondere im Kampf, sinken für um eine Stufe.</Vorteil>
+  <Vorteil name="Angepasst II (Dunkelheit)" kosten="1">Das Tier ist an schlechte Lichtverhältnisse gewöhnt. Abzüge hierdurch insbesondere im Kampf, sinken für um zwei Stufen.</Vorteil>
+  <Vorteil name="Niederwerfen" manöver="1" kosten="1">Ermöglicht das Manöver Niederwerfen (AT –4).
 Gegenprobe: KK.
 Wirkung: Dein Ziel stürzt und liegt am Boden.
 Anmerkung: Als Waffeneigenschaft ist Niederwerfen ein automatischer Manövereffekt und nicht erschwert. Der angegebene Modifikator gilt für die gegnerische Gegenprobe.</Vorteil>
-  <Vorteil name="Doppelangriff" manöver="1">Ermöglicht das Manöver Doppelangriff (zwei AT –4).
+  <Vorteil name="Doppelangriff" manöver="1" kosten="1">Ermöglicht das Manöver Doppelangriff (zwei AT –4).
 Wirkung: Das Tier führt zwei Attacken –4 aus. Beide Angriffe sind unabhängig voneinander; sie werden separat ausgewürfelt, können sich gegen verschiedene Ziele richten und mit unterschiedlichen Manövern versehen werden.
 Voraussetzungen: kein Doppelangriff seit Beginn der letzten eigenen Initiativephase.
 Anmerkung: Als Waffeneigenschaft ist Doppelangriff ein automatischer Manövereffekt und nicht erschwert.</Vorteil>
   <Vorteil name="Standfest">Nach einem Sturz befindet das Tier sich in kniender statt liegender Position.</Vorteil>
-  <Vorteil name="Sturmangriff" manöver="1">Ermöglicht das Manöver Sturmangriff (Bewegung und AT).
+  <Vorteil name="Sturmangriff" manöver="1" kosten="1">Ermöglicht das Manöver Sturmangriff (Bewegung und AT).
 Wirkung: Die Kombination der Aktionen Bewegung und Konflikt ist nicht erschwert. Außerdem richtet die Attacke GS Trefferpunkte zusätzlich an.
 Voraussetzungen: Die Bewegung muss vor dem Angriff ausgeführt werden.
 Anmerkung: Sturzflugangriffe von fliegenden Gegnern folgen denselben Regeln. Bei besonders kleinen Gegnern oder kurzem Anlauf sollte der Spielleiter den Schaden verringern.</Vorteil>
-  <Vorteil name="Sturmangriff (Reiterkampf)" manöver="1">Ermöglicht das Manöver Sturmangriff (Bewegung und AT).
+  <Vorteil name="Sturmangriff (Reiterkampf)" manöver="1" kosten="1">Ermöglicht das Manöver Sturmangriff (Bewegung und AT).
 Wirkung: Die Kombination der Aktionen Bewegung und Konflikt ist nicht erschwert. Außerdem richtet die Attacke GS Trefferpunkte zusätzlich an.
 Voraussetzungen: Vorteil Reiterkampf I und Kampf in diesem Stil; die Bewegung muss vor dem Angriff ausgeführt werden.
 Anmerkung: Sturzflugangriffe von fliegenden Gegnern folgen denselben Regeln. Bei besonders kleinen Gegnern oder kurzem Anlauf sollte der Spielleiter den Schaden verringern.</Vorteil>
-  <Vorteil name="Überrennen" manöver="1">Ermöglicht das Manöver Überrennen (Bewegung und AT).
+  <Vorteil name="Überrennen" manöver="1" kosten="1">Ermöglicht das Manöver Überrennen (Bewegung und AT).
 Wirkung: Das Reittier stürmt in die gegnerische Formation. Seine Attacke trifft alle Gegner in seiner Bahn, bis es durch mindestens 2 erfolgreiche Verteidigungen gestoppt wird. Außerdem richtet die Attacke GS Trefferpunkte zusätzlich an. Die Kombination der Aktionen Bewegung und Konflikt ist nicht erschwert.
 Voraussetzungen: GS Schritt Anlauf; Ziele sind in einer kleineren Größenklasse als das Tier.</Vorteil>
-  <Vorteil name="Überrennen (Reiterkampf)" manöver="1">Ermöglicht das Manöver Überrennen (Bewegung und AT).
+  <Vorteil name="Überrennen (Reiterkampf)" manöver="1" kosten="1">Ermöglicht das Manöver Überrennen (Bewegung und AT).
 Wirkung: Das Reittier stürmt in die gegnerische Formation. Seine Attacke trifft alle Gegner in seiner Bahn, bis es durch mindestens 2 erfolgreiche Verteidigungen gestoppt wird. Außerdem richtet die Attacke GS Trefferpunkte zusätzlich an. Die Kombination der Aktionen Bewegung und Konflikt ist nicht erschwert.
 Voraussetzungen: Vorteil Reiterkampf III und Kampf in diesem Stil; GS Schritt Anlauf; Ziele sind in einer kleineren Größenklasse als das Tier.</Vorteil>
-  <Vorteil name="Unaufhaltsam">Selbst bei einer gelungenen gegnerischen Verteidigung, die nicht mit dem Manöver Ausweichen verstärkt wurde, richtet das Tier halben Schaden an. Manövereffekte wirken weiterhin nur bei gelungenen Attacken.</Vorteil>
-  <Vorteil name="Zerstörerisch I">Proben zum Zerstören oder Durchbrechen von Gegenständen sind um +4 erleichtert.</Vorteil>
-  <Vorteil name="Zerstörerisch II">Proben zum Zerstören oder Durchbrechen von Gegenständen sind um weitere +4 erleichtert. Ermöglicht das Manöver Hammerschlag gegen Gegenstände. Bei waffenlosen Angriffen gegen Gegenstände verletzt das Tier sich normalerweise nicht.</Vorteil>
-  <Vorteil name="Zerbrechlich" manöver="1">Waffeneigenschaft. Die Waffe erleidet den vollen Waffenschaden, wenn sie eine nicht-zerbrechliche Waffe erfolgreich verteidigt oder von einer solchen erfolgreich verteidigt wird. Ausweichen vermeidet diesen Schaden.</Vorteil>
-  <Vorteil name="Rüstungsbrechend" manöver="1">Ermöglicht das Manöver Rüstungsbrecher (AT -4):
+  <Vorteil name="Unaufhaltsam" kosten="1">Selbst bei einer gelungenen gegnerischen Verteidigung, die nicht mit dem Manöver Ausweichen verstärkt wurde, richtet das Tier halben Schaden an. Manövereffekte wirken weiterhin nur bei gelungenen Attacken.</Vorteil>
+  <Vorteil name="Zerstörerisch I" kosten="1">Proben zum Zerstören oder Durchbrechen von Gegenständen sind um +4 erleichtert.</Vorteil>
+  <Vorteil name="Zerstörerisch II" kosten="1">Proben zum Zerstören oder Durchbrechen von Gegenständen sind um weitere +4 erleichtert. Ermöglicht das Manöver Hammerschlag gegen Gegenstände. Bei waffenlosen Angriffen gegen Gegenstände verletzt das Tier sich normalerweise nicht.</Vorteil>
+  <Vorteil name="Zerbrechlich" manöver="1" kosten="1">Waffeneigenschaft. Die Waffe erleidet den vollen Waffenschaden, wenn sie eine nicht-zerbrechliche Waffe erfolgreich verteidigt oder von einer solchen erfolgreich verteidigt wird. Ausweichen vermeidet diesen Schaden.</Vorteil>
+  <Vorteil name="Rüstungsbrechend" manöver="1" kosten="1">Ermöglicht das Manöver Rüstungsbrecher (AT -4):
 Wirkung: Der Angriff richtet SP statt TP an.</Vorteil>
-  <Vorteil name="Umklammern" manöver="1">Ermöglicht das Manöver Umklammern (AT -X).
+  <Vorteil name="Umklammern" manöver="1" kosten="1">Ermöglicht das Manöver Umklammern (AT -X).
 Wirkung: Handlungen des Umklammerten sind um –X erschwert und seine GS sinkt auf 0, solange die Umklammerung anhält. Bei mehrfachen Umklammerungen summieren sich die Malusse. Du kannst dein Ziel in einer Freien Aktion loslassen. Der Umklammerte kann eine Aktion Konflikt aufwenden und eine vergleichenden GE-oder KK-Probe (I) gegen die GE oder KK des Umklammernden ablegen. Gelingt die Probe, lässt der Umklammernde sofort los. Das Manöver senkt den Schaden des Angriffes auf 0. Sollte der Angriff ohnehin keinen Schaden anrichten, ist das Manöver nicht möglich.
 Voraussetzungen: Ziel darf nicht einer höheren Größenklasse angehören
 Anmerkung: Als Waffeneigenschaft ist Umklammern ein automatischer Manövereffekt und nicht erschwert. Die angegebenen Modifikatoren gelten für die Ansage und die gegnerische Gegenprobe.</Vorteil>  
-  <Vorteil name="Flächenangriff" manöver="1">Waffeneigenschaft. Flächenangriffe sind Angriffe, die sich gegen jedes Ziel im angegebenen Bereich richten. Jedem Ziel steht eine eigene Verteidigung zu.</Vorteil>
-  <Vorteil name="Rüstungsgewöhnung">Die BE aller Rüstungen ist um 1 gesenkt.</Vorteil>
-  <Vorteil name="Magiegespür">In der Nähe astraler Kräfte überfällt das Tier ein Frösteln, es hört sphärische Klänge oder ein Farbschleier legt sich für es über die Umgebung. Mit dem Talent Sinnenschärfe kann es Intensitätsanalysen (S. 80) von magischen Gegenständen durchführen. Nach dem aktiven Einsatz der Gabe erleidet es einen Punkt Erschöpfung.</Vorteil>
+  <Vorteil name="Flächenangriff" manöver="1" kosten="1">Waffeneigenschaft. Flächenangriffe sind Angriffe, die sich gegen jedes Ziel im angegebenen Bereich richten. Jedem Ziel steht eine eigene Verteidigung zu.</Vorteil>
+  <Vorteil name="Rüstungsgewöhnung" kosten="1">Die BE aller Rüstungen ist um 1 gesenkt.</Vorteil>
+  <Vorteil name="Magiegespür" kosten="1">In der Nähe astraler Kräfte überfällt das Tier ein Frösteln, es hört sphärische Klänge oder ein Farbschleier legt sich für es über die Umgebung. Mit dem Talent Sinnenschärfe kann es Intensitätsanalysen (S. 80) von magischen Gegenständen durchführen. Nach dem aktiven Einsatz der Gabe erleidet es einen Punkt Erschöpfung.</Vorteil>
 </Datenbank>

@@ -3,8 +3,10 @@ import lxml.etree as etree
 import copy
 import re
 import base64
+from Hilfsmethoden import Hilfsmethoden
 
 Attribute = ["KO", "MU", "GE", "KK", "IN", "KL", "CH", "FF", "WS", "RS", "BE", "MR", "GS", "TP", "INI", "AT", "VT"]
+AlleAttribute = copy.copy(Attribute) + ["GS2"]
 
 class Modifikator:
     def __init__(self):
@@ -13,6 +15,7 @@ class Modifikator:
         self.manöver = False
         self.mod = None
         self.reiterkampf = 0
+        self.kosten = 0
 
     def deserialize(self, root):
         self.name = root.get('name')
@@ -23,6 +26,8 @@ class Modifikator:
             self.reiterkampf = int(root.get('reiterkampf'))
         if root.get('manöver'):
             self.manöver = root.get('manöver') == "1"
+        if root.get('kosten'):
+            self.kosten = int(root.get('kosten'))
 
     def serialize(self, root):
         root.attrib['name'] = self.name
@@ -69,20 +74,19 @@ class Waffe:
 class TierbegleiterDefinition:
     def __init__(self):
         self.name = ''
-        self.preis = 0
         self.groesse = 0
         self.modifikatoren = []
         self.rassen = ""
         self.futter = ""
         self.kategorie = 0
-        self.preis = 0
+        self.preis = None
         self.reittier = 0
         self.waffen = []
 
     def deserialize(self, root, datenbank):
         self.name = root.get('name')
         self.groesse = int(root.get('groesse'))
-        self.preis = int(root.get('preis')) if root.get('preis') else 0
+        self.preis = int(root.get('preis')) if root.get('preis') else None
         self.futter = root.get('futter') or ''
         self.rassen = root.get('rassen') or ''
         self.kategorie = int(root.get('kategorie')) if root.get('kategorie') else 0
@@ -100,9 +104,7 @@ class TierbegleiterDefinition:
             mod = Modifikator()
             mod.deserialize(modNode)
             if mod.name in datenbank.tiervorteile:
-                tiervorteil = datenbank.tiervorteile[mod.name]
-                mod.wirkung = tiervorteil.wirkung
-                mod.manöver = tiervorteil.manöver
+                mod = copy.deepcopy(datenbank.tiervorteile[mod.name])
 
             self.modifikatoren.append(mod)
 
@@ -114,12 +116,18 @@ class TierbegleiterDefinition:
 
 class Tierbegleiter:
     def __init__(self):
+        self.hausregeln = Wolke.Settings['Datenbank']
+
         self.definition = None
         self.bild = None
         self.name = ""
         self.nahrung = ""
         self.hintergrund = ""
         self.aussehen = ""
+        self.zucht = None
+
+        self.epGesamt = 0
+        self.epAusgegeben = 0
 
         self.reitenPW = 0
         self.reiterkampfStufe = 0
@@ -145,7 +153,30 @@ class Tierbegleiter:
         self.vorteilModsMerged = []
         self.waffenMerged = []
 
-    def aktualisieren(self):
+    def epZaehlen(self, datenbank):
+        count = 0
+
+        scriptAPI = Hilfsmethoden.createScriptAPI()
+        for name, value in self.attributMods.items():
+            scriptAPI.update({ "name" : name, "wert" : value, "kosten" : 0 })
+            datenbank.einstellungen["Tierbegleiter Plugin: EP-Kosten Werte Script"].executeScript(scriptAPI)
+            count += scriptAPI["kosten"]
+           
+        for mod in self.talentMods:
+            if not mod.name.strip():
+                continue
+            scriptAPI.update({ "name" : mod.name, "wert" : mod.mod, "kosten" : 0 })
+            datenbank.einstellungen["Tierbegleiter Plugin: EP-Kosten Talente Script"].executeScript(scriptAPI)
+            count += scriptAPI["kosten"]
+
+        for mod in self.vorteilMods:
+            if not mod.name.strip():
+                continue
+            count += mod.kosten
+
+        self.epAusgegeben = count
+
+    def aktualisieren(self, datenbank):
         # main purpose of this function is to merge modifiers with TierbegleiterDefinition stats
         self.attributModsMerged = copy.deepcopy(self.attributMods)
         self.talentModsMerged = [copy.deepcopy(mod) for mod in self.talentMods if mod.name.strip()]
@@ -166,7 +197,7 @@ class Tierbegleiter:
                 continue
 
             # case 2: mod is Attribut
-            if mod.name in Attribute + ["GS2"]:
+            if mod.name in AlleAttribute:
                 if mod.name not in self.attributModsMerged:
                     self.attributModsMerged[mod.name] = 0
                 self.attributModsMerged[mod.name] += mod.mod
@@ -224,19 +255,46 @@ class Tierbegleiter:
                 waffe.eigenschaften = ", ".join(eigenschaften)
 
                 # create waffe
+                def getMatch(script):
+                    return re.search(r"modifyKampfstil\s*\(\s*['\"]Reiterkampf['\"],\s*(\d+),\s*(\d+),\s*(\d+)", script)
+
+                kampfstilAT = 0
+                kampfstilVT = 0
+                kampfstilTP = 0
+                if self.reiterkampfStufe >= 1 and "Reiterkampf I" in datenbank.vorteile:
+                    match = getMatch(datenbank.vorteile["Reiterkampf I"].script)
+                    if match and len(match.groups()) == 3:
+                        kampfstilAT += int(match.group(1))
+                        kampfstilVT += int(match.group(2))
+                        kampfstilTP += int(match.group(3))
+                if self.reiterkampfStufe >= 2 and "Reiterkampf II" in datenbank.vorteile:
+                    match = getMatch(datenbank.vorteile["Reiterkampf II"].script)
+                    if match and len(match.groups()) == 3:
+                        kampfstilAT += int(match.group(1))
+                        kampfstilVT += int(match.group(2))
+                        kampfstilTP += int(match.group(3))
+                if self.reiterkampfStufe >= 3 and "Reiterkampf III" in datenbank.vorteile:
+                    match = getMatch(datenbank.vorteile["Reiterkampf III"].script)
+                    if match and len(match.groups()) == 3:
+                        kampfstilAT += int(match.group(1))
+                        kampfstilVT += int(match.group(2))
+                        kampfstilTP += int(match.group(3))
+
                 reitenWaffe = copy.copy(waffe)
                 reitenWaffe.name = "Reiterkampf (" + reitenWaffe.name + ")"
-                reitenWaffe.at = self.reitenPW + reiterkampfMod + min(self.reiterkampfStufe, 3) + self.attributModsMerged["AT"] - self.attributModsMerged["BE"]
-                reitenWaffe.vt = self.reitenPW + reiterkampfMod + min(self.reiterkampfStufe, 3) + self.attributModsMerged["VT"] - self.attributModsMerged["BE"]
-                reitenWaffe.plus += min(self.reiterkampfStufe, 3)
+                reitenWaffe.at = self.reitenPW + reiterkampfMod + kampfstilAT + self.attributModsMerged["AT"] - self.attributModsMerged["BE"]
+                reitenWaffe.vt = self.reitenPW + reiterkampfMod + kampfstilVT + self.attributModsMerged["VT"] - self.attributModsMerged["BE"]
+                reitenWaffe.plus += kampfstilTP
                 if self.reiterkampfStufe >= 4:
                     reitenWaffe.at += self.reiterkampf4AT
                     reitenWaffe.vt += self.reiterkampf4VT
                     reitenWaffe.plus += self.reiterkampf4TP
 
-                if reitenWaffe.eigenschaften:
-                    reitenWaffe.eigenschaften += ", "
-                reitenWaffe.eigenschaften += "AT +4 gegen kleinere Gegner"
+                extraWaffeneigengenschaften = datenbank.einstellungen["Tierbegleiter Plugin: Reiterkampf Waffeneigenschaften"].wert
+                if len(extraWaffeneigengenschaften) > 0:
+                    if reitenWaffe.eigenschaften:
+                        reitenWaffe.eigenschaften += ", "
+                    reitenWaffe.eigenschaften += ", ".join(extraWaffeneigengenschaften)
                 self.waffenMerged.append(reitenWaffe)
 
         # remove mods that have already been factored into other mods or that are zero so they dont show up
@@ -260,12 +318,21 @@ class Tierbegleiter:
         self.vorteilModsMerged.sort(key = lambda mod : mod.name)
         self.talentModsMerged.sort(key = lambda mod : mod.name)
 
+        self.epZaehlen(datenbank)
+
     def serialize(self, root):
+        etree.SubElement(root, 'Hausregeln').text = self.hausregeln
         etree.SubElement(root, 'Name').text = self.name
         etree.SubElement(root, 'Nahrung').text = self.nahrung
         etree.SubElement(root, 'Aussehen').text = self.aussehen
         etree.SubElement(root, 'Tier').text = self.definition.name
         etree.SubElement(root, 'Hintergrund').text = self.hintergrund
+        if self.zucht is not None:
+            etree.SubElement(root, 'Zucht').text = str(self.zucht)
+
+        erfahrungNode = etree.SubElement(root, 'Erfahrung')
+        etree.SubElement(erfahrungNode, 'Gesamt').text = str(self.epGesamt)
+        etree.SubElement(erfahrungNode, 'Ausgegeben').text = str(self.epAusgegeben)
 
         etree.SubElement(root, 'Reiterkampf').text = str(self.reiterkampfStufe)
         etree.SubElement(root, 'Reiterkampf4AT').text = str(self.reiterkampf4AT)
@@ -301,11 +368,22 @@ class Tierbegleiter:
         etree.SubElement(root, 'FormularEditierbarkeit').text = "1" if self.formularEditierbar else "0"
 
     def deserialize(self, root, datenbank):
-        self.name = root.find('Name').text
-        self.aussehen = root.find('Aussehen').text
-        self.nahrung = root.find('Nahrung').text
-        self.hintergrund = root.find('Hintergrund').text
+        self.hausregeln = root.find('Hausregeln').text or self.hausregeln
         self.definition = datenbank.tierbegleiter[root.find('Tier').text]
+        self.name = root.find('Name').text or ''
+        self.aussehen = root.find('Aussehen').text or ''
+        self.nahrung = root.find('Nahrung').text or ''
+        self.hintergrund = root.find('Hintergrund').text or ''
+
+        zuchtNode = root.find('Zucht')
+        if zuchtNode is not None:
+            self.zucht = int(zuchtNode.text)
+        else:
+            self.zucht = None
+
+        erfahrungNode = root.find('Erfahrung')
+        self.epGesamt = int(erfahrungNode.find('Gesamt').text)
+        self.epAusgegeben = int(erfahrungNode.find('Ausgegeben').text)
 
         self.reiterkampfStufe = int(root.find('Reiterkampf').text)
         self.reiterkampf4AT = int(root.find('Reiterkampf4AT').text)
@@ -323,6 +401,8 @@ class Tierbegleiter:
         for vorteilNode in root.findall('Vorteile/'):
             mod = Modifikator()
             mod.deserialize(vorteilNode)
+            if mod.name in datenbank.tiervorteile:
+                mod = copy.deepcopy(datenbank.tiervorteile[mod.name])
             self.vorteilMods.append(mod)
 
         self.talentMods = []
@@ -344,27 +424,36 @@ class Tierbegleiter:
         self.regelnGroesse = int(root.find('RegelnGrösse').text)
         self.formularEditierbar = root.find('FormularEditierbarkeit').text == "1"
 
-        self.aktualisieren()
+        self.aktualisieren(datenbank)
 
-    def modifiersToString(self, summary = False):
-        lineStart = ""
-        lineEnd = ". "
-        boldStart = ""
-        boldEnd = ""
-        if summary:
-            lineStart = "<p>"
-            lineEnd = "</p>"
-            boldStart = '<b>'
-            boldEnd = '</b>'
+    def modifiersToString(self, datenbank):
+        lineStart = "<p>"
+        lineEnd = "</p>"
+        boldStart = '<b>'
+        boldEnd = '</b>'
 
         text = ""
+
+        if self.definition.preis is not None:
+            text += '<p><b>Preis: </b>'
+
+            preis = self.definition.preis
+            if self.zucht is not None:
+                zuchtEinstellung = datenbank.einstellungen["Tierbegleiter Plugin: Zucht"].wert
+                if self.zucht < len(zuchtEinstellung):
+                    multiplikator = float(zuchtEinstellung.valueAtIndex(self.zucht))
+                    preis *= multiplikator
+
+            text += str(int(preis)) + " Dukaten"
+            text += "</p>"
+
         addTitle = len(self.attributModsMerged) + len(self.talentModsMerged) + len(self.vorteilModsMerged) > 1
 
         if len(self.attributModsMerged) > 0:
             text += lineStart
             if addTitle:
                 text += boldStart + "Attribute: " + boldEnd
-            text += ", ".join([f'{k}: {v}' if summary or v < 0 else f'{k}: +{v}' for k,v in self.attributModsMerged.items()]) + lineEnd
+            text += ", ".join([f'{k}: {v}' for k,v in self.attributModsMerged.items()]) + lineEnd
         if len(self.talentModsMerged) > 0:
             text += lineStart
             if addTitle:
@@ -374,7 +463,7 @@ class Tierbegleiter:
             text += lineStart
             if addTitle:
                 text += boldStart + "Vorteile: " + boldEnd
-            text += ", ".join([mod.name if (summary or not mod.wirkung) else mod.wirkung for mod in self.vorteilModsMerged]) + lineEnd
+            text += ", ".join([mod.name for mod in self.vorteilModsMerged]) + lineEnd
         if len(self.waffenMerged) > 0:
             text += lineStart + boldStart + "Waffen: " + boldEnd + lineEnd
             for w in self.waffenMerged:
