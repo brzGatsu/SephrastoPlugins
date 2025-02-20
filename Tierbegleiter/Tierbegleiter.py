@@ -169,10 +169,13 @@ class Tierbegleiter:
             datenbank.einstellungen["Tierbegleiter Plugin: EP-Kosten Talente Script"].executeScript(scriptAPI)
             count += scriptAPI["kosten"]
 
+        del scriptAPI["wert"]
         for mod in self.vorteilMods:
             if not mod.name.strip():
                 continue
-            count += mod.kosten
+            scriptAPI.update({ "name" : mod.name, "kosten" : 0 })
+            datenbank.einstellungen["Tierbegleiter Plugin: EP-Kosten Vorteile Script"].executeScript(scriptAPI)
+            count += scriptAPI["kosten"]
 
         self.epAusgegeben = count
 

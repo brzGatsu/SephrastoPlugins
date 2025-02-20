@@ -49,6 +49,14 @@ else:
         self.db.loadElement(e)
 
         e = DatenbankEinstellung()
+        e.name = "Tierbegleiter Plugin: EP-Kosten Vorteile Script"
+        e.beschreibung = "Das script berechnet die EP-Kosten der Vorteile. Diese müssen der Variable 'kosten' zugewiesen werden. " +\
+        "Das Script wird einmal für jeden Vorteil aufgerufen, dessen Name in der Variable 'name' steht."
+        e.text = "kosten = 1"
+        e.typ = "Exec"
+        self.db.loadElement(e)
+
+        e = DatenbankEinstellung()
         e.name = "Tierbegleiter Plugin: EP-Kosten Infotext"
         e.beschreibung = "Der Text, der im Ausrüstung & Info Tab im Punkt Erfahrungspunkte erscheinen soll."
         e.text = "Erfahrungspunkte sind in erster Linie für Vertrautentiere gedacht: Da sie besonders prächtige Vertreter ihrer Gattung sind, " +\
