@@ -6,13 +6,13 @@ import logging
 class Plugin:
     def __init__(self):
         EventBus.addFilter("talent_kosten", self.talentKostenHook)
-        EventBus.addAction("basisdatenbank_geladen", self.basisDatenbankGeladenHandler)
+        EventBus.addAction("datenbank_laden", self.datenbankLadenHandler)
         EventBus.addAction("datenbank_geladen", self.datenbankGeladenHandler)
 
     def changesCharacter(self):
         return self.db.einstellungen["Hexalogien Plugin: Aktivieren"].wert
 
-    def basisDatenbankGeladenHandler(self, params):
+    def datenbankLadenHandler(self, params):
         self.db = params["datenbank"]
 
         e = DatenbankEinstellung()
@@ -44,7 +44,7 @@ Herbeirufung des Feuers, Herbeirufung der Luft, Herbeirufung des Erzes, Herbeiru
         for hexalogie in self.db.einstellungen["Hexalogien Plugin: Talente"].wert:
             for tal in [t.strip() for t in hexalogie.split(",")]:
                 if not tal in self.db.talente:
-                    logging.debug("Hexalogien Plugin: Unbekanntes Talent in EInstellung 'Hexalogien Plugin: Talente': " + tal)
+                    logging.debug("Hexalogien Plugin: Unbekanntes Talent in Einstellung 'Hexalogien Plugin: Talente': " + tal)
 
     def talentKostenHook(self, val, params):
         if not self.db.einstellungen["Hexalogien Plugin: Aktivieren"].wert:

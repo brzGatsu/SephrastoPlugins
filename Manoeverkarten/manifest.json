@@ -2,6 +2,6 @@
   "name": "Manöverkarten",
   "description": "Das Plugin gibt im Charaktereditor den Regelanhang eines Charakters und im Datenbankeditor die ganze Sephrastodatenbank in Manöverkarten aus. Im Datenbankeditor erscheint außerdem ein zusätzliches Datenbankelement \"Manöverkarte\" mit dem eigene Karten erstellt und automatisch generierte Karten angepasst werden können. Eine Anleitung kann im Hilfemenu des Datenbankeditors gefunden werden.",
   "author": "Gatsu",
-  "version": "3",
+  "version": "4",
   "hasSettings": true
 }

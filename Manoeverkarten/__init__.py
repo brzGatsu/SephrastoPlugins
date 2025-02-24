@@ -112,7 +112,6 @@ class Plugin:
         self.db.karten = {}
         self.db.insertTable(Karte, self.db.karten)
 
-    def basisDatenbankGeladenHook(self, params):
         self.kartenGenerator = KartenGenerator.KartenGenerator(self.db)
 
         e = DatenbankEinstellung()
@@ -405,8 +404,9 @@ bis die Bindung gelöst wird oder alle Pfeile ihr Ziel gefunden haben
         e.strip = False
         self.db.loadElement(e)
 
-        # only load plugin db if the main db doesn't contain cards already
-        # this can happen if it is a merged db
+    # only load plugin db if the main db doesn't contain cards already
+    # this can happen if it is a merged db
+    def basisDatenbankGeladenHook(self, params):
         if len(self.db.karten) == 0:
             deserializer = Serialization.getDeserializer(".xml")
             dbFilePath = os.path.join(os.path.dirname(os.path.abspath(__file__)), "Data", "datenbank.xml")

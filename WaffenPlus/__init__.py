@@ -29,6 +29,7 @@ Waffe.wmVt = property(lambda self: self._wmVtOverride if hasattr(self, "_wmVtOve
 
 class Plugin:
     def __init__(self):
+        EventBus.addAction("datenbank_laden", self.datenbankLadenHandler)
         EventBus.addAction("basisdatenbank_geladen", self.basisDatenbankGeladenHandler)
         EventBus.addAction("charakter_instanziiert", self.charakterInstanziiertHandler)
         EventBus.addFilter("scripts_available", self.scriptsAvailableHook)
@@ -47,7 +48,7 @@ class Plugin:
     def changesDatabase(self):
         return self.db.einstellungen["WaffenPlus Plugin: Separater VT-WM"].wert or self.db.einstellungen["WaffenPlus Plugin: Preis anzeigen"].wert
 
-    def basisDatenbankGeladenHandler(self, params):
+    def datenbankLadenHandler(self, params):
         self.db = params["datenbank"]
 
         e = DatenbankEinstellung()
@@ -86,6 +87,7 @@ class Plugin:
         e.typ = "Bool"
         self.db.loadElement(e)
 
+    def basisDatenbankGeladenHandler(self, params):
         e = self.db.einstellungen["Charakter aktualisieren Script"]
         e.text = e.text.replace("vt = pw + getKampfstilVT(kampfstil) + getWaffeWM(idx) - be",
                                 "vt = pw + getKampfstilVT(kampfstil) + getWaffeWMVT(idx) - be")

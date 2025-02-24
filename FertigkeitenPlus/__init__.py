@@ -28,6 +28,7 @@ Talent.aktualisieren = aktualisieren
 
 class Plugin:
     def __init__(self):
+        EventBus.addAction("datenbank_laden", self.datenbankLadenHook)
         EventBus.addAction("basisdatenbank_geladen", self.basisDatenbankGeladenHook)
         EventBus.addFilter("dbe_class_fertigkeitdefinition_wrapper", self.dbeClassFertigkeitFilter)
         EventBus.addFilter("dbe_class_ueberfertigkeitdefinition_wrapper", self.dbeClassFertigkeitFilter)
@@ -42,12 +43,9 @@ class Plugin:
     def changesDatabase(self):
         return True
 
-    def basisDatenbankGeladenHook(self, params):
+    def datenbankLadenHook(self, params):
         self.db = params["datenbank"]
-
-        e = self.db.einstellungen["Fertigkeiten: BW Script"]
-        e.text = "round(sum(sorted(getAttribute(), reverse=True)[:3])/3)"
-
+          
         e = DatenbankEinstellung()
         e.name = "FertigkeitenPlus Plugin: Talente Erfahrungsgrade Aktivieren"
         e.beschreibung = "Wenn aktiviert, steht beim Auswahlfenster von übernatürlichen Talenten die Option zur Verfügung, "+\
@@ -63,7 +61,11 @@ class Plugin:
         e.text = "0.5"
         e.typ = "Float"
         self.db.loadElement(e)
-        
+
+    def basisDatenbankGeladenHook(self, params):
+        e = self.db.einstellungen["Fertigkeiten: BW Script"]
+        e.text = "round(sum(sorted(getAttribute(), reverse=True)[:3])/3)"
+
     def talentSerialisiertHook(self, params):
         ser = params["serializer"]
         talent = params["object"]

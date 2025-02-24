@@ -2,5 +2,5 @@
   "name": "Zaubertricks",
   "description": "Das Plugin sorgt dafür, dass die Zaubertricks-Fertigkeit aus WeZwanzigs Hausregeln und Ilaris Advanced nicht steigerbar ist und auch im Seitenpanel entsprechend angezeigt wird. Außerdem trägt es im Charakterbogen beim PW einen Strich ein. Achtung: Das Plugin enthält keine Hausregeldatenbank mit den entsprechenden Zaubertricks, beziehe diese bitte von WeZwanzig oder Ilaris Advanced.",
   "author": "Gatsu",
-  "version": "2"
+  "version": "3"
 }

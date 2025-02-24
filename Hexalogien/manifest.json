@@ -2,5 +2,5 @@
   "name": "Hexalogien",
   "description": "Ein Ilaris-Elementarmagier hat nur wenig Motivation weitere Varianten von Hexalogie-Zaubern zu erlernen, der Mehrwert ist zu gering für die Kosten. Ich biete euch hier ein Sephrasto-Plugin, das die EP-Kosten von Talenten aus elementaren Hexalogien halbiert. Der volle EP-Preis muss nur für das teuerste erlernte Talent aus der Hexalogie bezahlt werden. Diese Umsetzung basiert auf der DSA4-Regel, die Hexalogiezauber eine Spalte günstiger steigern lässt, solange man eine Variante auf höherem TaW besitzt. Die Zauber sind über die Datenbankeinstellung \"Hexalogien Plugin: Talente\" konfigurierbar. Standardmäßig beinhaltet sind alle bestätigten Hexalogien gemäß <a href='https://de.wiki-aventurica.de/wiki/Hexalogie'>Wiki Aventurica</a> (nicht die vermuteten), zusätzlich noch die Herbeirufung und Macht des Zauber. Prinzipiell können auch andere Zauber eingetragen werden, die bspw. keine Elementarzauber sind. Beispielsweise der Reptilea und der Arachnea.",
   "author": "Gatsu",
-  "version": "2"
+  "version": "3"
 }

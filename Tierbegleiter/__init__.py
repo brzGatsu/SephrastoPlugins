@@ -7,7 +7,7 @@ from Hilfsmethoden import Hilfsmethoden
 class Plugin:
     def __init__(self):
         self.mainWindowButton = None
-        EventBus.addAction("basisdatenbank_geladen", self.basisDatenbankGeladenHandler)
+        EventBus.addAction("datenbank_laden", self.datenbankLadenHandler)
 
     def createMainWindowButtons(self):
         self.mainWindowButton = QtWidgets.QPushButton()
@@ -25,7 +25,7 @@ class Plugin:
         self.ed = TierbegleiterEditor.TierbegleiterEditor()
         self.ed.newCharacter()
 
-    def basisDatenbankGeladenHandler(self, params):
+    def datenbankLadenHandler(self, params):
         self.db = params["datenbank"]
 
         e = DatenbankEinstellung()
