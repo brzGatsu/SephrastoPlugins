@@ -50,14 +50,16 @@ class Plugin:
 
         e = DatenbankEinstellung()
         e.name = "FertigkeitenPlus Plugin: Talente Erfahrungsgrade Aktivieren"
-        e.beschreibung = ""
+        e.beschreibung = "Wenn aktiviert, steht beim Auswahlfenster von übernatürlichen Talenten die Option zur Verfügung, "+\
+            "ein Talent nur auf der Stufe 'Unerfahren' zu erwerben. "+\
+            "Dieses kostet dann nur die Hälfte der EP. Dafür steht damit nur der PW und nicht der PW(T) zur Verfügung."
         e.text = "False"
         e.typ = "Bool"
         self.db.loadElement(e)
 
         e = DatenbankEinstellung()
         e.name = "FertigkeitenPlus Plugin: Talente Unerfahren EP Multi"
-        e.beschreibung = ""
+        e.beschreibung = "Der EP-Kosten Multiplikator für Talent, die auf 'Unerfahren' erworben wurden."
         e.text = "0.5"
         e.typ = "Float"
         self.db.loadElement(e)
