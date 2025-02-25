@@ -5,7 +5,12 @@ from PySide6 import QtWidgets, QtCore
 from Core.Talent import Talent
 from Core.DatenbankEinstellung import DatenbankEinstellung
 
-Talent.unerfahren = property(lambda self: self._unerfahren if hasattr(self, "_unerfahren") else False).setter(lambda self, v: setattr(self, "_unerfahren", v))
+# Patch Talent class
+def setUnerfahren(self, value):
+    self._unerfahren = value
+    self._updateAnzeigenameExt()
+
+Talent.unerfahren = property(lambda self: self._unerfahren if hasattr(self, "_unerfahren") else False).setter(setUnerfahren)
 
 aktualisierenOld = Talent.aktualisieren
 
@@ -25,6 +30,16 @@ def aktualisieren(self):
         self.probenwert = max(self.probenwert, fertPW + nextFert.basiswertMod)
 
 Talent.aktualisieren = aktualisieren
+
+nameOld = Talent._updateAnzeigenameExt
+
+def updateAnzeigeName(self):
+    nameOld(self)
+    if self.unerfahren:
+        self.anzeigenameExt += " (unerfahren)"
+
+
+Talent._updateAnzeigenameExt = updateAnzeigeName
 
 class Plugin:
     def __init__(self):
@@ -206,7 +221,3 @@ class Plugin:
                         fertigkeit.attribute[3] = self.ui.comboAttribut4.currentText()
 
         return DatenbankEditFertigkeitWrapperPlus
-
-    def dbeClassUeberFertigkeitFilter(self, editorType):
-        return editorType
-
