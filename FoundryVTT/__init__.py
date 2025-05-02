@@ -140,7 +140,7 @@ def waffe_item(w):
             "umklammern_816": ("Umklammern (-8; 16)" in w.eigenschaften),
             "zweihaendig": ("Zweihändig" in w.eigenschaften)
         }
-    waffe['data'] = wdata
+    waffe['system'] = wdata
     return waffe
 
 
@@ -223,7 +223,7 @@ class Plugin:
         # -- Vorteile -- #
         for v in self.char.vorteile.values():
             item = create_item(v.name, "vorteil") # TODO: v.anzeigenameExt enthält mit dem Kommentar wichtige Infos, die in .name fehlen
-            item["data"] = {
+            item["system"] = {
                 # "voraussetzung": ", ".join(vorteil.voraussetzungen),
                 "voraussetzung": v.voraussetzungen.anzeigetext(self.db),
                 "gruppe": v.kategorie, # "Kampfvorteile" etc.
@@ -240,7 +240,7 @@ class Plugin:
         for f in self.char.fertigkeiten.values():
             # ist das jetzt ein dict?
             item = create_item(f.name, "fertigkeit")
-            item["data"] = {
+            item["system"] = {
                 "basis": 0,
                 "fw": f.wert,
                 "pw": f.probenwert,
@@ -257,7 +257,7 @@ class Plugin:
             if t.spezialTalent:
                 continue
             item = create_item(t.name, "talent") # TODO: t.anzeigename enthält mit dem Kommentar wichtige Infos, die in .name fehlen
-            item["data"] = {
+            item["system"] = {
                 "fertigkeit": t.hauptfertigkeit.name, # TODO Gatsu: auch profane talente können theoretisch mehreren fertigkeiten zugewiesen werden
             }
             items.append(item)
@@ -266,7 +266,7 @@ class Plugin:
             if not ff.name:
                 continue
             item = create_item(ff.name, "freie_fertigkeit")
-            item['data'] = {
+            item['system'] = {
                 "stufe": ff.wert,
                 "text": ff.name,
                 "gruppe": "1"
@@ -275,7 +275,7 @@ class Plugin:
         # -- Übernatürliche Fertigkeiten -- #
         for uef in self.char.übernatürlicheFertigkeiten.values():
             item = create_item(uef.name, "uebernatuerliche_fertigkeit")
-            item["data"] = {
+            item["system"] = {
                 "basis": uef.basiswert,
                 "fw": uef.wert,
                 "pw": uef.probenwertTalent,  # TODO: eigentlich pwt.. aber ist in fvtt einfach pw für übernat fix in foundry
@@ -292,7 +292,7 @@ class Plugin:
             if not t.spezialTalent:
                 continue
             item = create_item(t.name, "zauber") # TODO: t.anzeigename enthält mit dem Kommentar wichtige Infos, die in .name fehlen
-            item["data"] = {
+            item["system"] = {
                 "fertigkeit_ausgewaehlt": "auto",
                 "fertigkeiten": ", ".join(t.fertigkeiten),
                 "text": Hilfsmethoden.fixHtml(t.text),
@@ -317,7 +317,7 @@ class Plugin:
             if not r.name:
                 continue
             item = create_item(r.name, "ruestung")
-            item["data"] = {
+            item["system"] = {
                 "rs": r.getRSGesamtInt(),
                 "be": r.be,
                 "rs_beine": r.rs[0],
@@ -335,7 +335,7 @@ class Plugin:
             if not a:
                 continue
             item = create_item(a, "gegenstand")
-            item["data"] = {}
+            item["system"] = {}
             items.append(item)
         return items
 
@@ -432,7 +432,7 @@ class Plugin:
             "name": name,
             "type": "held",
             "img": "systems/Ilaris/assets/images/token/kreaturentypen/humanoid.png",
-            "data": data,
+            "system": data,
             "token": self.get_token(name),
             "items": self.get_items(),
             "effects": []
