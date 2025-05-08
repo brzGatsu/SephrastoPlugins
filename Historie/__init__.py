@@ -4,7 +4,6 @@ import datetime as dt
 from PySide6 import QtWidgets, QtGui
 from QtUtils.SimpleSettingsDialog import SimpleSettingsDialog
 from EinstellungenWrapper import EinstellungenWrapper
-from Wolke import Wolke
 from string import Template
 from Historie.HistorieTabWrapper import HistorieTabWrapper
 from CharakterEditor import Tab
