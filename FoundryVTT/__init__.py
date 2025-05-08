@@ -26,8 +26,16 @@ def getFoundryPackId(name):
             return key
     return ''
 
+def get_sys_key():
+    foundry_version = Wolke.Settings.get("FoundryVTT_Version")
+    if foundry_version == "v9":
+        return "data"
+    return "system"
+
 def create_item(name, type):
     foundry_version = Wolke.Settings.get("FoundryVTT_Version")
+    if foundry_version == "v12":
+        sys_key = "system"
     if foundry_version == "v12" and type == "vorteil":
         compendiumSource = "Compendium.Ilaris.vorteil.Item." + getFoundryPackId(name)
         return {
@@ -35,7 +43,7 @@ def create_item(name, type):
             "name": name,
             "type": type,
             "img": "icons/svg/item-bag.svg",
-            "data": {},
+            get_sys_key(): {},
             "effects": [],
             "folder": None,
             "sort": 0,
@@ -50,7 +58,7 @@ def create_item(name, type):
         "name": name,
         "type": type,
         "img": "icons/svg/item-bag.svg",
-        "data": {},
+        get_sys_key(): {},
         "effects": [],
         "folder": None,
         "sort": 0,
@@ -144,7 +152,7 @@ def waffe_item(w):
             "umklammern_816": ("Umklammern (-8; 16)" in w.eigenschaften),
             "zweihaendig": ("Zweihändig" in w.eigenschaften)
         }
-    waffe['data'] = wdata
+    waffe[get_sys_key()] = wdata
     return waffe
 
 
@@ -238,7 +246,7 @@ class Plugin:
         # -- Vorteile -- #
         for v in self.char.vorteile.values():
             item = create_item(v.name, "vorteil") # TODO: v.anzeigenameExt enthält mit dem Kommentar wichtige Infos, die in .name fehlen
-            item["data"] = {
+            item[get_sys_key()] = {
                 # "voraussetzung": ", ".join(vorteil.voraussetzungen),
                 "voraussetzung": v.voraussetzungen.anzeigetext(self.db),
                 "gruppe": v.kategorie, # "Kampfvorteile" etc.
@@ -255,7 +263,7 @@ class Plugin:
         for f in self.char.fertigkeiten.values():
             # ist das jetzt ein dict?
             item = create_item(f.name, "fertigkeit")
-            item["data"] = {
+            item[get_sys_key()] = {
                 "basis": 0,
                 "fw": f.wert,
                 "pw": f.probenwert,
@@ -272,7 +280,7 @@ class Plugin:
             if t.spezialTalent:
                 continue
             item = create_item(t.name, "talent") # TODO: t.anzeigename enthält mit dem Kommentar wichtige Infos, die in .name fehlen
-            item["data"] = {
+            item[get_sys_key()] = {
                 "fertigkeit": t.hauptfertigkeit.name, # TODO Gatsu: auch profane talente können theoretisch mehreren fertigkeiten zugewiesen werden
             }
             items.append(item)
@@ -281,7 +289,7 @@ class Plugin:
             if not ff.name:
                 continue
             item = create_item(ff.name, "freie_fertigkeit")
-            item['data'] = {
+            item[get_sys_key()] = {
                 "stufe": ff.wert,
                 "text": ff.name,
                 "gruppe": "1"
@@ -290,7 +298,7 @@ class Plugin:
         # -- Übernatürliche Fertigkeiten -- #
         for uef in self.char.übernatürlicheFertigkeiten.values():
             item = create_item(uef.name, "uebernatuerliche_fertigkeit")
-            item["data"] = {
+            item[get_sys_key()] = {
                 "basis": uef.basiswert,
                 "fw": uef.wert,
                 "pw": uef.probenwertTalent,  # TODO: eigentlich pwt.. aber ist in fvtt einfach pw für übernat fix in foundry
@@ -307,7 +315,7 @@ class Plugin:
             if not t.spezialTalent:
                 continue
             item = create_item(t.name, "zauber") # TODO: t.anzeigename enthält mit dem Kommentar wichtige Infos, die in .name fehlen
-            item["data"] = {
+            item[get_sys_key()] = {
                 "fertigkeit_ausgewaehlt": "auto",
                 "fertigkeiten": ", ".join(t.fertigkeiten),
                 "text": Hilfsmethoden.fixHtml(t.text),
@@ -332,7 +340,7 @@ class Plugin:
             if not r.name:
                 continue
             item = create_item(r.name, "ruestung")
-            item["data"] = {
+            item[get_sys_key()] = {
                 "rs": r.getRSGesamtInt(),
                 "be": r.be,
                 "rs_beine": r.rs[0],
@@ -350,7 +358,7 @@ class Plugin:
             if not a:
                 continue
             item = create_item(a, "gegenstand")
-            item["data"] = {}
+            item[get_sys_key()] = {}
             items.append(item)
         return items
 
@@ -447,7 +455,7 @@ class Plugin:
             "name": name,
             "type": "held",
             "img": "systems/Ilaris/assets/images/token/kreaturentypen/humanoid.png",
-            "data": data,
+            get_sys_key(): data,
             "token": self.get_token(name),
             "items": self.get_items(),
             "effects": []
