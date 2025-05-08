@@ -5,10 +5,13 @@ import re
 import json
 from CharakterPrintUtility import CharakterPrintUtility
 from Hilfsmethoden import Hilfsmethoden
+from EinstellungenWrapper import EinstellungenWrapper
+from PySide6 import QtWidgets, QtGui
+from QtUtils.SimpleSettingsDialog import SimpleSettingsDialog
 import random
 from Version import _sephrasto_version_major, _sephrasto_version_minor, _sephrasto_version_build
 
-__version__ = "4.2.1.a"  # Plugin Version
+__version__ = "5"  # Plugin Version
 
 def random_foundry_id():
     chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
@@ -24,7 +27,8 @@ def getFoundryPackId(name):
     return ''
 
 def create_item(name, type):
-    if type == "vorteil":
+    foundry_version = Wolke.Settings.get("FoundryVTT_Version")
+    if foundry_version == "v12" and type == "vorteil":
         compendiumSource = "Compendium.Ilaris.vorteil.Item." + getFoundryPackId(name)
         return {
             "_id": random_foundry_id(),
@@ -148,6 +152,17 @@ class Plugin:
     def __init__(self):
         EventBus.addAction("charakter_geschrieben", self.json_schreiben)
         EventBus.addAction("basisdatenbank_geladen", self.basisDatenbankGeladenHandler)
+        EinstellungenWrapper.addSettings({
+            "FoundryVTT_Version" : "v9",
+        })
+
+    def showSettings(self):
+        dlg = SimpleSettingsDialog("Historie Plugin Einstellungen")
+        versionPickerField = QtWidgets.QComboBox()
+        versionPickerField.addItem("v9", "v9")
+        versionPickerField.addItem("v12", "v12")
+        dlg.addSetting("FoundryVTT_Version", "FoundryVTT Version", versionPickerField)
+        dlg.show()
 
     def json_schreiben_alt(self, params):
         params["filepath"] = params["filename"]
@@ -507,7 +522,8 @@ class Plugin:
         # for talent in CharakterPrintUtility.getÜberTalente(char):
         #     content.append(talent.anzeigeName + " " + str(talent.pw))
 
-        path = os.path.splitext(params["filepath"])[0] + "_foundryvtt.json"
+        fvtt_version = Wolke.Settings.get("FoundryVTT_Version")
+        path = os.path.splitext(params["filepath"])[0] + f"_foundryvtt_{fvtt_version}.json"
         with open(path, 'w', encoding="utf-8") as f:
             json.dump(actor, f, indent=2)
 
