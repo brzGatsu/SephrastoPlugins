@@ -14,8 +14,33 @@ def random_foundry_id():
     chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
     return "".join(random.choices(chars, k=16))
 
+def getFoundryPackId(name):
+    json_path = os.path.join(os.path.dirname(__file__), "foundry_advantage_id_names.json")
+    with open(json_path, "r", encoding="utf-8") as f:
+        data = json.load(f)  
+    for key, value in data.items():
+        if value == name:
+            return key
+    return ''
 
 def create_item(name, type):
+    if type == "vorteil":
+        compendiumSource = "Compendium.Ilaris.vorteil.Item." + getFoundryPackId(name)
+        return {
+            "_id": random_foundry_id(),
+            "name": name,
+            "type": type,
+            "img": "icons/svg/item-bag.svg",
+            "data": {},
+            "effects": [],
+            "folder": None,
+            "sort": 0,
+            "permission": {},
+            "flags": {},
+            "_stats": {
+                "compendiumSource": compendiumSource
+            }
+        }
     return {
         "_id": random_foundry_id(),
         "name": name,
