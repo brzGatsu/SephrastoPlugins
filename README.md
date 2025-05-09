@@ -29,7 +29,7 @@ Dieses Plugin installiert die Hausregeln des Drachentöter Kampfregelwerks für 
 Dieses Plugin bietet bei Fertigkeiten die Möglichkeit, ein viertes Attribut anzugeben. Berechnungen für den Basiswert verwenden dann nur die 3 höchsten Attribute (siehe angepasste Einstellung "Fertigkeiten: BW Script").
 
 ### FoundryVTT
-Wenn das Plugin aktiv ist, wird beim Speichern des Helden neben der `<name>.xml` automatisch eine zweite Datei `<name>_foundryvtt.json` erstellt, die in Foundry als Held importiert werden kann. Die Foundry Helden können nicht zurück in Sephrasto importiert werden. Die `.xml`-Datei also nicht löschen!
+Wenn das Plugin aktiv ist, wird beim Speichern des Helden neben der `<name>.xml` automatisch eine zweite Datei `<name>_foundryvtt_<version>.json` erstellt, die in Foundry als Held importiert werden kann. Die Zielversion kann in den Plugin-Einstellungen angepasst werden. Foundry-Token der Helden können nicht zurück nach Sephrasto importiert werden. Die `.xml`-Datei also nicht löschen!
 
 Es werden nur die für FoundryVTT relevanten Informationen in der `.json`-Datei gespeichert und auch hier gibt es noch einige Einschränkungen. Folgendes wird NICHT übertragen:
 
