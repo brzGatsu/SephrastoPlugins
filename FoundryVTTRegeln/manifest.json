@@ -1,0 +1,7 @@
+{
+  "name": "Foundry VTT Regeln",
+  "description": "Wenn das Plugin aktiv ist, stehen beim Bearbeiten und Erstellen von Regeln zusätzliche Felder zur Verfügung.",
+  "author": "Siebenstreich",
+  "version": "1",
+  "hasSettings": true
+}
