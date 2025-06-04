@@ -5,15 +5,18 @@ from Wolke import Wolke
 from Core.Regel import Regel
 import UI.DatenbankEditRegel
 import json
+import os
+import glob
 
 # Categories that should show the modifications field
 FOUNDRY_CATEGORIES = [
     "Nahkampfmanöver",
     "Fernkampfmanöver",
-    "Magische Modifikationen",
-    "Karmale Modifikationen",
-    "Dämonische Modifikationen"
+    "Magische Modifikation",
+    "Karmale Modifikation",
+    "Dämonische Modifikation"
 ]
+
 
 # Modification types
 MODIFICATION_TYPES = [
@@ -38,6 +41,22 @@ OPERATORS = [
     "DIVIDE"
 ]
 
+# Input field types with descriptions
+INPUT_FIELD_TYPES = {
+    "CHECKBOX": {
+        "label": "Checkbox",
+        "description": "Checkbox - Eine einfache Ja/Nein Auswahl"
+    },
+    "NUMBER": {
+        "label": "Nummerneingabefeld",
+        "description": "Nummerneingabefeld - Ein Feld für Zahleneingaben"
+    },
+    "TREFFER_ZONE": {
+        "label": "Trefferzonenauswahl",
+        "description": "Trefferzonenauswahl - Auswahl einer spezifischen Trefferzone"
+    }
+}
+
 class ModificationWidget(QtWidgets.QWidget):
     removed = QtCore.Signal(object)  # Signal when this modification is removed
 
@@ -48,102 +67,273 @@ class ModificationWidget(QtWidgets.QWidget):
             self.setData(modification_data)
 
     def setupUi(self):
-        layout = QtWidgets.QHBoxLayout(self)
-        layout.setContentsMargins(0, 0, 0, 0)
+        # Create main layout
+        mainLayout = QtWidgets.QVBoxLayout(self)
+        mainLayout.setContentsMargins(10, 10, 10, 10)
 
-        # Type ComboBox
+        # Create a frame for the border
+        frame = QtWidgets.QFrame()
+        frame.setFrameStyle(QtWidgets.QFrame.Box | QtWidgets.QFrame.Sunken)
+        frameLayout = QtWidgets.QVBoxLayout(frame)
+        frameLayout.setContentsMargins(10, 10, 10, 10)
+
+        # Grid for the actual content
+        grid = QtWidgets.QGridLayout()
+        grid.setVerticalSpacing(10)
+
+        # Row 1: Type and Value
+        typeLabel = QtWidgets.QLabel("Typ")
         self.typeCombo = QtWidgets.QComboBox()
         self.typeCombo.addItems(MODIFICATION_TYPES)
-        layout.addWidget(self.typeCombo)
-
-        # Value SpinBox
+        
+        valueLabel = QtWidgets.QLabel("Wert")
         self.valueSpinBox = QtWidgets.QSpinBox()
         self.valueSpinBox.setRange(-999, 999)
-        layout.addWidget(self.valueSpinBox)
 
-        # Operator ComboBox
+        grid.addWidget(typeLabel, 0, 0)
+        grid.addWidget(self.typeCombo, 0, 1)
+        grid.addWidget(valueLabel, 0, 2)
+        grid.addWidget(self.valueSpinBox, 0, 3)
+
+        # Row 2: Operator and Target
+        operatorLabel = QtWidgets.QLabel("Operator")
         self.operatorCombo = QtWidgets.QComboBox()
         self.operatorCombo.addItems(OPERATORS)
-        layout.addWidget(self.operatorCombo)
 
-        # Target LineEdit
+        targetLabel = QtWidgets.QLabel("Ziel")
         self.targetEdit = QtWidgets.QLineEdit()
         self.targetEdit.setPlaceholderText("actor.system...")
-        layout.addWidget(self.targetEdit)
 
-        # Remove Button
+        grid.addWidget(operatorLabel, 1, 0)
+        grid.addWidget(self.operatorCombo, 1, 1)
+        grid.addWidget(targetLabel, 1, 2)
+        grid.addWidget(self.targetEdit, 1, 3)
+
+        # Row 3: Checkbox and Remove button
+        self.affectedByInputCheck = QtWidgets.QCheckBox("Durch Input beeinflusst")
         removeButton = QtWidgets.QPushButton("-")
         removeButton.setMaximumWidth(30)
         removeButton.clicked.connect(lambda: self.removed.emit(self))
-        layout.addWidget(removeButton)
+
+        buttonLayout = QtWidgets.QHBoxLayout()
+        buttonLayout.addWidget(self.affectedByInputCheck)
+        buttonLayout.addStretch()
+        buttonLayout.addWidget(removeButton)
+
+        grid.addLayout(buttonLayout, 2, 0, 1, 4)  # Span all columns
+
+        # Set column stretches
+        grid.setColumnStretch(1, 2)  # Type combo gets more space
+        grid.setColumnStretch(3, 2)  # Target edit gets more space
+
+        # Add grid to frame
+        frameLayout.addLayout(grid)
+
+        # Add frame to main layout
+        mainLayout.addWidget(frame)
+
+        # Add bottom margin to separate from next modification
+        self.setContentsMargins(0, 0, 0, 5)
 
     def setData(self, data):
         self.typeCombo.setCurrentText(data.get("type", "DAMAGE"))
         self.valueSpinBox.setValue(data.get("value", 0))
         self.operatorCombo.setCurrentText(data.get("operator", "ADD"))
         self.targetEdit.setText(data.get("target", ""))
+        self.affectedByInputCheck.setChecked(data.get("affectedByInput", False))
 
     def getData(self):
         return {
             "type": self.typeCombo.currentText(),
             "value": self.valueSpinBox.value(),
             "operator": self.operatorCombo.currentText(),
-            "target": self.targetEdit.text()
+            "target": self.targetEdit.text(),
+            "affectedByInput": self.affectedByInputCheck.isChecked()
         }
+
+class InputConfigWidget(QtWidgets.QWidget):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setupUi()
+
+    def setupUi(self):
+        mainLayout = QtWidgets.QVBoxLayout(self)
+        mainLayout.setContentsMargins(0, 0, 0, 0)
+
+        # Description text
+        descLabel = QtWidgets.QLabel("Hier legst du fest, welches Eingabefeld im Würfeldialog für dieses Manöver angezeigt werden soll:")
+        descLabel.setWordWrap(True)
+        mainLayout.addWidget(descLabel)
+
+        # Input configuration grid
+        inputGrid = QtWidgets.QGridLayout()
+        
+        # Label field
+        labelLabel = QtWidgets.QLabel("Label")
+        self.labelEdit = QtWidgets.QLineEdit()
+        inputGrid.addWidget(labelLabel, 0, 0)
+        inputGrid.addWidget(self.labelEdit, 0, 1)
+
+        # Field type combo
+        fieldLabel = QtWidgets.QLabel("Feldtyp")
+        self.fieldCombo = QtWidgets.QComboBox()
+        # Add translated items
+        for key, data in INPUT_FIELD_TYPES.items():
+            self.fieldCombo.addItem(data["label"], key)  # Store the key as user data
+            # Add tooltip for the item
+            self.fieldCombo.setItemData(self.fieldCombo.count() - 1, data["description"], QtCore.Qt.ToolTipRole)
+        self.fieldCombo.currentTextChanged.connect(self.onFieldTypeChanged)
+        # Add tooltip for the combo box itself
+        self.fieldCombo.setToolTip(INPUT_FIELD_TYPES[self.fieldCombo.itemData(0)]["description"])
+        self.fieldCombo.currentTextChanged.connect(self.updateTooltip)
+        
+        inputGrid.addWidget(fieldLabel, 0, 2)
+        inputGrid.addWidget(self.fieldCombo, 0, 3)
+
+        # Min/Max fields (initially hidden)
+        minLabel = QtWidgets.QLabel("Min")
+        self.minSpinBox = QtWidgets.QSpinBox()
+        self.minSpinBox.setRange(-999, 999)
+        maxLabel = QtWidgets.QLabel("Max")
+        self.maxSpinBox = QtWidgets.QSpinBox()
+        self.maxSpinBox.setRange(-999, 999)
+        
+        self.minLabel = minLabel
+        self.maxLabel = maxLabel
+        
+        inputGrid.addWidget(minLabel, 0, 4)
+        inputGrid.addWidget(self.minSpinBox, 0, 5)
+        inputGrid.addWidget(maxLabel, 0, 6)
+        inputGrid.addWidget(self.maxSpinBox, 0, 7)
+
+        # Set column stretches
+        inputGrid.setColumnStretch(1, 2)  # Label edit gets more space
+        inputGrid.setColumnStretch(3, 1)  # Field combo
+        inputGrid.setColumnStretch(5, 1)  # Min spin
+        inputGrid.setColumnStretch(7, 1)  # Max spin
+
+        mainLayout.addLayout(inputGrid)
+
+        # Set initial visibility
+        self.onFieldTypeChanged(self.fieldCombo.currentText())
+
+    def updateTooltip(self, text):
+        # Update the combo box tooltip when selection changes
+        index = self.fieldCombo.currentIndex()
+        key = self.fieldCombo.itemData(index)
+        self.fieldCombo.setToolTip(INPUT_FIELD_TYPES[key]["description"])
+
+    def onFieldTypeChanged(self, field_text):
+        # Get the actual field type from user data
+        index = self.fieldCombo.currentIndex()
+        field_type = self.fieldCombo.itemData(index)
+        show_min_max = field_type == "NUMBER"
+        self.minLabel.setVisible(show_min_max)
+        self.maxLabel.setVisible(show_min_max)
+        self.minSpinBox.setVisible(show_min_max)
+        self.maxSpinBox.setVisible(show_min_max)
+
+    def setData(self, data):
+        if not data:
+            return
+        self.labelEdit.setText(data.get('label', ''))
+        # Find and set the correct field type
+        field_type = data.get('field', 'NUMBER')
+        for i in range(self.fieldCombo.count()):
+            if self.fieldCombo.itemData(i) == field_type:
+                self.fieldCombo.setCurrentIndex(i)
+                break
+        self.minSpinBox.setValue(data.get('min', 0))
+        self.maxSpinBox.setValue(data.get('max', 8))
+
+    def getData(self):
+        # Get the actual field type from user data
+        index = self.fieldCombo.currentIndex()
+        field_type = self.fieldCombo.itemData(index)
+        
+        data = {
+            'label': self.labelEdit.text(),
+            'field': field_type
+        }
+        if field_type == "NUMBER":
+            data['min'] = self.minSpinBox.value()
+            data['max'] = self.maxSpinBox.value()
+        return data
 
 class DatenbankEditRegelWrapperPlus(DatenbankElementEditorBase):
     def __init__(self, datenbank, regel=None):
-        super().__init__(datenbank, UI.DatenbankEditRegel.Ui_dialog(), Regel, regel)
         self.modificationWidgets = []
+        self.foundry_maneuvers = self.load_foundry_maneuvers()
+        super().__init__(datenbank, UI.DatenbankEditRegel.Ui_dialog(), Regel, regel)
+
+    def get_config(self):
+        """Load configuration from config.json"""
+        try:
+            config_path = os.path.join(os.path.dirname(__file__), "config.json")
+            if not os.path.exists(config_path):
+                print(f"Config file not found: {config_path}")
+                return {}
+            
+            with open(config_path, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except Exception as e:
+            print(f"Error loading config file: {str(e)}")
+            return {}
+
+    def load_foundry_maneuvers(self):
+        """Load maneuvers from config file."""
+        try:
+            config = self.get_config()
+            return config.get('maneuvers', {})
+        except Exception as e:
+            print(f"Error loading maneuvers from config: {str(e)}")
+            return {}
 
     def onSetupUi(self):
+        # First setup the base UI
         super().onSetupUi()
         
-        # Create container for modifications
-        self.modContainer = QtWidgets.QWidget()
-        self.modLayout = QtWidgets.QVBoxLayout(self.modContainer)
-        self.modLayout.setContentsMargins(0, 0, 0, 0)
-        
-        # Add button for new modifications
+        # Then add our custom UI elements
+        self.setupFoundryUi()
+
+    def setupFoundryUi(self):
+        # Create form layout for Foundry extensions
+        formLayout = QtWidgets.QFormLayout()
+        formLayout.setLabelAlignment(QtCore.Qt.AlignLeft)
+        formLayout.setFormAlignment(QtCore.Qt.AlignLeft)
+
+        # Verteidigungsmanöver checkbox
+        self.verteidigungLabel = QtWidgets.QLabel("Verteidigungsmanöver")
+        self.verteidigungCheckbox = QtWidgets.QCheckBox()
+        defenseWidget = QtWidgets.QWidget()
+        defenseLayout = QtWidgets.QHBoxLayout(defenseWidget)
+        defenseLayout.setContentsMargins(0, 0, 0, 0)
+        defenseLayout.addWidget(self.verteidigungCheckbox)
+        defenseLayout.addStretch()
+        formLayout.addRow(self.verteidigungLabel, defenseWidget)
+
+        # Input configuration with subheader
+        formLayout.addRow("Input:", QtWidgets.QWidget())  # Empty row for spacing
+        self.inputConfigWidget = InputConfigWidget()
+        formLayout.addRow("", self.inputConfigWidget)
+
+        # Icon input with its label
+        self.iconEdit = QtWidgets.QLineEdit()
+        self.iconEdit.setPlaceholderText("systems/dsa5/icons/...")
+        formLayout.addRow("Icon:", self.iconEdit)
+
+        # Modifications section with header and add button
+        headerWidget = QtWidgets.QWidget()
+        headerLayout = QtWidgets.QHBoxLayout(headerWidget)
+        headerLayout.setContentsMargins(0, 0, 0, 0)
         self.addButton = QtWidgets.QPushButton("+")
         self.addButton.setMaximumWidth(30)
         self.addButton.clicked.connect(self.addModification)
+        headerLayout.addWidget(self.addButton)
+        headerLayout.addStretch()
+        formLayout.addRow("Modifikatoren:", headerWidget)
 
-        # Icon input field
-        iconLayout = QtWidgets.QHBoxLayout()
-        iconLabel = QtWidgets.QLabel("Icon:")
-        self.iconEdit = QtWidgets.QLineEdit()
-        self.iconEdit.setPlaceholderText("systems/dsa5/icons/...")
-        iconLayout.addWidget(iconLabel)
-        iconLayout.addWidget(self.iconEdit)
-
-        # Main header
-        mainHeaderLayout = QtWidgets.QHBoxLayout()
-        mainHeaderLabel = QtWidgets.QLabel("Foundry Regel Erweiterungen")
-        font = mainHeaderLabel.font()
-        font.setBold(True)
-        mainHeaderLabel.setFont(font)
-        mainHeaderLayout.addWidget(mainHeaderLabel)
-        mainHeaderLayout.addStretch()
-
-        # Verteidigungsmanöver checkbox
-        self.verteidigungCheckbox = QtWidgets.QCheckBox("Verteidigungsmanöver")
-        self.verteidigungCheckbox.hide()  # Initially hidden
-        
-        # Verteidigungsmanöver description
-        self.verteidigungDesc = QtWidgets.QLabel("Flaggt Manöver als Verteidigungsmanöver in Foundry für bessere Sortierung im Kampfdialog")
-        self.verteidigungDesc.setWordWrap(True)
-        self.verteidigungDesc.setStyleSheet("color: gray;")  # Make it look like a hint
-        self.verteidigungDesc.hide()  # Initially hidden
-
-        # Sub-header for modifications
-        subHeaderLayout = QtWidgets.QHBoxLayout()
-        subHeaderLabel = QtWidgets.QLabel("Foundry Manöver Modifikatoren")
-        subHeaderLayout.addWidget(subHeaderLabel)
-        subHeaderLayout.addStretch()
-        subHeaderLayout.addWidget(self.addButton)
-        
-        # Description and hints
+        # Description and hints for modifications
         descLabel = QtWidgets.QLabel("Hier definierst du die Effekte des Manövers für Foundry VTT. Empfehlungen:")
         descLabel.setWordWrap(True)
         
@@ -157,22 +347,30 @@ class DatenbankEditRegelWrapperPlus(DatenbankElementEditorBase):
             hintLabel = QtWidgets.QLabel("• " + hint)
             hintLabel.setWordWrap(True)
             hintsLayout.addWidget(hintLabel)
+
+        # Add description and hints to a container
+        hintsContainer = QtWidgets.QWidget()
+        hintsContainerLayout = QtWidgets.QVBoxLayout(hintsContainer)
+        hintsContainerLayout.setContentsMargins(0, 0, 0, 10)  # Add bottom margin before modifications
+        hintsContainerLayout.addWidget(descLabel)
+        hintsContainerLayout.addLayout(hintsLayout)
+        formLayout.addRow("", hintsContainer)
+
+        # Create container for modifications
+        self.modContainer = QtWidgets.QWidget()
+        self.modLayout = QtWidgets.QVBoxLayout(self.modContainer)
+        self.modLayout.setContentsMargins(0, 0, 0, 0)
+        self.modLayout.setSpacing(0)  # Remove spacing between modifications
+        formLayout.addRow("", self.modContainer)
         
-        # Main layout for modifications section
+        # Main widget setup
         self.modificationsWidget = QtWidgets.QWidget()
         mainLayout = QtWidgets.QVBoxLayout(self.modificationsWidget)
-        mainLayout.addLayout(mainHeaderLayout)
-        mainLayout.addWidget(self.verteidigungCheckbox)
-        mainLayout.addWidget(self.verteidigungDesc)
-        mainLayout.addLayout(subHeaderLayout)
-        mainLayout.addWidget(descLabel)
-        mainLayout.addLayout(hintsLayout)
-        mainLayout.addWidget(self.modContainer)
-        mainLayout.addLayout(iconLayout)  # Add icon field at the bottom
+        mainLayout.addLayout(formLayout)
         
         # Add to form layout after description
         if hasattr(self.ui, "teBeschreibung"):
-            self.ui.formLayout.insertRow(self.ui.formLayout.rowCount(), "", self.modificationsWidget)
+            self.ui.formLayout.insertRow(self.ui.formLayout.rowCount(), "Foundry Regel\nErweiterungen:", self.modificationsWidget)
             # Initially hide the fields - they will be shown/hidden based on category
             self.modificationsWidget.hide()
         
@@ -199,12 +397,17 @@ class DatenbankEditRegelWrapperPlus(DatenbankElementEditorBase):
         should_show = current_category in FOUNDRY_CATEGORIES
         
         self.modificationsWidget.setVisible(should_show)
-        # Show/hide Verteidigungsmanöver checkbox and description only for Nahkampfmanöver
+        # Show/hide Verteidigungsmanöver checkbox and label only for Nahkampfmanöver
         is_nahkampf = current_category == "Nahkampfmanöver"
+        self.verteidigungLabel.setVisible(is_nahkampf)
         self.verteidigungCheckbox.setVisible(is_nahkampf)
-        self.verteidigungDesc.setVisible(is_nahkampf)
 
     def load(self, regel):
+        # First check the category
+        current_category = self.ui.comboKategorie.currentText()
+        foundry_enabled = current_category in FOUNDRY_CATEGORIES
+        
+        # Load all original fields first
         super().load(regel)
         
         # Clear existing modifications
@@ -212,11 +415,41 @@ class DatenbankEditRegelWrapperPlus(DatenbankElementEditorBase):
             widget.deleteLater()
         self.modificationWidgets.clear()
         
-        # Load Verteidigungsmanöver state
-        self.verteidigungCheckbox.setChecked(getattr(regel, "foundry_verteidigung", False))
+        # Only proceed with Foundry-specific loading if category matches
+        if not foundry_enabled:
+            self.updateModificationFieldVisibility()
+            return
+            
+        # Check if we have predefined modifications for this regel
+        if regel.name in self.foundry_maneuvers:
+            foundry_data = self.foundry_maneuvers[regel.name]
+            
+            # Set defense checkbox if it's a defense maneuver
+            self.verteidigungCheckbox.setChecked(foundry_data['isDefense'])
+            
+            # Set icon if available
+            self.iconEdit.setText(foundry_data['icon'])
+            
+            # Load predefined modifications if no custom ones exist
+            if not hasattr(regel, 'foundry_modifications'):
+                modifications = foundry_data['modifications']
+                regel.foundry_modifications = json.dumps(modifications)
         
-        # Load icon
-        self.iconEdit.setText(getattr(regel, "foundry_icon", ""))
+        # Load Verteidigungsmanöver state (if not already set from predefined data)
+        if not regel.name in self.foundry_maneuvers:
+            self.verteidigungCheckbox.setChecked(getattr(regel, "foundry_verteidigung", False))
+        
+        # Load icon (if not already set from predefined data)
+        if not regel.name in self.foundry_maneuvers:
+            self.iconEdit.setText(getattr(regel, "foundry_icon", ""))
+
+        # Load input configuration
+        if hasattr(regel, "foundry_input"):
+            try:
+                input_data = json.loads(regel.foundry_input)
+                self.inputConfigWidget.setData(input_data)
+            except (json.JSONDecodeError, AttributeError):
+                pass
         
         # Load modifications from regel
         if hasattr(regel, "foundry_modifications"):
@@ -239,4 +472,6 @@ class DatenbankEditRegelWrapperPlus(DatenbankElementEditorBase):
             # Save Verteidigungsmanöver state
             regel.foundry_verteidigung = self.verteidigungCheckbox.isChecked()
             # Save icon
-            regel.foundry_icon = self.iconEdit.text() 
+            regel.foundry_icon = self.iconEdit.text()
+            # Save input configuration
+            regel.foundry_input = json.dumps(self.inputConfigWidget.getData()) 
