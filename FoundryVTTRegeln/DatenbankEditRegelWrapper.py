@@ -4,6 +4,7 @@ from DatenbankElementEditorBase import DatenbankElementEditorBase
 from Wolke import Wolke
 from Core.Regel import Regel
 import UI.DatenbankEditRegel
+from DatenbankEditRegelWrapper import DatenbankEditRegelWrapper
 import json
 import os
 import glob
@@ -12,9 +13,9 @@ import glob
 FOUNDRY_CATEGORIES = [
     "Nahkampfmanöver",
     "Fernkampfmanöver",
-    "Magische Modifikation",
-    "Karmale Modifikation",
-    "Dämonische Modifikation"
+    "Magische Modifikationen",
+    "Karmale Modifikationen",
+    "Dämonische Modifikationen"
 ]
 
 
@@ -137,7 +138,11 @@ class ModificationWidget(QtWidgets.QWidget):
 
     def setData(self, data):
         self.typeCombo.setCurrentText(data.get("type", "DAMAGE"))
-        self.valueSpinBox.setValue(data.get("value", 0))
+        try:
+            value = int(data.get("value", 0))
+        except (ValueError, TypeError):
+            value = 0
+        self.valueSpinBox.setValue(value)
         self.operatorCombo.setCurrentText(data.get("operator", "ADD"))
         self.targetEdit.setText(data.get("target", ""))
         self.affectedByInputCheck.setChecked(data.get("affectedByInput", False))
@@ -260,11 +265,11 @@ class InputConfigWidget(QtWidgets.QWidget):
             data['max'] = self.maxSpinBox.value()
         return data
 
-class DatenbankEditRegelWrapperPlus(DatenbankElementEditorBase):
+class DatenbankEditRegelWrapperPlus(DatenbankEditRegelWrapper):
     def __init__(self, datenbank, regel=None):
+        super().__init__(datenbank, regel)
         self.modificationWidgets = []
         self.foundry_maneuvers = self.load_foundry_maneuvers()
-        super().__init__(datenbank, UI.DatenbankEditRegel.Ui_dialog(), Regel, regel)
 
     def get_config(self):
         """Load configuration from config.json"""
