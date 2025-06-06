@@ -37,22 +37,24 @@ def create_item(name, type):
     if foundry_version == "v12":
         sys_key = "system"
     if foundry_version == "v12" and type == "vorteil":
-        compendiumSource = "Compendium.Ilaris.vorteil.Item." + getFoundryPackId(name)
-        return {
-            "_id": random_foundry_id(),
-            "name": name,
-            "type": type,
-            "img": "icons/svg/item-bag.svg",
-            get_sys_key(): {},
-            "effects": [],
-            "folder": None,
-            "sort": 0,
-            "permission": {},
-            "flags": {},
-            "_stats": {
-                "compendiumSource": compendiumSource
+        foundry_pack_id = getFoundryPackId(name)
+        if foundry_pack_id:
+            compendiumSource = "Compendium.Ilaris.vorteil.Item." + foundry_pack_id
+            return {
+                "_id": random_foundry_id(),
+                "name": name,
+                "type": type,
+                "img": "icons/svg/item-bag.svg",
+                get_sys_key(): {},
+                "effects": [],
+                "folder": None,
+                "sort": 0,
+                "permission": {},
+                "flags": {},
+                "_stats": {
+                    "compendiumSource": compendiumSource
+                }
             }
-        }
     return {
         "_id": random_foundry_id(),
         "name": name,
