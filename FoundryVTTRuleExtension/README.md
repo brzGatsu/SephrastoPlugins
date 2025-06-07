@@ -1,24 +1,37 @@
 # FoundryVTTRuleExtension Plugin
 
-Ein Plugin für Sephrasto, das Textmodifikationen für Regeln ermöglicht.
+Ein Plugin für Sephrasto, das die Integration von Regeln und Manövern mit Foundry VTT erweitert.
 
 ## Features
 
-- Fügt einen Textmodifikationsbereich zum Regeleditor hinzu
-- Speichert Textmodifikationen mit den Regeln
-- Modifikationen bleiben beim Speichern/Laden der Datenbank erhalten
+### Manöver-Konfiguration
+- Definiere Modifikatoren für Manöver (Angriff, Verteidigung, Schaden, etc.)
+- Konfiguriere Eingabefelder für den Würfeldialog
+- Setze Icons für visuelle Darstellung
+- Spezielle Unterstützung für Verteidigungsmanöver
+- Automatische Integration mit Foundry VTT's Kampfsystem
 
-## Installation
-
-1. Kopiere den Plugin-Ordner in das Sephrasto Plugins-Verzeichnis
-2. Aktiviere das Plugin in den Sephrasto-Einstellungen
+### Unterstützte Kategorien
+- Nahkampfmanöver
+- Fernkampfmanöver
+- Magische Modifikationen
+- Karmale Modifikationen
+- Dämonische Modifikationen
 
 ## Verwendung
 
+### Regel/Manöver bearbeiten
 1. Öffne den Datenbankeditor
-2. Wähle eine Regel zum Bearbeiten
-3. Im Editor findest du einen neuen Bereich "Text Modifikationen"
-4. Gib die gewünschten Textmodifikationen ein
-5. Speichere die Regel
+2. Wähle eine Regel/Manöver zum Bearbeiten
+3. Wenn die Kategorie unterstützt wird (siehe oben), erscheint der "Foundry Regel Erweiterungen" Bereich
+4. Konfiguriere die gewünschten Modifikatoren:
+   - Wähle den Typ des Modifikators
+   - Setze den Wert und Operator
+   - Optional: Definiere ein Ziel (z.B. actor.system...)
+   - Aktiviere "Durch Input beeinflusst" wenn der Modifikator durch Benutzereingaben verändert werden soll
+5. Konfiguriere das Eingabefeld für den Würfeldialog (optional)
+6. Setze ein Icon für die visuelle Darstellung
+7. Speichere die Regel
 
-Die Textmodifikationen werden mit der Regel gespeichert und beim erneuten Laden angezeigt. 
+### Manöver aktualisieren
+Die Manöver-Definitionen für Vanilla Manöver (für den Fall jemand merged seine Hausregeln mit dem Regelwerk) werden in `maneuver_foundry_extensions.json` gespeichert. Ein Entwicklungsskript (`extract_maneuvers.py`) ist verfügbar, um diese aus den Foundry VTT Quelldateien zu aktualisieren.
