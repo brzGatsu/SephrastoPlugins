@@ -271,7 +271,7 @@ class DatenbankEditRegelWrapperPlus(DatenbankEditRegelWrapper):
         self.modificationWidgets = []
         self.foundry_maneuvers = self.load_foundry_maneuvers()
 
-    def load_config():
+    def load_config(self):
         """Load configuration from maneuver_foundry_extensions.json"""
         try:
             config_path = os.path.join(os.path.dirname(__file__), "maneuver_foundry_extensions.json")

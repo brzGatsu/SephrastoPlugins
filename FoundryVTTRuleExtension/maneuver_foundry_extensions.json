@@ -17,7 +17,7 @@
                     "affectedByInput": true
                 }
             ],
-            "isDefense": false,
+            "isDefense": true,
             "icon": "icons/svg/item-bag.svg"
         },
         "Ausfall": {
@@ -50,7 +50,7 @@
                     "affectedByInput": true
                 }
             ],
-            "isDefense": false,
+            "isDefense": true,
             "icon": "icons/svg/item-bag.svg"
         },
         "Befreiungsschlag": {
@@ -83,7 +83,7 @@
                     "affectedByInput": true
                 }
             ],
-            "isDefense": false,
+            "isDefense": true,
             "icon": "icons/svg/item-bag.svg"
         },
         "Doppelangriff": {
@@ -627,7 +627,7 @@
                     "affectedByInput": true
                 }
             ],
-            "isDefense": false,
+            "isDefense": true,
             "icon": "icons/svg/item-bag.svg"
         },
         "Rüstungsbrecher": {
@@ -705,7 +705,7 @@
                     "affectedByInput": true
                 }
             ],
-            "isDefense": false,
+            "isDefense": true,
             "icon": "icons/svg/item-bag.svg"
         },
         "Schnellschuss": {
@@ -822,7 +822,7 @@
                     "affectedByInput": true
                 }
             ],
-            "isDefense": false,
+            "isDefense": true,
             "icon": "icons/svg/item-bag.svg"
         },
         "Vorbereitung verkürzen (BOR)": {
