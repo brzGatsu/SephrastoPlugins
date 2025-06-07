@@ -271,24 +271,20 @@ class DatenbankEditRegelWrapperPlus(DatenbankEditRegelWrapper):
         self.modificationWidgets = []
         self.foundry_maneuvers = self.load_foundry_maneuvers()
 
-    def get_config(self):
-        """Load configuration from config.json"""
+    def load_config():
+        """Load configuration from maneuver_foundry_extensions.json"""
         try:
-            config_path = os.path.join(os.path.dirname(__file__), "config.json")
-            if not os.path.exists(config_path):
-                print(f"Config file not found: {config_path}")
-                return {}
-            
+            config_path = os.path.join(os.path.dirname(__file__), "maneuver_foundry_extensions.json")
             with open(config_path, 'r', encoding='utf-8') as f:
                 return json.load(f)
         except Exception as e:
-            print(f"Error loading config file: {str(e)}")
-            return {}
+            print(f"Error loading configuration: {str(e)}")
+            return None
 
     def load_foundry_maneuvers(self):
         """Load maneuvers from config file."""
         try:
-            config = self.get_config()
+            config = self.load_config()
             return config.get('maneuvers', {})
         except Exception as e:
             print(f"Error loading maneuvers from config: {str(e)}")

@@ -1,8 +1,14 @@
+"""
+This is a development utility script used to make updating the maneuvers in maneuver_foundry_extensions.json more convenient.
+It extracts maneuver data from Foundry VTT's source files and updates the plugin's configuration.
+This script is not required for the plugin to function and is only used during development.
+"""
+
 import json
 import os
 import glob
 
-FOUNDRY_PATH = "C:/Users/padiq/AppData/Local/FoundryVTT/Data/systems/Ilaris/packs/manover/_source"
+FOUNDRY_PATH = "{...wo auch immer der Pfad ist}/FoundryVTT/Data/systems/Ilaris/packs/manover/_source"
 
 def extract_maneuvers():
     maneuvers = {}
@@ -68,7 +74,7 @@ def main():
             "maneuvers": maneuvers
         }
         
-        config_path = os.path.join(os.path.dirname(__file__), "config.json")
+        config_path = os.path.join(os.path.dirname(__file__), "maneuver_foundry_extensions.json")
         with open(config_path, 'w', encoding='utf-8') as f:
             json.dump(config, f, indent=4, ensure_ascii=False)
         print(f"Saved maneuver data to {config_path}")
