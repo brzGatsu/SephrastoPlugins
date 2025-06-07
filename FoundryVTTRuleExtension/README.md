@@ -1,4 +1,4 @@
-# FoundryVTTRegeln Plugin
+# FoundryVTTRuleExtension Plugin
 
 Ein Plugin für Sephrasto, das Textmodifikationen für Regeln ermöglicht.
 
