@@ -1,6 +1,6 @@
 {
-  "name": "Foundry VTT Regeln",
-  "description": "Wenn das Plugin aktiv ist, stehen beim Bearbeiten und Erstellen von Regeln zusätzliche Felder zur Verfügung.",
+  "name": "Foundry VTT Regel-Erweiterung",
+  "description": "Erweitert die Integration von Regeln und Manövern mit Foundry VTT. Ermöglicht die Konfiguration von Modifikatoren, Eingabefeldern und Icons für unterstützte Regelkategorien.",
   "author": "Siebenstreich",
   "version": "1",
   "hasSettings": true
