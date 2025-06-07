@@ -1,0 +1,1032 @@
+{
+    "maneuvers": {
+        "Auflaufen lassen": {
+            "modifications": [
+                {
+                    "type": "DEFENCE",
+                    "value": -4,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": false
+                },
+                {
+                    "type": "DAMAGE",
+                    "value": 1,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": true,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Ausfall": {
+            "modifications": [
+                {
+                    "type": "ATTACK",
+                    "value": 2,
+                    "operator": "SUBTRACT",
+                    "target": "actor.system.abgeleitete.be",
+                    "affectedByInput": true
+                },
+                {
+                    "type": "SPECIAL_TEXT",
+                    "value": "Dein Ziel muss zurückweichen und sich auf dich konzentrieren",
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Ausweichen": {
+            "modifications": [
+                {
+                    "type": "DEFENCE",
+                    "value": 2,
+                    "operator": "SUBTRACT",
+                    "target": "actor.system.abgeleitete.be",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": true,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Befreiungsschlag": {
+            "modifications": [
+                {
+                    "type": "ATTACK",
+                    "value": -4,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                },
+                {
+                    "type": "SPECIAL_TEXT",
+                    "value": "Du triffst mehrere Ziele",
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Binden": {
+            "modifications": [
+                {
+                    "type": "DEFENCE",
+                    "value": -1,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": true,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Doppelangriff": {
+            "modifications": [
+                {
+                    "type": "ATTACK",
+                    "value": -4,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Entfernung verändern": {
+            "modifications": [
+                {
+                    "type": "ATTACK",
+                    "value": 0,
+                    "operator": "SUBTRACT",
+                    "target": "actor.system.abgeleitete.be",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Entwaffnen": {
+            "modifications": [
+                {
+                    "type": "ATTACK",
+                    "value": -4,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                },
+                {
+                    "type": "DEFENCE",
+                    "value": -4,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                },
+                {
+                    "type": "ZERO_DAMAGE",
+                    "value": 0,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Erzwingen": {
+            "modifications": [
+                {
+                    "type": "ATTACK",
+                    "value": 0,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Gezielter Schlag": {
+            "modifications": [
+                {
+                    "type": "ATTACK",
+                    "value": -2,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                },
+                {
+                    "type": "SPECIAL_TEXT",
+                    "value": "Trefferzone gewählt",
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Gezielter Schuss": {
+            "modifications": [
+                {
+                    "type": "ATTACK",
+                    "value": -2,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Hammerschlag": {
+            "modifications": [
+                {
+                    "type": "ATTACK",
+                    "value": -8,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                },
+                {
+                    "type": "WEAPON_DAMAGE",
+                    "value": 2,
+                    "operator": "MULTIPLY",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Klingentanz": {
+            "modifications": [
+                {
+                    "type": "ATTACK",
+                    "value": -4,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                },
+                {
+                    "type": "SPECIAL_TEXT",
+                    "value": "Zweiter Angriff nach Treffer",
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Kosten sparen (L)": {
+            "modifications": [
+                {
+                    "type": "ATTACK",
+                    "value": -4,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                },
+                {
+                    "type": "SPECIAL_RESOURCE",
+                    "value": 0.25,
+                    "operator": "MULTIPLY",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Kosten sparen (M)": {
+            "modifications": [
+                {
+                    "type": "ATTACK",
+                    "value": -4,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                },
+                {
+                    "type": "SPECIAL_RESOURCE",
+                    "value": 0.25,
+                    "operator": "MULTIPLY",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Liturgische Technik ignorieren": {
+            "modifications": [
+                {
+                    "type": "ATTACK",
+                    "value": -4,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Mehrere Ziele (BOR)": {
+            "modifications": [
+                {
+                    "type": "ATTACK",
+                    "value": -4,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Mehrere Ziele (L)": {
+            "modifications": [
+                {
+                    "type": "ATTACK",
+                    "value": -4,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Mehrere Ziele (M)": {
+            "modifications": [
+                {
+                    "type": "ATTACK",
+                    "value": -4,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Meisterschuss": {
+            "modifications": [
+                {
+                    "type": "ATTACK",
+                    "value": -8,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                },
+                {
+                    "type": "SPECIAL_TEXT",
+                    "value": "zwei zusätzliche Wunden",
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Mächtige Liturgie": {
+            "modifications": [
+                {
+                    "type": "ATTACK",
+                    "value": -4,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Mächtige Magie": {
+            "modifications": [
+                {
+                    "type": "ATTACK",
+                    "value": -4,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Mächtige Magie (BOR)": {
+            "modifications": [
+                {
+                    "type": "ATTACK",
+                    "value": -4,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Niederwerfen": {
+            "modifications": [
+                {
+                    "type": "ATTACK",
+                    "value": -4,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                },
+                {
+                    "type": "SPECIAL_TEXT",
+                    "value": "Ziel wird niedergeworfen",
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Opferung (Aves)": {
+            "modifications": [
+                {
+                    "type": "ATTACK",
+                    "value": 4,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Opferung (Derwische)": {
+            "modifications": [
+                {
+                    "type": "ATTACK",
+                    "value": 4,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Opferung (Durro-dûn)": {
+            "modifications": [
+                {
+                    "type": "ATTACK",
+                    "value": 4,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Opferung (Efferd)": {
+            "modifications": [
+                {
+                    "type": "ATTACK",
+                    "value": 4,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Opferung (Firun)": {
+            "modifications": [
+                {
+                    "type": "ATTACK",
+                    "value": 4,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Opferung (Ingerimm)": {
+            "modifications": [
+                {
+                    "type": "ATTACK",
+                    "value": 4,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Opferung (Kor)": {
+            "modifications": [
+                {
+                    "type": "ATTACK",
+                    "value": 4,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Opferung (Nandus)": {
+            "modifications": [
+                {
+                    "type": "ATTACK",
+                    "value": 4,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Opferung (Phex)": {
+            "modifications": [
+                {
+                    "type": "ATTACK",
+                    "value": 4,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Opferung (Rahja)": {
+            "modifications": [
+                {
+                    "type": "ATTACK",
+                    "value": 4,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Opferung (Rondra)": {
+            "modifications": [
+                {
+                    "type": "ATTACK",
+                    "value": 4,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Opferung (Swafnir)": {
+            "modifications": [
+                {
+                    "type": "ATTACK",
+                    "value": 4,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Opferung (Zaubertänzer)": {
+            "modifications": [
+                {
+                    "type": "ATTACK",
+                    "value": 4,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Reichweite erhöhen": {
+            "modifications": [
+                {
+                    "type": "ATTACK",
+                    "value": -4,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Reichweite erhöhen (BOR)": {
+            "modifications": [
+                {
+                    "type": "ATTACK",
+                    "value": -2,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Reichweite erhöhen (L)": {
+            "modifications": [
+                {
+                    "type": "ATTACK",
+                    "value": -2,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Reichweite erhöhen (M)": {
+            "modifications": [
+                {
+                    "type": "ATTACK",
+                    "value": -2,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Riposte": {
+            "modifications": [
+                {
+                    "type": "DEFENCE",
+                    "value": -4,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": true,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Rüstungsbrecher": {
+            "modifications": [
+                {
+                    "type": "ATTACK",
+                    "value": -4,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                },
+                {
+                    "type": "SPECIAL_TEXT",
+                    "value": "Ignoriert Rüstung",
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Rüstungsbrecher (FK)": {
+            "modifications": [],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Scharfschuss": {
+            "modifications": [
+                {
+                    "type": "ATTACK",
+                    "value": -1,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                },
+                {
+                    "type": "DAMAGE",
+                    "value": 1,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Schildspalter": {
+            "modifications": [
+                {
+                    "type": "ATTACK",
+                    "value": 2,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                },
+                {
+                    "type": "SPECIAL_TEXT",
+                    "value": "Schaden auf Schild",
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Schildwall": {
+            "modifications": [
+                {
+                    "type": "DEFENCE",
+                    "value": -4,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": true,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Schnellschuss": {
+            "modifications": [],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Stumpfer Schlag": {
+            "modifications": [
+                {
+                    "type": "CHANGE_DAMAGE_TYPE",
+                    "value": "STUMPF",
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Sturmangriff": {
+            "modifications": [
+                {
+                    "type": "DAMAGE",
+                    "value": 1,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Sturmangriff (Reiter)": {
+            "modifications": [
+                {
+                    "type": "DAMAGE",
+                    "value": 1,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Todesstoß": {
+            "modifications": [
+                {
+                    "type": "ATTACK",
+                    "value": -8,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                },
+                {
+                    "type": "SPECIAL_TEXT",
+                    "value": "Verursacht 2 zusätzliche Wunden",
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Umklammern": {
+            "modifications": [
+                {
+                    "type": "ATTACK",
+                    "value": -1,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                },
+                {
+                    "type": "SPECIAL_TEXT",
+                    "value": "Ziel ist umklammert",
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                },
+                {
+                    "type": "ZERO_DAMAGE",
+                    "value": 0,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Umreißen": {
+            "modifications": [
+                {
+                    "type": "ZERO_DAMAGE",
+                    "value": 0,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Unterlaufen": {
+            "modifications": [
+                {
+                    "type": "DEFENCE",
+                    "value": -4,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": true,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Vorbereitung verkürzen (BOR)": {
+            "modifications": [
+                {
+                    "type": "ATTACK",
+                    "value": -4,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Vorbereitung verkürzen (L)": {
+            "modifications": [
+                {
+                    "type": "ATTACK",
+                    "value": -4,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Vorbereitung verkürzen (M)": {
+            "modifications": [
+                {
+                    "type": "ATTACK",
+                    "value": -4,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Wirkungsdauer verlängern (BOR)": {
+            "modifications": [
+                {
+                    "type": "ATTACK",
+                    "value": -4,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Wirkungsdauer verlängern (L)": {
+            "modifications": [
+                {
+                    "type": "ATTACK",
+                    "value": -4,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Wirkungsdauer verlängern (M)": {
+            "modifications": [
+                {
+                    "type": "ATTACK",
+                    "value": -4,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Wuchtschlag": {
+            "modifications": [
+                {
+                    "type": "ATTACK",
+                    "value": -1,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                },
+                {
+                    "type": "DAMAGE",
+                    "value": 1,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Zaubertechnik ignorieren": {
+            "modifications": [
+                {
+                    "type": "ATTACK",
+                    "value": -4,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Zaubertechnik ignorieren (BOR)": {
+            "modifications": [
+                {
+                    "type": "ATTACK",
+                    "value": -4,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Zeit lassen": {
+            "modifications": [
+                {
+                    "type": "ATTACK",
+                    "value": 2,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": false
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Zeremonie (L)": {
+            "modifications": [
+                {
+                    "type": "ATTACK",
+                    "value": 4,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": false
+                },
+                {
+                    "type": "ATTACK",
+                    "value": 2,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Zeremonie (M)": {
+            "modifications": [
+                {
+                    "type": "ATTACK",
+                    "value": 4,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": false
+                },
+                {
+                    "type": "ATTACK",
+                    "value": 2,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Zielen": {
+            "modifications": [
+                {
+                    "type": "ATTACK",
+                    "value": 2,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        },
+        "Überrennen": {
+            "modifications": [
+                {
+                    "type": "DAMAGE",
+                    "value": 1,
+                    "operator": "ADD",
+                    "target": "",
+                    "affectedByInput": true
+                }
+            ],
+            "isDefense": false,
+            "icon": "icons/svg/item-bag.svg"
+        }
+    }
+}
