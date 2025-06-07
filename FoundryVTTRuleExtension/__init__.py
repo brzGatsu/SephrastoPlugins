@@ -4,7 +4,7 @@ from Core.DatenbankEinstellung import DatenbankEinstellung
 from Wolke import Wolke
 import DatenbankEditor
 import logging
-from .DatenbankEditRegelWrapper import DatenbankEditRegelWrapperPlus
+from .DatenbankEditRegelWrapperPlus import DatenbankEditRegelWrapperPlus
 from .RegelExtension import extend_regel
 
 __version__ = "1.0.0"  # Plugin Version
