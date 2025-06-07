@@ -420,59 +420,99 @@ class DatenbankEditRegelWrapperPlus(DatenbankEditRegelWrapper):
         if not foundry_enabled:
             self.updateModificationFieldVisibility()
             return
+
+        # Initialize Foundry attributes if they don't exist
+        if not hasattr(regel, 'foundry_modifications'):
+            regel.foundry_modifications = None
+        if not hasattr(regel, 'foundry_verteidigung'):
+            regel.foundry_verteidigung = False
+        if not hasattr(regel, 'foundry_icon'):
+            regel.foundry_icon = ""
+        if not hasattr(regel, 'foundry_input'):
+            regel.foundry_input = "{}"
             
         # Check if we have predefined modifications for this regel
-        if regel.name in self.foundry_maneuvers:
+        if regel.name in self.foundry_maneuvers and not regel.foundry_modifications:
             foundry_data = self.foundry_maneuvers[regel.name]
             
             # Set defense checkbox if it's a defense maneuver
-            self.verteidigungCheckbox.setChecked(foundry_data['isDefense'])
+            regel.foundry_verteidigung = foundry_data.get('isDefense', False)
+            self.verteidigungCheckbox.setChecked(regel.foundry_verteidigung)
             
             # Set icon if available
-            self.iconEdit.setText(foundry_data['icon'])
+            regel.foundry_icon = foundry_data.get('icon', '')
+            self.iconEdit.setText(regel.foundry_icon)
             
-            # Load predefined modifications if no custom ones exist
-            if not hasattr(regel, 'foundry_modifications'):
-                modifications = foundry_data['modifications']
-                regel.foundry_modifications = json.dumps(modifications)
-        
-        # Load Verteidigungsmanöver state (if not already set from predefined data)
-        if not regel.name in self.foundry_maneuvers:
-            self.verteidigungCheckbox.setChecked(getattr(regel, "foundry_verteidigung", False))
-        
-        # Load icon (if not already set from predefined data)
-        if not regel.name in self.foundry_maneuvers:
-            self.iconEdit.setText(getattr(regel, "foundry_icon", ""))
+            # Load predefined modifications
+            modifications = foundry_data.get('modifications', [])
+            regel.foundry_modifications = json.dumps(modifications)
+        else:
+            # Load existing data
+            self.verteidigungCheckbox.setChecked(regel.foundry_verteidigung)
+            self.iconEdit.setText(regel.foundry_icon)
 
         # Load input configuration
-        if hasattr(regel, "foundry_input"):
-            try:
+        try:
+            if regel.foundry_input:
                 input_data = json.loads(regel.foundry_input)
                 self.inputConfigWidget.setData(input_data)
-            except (json.JSONDecodeError, AttributeError):
-                pass
+        except (json.JSONDecodeError, AttributeError):
+            pass
         
-        # Load modifications from regel
-        if hasattr(regel, "foundry_modifications"):
-            try:
+        # Load modifications
+        try:
+            if regel.foundry_modifications:
                 modifications = json.loads(regel.foundry_modifications)
                 for mod in modifications:
                     self.addModification(mod)
-            except (json.JSONDecodeError, AttributeError):
-                pass
+        except (json.JSONDecodeError, AttributeError):
+            pass
         
         # Update visibility based on current category
         self.updateModificationFieldVisibility()
 
     def update(self, regel):
+        # First update the base regel
         super().update(regel)
-        # Update modifications only if the category matches
+        
+        # Update Foundry VTT extensions only if the category matches
         if self.ui.comboKategorie.currentText() in FOUNDRY_CATEGORIES:
+            # Initialize Foundry attributes if they don't exist
+            if not hasattr(regel, 'foundry_modifications'):
+                regel.foundry_modifications = None
+            if not hasattr(regel, 'foundry_verteidigung'):
+                regel.foundry_verteidigung = False
+            if not hasattr(regel, 'foundry_icon'):
+                regel.foundry_icon = ""
+            if not hasattr(regel, 'foundry_input'):
+                regel.foundry_input = "{}"
+
+            # Always save modifications to the regel object
             modifications = [widget.getData() for widget in self.modificationWidgets]
-            regel.foundry_modifications = json.dumps(modifications)
-            # Save Verteidigungsmanöver state
+            regel.foundry_modifications = json.dumps(modifications) if modifications else None
             regel.foundry_verteidigung = self.verteidigungCheckbox.isChecked()
-            # Save icon
             regel.foundry_icon = self.iconEdit.text()
-            # Save input configuration
-            regel.foundry_input = json.dumps(self.inputConfigWidget.getData()) 
+            regel.foundry_input = json.dumps(self.inputConfigWidget.getData())
+
+    def accept(self):
+        # First update our regel with the current Foundry data
+        if self.ui.comboKategorie.currentText() in FOUNDRY_CATEGORIES:
+            # Initialize Foundry attributes if they don't exist
+            if not hasattr(self.elementPicked, 'foundry_modifications'):
+                self.elementPicked.foundry_modifications = None
+            if not hasattr(self.elementPicked, 'foundry_verteidigung'):
+                self.elementPicked.foundry_verteidigung = False
+            if not hasattr(self.elementPicked, 'foundry_icon'):
+                self.elementPicked.foundry_icon = ""
+            if not hasattr(self.elementPicked, 'foundry_input'):
+                self.elementPicked.foundry_input = "{}"
+
+            # Save current state
+            modifications = [widget.getData() for widget in self.modificationWidgets]
+            self.elementPicked.foundry_modifications = json.dumps(modifications) if modifications else None
+            self.elementPicked.foundry_verteidigung = self.verteidigungCheckbox.isChecked()
+            self.elementPicked.foundry_icon = self.iconEdit.text()
+            self.elementPicked.foundry_input = json.dumps(self.inputConfigWidget.getData())
+
+        # Then let the parent class handle its own accept logic
+        super().accept() 

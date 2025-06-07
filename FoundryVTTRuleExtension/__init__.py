@@ -5,6 +5,7 @@ from Wolke import Wolke
 import DatenbankEditor
 import logging
 from .DatenbankEditRegelWrapper import DatenbankEditRegelWrapperPlus
+from .RegelExtension import extend_regel
 
 __version__ = "1.0.0"  # Plugin Version
 
@@ -29,6 +30,9 @@ class Plugin:
         # Store event bus registrations
         self.datenbank_laden_reg = EventBus.addAction("datenbank_laden", self.datenbankLadenHook)
         self.regel_reg = EventBus.addFilter("dbe_class_regel_wrapper", self.dbeClassRegelFilter)
+
+        # Extend the Regel class with XML serialization support
+        extend_regel()
 
     def changesCharacter(self):
         if not hasattr(self, "db") or self.db is None or not hasattr(self.db, "einstellungen"):
@@ -78,3 +82,6 @@ class Plugin:
             return editorType
 
         return DatenbankEditRegelWrapperPlus 
+
+    def createDatenbankEditRegelWrapper(self, datenbank, regel=None):
+        return DatenbankEditRegelWrapperPlus(datenbank, regel) 
