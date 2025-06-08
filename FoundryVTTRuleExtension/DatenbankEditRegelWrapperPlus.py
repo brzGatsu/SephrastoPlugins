@@ -113,7 +113,6 @@ class ModificationWidget(QtWidgets.QWidget):
         # Row 3: Checkbox and Remove button
         self.affectedByInputCheck = QtWidgets.QCheckBox("Durch Input beeinflusst")
         removeButton = QtWidgets.QPushButton("-")
-        removeButton.setMaximumWidth(30)
         removeButton.clicked.connect(lambda: self.removed.emit(self))
 
         buttonLayout = QtWidgets.QHBoxLayout()

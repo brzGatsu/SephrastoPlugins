@@ -9,11 +9,6 @@ from .RegelExtension import extend_regel
 
 __version__ = "1.0.0"  # Plugin Version
 
-# Configure logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger("FoundryVTTRuleExtension")
-print("FoundryVTTRuleExtension Plugin module loaded")
-
 # Categories that should show the modifications field
 FOUNDRY_CATEGORIES = [
     "Nahkampfmanöver",
@@ -24,12 +19,10 @@ FOUNDRY_CATEGORIES = [
 ]
 
 class Plugin:
-    def __init__(self):
-        logger.info("FoundryVTTRuleExtension Plugin initializing...")
-        
+    def __init__(self):        
         # Store event bus registrations
-        self.datenbank_laden_reg = EventBus.addAction("datenbank_laden", self.datenbankLadenHook)
-        self.regel_reg = EventBus.addFilter("dbe_class_regel_wrapper", self.dbeClassRegelFilter)
+        EventBus.addAction("datenbank_laden", self.datenbankLadenHook)
+        EventBus.addFilter("dbe_class_regel_wrapper", self.dbeClassRegelFilter)
 
         # Extend the Regel class with XML serialization support
         extend_regel()
