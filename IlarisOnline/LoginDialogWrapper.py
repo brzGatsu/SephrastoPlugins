@@ -7,7 +7,7 @@ from EinstellungenWrapper import EinstellungenWrapper
 from Kreaturen import LoginDialog
 from Kreaturen.IlarisOnlineApi import APIClient
 
-class IlarisOnlineLoginWrapper(QtCore.QObject):
+class LoginDialogWrapper(QtCore.QObject):
     loginSuccessful = QtCore.Signal()
 
     def __init__(self, callback=None):
@@ -45,7 +45,7 @@ class IlarisOnlineLoginWrapper(QtCore.QObject):
             print(data)
             if "token" in data:
                 token = data["token"]
-                Wolke.Settings["IO_API_Token"] = token
+                Wolke.Settings["IO_APIToken"] = token
                 Wolke.Settings["IO_Username"] = username
                 self.form.accept()
                 self.loginSuccessful.emit()

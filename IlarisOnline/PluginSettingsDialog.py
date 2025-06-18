@@ -1,16 +1,16 @@
 from PySide6 import QtWidgets, QtGui
 from PySide6.QtWidgets import QCheckBox, QLineEdit, QPushButton, QHBoxLayout
 from QtUtils.SimpleSettingsDialog import SimpleSettingsDialog
-from IlarisOnline.IlarisOnlineLoginWrapper import IlarisOnlineLoginWrapper
+from IlarisOnline.LoginDialogWrapper import LoginDialogWrapper
 from Wolke import Wolke
 
 
 DEFAULT_SETTINGS = {
     "IO_Username": "",
-    "IO_API_Token": "",
-    "IO_Auto_Upload_Char": False,
-    "IO_Auto_Upload_DB": False,
-    "IO_Show_Char_Upload_Button": True,
+    "IO_APIToken": "",
+    "IO_AutoUploadChar": False,
+    "IO_AutoUploadDB": False,
+    "IO_ShowCharUploadButton": True,
 }
 
 class PluginSettingsDialog(SimpleSettingsDialog):
@@ -32,14 +32,14 @@ class PluginSettingsDialog(SimpleSettingsDialog):
         loginButton.clicked.connect(self.clickedLogin)
         loginButton.setToolTip("Via Login automatisch einen Token erstellen.")
         tokenRow.addWidget(loginButton)
-        self.addSetting("IO_API_Token", "API Token", tokenField, layout=tokenRow)
+        self.addSetting("IO_APIToken", "API Token", tokenField, layout=tokenRow)
 
-        self.addSetting("IO_Auto_Upload_Char", "Charaktere automatisch hochladen", QCheckBox())
-        self.addSetting("IO_Auto_Upload_DB", "Hausregeln automatisch hochladen", QCheckBox())
-        self.addSetting("IO_Show_Char_Upload_Button", "Upload-Button im Charaktereditor", QCheckBox())
+        self.addSetting("IO_AutoUploadChar", "Charaktere automatisch hochladen", QCheckBox())
+        self.addSetting("IO_AutoUploadDB", "Hausregeln automatisch hochladen", QCheckBox())
+        self.addSetting("IO_ShowCharUploadButton", "Upload-Button im Charaktereditor", QCheckBox())
     
     def clickedLogin(self):
         """Login-Button-Klick-Handler."""
         def updateTokenField():
-            self.tokenField.setText(Wolke.Settings.get("IO_API_Token", ""))
-        IlarisOnlineLoginWrapper(callback=updateTokenField)
+            self.tokenField.setText(Wolke.Settings.get("IO_APIToken", ""))
+        LoginDialogWrapper(callback=updateTokenField)

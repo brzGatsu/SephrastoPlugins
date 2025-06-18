@@ -1,12 +1,13 @@
 from PySide6 import QtWidgets, QtCore, QtGui
 from EventBus import EventBus
-from IlarisOnline import IlarisOnlineDBWrapper
-from IlarisOnline import IlarisOnlineLoginWrapper
+from IlarisOnline import (CharakterBrowserWrapper)
 from IlarisOnline.PluginSettingsDialog import PluginSettingsDialog, DEFAULT_SETTINGS
 from Hilfsmethoden import Hilfsmethoden
 from EinstellungenWrapper import EinstellungenWrapper
 from QtUtils.RichTextButton import RichTextToolButton
+from IlarisOnline import LoginDialogWrapper
 from Wolke import Wolke
+
 
 class Plugin:
     def __init__(self):
@@ -22,18 +23,20 @@ class Plugin:
         font = self.mainWindowButton.font()
         font.setHintingPreference(QtGui.QFont.PreferNoHinting)
         self.mainWindowButton.setFont(font)
-        self.mainWindowButton.setText("\uf0c2")    # \uf0ac is globe
-        self.mainWindowButton.clicked.connect(self.clickedMainWindowButton) 
+        self.mainWindowButton.setText("\uf0c2")  # \uf0ac is globe
+        self.mainWindowButton.clicked.connect(self.clickedMainWindowButton)
         return [self.mainWindowButton]
-    
+
     def createCharakterButtons(self):
-        if not Wolke.Settings["IO_Show_Char_Upload_Button"]:
+        if not Wolke.Settings["IO_ShowCharUploadButton"]:
             return []
         self.charUploadBtn = RichTextToolButton()
         self.charUploadBtn.setObjectName("buttonPluginCharakter")
         self.charUploadBtn.setToolTip("ilaris-online.de")
         self.charUploadBtn.setProperty("class", "icon")
-        self.charUploadBtn.setText(f"<span style='{Wolke.FontAwesomeCSS}'>\uf0ee</span>&nbsp;&nbsp;Upload")
+        self.charUploadBtn.setText(
+            f"<span style='{Wolke.FontAwesomeCSS}'>\uf0ee</span>&nbsp;&nbsp;Upload"
+        )
         self.charUploadBtn.setShortcut("Ctrl+U")
         self.charUploadBtn.setToolTip("Charakter auf Ilaris-Online.de hochladen.")
         self.charUploadBtn.clicked.connect(self.clickedCharUploadBtn)
@@ -41,6 +44,7 @@ class Plugin:
 
     def clickedMainWindowButton(self):
         print("clicked ilaris-online window")
+        CharakterBrowserWrapper.CharakterBrowserWrapper()
 
     def clickedCharUploadBtn(self):
         print("clicked char sync")
