@@ -4,7 +4,7 @@ from Core.DatenbankEinstellung import DatenbankEinstellung
 from Wolke import Wolke
 import DatenbankEditor
 import logging
-from .DatenbankEditRegelWrapperPlus import DatenbankEditRegelWrapperPlus
+from .DatenbankEditRegelWrapperPlus import create_regel_editor
 from .RegelExtension import extend_regel
 
 __version__ = "1.0.0"  # Plugin Version
@@ -58,10 +58,7 @@ class Plugin:
             e.kategorie = "Plugins"
             self.db.loadElement(e)
             
-            logger.info("Settings loaded successfully")
-            
         except Exception as e:
-            logger.error("Error in datenbankLadenHook: %s", str(e), exc_info=True)
             raise
 
     def dbeClassRegelFilter(self, editorType, params):
@@ -74,7 +71,7 @@ class Plugin:
         if not self.db.einstellungen["FoundryVTTRuleExtension Plugin: Aktivieren"].wert:
             return editorType
 
-        return DatenbankEditRegelWrapperPlus 
+        return create_regel_editor(editorType)
 
     def createDatenbankEditRegelWrapper(self, datenbank, regel=None):
-        return DatenbankEditRegelWrapperPlus(datenbank, regel) 
+        return create_regel_editor(DatenbankElementEditorBase)(datenbank, regel) 
