@@ -45,8 +45,8 @@ class IlarisOnlineLoginWrapper(QtCore.QObject):
             print(data)
             if "token" in data:
                 token = data["token"]
-                Wolke.Settings["IlarisOnlineToken"] = token
-                Wolke.Settings["IlarisOnlineUser"] = username
+                Wolke.Settings["IO_API_Token"] = token
+                Wolke.Settings["IO_Username"] = username
                 self.form.accept()
                 self.loginSuccessful.emit()
             else:

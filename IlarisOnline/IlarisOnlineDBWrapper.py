@@ -32,6 +32,9 @@ class KreaturOnlineDBWrapper(object):
         self.progressBar = QtWidgets.QProgressBar(self.form)
         self.progressBar.show()
         self.api = APIClient(Wolke.Settings.get("IlarisOnlineToken"))
+        # TDOO: add token for persistent login
+        # self.api.token = Wolke.Settings.get("IlarisOnlineToken")
+        # print(f"setting token: {self.api.token}")
         self.api.request("ilaris/kreatur/", self.kreaturenLoaded)
 
         self.ui.cbTyp.addItems([t.capitalize() for t in TYPEN])

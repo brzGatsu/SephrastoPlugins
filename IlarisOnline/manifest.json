@@ -1,0 +1,7 @@
+{
+  "name": "IlarisOnline",
+  "description": "Mit dem IlarisOnline Plugin können Charaktere und Hausregeln mit der ilaris-online.de synchronisiert werden. Wenn das Kreaturen Plugin installiert ist, kann darin direkt auf die Kreaturendatenbank zugegriffen werden.",
+  "author": "Lukr",
+  "version": "0",
+  "hasSettings": true
+}
