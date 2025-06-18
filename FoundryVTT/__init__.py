@@ -17,15 +17,6 @@ def random_foundry_id():
     chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
     return "".join(random.choices(chars, k=16))
 
-def getFoundryPackId(name):
-    json_path = os.path.join(os.path.dirname(__file__), "foundry_advantage_id_names.json")
-    with open(json_path, "r", encoding="utf-8") as f:
-        data = json.load(f)  
-    for key, value in data.items():
-        if value == name:
-            return key
-    return ''
-
 def get_sys_key():
     foundry_version = Wolke.Settings.get("FoundryVTT_Version")
     if foundry_version == "v9":
@@ -33,28 +24,6 @@ def get_sys_key():
     return "system"
 
 def create_item(name, type):
-    foundry_version = Wolke.Settings.get("FoundryVTT_Version")
-    if foundry_version == "v12":
-        sys_key = "system"
-    if foundry_version == "v12" and type == "vorteil":
-        foundry_pack_id = getFoundryPackId(name)
-        if foundry_pack_id:
-            compendiumSource = "Compendium.Ilaris.vorteil.Item." + foundry_pack_id
-            return {
-                "_id": random_foundry_id(),
-                "name": name,
-                "type": type,
-                "img": "icons/svg/item-bag.svg",
-                get_sys_key(): {},
-                "effects": [],
-                "folder": None,
-                "sort": 0,
-                "permission": {},
-                "flags": {},
-                "_stats": {
-                    "compendiumSource": compendiumSource
-                }
-            }
     return {
         "_id": random_foundry_id(),
         "name": name,
