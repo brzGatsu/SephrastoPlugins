@@ -6,7 +6,7 @@ from PySide6.QtCore import QJsonDocument, QJsonParseError
 from PySide6.QtCore import QUrl, Slot
 from PySide6.QtNetwork import QNetworkAccessManager, QNetworkRequest
 from PySide6.QtCore import QJsonDocument, QJsonParseError
-
+from Wolke import Wolke
 
 class ReplyHandler(QtCore.QObject):
     finished = Signal(object)
@@ -45,12 +45,20 @@ class ReplyHandler(QtCore.QObject):
 
 class APIClient:
     def __init__(self, token=None):
-        self.base_url = "https://ilaris-online.de/api/"
-        # self.base_url = "http://localhost:8000/api/"
+        print("init client")
+        self.base_url = Wolke.Settings.get("IO_APIUrl", "")
+        print(self.base_url)
+        if not self.base_url:
+            print("No API URL set, using default")
+            self.base_url = "https://ilaris-online.de/api/"
+        if not self.base_url.endswith("/"):
+            self.base_url += "/"
         self.manager = QNetworkAccessManager()
         self.handlers = []
-        self.token = token
-        print("api  created")
+        self.token = Wolke.Settings.get("IO_APIToken", "")
+        if token is not None:
+            self.token = token
+        print("is api created?")
 
     def request(self, path, callback, method="GET", payload=None):
         print("request running")
@@ -86,13 +94,15 @@ class APIClient:
         self.request(path, callback, method="PUT", payload=payload)
 
     def login(self, username, password, callback):
-        url = "https://ilaris-online.de/accounts/token"
+        print("LOGIN CALLED")
+        url = self.base_url[:-4] + "/accounts/token"
+        print(url)
         # url = "http://localhost:8000/accounts/token"
         request = QNetworkRequest(url)
         request.setHeader(QNetworkRequest.ContentTypeHeader, "application/json")
         data = {
             "username": username,
-            "password": password
+            "password": password,
         }
         handler = ReplyHandler(callback)
         reply = self.manager.post(request, QJsonDocument(data).toJson())

@@ -11,6 +11,7 @@ DEFAULT_SETTINGS = {
     "IO_AutoUploadChar": False,
     "IO_AutoUploadDB": False,
     "IO_ShowCharUploadButton": True,
+    "IO_APIUrl": "https://ilaris-online.de/api/"
 }
 
 class PluginSettingsDialog(SimpleSettingsDialog):
@@ -37,6 +38,8 @@ class PluginSettingsDialog(SimpleSettingsDialog):
         self.addSetting("IO_AutoUploadChar", "Charaktere automatisch hochladen", QCheckBox())
         self.addSetting("IO_AutoUploadDB", "Hausregeln automatisch hochladen", QCheckBox())
         self.addSetting("IO_ShowCharUploadButton", "Upload-Button im Charaktereditor", QCheckBox())
+        # Advanced (TODO: collapse section?)
+        self.addSetting("IO_APIUrl", "Eigenen API-Server verwenden", QLineEdit())
     
     def clickedLogin(self):
         """Login-Button-Klick-Handler."""

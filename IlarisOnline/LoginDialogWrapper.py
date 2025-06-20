@@ -4,8 +4,8 @@ from PySide6 import QtCore, QtWidgets, QtGui
 from Wolke import Wolke
 from EventBus import EventBus
 from EinstellungenWrapper import EinstellungenWrapper
-from Kreaturen import LoginDialog
-from Kreaturen.IlarisOnlineApi import APIClient
+from IlarisOnline import LoginDialog
+from IlarisOnline.IlarisOnlineApi import APIClient
 
 class LoginDialogWrapper(QtCore.QObject):
     loginSuccessful = QtCore.Signal()
@@ -22,7 +22,7 @@ class LoginDialogWrapper(QtCore.QObject):
         # self.ui.buttonBox.button(QtWidgets.QDialogButtonBox.Ok).setDisabled(True)
         self.ui.buttonBox.button(QtWidgets.QDialogButtonBox.Cancel).setText("Abbrechen")
         
-        self.ui.leBenutzer.setText(Wolke.Settings.get("IlarisOnlineUser", "admin"))
+        self.ui.leBenutzer.setText(Wolke.Settings.get("IOUsername", "admin"))
         if callback:
             self.loginSuccessful.connect(callback)
         self.form.setModal(True)
@@ -36,6 +36,7 @@ class LoginDialogWrapper(QtCore.QObject):
         client = APIClient()
         print("starting login")
         def on_login(data, error=False, status=None):
+            print(data)
             if error:
                 print("Error in login")
                 print(error)

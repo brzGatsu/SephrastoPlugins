@@ -11,6 +11,8 @@ from Wolke import Wolke
 from datetime import datetime as dt
 from lxml import etree
 from IlarisOnline.ConfirmCheckDialog import ConfirmCheckDialog
+from IlarisOnline.TabWrapper import TabWrapper
+from CharakterEditor import Tab
 
 PLUGIN_DATA_KEYS = [
     "alias",
@@ -27,9 +29,24 @@ class Plugin:
         EventBus.addAction("charakter_serialisiert", self.charakterSerialisiertHandler)
         EventBus.addAction("charakter_deserialisiert", self.charakterDeserialisiertHandler)
         EventBus.addAction("charakter_geschrieben", self.charakterGeschriebenHandler, 0)
+        EventBus.addAction("charaktereditor_oeffnet", self.charakterEditorOeffnet)
 
     def changesCharacter(self):
         return True
+
+    def charakterEditorOeffnet(self, params):
+        self.ioTab = TabWrapper()
+        # self.historieTab.ui.historieTable.itemClicked.connect(self.rowClicked)
+    
+    def createCharakterTabs(self):
+        tab = Tab(72, self.ioTab, self.ioTab.form, "Ilaris-Online")
+        return [tab]
+
+    def updateTab(self, ioData=None):
+        if ioData is None:
+            # ioData = Wolke.Charakter.ilarisOnline  # how to get char from here?
+            pass
+        self.ioTab.ui.labelAlias.setText(ioData["alias"])
 
     def createMainWindowButtons(self):
         self.mainWindowButton = QtWidgets.QPushButton()
@@ -92,6 +109,7 @@ class Plugin:
         serializer.end() # IlarisOnline
     
     def uploadCallback(self, data, error=None, status=None):
+        print(data)
         if error:
             print("Error uploading character to Ilaris-Online")
             print(error)
@@ -107,6 +125,23 @@ class Plugin:
                 "Ilaris-Online",
                 "Dein Charakter wurde erfolgreich auf Ilaris-Online.de hochgeladen.",
             )
+            if "io_data" in data:
+                print("IO data found, updating character")
+                # self.charakterGeschriebenParams["charakter"].ilarisOnline = self.charakterGeschriebenParams["io_data"]
+                print("wird erneut gespeihert")
+                # TODO: compare IO data only update on diff also mention in popup
+                ser = self.charakterGeschriebenParams["serializer"]
+                if ser.find("IlarisOnline"):
+                    if ser.find("alias"):
+                        print("IlarisOnline alias found in serializer, updating")
+                        ser.set("text", data["io_data"]["alias"])
+                    ser.end()  # alias
+                ser.end()  # IlarisOnline
+                self.charakterGeschriebenParams["charakter"].ilarisOnline["alias"] = data["io_data"]["alias"]
+                print(f"writing file to {self.charakterGeschriebenParams['filepath']}")
+                ser.writeFile(self.charakterGeschriebenParams["filepath"])
+                self.updateTab(data["io_data"])
+            
 
     def charakterGeschriebenHandler(self, params):
         """Upload after save to include serialized data from other plugins."""
@@ -126,8 +161,9 @@ class Plugin:
             print("User confirmed upload")
         client = APIClient()
         xml_string = etree.tostring(etree.ElementTree(params['serializer'].root).getroot(), encoding='unicode')
+        self.charakterGeschriebenParams = params  # keep reference to access in callbacks
         client.post(
-            f"ilaris/charakter/{char.ilarisOnline['alias']}/",
+            "ilaris/charakter/pluginxml/",
             {
                 "xml": xml_string,
             },
