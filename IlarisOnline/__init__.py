@@ -13,9 +13,10 @@ from lxml import etree
 from IlarisOnline.ConfirmCheckDialog import ConfirmCheckDialog
 from IlarisOnline.TabWrapper import TabWrapper
 from CharakterEditor import Tab
+from IlarisOnline.ProgressDialog import ProgressDialog
 
 PLUGIN_DATA_KEYS = [
-    "alias",
+    "id",
     "gruppe",
     "bearbeitet",
     "hausregel"
@@ -46,7 +47,7 @@ class Plugin:
         if ioData is None:
             # ioData = Wolke.Charakter.ilarisOnline  # how to get char from here?
             pass
-        self.ioTab.ui.labelAlias.setText(ioData["alias"])
+        self.ioTab.ui.labelAlias.setText(ioData["id"])
 
     def createMainWindowButtons(self):
         self.mainWindowButton = QtWidgets.QPushButton()
@@ -85,6 +86,7 @@ class Plugin:
     def showSettings(self):
         dialog = PluginSettingsDialog()
         dialog.show()
+        
 
     def charakterDeserialisiertHandler(self, params):
         char = params["charakter"]
@@ -113,34 +115,33 @@ class Plugin:
         if error:
             print("Error uploading character to Ilaris-Online")
             print(error)
-            QtWidgets.QMessageBox.critical(
-                QtWidgets.QApplication.activeWindow(),
-                "Ilaris-Online",
-                "Fehler beim Hochladen des Charakters auf Ilaris-Online.de.",
-            )
+            self.uploadDialog.addMessage("Fehler beim Hochladen des Charakters auf Ilaris-Online.de.", style="color: red;")
         else:
             print("Character uploaded successfully")
-            QtWidgets.QMessageBox.information(
-                QtWidgets.QApplication.activeWindow(),
-                "Ilaris-Online",
-                "Dein Charakter wurde erfolgreich auf Ilaris-Online.de hochgeladen.",
-            )
+            # QtWidgets.QMessageBox.information(
+            #     QtWidgets.QApplication.activeWindow(),
+            #     "Ilaris-Online",
+            #     "Dein Charakter wurde erfolgreich auf Ilaris-Online.de hochgeladen.",
+            # )
+            self.uploadDialog.addMessage("Charakter erfolgreich hochgeladen.", style="color: green;")
             if "io_data" in data:
                 print("IO data found, updating character")
                 # self.charakterGeschriebenParams["charakter"].ilarisOnline = self.charakterGeschriebenParams["io_data"]
                 print("wird erneut gespeihert")
+                self.uploadDialog.addMessage("Charakterdaten aktualisieren und erneut speichern...", 0.9)
                 # TODO: compare IO data only update on diff also mention in popup
                 ser = self.charakterGeschriebenParams["serializer"]
                 if ser.find("IlarisOnline"):
-                    if ser.find("alias"):
-                        print("IlarisOnline alias found in serializer, updating")
-                        ser.set("text", data["io_data"]["alias"])
-                    ser.end()  # alias
+                    if ser.find("id"):
+                        print("IlarisOnline id found in serializer, updating")
+                        ser.set("text", data["io_data"]["id"])
+                    ser.end()  # id
                 ser.end()  # IlarisOnline
-                self.charakterGeschriebenParams["charakter"].ilarisOnline["alias"] = data["io_data"]["alias"]
+                self.charakterGeschriebenParams["charakter"].ilarisOnline["id"] = data["io_data"]["id"]
                 print(f"writing file to {self.charakterGeschriebenParams['filepath']}")
                 ser.writeFile(self.charakterGeschriebenParams["filepath"])
                 self.updateTab(data["io_data"])
+        self.uploadDialog.enable()
             
 
     def charakterGeschriebenHandler(self, params):
@@ -159,6 +160,12 @@ class Plugin:
                 print("Auto-upload enabled")
                 Wolke.Settings["IO_AutoUploadChar"] = True
             print("User confirmed upload")
+        self.uploadDialog = ProgressDialog()
+        self.uploadDialog.show()
+        # self.uploadDialog.raise_()
+        # self.uploadDialog.activateWindow()
+        self.uploadDialog.addMessage("Charakter lokal gespeichert...", 0.2)
+        self.uploadDialog.addMessage("Charakter mit Ilaris-Online.de synchronisieren...", 0.5)
         client = APIClient()
         xml_string = etree.tostring(etree.ElementTree(params['serializer'].root).getroot(), encoding='unicode')
         self.charakterGeschriebenParams = params  # keep reference to access in callbacks
