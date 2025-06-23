@@ -16,10 +16,12 @@ from CharakterEditor import Tab
 from IlarisOnline.ProgressDialog import ProgressDialog
 
 PLUGIN_DATA_KEYS = [
-    "id",
-    "gruppe",
-    "bearbeitet",
-    "hausregel"
+    "Id",
+    "Gruppe",
+    "Bearbeitet",
+    "Erstellt",
+    "Hausregel",
+    "Besitzer",
 ]
 
 class Plugin:
@@ -47,7 +49,28 @@ class Plugin:
         if ioData is None:
             # ioData = Wolke.Charakter.ilarisOnline  # how to get char from here?
             pass
-        self.ioTab.ui.labelAlias.setText(ioData["id"])
+        self.ioTab.ui.labelId.setText(ioData["Id"])
+        self.ioTab.ui.labelGruppe.setText("-")
+        base_url = 'https://ilaris-online.de/app/'
+        self.ioTab.ui.labelGruppe.setText("-")
+        self.ioTab.ui.labelGruppe.setToolTip("Keine Gruppe zugeordnet")
+        if ioData.get("Gruppe"):
+            url = base_url + 'gruppe/' + ioData["Gruppe"].get("@id", "-") + '/'
+            self.ioTab.ui.labelGruppe.setText(f"<a href='{url}'>{ioData['Gruppe'].get('@name', '-')}</a>")
+            self.ioTab.ui.labelGruppe.setToolTip(ioData["Gruppe"].get("@id", "-"))
+            self.ioTab.ui.labelGruppe.setOpenExternalLinks(True)
+        self.ioTab.ui.labelBesitzer.setText("-")
+        if ioData.get("Besitzer"):
+            self.ioTab.ui.labelBesitzer.setText(ioData["Besitzer"].get("@name", "-"))
+            self.ioTab.ui.labelBesitzer.setToolTip(ioData["Besitzer"].get("@id", "-"))
+            self.ioTab.ui.labelBesitzer.setOpenExternalLinks(True)
+        self.ioTab.ui.labelHausregel.setText("-")
+        if ioData.get("Hausregel"):
+            self.ioTab.ui.labelHausregel.setText(ioData["Hausregel"].get("@name", "-"))
+            self.ioTab.ui.labelHausregel.setToolTip(ioData["Hausregel"].get("@id", "-"))
+        url = f'https://ilaris-online.de/app/charakter/{ioData["Id"]}'
+        self.ioTab.ui.labelUrl.setText(f'<a href="{url}">{url}</a>')
+        self.ioTab.ui.labelUrl.setOpenExternalLinks(True)
 
     def createMainWindowButtons(self):
         self.mainWindowButton = QtWidgets.QPushButton()
@@ -96,6 +119,7 @@ class Plugin:
             deserializer.end()  # IlarisOnline
         else:
             char.ilarisOnline = {k: "" for k in PLUGIN_DATA_KEYS}
+        self.updateTab(char.ilarisOnline)
 
     def charakterSerialisiertHandler(self, params):
         print(params)
@@ -118,11 +142,6 @@ class Plugin:
             self.uploadDialog.addMessage("Fehler beim Hochladen des Charakters auf Ilaris-Online.de.", style="color: red;")
         else:
             print("Character uploaded successfully")
-            # QtWidgets.QMessageBox.information(
-            #     QtWidgets.QApplication.activeWindow(),
-            #     "Ilaris-Online",
-            #     "Dein Charakter wurde erfolgreich auf Ilaris-Online.de hochgeladen.",
-            # )
             self.uploadDialog.addMessage("Charakter erfolgreich hochgeladen.", style="color: green;")
             if "io_data" in data:
                 print("IO data found, updating character")
@@ -137,7 +156,12 @@ class Plugin:
                         ser.set("text", data["io_data"]["id"])
                     ser.end()  # id
                 ser.end()  # IlarisOnline
-                self.charakterGeschriebenParams["charakter"].ilarisOnline["id"] = data["io_data"]["id"]
+                char = self.charakterGeschriebenParams["charakter"]
+                # todo compare char.ilarisOnline with data["io_data"] and update only if different
+                char.ilarisOnline = data["io_data"]
+                # char.ilarisOnline["id"] = data["io_data"]["id"]
+                # char.ilarisOnline["gruppe"] = data["io_data"]["gruppe"]
+                # char.ilarisOnline["besitzer"] = data["io_data"]["besitzer"]
                 print(f"writing file to {self.charakterGeschriebenParams['filepath']}")
                 ser.writeFile(self.charakterGeschriebenParams["filepath"])
                 self.updateTab(data["io_data"])

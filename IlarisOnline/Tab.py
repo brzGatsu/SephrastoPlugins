@@ -15,91 +15,99 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QFrame, QGridLayout, QLabel,
-    QScrollArea, QSizePolicy, QSplitter, QTextBrowser,
-    QWidget)
+from PySide6.QtWidgets import (QApplication, QGridLayout, QGroupBox, QHBoxLayout,
+    QLabel, QSizePolicy, QSpacerItem, QTextBrowser,
+    QVBoxLayout, QWidget)
 
 class Ui_Form(object):
     def setupUi(self, Form):
         if not Form.objectName():
             Form.setObjectName(u"Form")
-        Form.resize(701, 460)
-        self.gridLayout = QGridLayout(Form)
-        self.gridLayout.setObjectName(u"gridLayout")
-        self.gridLayout.setContentsMargins(20, 20, 20, 20)
-        self.splitter = QSplitter(Form)
-        self.splitter.setObjectName(u"splitter")
-        self.splitter.setOrientation(Qt.Orientation.Horizontal)
-        self.scrollArea = QScrollArea(self.splitter)
-        self.scrollArea.setObjectName(u"scrollArea")
-        sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.scrollArea.sizePolicy().hasHeightForWidth())
-        self.scrollArea.setSizePolicy(sizePolicy)
-        self.scrollArea.setMinimumSize(QSize(0, 0))
-        self.scrollArea.setMaximumSize(QSize(16777215, 16777215))
-        self.scrollArea.setFrameShape(QFrame.Shape.StyledPanel)
-        self.scrollArea.setMidLineWidth(0)
-        self.scrollArea.setWidgetResizable(True)
-        self.scrollArea.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
-        self.scrollAreaWidgetContents = QWidget()
-        self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 659, 418))
-        self.gridLayout_2 = QGridLayout(self.scrollAreaWidgetContents)
-        self.gridLayout_2.setObjectName(u"gridLayout_2")
-        self.labelAlias = QLabel(self.scrollAreaWidgetContents)
-        self.labelAlias.setObjectName(u"labelAlias")
-        self.labelAlias.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
-
-        self.gridLayout_2.addWidget(self.labelAlias, 1, 1, 1, 1)
-
-        self.labelApiUrl = QLabel(self.scrollAreaWidgetContents)
-        self.labelApiUrl.setObjectName(u"labelApiUrl")
-        self.labelApiUrl.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
-        self.labelApiUrl.setWordWrap(True)
-
-        self.gridLayout_2.addWidget(self.labelApiUrl, 2, 1, 1, 1)
-
-        self.label_2 = QLabel(self.scrollAreaWidgetContents)
-        self.label_2.setObjectName(u"label_2")
-
-        self.gridLayout_2.addWidget(self.label_2, 1, 0, 1, 1)
-
-        self.labelWebUrl = QLabel(self.scrollAreaWidgetContents)
-        self.labelWebUrl.setObjectName(u"labelWebUrl")
-        self.labelWebUrl.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
-
-        self.gridLayout_2.addWidget(self.labelWebUrl, 3, 1, 1, 1)
-
-        self.label = QLabel(self.scrollAreaWidgetContents)
-        self.label.setObjectName(u"label")
-
-        self.gridLayout_2.addWidget(self.label, 3, 0, 1, 1)
-
-        self.label_3 = QLabel(self.scrollAreaWidgetContents)
+        Form.resize(682, 460)
+        self.horizontalLayout = QHBoxLayout(Form)
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.horizontalLayout.setContentsMargins(20, 20, 20, 20)
+        self.groupBox = QGroupBox(Form)
+        self.groupBox.setObjectName(u"groupBox")
+        self.groupBox.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+        self.groupBox.setFlat(False)
+        self.gridLayout_3 = QGridLayout(self.groupBox)
+        self.gridLayout_3.setObjectName(u"gridLayout_3")
+        self.label_3 = QLabel(self.groupBox)
         self.label_3.setObjectName(u"label_3")
         self.label_3.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
 
-        self.gridLayout_2.addWidget(self.label_3, 2, 0, 1, 1)
+        self.gridLayout_3.addWidget(self.label_3, 1, 0, 1, 1)
 
-        self.labelTitelDetail = QLabel(self.scrollAreaWidgetContents)
-        self.labelTitelDetail.setObjectName(u"labelTitelDetail")
-        font = QFont()
-        font.setBold(True)
-        self.labelTitelDetail.setFont(font)
+        self.labelGruppe = QLabel(self.groupBox)
+        self.labelGruppe.setObjectName(u"labelGruppe")
+        self.labelGruppe.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
-        self.gridLayout_2.addWidget(self.labelTitelDetail, 0, 0, 1, 2)
+        self.gridLayout_3.addWidget(self.labelGruppe, 2, 2, 1, 1)
 
-        self.plainText = QTextBrowser(self.scrollAreaWidgetContents)
+        self.label = QLabel(self.groupBox)
+        self.label.setObjectName(u"label")
+
+        self.gridLayout_3.addWidget(self.label, 4, 0, 1, 1)
+
+        self.labelUrl = QLabel(self.groupBox)
+        self.labelUrl.setObjectName(u"labelUrl")
+        self.labelUrl.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
+
+        self.gridLayout_3.addWidget(self.labelUrl, 4, 2, 1, 1)
+
+        self.label_2 = QLabel(self.groupBox)
+        self.label_2.setObjectName(u"label_2")
+
+        self.gridLayout_3.addWidget(self.label_2, 0, 0, 1, 1)
+
+        self.labelBesitzer = QLabel(self.groupBox)
+        self.labelBesitzer.setObjectName(u"labelBesitzer")
+        self.labelBesitzer.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
+        self.labelBesitzer.setWordWrap(True)
+
+        self.gridLayout_3.addWidget(self.labelBesitzer, 1, 2, 1, 1)
+
+        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.gridLayout_3.addItem(self.verticalSpacer, 5, 0, 1, 1)
+
+        self.labelId = QLabel(self.groupBox)
+        self.labelId.setObjectName(u"labelId")
+        self.labelId.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
+
+        self.gridLayout_3.addWidget(self.labelId, 0, 2, 1, 1)
+
+        self.label_4 = QLabel(self.groupBox)
+        self.label_4.setObjectName(u"label_4")
+
+        self.gridLayout_3.addWidget(self.label_4, 2, 0, 1, 1)
+
+        self.label_5 = QLabel(self.groupBox)
+        self.label_5.setObjectName(u"label_5")
+
+        self.gridLayout_3.addWidget(self.label_5, 3, 0, 1, 1)
+
+        self.labelHausregel = QLabel(self.groupBox)
+        self.labelHausregel.setObjectName(u"labelHausregel")
+        self.labelHausregel.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
+
+        self.gridLayout_3.addWidget(self.labelHausregel, 3, 2, 1, 1)
+
+
+        self.horizontalLayout.addWidget(self.groupBox)
+
+        self.groupBox_2 = QGroupBox(Form)
+        self.groupBox_2.setObjectName(u"groupBox_2")
+        self.verticalLayout = QVBoxLayout(self.groupBox_2)
+        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.plainText = QTextBrowser(self.groupBox_2)
         self.plainText.setObjectName(u"plainText")
 
-        self.gridLayout_2.addWidget(self.plainText, 4, 0, 1, 2)
+        self.verticalLayout.addWidget(self.plainText)
 
-        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
-        self.splitter.addWidget(self.scrollArea)
 
-        self.gridLayout.addWidget(self.splitter, 1, 0, 1, 1)
+        self.horizontalLayout.addWidget(self.groupBox_2)
 
 
         self.retranslateUi(Form)
@@ -109,13 +117,17 @@ class Ui_Form(object):
 
     def retranslateUi(self, Form):
         Form.setWindowTitle(QCoreApplication.translate("Form", u"Form", None))
-        self.labelAlias.setText(QCoreApplication.translate("Form", u"0", None))
-        self.labelApiUrl.setText(QCoreApplication.translate("Form", u"0", None))
-        self.label_2.setText(QCoreApplication.translate("Form", u"Datenbank-ID", None))
-        self.labelWebUrl.setText(QCoreApplication.translate("Form", u"0", None))
+        self.groupBox.setTitle(QCoreApplication.translate("Form", u"Ilaris-Online Daten", None))
+        self.label_3.setText(QCoreApplication.translate("Form", u"Besitzer", None))
+        self.labelGruppe.setText(QCoreApplication.translate("Form", u"-", None))
         self.label.setText(QCoreApplication.translate("Form", u"Web-Ansicht", None))
-        self.label_3.setText(QCoreApplication.translate("Form", u"API-URL", None))
-        self.labelTitelDetail.setText(QCoreApplication.translate("Form", u"Ilaris-Online Daten", None))
-        self.labelTitelDetail.setProperty(u"class", QCoreApplication.translate("Form", u"h4", None))
+        self.labelUrl.setText(QCoreApplication.translate("Form", u"-", None))
+        self.label_2.setText(QCoreApplication.translate("Form", u"Datenbank-ID", None))
+        self.labelBesitzer.setText(QCoreApplication.translate("Form", u"-", None))
+        self.labelId.setText(QCoreApplication.translate("Form", u"-", None))
+        self.label_4.setText(QCoreApplication.translate("Form", u"Gruppe", None))
+        self.label_5.setText(QCoreApplication.translate("Form", u"Hausregeln", None))
+        self.labelHausregel.setText(QCoreApplication.translate("Form", u"-", None))
+        self.groupBox_2.setTitle(QCoreApplication.translate("Form", u"Charakter Log", None))
     # retranslateUi
 

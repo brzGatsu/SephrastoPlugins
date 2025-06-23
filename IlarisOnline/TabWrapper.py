@@ -1,5 +1,6 @@
 from PySide6 import QtWidgets, QtCore, QtGui
 from IlarisOnline import Tab
+from Wolke import Wolke
 
 class TabWrapper(QtCore.QObject):
     modified = QtCore.Signal()
@@ -16,6 +17,3 @@ class TabWrapper(QtCore.QObject):
     def load(self):
         pass
         
-    def update(self):
-        pass
-
