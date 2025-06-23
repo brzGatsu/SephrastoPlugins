@@ -17,11 +17,11 @@ from IlarisOnline.ProgressDialog import ProgressDialog
 
 PLUGIN_DATA_KEYS = [
     "Id",
-    "Gruppe",
+    # "Gruppe",
     "Bearbeitet",
     "Erstellt",
-    "Hausregel",
-    "Besitzer",
+    # "Hausregel",
+    # "Besitzer",
 ]
 
 class Plugin:
@@ -49,7 +49,9 @@ class Plugin:
         if ioData is None:
             # ioData = Wolke.Charakter.ilarisOnline  # how to get char from here?
             pass
-        self.ioTab.ui.labelId.setText(ioData["Id"])
+        self.ioTab.ui.labelErstellt.setText("-")
+        if ioData.get("Id"):
+            self.ioTab.ui.labelId.setText(ioData["Id"])
         self.ioTab.ui.labelGruppe.setText("-")
         base_url = 'https://ilaris-online.de/app/'
         self.ioTab.ui.labelGruppe.setText("-")
@@ -68,6 +70,8 @@ class Plugin:
         if ioData.get("Hausregel"):
             self.ioTab.ui.labelHausregel.setText(ioData["Hausregel"].get("@name", "-"))
             self.ioTab.ui.labelHausregel.setToolTip(ioData["Hausregel"].get("@id", "-"))
+        if ioData.get("Bearbeitet"):
+            self.ioTab.ui.labelBearbeitet.setText(ioData["Bearbeitet"])
         url = f'https://ilaris-online.de/app/charakter/{ioData["Id"]}'
         self.ioTab.ui.labelUrl.setText(f'<a href="{url}">{url}</a>')
         self.ioTab.ui.labelUrl.setOpenExternalLinks(True)
@@ -116,6 +120,11 @@ class Plugin:
         deserializer = params["deserializer"]
         if deserializer.find("IlarisOnline"):
             char.ilarisOnline = {k: deserializer.getNested(k, "") for k in PLUGIN_DATA_KEYS}
+            if deserializer.find("Gruppe"):
+                char.ilarisOnline["Gruppe"] = deserializer.get("id", "")
+                char.ilarisOnline["Gruppe"] = deserializer.get("name", "")
+                deserializer.end()  # Gruppe
+            # char.ilarisOnline["Gruppe"]
             deserializer.end()  # IlarisOnline
         else:
             char.ilarisOnline = {k: "" for k in PLUGIN_DATA_KEYS}
@@ -128,7 +137,9 @@ class Plugin:
         print(char.neueHausregeln)
         if char.neueHausregeln:
             print("TODO: update hausregeln")
-        char.ilarisOnline["bearbeitet"] = dt.now().strftime("%Y-%m-%d %H:%M:%S")
+        # char.ilarisOnline["bearbeitet"] = dt.now().strftime("%Y-%m-%d %H:%M:%S")
+        if not hasattr(char, "ilarisOnline"):  # i.e. for new created characters
+            char.ilarisOnline = {k: "" for k in PLUGIN_DATA_KEYS}
         serializer.begin("IlarisOnline")
         for key, val in char.ilarisOnline.items():
             serializer.setNested(key, val)
@@ -153,9 +164,9 @@ class Plugin:
                 if ser.find("IlarisOnline"):
                     if ser.find("id"):
                         print("IlarisOnline id found in serializer, updating")
-                        ser.set("text", data["io_data"]["id"])
-                    ser.end()  # id
-                ser.end()  # IlarisOnline
+                        ser.set("text", data["io_data"]["Id"])
+                        ser.end()  # id
+                    ser.end()  # IlarisOnline
                 char = self.charakterGeschriebenParams["charakter"]
                 # todo compare char.ilarisOnline with data["io_data"] and update only if different
                 char.ilarisOnline = data["io_data"]
