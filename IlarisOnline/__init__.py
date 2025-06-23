@@ -150,7 +150,16 @@ class Plugin:
         if error:
             print("Error uploading character to Ilaris-Online")
             print(error)
-            self.uploadDialog.addMessage("Fehler beim Hochladen des Charakters auf Ilaris-Online.de.", style="color: red;")
+            self.uploadDialog.addMessage("Hochladen des Charakters auf Ilaris-Online.de fehlgeschlagen.", style="color: red;")
+            self.uploadDialog.addMessage(f"Fehler: {error}", style="color: red;")
+            self.uploadError = error
+            self.uploadStatus = status
+            self.uploadData = data
+            if status == 401:
+                # raise PermissionError("Unauthorized, please login again")
+                loginDialog = LoginDialogWrapper.LoginDialogWrapper(
+                    callback=self.startUpload
+                )
         else:
             print("Character uploaded successfully")
             self.uploadDialog.addMessage("Charakter erfolgreich hochgeladen.", style="color: green;")
@@ -179,6 +188,20 @@ class Plugin:
         self.uploadDialog.enable()
             
 
+    def startUpload(self):
+        """Start the upload process for the character."""
+        params = self.geschriebenParams
+        client = APIClient()
+        xml_string = etree.tostring(etree.ElementTree(params['serializer'].root).getroot(), encoding='unicode')
+        self.charakterGeschriebenParams = params  # keep reference to access in callbacks
+        client.post(
+            "ilaris/charakter/pluginxml/",
+            {
+                "xml": xml_string,
+            },
+            callback=self.uploadCallback
+        )
+
     def charakterGeschriebenHandler(self, params):
         """Upload after save to include serialized data from other plugins."""
         print("charakter geschrieben handler")
@@ -195,21 +218,20 @@ class Plugin:
                 print("Auto-upload enabled")
                 Wolke.Settings["IO_AutoUploadChar"] = True
             print("User confirmed upload")
+        self.retryUploads = 3  # allow 3 retries on error (i.e. unauthorized)
         self.uploadDialog = ProgressDialog()
         self.uploadDialog.show()
         # self.uploadDialog.raise_()
         # self.uploadDialog.activateWindow()
         self.uploadDialog.addMessage("Charakter lokal gespeichert...", 0.2)
         self.uploadDialog.addMessage("Charakter mit Ilaris-Online.de synchronisieren...", 0.5)
-        client = APIClient()
-        xml_string = etree.tostring(etree.ElementTree(params['serializer'].root).getroot(), encoding='unicode')
-        self.charakterGeschriebenParams = params  # keep reference to access in callbacks
-        client.post(
-            "ilaris/charakter/pluginxml/",
-            {
-                "xml": xml_string,
-            },
-            callback=self.uploadCallback
-        )
+        self.geschriebenParams = params
+        self.startUpload()
+        # except PermissionError as e:
+        #     print(f"Error starting upload: {e}")
+        #     print("PERMISSION ERROR: RUN LOGIN NOW")
+        #     self.uploadDialog.addMessage("Fehler beim Hochladen des Charakters.", style="color: red;")
+        #     self.uploadDialog.enable()
+        #     return
 
         # client.uploadHausregel(char.ilarisOnline["hausregel"], char.ilarisOnline["alias"])

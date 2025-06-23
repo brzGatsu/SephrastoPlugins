@@ -50,6 +50,8 @@ class LoginDialogWrapper(QtCore.QObject):
                 Wolke.Settings["IO_Username"] = username
                 self.form.accept()
                 self.loginSuccessful.emit()
+                # if self.on_success:  # pass callback to init
+                #     self.on_success()
             else:
                 box = QtWidgets.QMessageBox.critical(self.form, "Fehler", "Login fehlgeschlagen")
                 # box.setModal(True)
