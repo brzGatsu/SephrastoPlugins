@@ -143,6 +143,19 @@ class Plugin:
         serializer.begin("IlarisOnline")
         for key, val in char.ilarisOnline.items():
             serializer.setNested(key, val)
+        # write abgeleitete werte (avoid calculation serverside)
+        serializer.beginList('Abgeleitete')
+        for (abk, abwert) in char.abgeleiteteWerte.items():
+            serializer.begin('Abgeleitet')
+            # abwert.serialize(serializer)
+            serializer.set("abk", abk)
+            serializer.set("name", abwert.anzeigename)
+            serializer.set("wert", abwert.wert)
+            # serializer.set("mod", abwert.mod)
+            serializer.set("wertStern", abwert.finalwert)
+            # serializer.set("mod", abwert.modifikator)
+            serializer.end() #abgeleitet
+        serializer.end() #abgeleitet
         serializer.end() # IlarisOnline
     
     def uploadCallback(self, data, error=None, status=None):
