@@ -1,0 +1,6 @@
+{
+  "name": "Foundry VTT Regel-Erweiterung",
+  "description": "Erweitert die Integration von Regeln und Manövern mit Foundry VTT. Ermöglicht die Konfiguration von Modifikatoren, Eingabefeldern und Icons für unterstützte Regelkategorien.",
+  "author": "Siebenstreich",
+  "version": "1"
+}
