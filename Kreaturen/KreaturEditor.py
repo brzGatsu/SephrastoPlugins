@@ -670,7 +670,7 @@ class KreaturEditor(object):
                 alglist.append
 
             block += self.ruleHeading(eigenschaft["name"])
-            block += f'<p>{eigenschaft["wert"]}</p>'
+            block += f'<p>{eigenschaft.get("wert", "")}</p>'
         block += '</div>'
         # TODO: Add more sections here, based on the structure of self.data
         block += '</div>'
