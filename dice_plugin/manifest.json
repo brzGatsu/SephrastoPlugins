@@ -1,0 +1,7 @@
+{
+    "name": "Dice Plugin",
+    "author": "aradan13 + 95% KI",
+    "version": "1.4.2",
+    "description": "Würfel-, Kampf- und Meister-Plugin: Effekte, Manöver-Flow, Präzision, spielerähnliche NSCs, MIT KI ERSTELLT.",
+    "hasSettings": false
+}

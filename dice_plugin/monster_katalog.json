@@ -1,0 +1,517 @@
+{
+  "klassen": [
+    {
+      "id": "daimonid",
+      "name": "Dämonid",
+      "wissen": "Dämonenkunde",
+      "icon": "sprites/daimonid.png",
+      "beschreibung": "Dämoniden sind Kreaturen, die mit dämonischer Hilfe erschaffen wurden –\nalso in widernatürlichen Experimenten zusammengeschmolzene Chimären\noder dämonisch belebte Golems.\n\nEigenschaften: Immunität (Einfluss, Verwandlung), Schmerzimmun I,\nUnheilig, Verwundbarkeit I (geweihte Waffen oder Gegenstände der Gegengottheit)\nWissenstalent: Dämonenkunde\nBesonderheiten: Bei der Erschaffung zusätzliche Vorteile möglich (S. 81).",
+      "eigenschaften": [
+        "schmerzimmun_1",
+        "unheilig",
+        "verwundbarkeit_1"
+      ],
+      "eigenschaft_params": {
+        "verwundbarkeit_1": "geweiht"
+      }
+    },
+    {
+      "id": "daemon",
+      "name": "Dämon",
+      "wissen": "Dämonenkunde",
+      "icon": "sprites/daemon.png",
+      "beschreibung": "Dämonen sind Wesen aus den Niederhöllen, die auf Dere gerufen\noder gebunden wurden.\n\nEigenschaften: Astralsinn, Körperlosigkeit, Paraphysikalität,\nResistenz I (profan), Schmerzimmun II, Schreckgestalt I, Unheilig,\nVerwundbarkeit I (geweihte Waffen oder Gegenstände der Gegengottheit)\nWissenstalent: Dämonenkunde\nBesonderheiten: Bei der Beschwörung zusätzliche Vorteile möglich (S. 81).\nBeispiele: Gotongi, Heshthot, Shruuf",
+      "eigenschaften": [
+        "astralsinn",
+        "koerperlosigkeit",
+        "paraphysikalitaet",
+        "resistenz_1",
+        "schmerzimmun_2",
+        "schreckgestalt_1",
+        "unheilig",
+        "verwundbarkeit_1"
+      ],
+      "eigenschaft_params": {
+        "resistenz_1": "profan",
+        "verwundbarkeit_1": "geweiht"
+      }
+    },
+    {
+      "id": "elementar",
+      "name": "Elementar",
+      "wissen": "Elementarkunde",
+      "icon": "sprites/elementar.png",
+      "beschreibung": "Elementare sind reine Ausformungen eines der sechs Elemente und treten\ndort auf, wo dieses Element besonders ausgeprägt ist.\n\nEigenschaften: Astralsinn, Immunität (eigenes Element, Eigenschaften,\nHellsicht, Illusion, Umwelt, Verwandlung, Krankheiten, Gifte, Hitze, Kälte),\nKörperlosigkeit, Resistenz II (profan), Schmerzimmun II,\nVerwundbarkeit I (Gegenelement)\nWissenstalent: Elementarkunde\nBesonderheiten: Bei der Herbeirufung zusätzliche Vorteile möglich (S. 81).\nJedes Elementar kann sich durch sein eigenes Element bewegen.\nBeispiele: Kräuterkopf, Sausewind, Hefashar",
+      "eigenschaften": [
+        "astralsinn",
+        "koerperlosigkeit",
+        "resistenz_2",
+        "schmerzimmun_2",
+        "verwundbarkeit_1"
+      ],
+      "eigenschaft_params": {
+        "resistenz_2": "profan",
+        "verwundbarkeit_1": "Gegenelement"
+      }
+    },
+    {
+      "id": "feenwesen",
+      "name": "Feenwesen",
+      "wissen": "Geschichten und Legenden",
+      "icon": "sprites/fee.png",
+      "beschreibung": "Feenwesen sind an die jenseitigen Feenwelten gebunden, was sich in\nmächtiger, oft freizauberischer Magie äußert. Viele können nur mit\neinem Anker längere Zeit auf Dere verbringen.\n\nEigenschaften: Resistenz I (geweihte und magische Waffen), Resistenz II (profan)\nWissenstalent: Geschichten und Legenden\nBesonderheiten: Oft Freizauberei.\nBeispiele: Einhorn, Kobold, Ladifaahr",
+      "eigenschaften": [
+        "resistenz_1",
+        "resistenz_2"
+      ],
+      "eigenschaft_params": {
+        "resistenz_1": "geweiht und magisch",
+        "resistenz_2": "profan"
+      }
+    },
+    {
+      "id": "humanoid",
+      "name": "Humanoid",
+      "wissen": "Gebräuche / Geschichten",
+      "icon": "sprites/humanoid.png",
+      "beschreibung": "Die kulturschaffenden und primitiven Völker Aventuriens.\nEigenschaften: keine\nWissenstalente: Gebräuche, Geschichten und Legenden, Geographie\nBeispiele: Oger, Menschen, Trolle",
+      "eigenschaften": [],
+      "eigenschaft_params": {}
+    },
+    {
+      "id": "mythenwesen",
+      "name": "Mythenwesen",
+      "wissen": "Geschichten und Legenden",
+      "icon": "sprites/mythen.png",
+      "beschreibung": "Legendäre oder sagenhafte Kreaturen aus Geschichten und Legenden.\nEigenschaften: je nach Wesen\nWissenstalent: Geschichten und Legenden",
+      "eigenschaften": [],
+      "eigenschaft_params": {}
+    },
+    {
+      "id": "tier",
+      "name": "Tier",
+      "wissen": "Tierkunde / Überleben",
+      "icon": "sprites/tier.png",
+      "beschreibung": "Tiere bevölkern Aventurien vom hohen Norden in den tiefen Süden.\nEigenschaften: keine\nWissenstalent: Tierkunde, Überleben\nBeispiele: Tatzelwurm, Ghul, Sumpfranze",
+      "eigenschaften": [],
+      "eigenschaft_params": {}
+    },
+    {
+      "id": "untoter",
+      "name": "Untoter",
+      "wissen": "Dämonenkunde / Mythenkunde",
+      "icon": "sprites/untot.png",
+      "beschreibung": "Von Nekromanten erhobene Leichname ohne Seele, oder ruhelose\nTotengeister an der dritten Sphäre.\n\nEigenschaften: Empfindlichkeit I (Sonnenlicht, borongeweihter Boden),\nImmunität (Eigenschaften, Einfluss, Gift, Krankheit, Verwandlung, Kälte),\nLichtscheu, Schmerzimmun I, Schreckgestalt I, Unheilig,\nVerwundbarkeit I (borongeweihte Waffen oder Gegenstände)\nWissenstalent: Dämonenkunde / Mythenkunde\nBesonderheiten: Bei der Erhebung zusätzliche Eigenschaften möglich (S. 81).\nBeispiele: Skelett, Nachtalp, Mumie",
+      "eigenschaften": [
+        "empfindlichkeit_1",
+        "lichtscheu",
+        "schmerzimmun_1",
+        "schreckgestalt_1",
+        "unheilig",
+        "verwundbarkeit_1"
+      ],
+      "eigenschaft_params": {
+        "empfindlichkeit_1": "Sonnenlicht / borongeweihter Boden",
+        "verwundbarkeit_1": "borongeweiht"
+      }
+    }
+  ],
+  "eigenschaften": [
+    {
+      "id": "astralsinn",
+      "name": "Astralsinn",
+      "tooltip": "Erlaubt der Kreatur, ihre Umgebung magisch wahrzunehmen.\nSie erleidet keine Abzüge durch schlechte Sicht.\nDer Astralsinn kann durch Antimagie (z. B. Hellsicht trüben,\nModifikation Magie unterdrücken) gestört werden.\nDie Schwierigkeit dafür liegt mindestens bei 20,\nbei mächtigen Wesen deutlich höher."
+    },
+    {
+      "id": "aura",
+      "name": "Aura",
+      "needs_param": true,
+      "param_label": "Art, Probe, Intervall, Auswirkung",
+      "tooltip": "Schädlicher Flächeneffekt rund um die Kreatur.\nDie Stichworte in der Klammer geben Art der Aura an und welche\nProbe wie oft abgelegt werden muss, um der Auswirkung zu widerstehen.\nDiese Probe ist für jeden Schritt Entfernung von der Kreatur um +1 erleichtert.\n\nBeispiel: Aura (Hitze, Zähigkeit (16) alle 4 Initiativephasen, 1 Erschöpfung).\nIm Nahkampf: alle 4 INI-Phasen Zähigkeit (16) oder 1 Erschöpfung.\nIn 8 Schritt Entfernung wäre die Probe um +8 erleichtert."
+    },
+    {
+      "id": "empfindlichkeit_1",
+      "name": "Empfindlichkeit I",
+      "needs_param": true,
+      "param_label": "Umstand",
+      "param_extra": "umstand",
+      "tooltip": "Unter dem angegebenen Umstand erleidet die Kreatur\npro Initiativephase 1 Wunde."
+    },
+    {
+      "id": "empfindlichkeit_2",
+      "name": "Empfindlichkeit II",
+      "needs_param": true,
+      "param_label": "Umstand",
+      "param_extra": "umstand",
+      "tooltip": "Unter dem angegebenen Umstand erleidet die Kreatur\npro Initiativephase 2 Wunden."
+    },
+    {
+      "id": "explosion",
+      "name": "Explosion",
+      "needs_param": true,
+      "param_label": "Schaden",
+      "tooltip": "Wird die Kreatur im Kampf vernichtet, explodiert sie und richtet\nden in der Klammer angegebenen Schaden an, der Nachbrennen (S. 98) verursacht.\nPro Schritt Entfernung fällt der niedrigste Schadenswürfel weg."
+    },
+    {
+      "id": "flieger",
+      "name": "Flieger",
+      "tooltip": "Bewegen sich üblicherweise fliegend; die angegebenen Werte gelten\nfür Angriffe und Bewegung in der Luft.\nAm Boden stellen solche Kreaturen meist keine Gefahr dar."
+    },
+    {
+      "id": "flugfaehig",
+      "name": "Flugfähig",
+      "tooltip": "Kämpfen in der Luft und am Boden gleichermaßen gewandt."
+    },
+    {
+      "id": "immunitaet_fertigkeit",
+      "name": "Immunität (Fertigkeit)",
+      "needs_param": true,
+      "param_label": "Fertigkeit",
+      "tooltip": "Immun gegen alle Zauber, die (auch) der entsprechenden Fertigkeit\nzugeordnet sind.\nAusgenommen: Effekte, die das Wesen nur indirekt betreffen\n(z. B. erfasst ein Odem auch einen Dämon mit Immunität (Hellsicht);\nImmunität (Umwelt) schützt nicht vor gerufenem Regen)."
+    },
+    {
+      "id": "immunitaet_schadensquelle",
+      "name": "Immunität (Schadensquelle)",
+      "needs_param": true,
+      "param_label": "Schadensquelle",
+      "param_extra": "schadensquelle",
+      "tooltip": "Das Wesen erleidet keinen Schaden aus der angegebenen Quelle.\n\nSchadensquellen und Beispiele\n\nProfan — profane Waffen, Stürze, Tierangriffe\nMagisch — magische Waffen, Schadenszauber\nGeweiht — geweihte Waffen, Bannstrahl\nDämonisch — Angriffe von Dämonen, Paktierer-Fähigkeiten\nElementar — Lagerfeuer (Feuer), Aquafaxius (Wasser), Angriffe von Luftelementaren (Luft), Fausthieb (Humus), Kälte (Eis), Schwert (Erz)\n\nWelche Schadensquelle wird verursacht?\nGrundsätzlich kann Schaden mehrere Ursachen haben. Ausgenommen davon ist nur die Schadensquelle profan: sie kann nicht gemeinsam mit magisch, geweiht oder dämonisch vorkommen.\n\nBeispiel: Ein gewöhnliches Schwert wäre den Schadensquellen profan und Erz zugeordnet. Das Flammenschwert eines Zauberers hätte dagegen die Quellen magisch, Erz und Feuer.\n\nMehrere Verwundbarkeiten und Resistenzen?\nMehrere Verwundbarkeiten oder Resistenzen werden miteinander verrechnet.\n\nBeispiel: Ein Fausthieb (profan, Humus) würde gegen ein Eiselementar mit Resistenz II (profan) und Verwundbarkeit I (Humus) 1 Wunde weniger anrichten.",
+      "param_extra_tooltip": "Schadensquellen und Beispiele\n\nProfan — profane Waffen, Stürze, Tierangriffe\nMagisch — magische Waffen, Schadenszauber\nGeweiht — geweihte Waffen, Bannstrahl\nDämonisch — Angriffe von Dämonen, Paktierer-Fähigkeiten\nElementar — Lagerfeuer (Feuer), Aquafaxius (Wasser), Angriffe von Luftelementaren (Luft), Fausthieb (Humus), Kälte (Eis), Schwert (Erz)\n\nWelche Schadensquelle wird verursacht?\nGrundsätzlich kann Schaden mehrere Ursachen haben. Ausgenommen davon ist nur die Schadensquelle profan: sie kann nicht gemeinsam mit magisch, geweiht oder dämonisch vorkommen.\n\nBeispiel: Ein gewöhnliches Schwert wäre den Schadensquellen profan und Erz zugeordnet. Das Flammenschwert eines Zauberers hätte dagegen die Quellen magisch, Erz und Feuer.\n\nMehrere Verwundbarkeiten und Resistenzen?\nMehrere Verwundbarkeiten oder Resistenzen werden miteinander verrechnet.\n\nBeispiel: Ein Fausthieb (profan, Humus) würde gegen ein Eiselementar mit Resistenz II (profan) und Verwundbarkeit I (Humus) 1 Wunde weniger anrichten."
+    },
+    {
+      "id": "koerperlosigkeit",
+      "name": "Körperlosigkeit",
+      "tooltip": "Der Körper der Kreatur hat keine lebenserhaltende Funktion.\nSelbst schwerste Verwundungen schränken sie nicht ein.\nKeine Abzüge durch Wunden, wird nicht kampfunfähig.\nDie neunte Wunde vernichtet aber auch eine körperlose Kreatur."
+    },
+    {
+      "id": "lichtscheu",
+      "name": "Lichtscheu",
+      "tooltip": "An ein Leben in der Dunkelheit gewöhnt.\nIm Licht einer Fackel / eines Lagerfeuers / der Sonne:\nMalus von −2 / −4 / −8 auf alle Proben."
+    },
+    {
+      "id": "paraphysikalitaet",
+      "name": "Paraphysikalität",
+      "tooltip": "Setzt die Naturgesetze für das Wesen außer Kraft.\nKann an Wänden oder Decke gehen, aus dem Stand auf\nHöchstgeschwindigkeit beschleunigen und gewaltige Sprünge vollführen.\nImmun gegen Umreißen-, Niederwerfen-, Zurückstoßen-\nund Niederschmettern-Effekte."
+    },
+    {
+      "id": "regeneration_1",
+      "name": "Regeneration I",
+      "tooltip": "In jeder Initiativephase 1 Wunde schließen."
+    },
+    {
+      "id": "regeneration_2",
+      "name": "Regeneration II",
+      "tooltip": "In jeder Initiativephase 2 Wunden schließen."
+    },
+    {
+      "id": "regeneration_3",
+      "name": "Regeneration III",
+      "tooltip": "In jeder Initiativephase 3 Wunden schließen."
+    },
+    {
+      "id": "regeneration_4",
+      "name": "Regeneration IV",
+      "tooltip": "In jeder Initiativephase 4 Wunden schließen."
+    },
+    {
+      "id": "resistenz_1",
+      "name": "Resistenz I",
+      "needs_param": true,
+      "param_label": "Schadensquelle",
+      "param_extra": "schadensquelle",
+      "tooltip": "Verringert Schaden durch die angegebene Schadensquelle.\nWann immer die Kreatur Wunden erleiden würde,\nerleidet sie 1 Wunde weniger.\n\nSchadensquellen und Beispiele\n\nProfan — profane Waffen, Stürze, Tierangriffe\nMagisch — magische Waffen, Schadenszauber\nGeweiht — geweihte Waffen, Bannstrahl\nDämonisch — Angriffe von Dämonen, Paktierer-Fähigkeiten\nElementar — Lagerfeuer (Feuer), Aquafaxius (Wasser), Angriffe von Luftelementaren (Luft), Fausthieb (Humus), Kälte (Eis), Schwert (Erz)\n\nWelche Schadensquelle wird verursacht?\nGrundsätzlich kann Schaden mehrere Ursachen haben. Ausgenommen davon ist nur die Schadensquelle profan: sie kann nicht gemeinsam mit magisch, geweiht oder dämonisch vorkommen.\n\nBeispiel: Ein gewöhnliches Schwert wäre den Schadensquellen profan und Erz zugeordnet. Das Flammenschwert eines Zauberers hätte dagegen die Quellen magisch, Erz und Feuer.\n\nMehrere Verwundbarkeiten und Resistenzen?\nMehrere Verwundbarkeiten oder Resistenzen werden miteinander verrechnet.\n\nBeispiel: Ein Fausthieb (profan, Humus) würde gegen ein Eiselementar mit Resistenz II (profan) und Verwundbarkeit I (Humus) 1 Wunde weniger anrichten.",
+      "param_extra_tooltip": "Schadensquellen und Beispiele\n\nProfan — profane Waffen, Stürze, Tierangriffe\nMagisch — magische Waffen, Schadenszauber\nGeweiht — geweihte Waffen, Bannstrahl\nDämonisch — Angriffe von Dämonen, Paktierer-Fähigkeiten\nElementar — Lagerfeuer (Feuer), Aquafaxius (Wasser), Angriffe von Luftelementaren (Luft), Fausthieb (Humus), Kälte (Eis), Schwert (Erz)\n\nWelche Schadensquelle wird verursacht?\nGrundsätzlich kann Schaden mehrere Ursachen haben. Ausgenommen davon ist nur die Schadensquelle profan: sie kann nicht gemeinsam mit magisch, geweiht oder dämonisch vorkommen.\n\nBeispiel: Ein gewöhnliches Schwert wäre den Schadensquellen profan und Erz zugeordnet. Das Flammenschwert eines Zauberers hätte dagegen die Quellen magisch, Erz und Feuer.\n\nMehrere Verwundbarkeiten und Resistenzen?\nMehrere Verwundbarkeiten oder Resistenzen werden miteinander verrechnet.\n\nBeispiel: Ein Fausthieb (profan, Humus) würde gegen ein Eiselementar mit Resistenz II (profan) und Verwundbarkeit I (Humus) 1 Wunde weniger anrichten."
+    },
+    {
+      "id": "resistenz_2",
+      "name": "Resistenz II",
+      "needs_param": true,
+      "param_label": "Schadensquelle",
+      "param_extra": "schadensquelle",
+      "tooltip": "Verringert Schaden durch die angegebene Schadensquelle.\nWann immer die Kreatur Wunden erleiden würde,\nerleidet sie 2 Wunden weniger.\n\nSchadensquellen und Beispiele\n\nProfan — profane Waffen, Stürze, Tierangriffe\nMagisch — magische Waffen, Schadenszauber\nGeweiht — geweihte Waffen, Bannstrahl\nDämonisch — Angriffe von Dämonen, Paktierer-Fähigkeiten\nElementar — Lagerfeuer (Feuer), Aquafaxius (Wasser), Angriffe von Luftelementaren (Luft), Fausthieb (Humus), Kälte (Eis), Schwert (Erz)\n\nWelche Schadensquelle wird verursacht?\nGrundsätzlich kann Schaden mehrere Ursachen haben. Ausgenommen davon ist nur die Schadensquelle profan: sie kann nicht gemeinsam mit magisch, geweiht oder dämonisch vorkommen.\n\nBeispiel: Ein gewöhnliches Schwert wäre den Schadensquellen profan und Erz zugeordnet. Das Flammenschwert eines Zauberers hätte dagegen die Quellen magisch, Erz und Feuer.\n\nMehrere Verwundbarkeiten und Resistenzen?\nMehrere Verwundbarkeiten oder Resistenzen werden miteinander verrechnet.\n\nBeispiel: Ein Fausthieb (profan, Humus) würde gegen ein Eiselementar mit Resistenz II (profan) und Verwundbarkeit I (Humus) 1 Wunde weniger anrichten.",
+      "param_extra_tooltip": "Schadensquellen und Beispiele\n\nProfan — profane Waffen, Stürze, Tierangriffe\nMagisch — magische Waffen, Schadenszauber\nGeweiht — geweihte Waffen, Bannstrahl\nDämonisch — Angriffe von Dämonen, Paktierer-Fähigkeiten\nElementar — Lagerfeuer (Feuer), Aquafaxius (Wasser), Angriffe von Luftelementaren (Luft), Fausthieb (Humus), Kälte (Eis), Schwert (Erz)\n\nWelche Schadensquelle wird verursacht?\nGrundsätzlich kann Schaden mehrere Ursachen haben. Ausgenommen davon ist nur die Schadensquelle profan: sie kann nicht gemeinsam mit magisch, geweiht oder dämonisch vorkommen.\n\nBeispiel: Ein gewöhnliches Schwert wäre den Schadensquellen profan und Erz zugeordnet. Das Flammenschwert eines Zauberers hätte dagegen die Quellen magisch, Erz und Feuer.\n\nMehrere Verwundbarkeiten und Resistenzen?\nMehrere Verwundbarkeiten oder Resistenzen werden miteinander verrechnet.\n\nBeispiel: Ein Fausthieb (profan, Humus) würde gegen ein Eiselementar mit Resistenz II (profan) und Verwundbarkeit I (Humus) 1 Wunde weniger anrichten."
+    },
+    {
+      "id": "resistenz_3",
+      "name": "Resistenz III",
+      "needs_param": true,
+      "param_label": "Schadensquelle",
+      "param_extra": "schadensquelle",
+      "tooltip": "Verringert Schaden durch die angegebene Schadensquelle.\nWann immer die Kreatur Wunden erleiden würde,\nerleidet sie 3 Wunden weniger.\n\nSchadensquellen und Beispiele\n\nProfan — profane Waffen, Stürze, Tierangriffe\nMagisch — magische Waffen, Schadenszauber\nGeweiht — geweihte Waffen, Bannstrahl\nDämonisch — Angriffe von Dämonen, Paktierer-Fähigkeiten\nElementar — Lagerfeuer (Feuer), Aquafaxius (Wasser), Angriffe von Luftelementaren (Luft), Fausthieb (Humus), Kälte (Eis), Schwert (Erz)\n\nWelche Schadensquelle wird verursacht?\nGrundsätzlich kann Schaden mehrere Ursachen haben. Ausgenommen davon ist nur die Schadensquelle profan: sie kann nicht gemeinsam mit magisch, geweiht oder dämonisch vorkommen.\n\nBeispiel: Ein gewöhnliches Schwert wäre den Schadensquellen profan und Erz zugeordnet. Das Flammenschwert eines Zauberers hätte dagegen die Quellen magisch, Erz und Feuer.\n\nMehrere Verwundbarkeiten und Resistenzen?\nMehrere Verwundbarkeiten oder Resistenzen werden miteinander verrechnet.\n\nBeispiel: Ein Fausthieb (profan, Humus) würde gegen ein Eiselementar mit Resistenz II (profan) und Verwundbarkeit I (Humus) 1 Wunde weniger anrichten.",
+      "param_extra_tooltip": "Schadensquellen und Beispiele\n\nProfan — profane Waffen, Stürze, Tierangriffe\nMagisch — magische Waffen, Schadenszauber\nGeweiht — geweihte Waffen, Bannstrahl\nDämonisch — Angriffe von Dämonen, Paktierer-Fähigkeiten\nElementar — Lagerfeuer (Feuer), Aquafaxius (Wasser), Angriffe von Luftelementaren (Luft), Fausthieb (Humus), Kälte (Eis), Schwert (Erz)\n\nWelche Schadensquelle wird verursacht?\nGrundsätzlich kann Schaden mehrere Ursachen haben. Ausgenommen davon ist nur die Schadensquelle profan: sie kann nicht gemeinsam mit magisch, geweiht oder dämonisch vorkommen.\n\nBeispiel: Ein gewöhnliches Schwert wäre den Schadensquellen profan und Erz zugeordnet. Das Flammenschwert eines Zauberers hätte dagegen die Quellen magisch, Erz und Feuer.\n\nMehrere Verwundbarkeiten und Resistenzen?\nMehrere Verwundbarkeiten oder Resistenzen werden miteinander verrechnet.\n\nBeispiel: Ein Fausthieb (profan, Humus) würde gegen ein Eiselementar mit Resistenz II (profan) und Verwundbarkeit I (Humus) 1 Wunde weniger anrichten."
+    },
+    {
+      "id": "resistenz_4",
+      "name": "Resistenz IV",
+      "needs_param": true,
+      "param_label": "Schadensquelle",
+      "param_extra": "schadensquelle",
+      "tooltip": "Verringert Schaden durch die angegebene Schadensquelle.\nWann immer die Kreatur Wunden erleiden würde,\nerleidet sie 4 Wunden weniger.\n\nSchadensquellen und Beispiele\n\nProfan — profane Waffen, Stürze, Tierangriffe\nMagisch — magische Waffen, Schadenszauber\nGeweiht — geweihte Waffen, Bannstrahl\nDämonisch — Angriffe von Dämonen, Paktierer-Fähigkeiten\nElementar — Lagerfeuer (Feuer), Aquafaxius (Wasser), Angriffe von Luftelementaren (Luft), Fausthieb (Humus), Kälte (Eis), Schwert (Erz)\n\nWelche Schadensquelle wird verursacht?\nGrundsätzlich kann Schaden mehrere Ursachen haben. Ausgenommen davon ist nur die Schadensquelle profan: sie kann nicht gemeinsam mit magisch, geweiht oder dämonisch vorkommen.\n\nBeispiel: Ein gewöhnliches Schwert wäre den Schadensquellen profan und Erz zugeordnet. Das Flammenschwert eines Zauberers hätte dagegen die Quellen magisch, Erz und Feuer.\n\nMehrere Verwundbarkeiten und Resistenzen?\nMehrere Verwundbarkeiten oder Resistenzen werden miteinander verrechnet.\n\nBeispiel: Ein Fausthieb (profan, Humus) würde gegen ein Eiselementar mit Resistenz II (profan) und Verwundbarkeit I (Humus) 1 Wunde weniger anrichten.",
+      "param_extra_tooltip": "Schadensquellen und Beispiele\n\nProfan — profane Waffen, Stürze, Tierangriffe\nMagisch — magische Waffen, Schadenszauber\nGeweiht — geweihte Waffen, Bannstrahl\nDämonisch — Angriffe von Dämonen, Paktierer-Fähigkeiten\nElementar — Lagerfeuer (Feuer), Aquafaxius (Wasser), Angriffe von Luftelementaren (Luft), Fausthieb (Humus), Kälte (Eis), Schwert (Erz)\n\nWelche Schadensquelle wird verursacht?\nGrundsätzlich kann Schaden mehrere Ursachen haben. Ausgenommen davon ist nur die Schadensquelle profan: sie kann nicht gemeinsam mit magisch, geweiht oder dämonisch vorkommen.\n\nBeispiel: Ein gewöhnliches Schwert wäre den Schadensquellen profan und Erz zugeordnet. Das Flammenschwert eines Zauberers hätte dagegen die Quellen magisch, Erz und Feuer.\n\nMehrere Verwundbarkeiten und Resistenzen?\nMehrere Verwundbarkeiten oder Resistenzen werden miteinander verrechnet.\n\nBeispiel: Ein Fausthieb (profan, Humus) würde gegen ein Eiselementar mit Resistenz II (profan) und Verwundbarkeit I (Humus) 1 Wunde weniger anrichten."
+    },
+    {
+      "id": "rudel",
+      "name": "Rudel",
+      "tooltip": "Werden oft in Gruppen gerufen; die spontane Modifikation\nMehrere Ziele ist bei ihrer Beschwörung nicht erschwert.\nNur eine Kontrollprobe für alle auf einmal beschworenen Wesen."
+    },
+    {
+      "id": "schmerzimmun_1",
+      "name": "Schmerzimmun I",
+      "tooltip": "Immunität gegen Blutungen und die Wundschmerzeffekte\nBetäubt und Organtreffer."
+    },
+    {
+      "id": "schmerzimmun_2",
+      "name": "Schmerzimmun II",
+      "tooltip": "Immunität gegen alle Wundschmerzeffekte."
+    },
+    {
+      "id": "schreckgestalt_1",
+      "name": "Schreckgestalt I",
+      "tooltip": "Bei Begegnung: Furcht-Effekt Stufe I (S. 46).\nHält an, bis der Gegner besiegt wurde oder sichere Entfernung."
+    },
+    {
+      "id": "schreckgestalt_2",
+      "name": "Schreckgestalt II",
+      "tooltip": "Bei Begegnung: Furcht-Effekt Stufe II (S. 46).\nHält an, bis der Gegner besiegt wurde oder sichere Entfernung."
+    },
+    {
+      "id": "schreckgestalt_3",
+      "name": "Schreckgestalt III",
+      "tooltip": "Bei Begegnung: Furcht-Effekt Stufe III (S. 46).\nHält an, bis der Gegner besiegt wurde oder sichere Entfernung."
+    },
+    {
+      "id": "schreckgestalt_4",
+      "name": "Schreckgestalt IV",
+      "tooltip": "Bei Begegnung: Furcht-Effekt Stufe IV (S. 46).\nHält an, bis der Gegner besiegt wurde oder sichere Entfernung."
+    },
+    {
+      "id": "tarnung",
+      "name": "Tarnung",
+      "tooltip": "Kann sich der Umgebung anpassen (z. B. Hautfarbe).\nBei Heimlichkeits-Proben kein Malus durch fehlendes Versteck."
+    },
+    {
+      "id": "unheilig",
+      "name": "Unheilig",
+      "tooltip": "Besonders anfällig gegen bestimmte karmale Wirkungen (S. 91)."
+    },
+    {
+      "id": "unsichtbarkeit",
+      "name": "Unsichtbarkeit",
+      "tooltip": "Kann sich beliebig oft und lange unsichtbar machen."
+    },
+    {
+      "id": "verwundbarkeit_1",
+      "name": "Verwundbarkeit I",
+      "needs_param": true,
+      "param_label": "Schadensquelle",
+      "param_extra": "schadensquelle",
+      "tooltip": "Wann immer die Kreatur Wunden durch diese Schadensquelle erleidet,\nbekommt sie 1 zusätzliche Wunde.\n\nSchadensquellen und Beispiele\n\nProfan — profane Waffen, Stürze, Tierangriffe\nMagisch — magische Waffen, Schadenszauber\nGeweiht — geweihte Waffen, Bannstrahl\nDämonisch — Angriffe von Dämonen, Paktierer-Fähigkeiten\nElementar — Lagerfeuer (Feuer), Aquafaxius (Wasser), Angriffe von Luftelementaren (Luft), Fausthieb (Humus), Kälte (Eis), Schwert (Erz)\n\nWelche Schadensquelle wird verursacht?\nGrundsätzlich kann Schaden mehrere Ursachen haben. Ausgenommen davon ist nur die Schadensquelle profan: sie kann nicht gemeinsam mit magisch, geweiht oder dämonisch vorkommen.\n\nBeispiel: Ein gewöhnliches Schwert wäre den Schadensquellen profan und Erz zugeordnet. Das Flammenschwert eines Zauberers hätte dagegen die Quellen magisch, Erz und Feuer.\n\nMehrere Verwundbarkeiten und Resistenzen?\nMehrere Verwundbarkeiten oder Resistenzen werden miteinander verrechnet.\n\nBeispiel: Ein Fausthieb (profan, Humus) würde gegen ein Eiselementar mit Resistenz II (profan) und Verwundbarkeit I (Humus) 1 Wunde weniger anrichten.",
+      "param_extra_tooltip": "Schadensquellen und Beispiele\n\nProfan — profane Waffen, Stürze, Tierangriffe\nMagisch — magische Waffen, Schadenszauber\nGeweiht — geweihte Waffen, Bannstrahl\nDämonisch — Angriffe von Dämonen, Paktierer-Fähigkeiten\nElementar — Lagerfeuer (Feuer), Aquafaxius (Wasser), Angriffe von Luftelementaren (Luft), Fausthieb (Humus), Kälte (Eis), Schwert (Erz)\n\nWelche Schadensquelle wird verursacht?\nGrundsätzlich kann Schaden mehrere Ursachen haben. Ausgenommen davon ist nur die Schadensquelle profan: sie kann nicht gemeinsam mit magisch, geweiht oder dämonisch vorkommen.\n\nBeispiel: Ein gewöhnliches Schwert wäre den Schadensquellen profan und Erz zugeordnet. Das Flammenschwert eines Zauberers hätte dagegen die Quellen magisch, Erz und Feuer.\n\nMehrere Verwundbarkeiten und Resistenzen?\nMehrere Verwundbarkeiten oder Resistenzen werden miteinander verrechnet.\n\nBeispiel: Ein Fausthieb (profan, Humus) würde gegen ein Eiselementar mit Resistenz II (profan) und Verwundbarkeit I (Humus) 1 Wunde weniger anrichten."
+    },
+    {
+      "id": "verwundbarkeit_2",
+      "name": "Verwundbarkeit II",
+      "needs_param": true,
+      "param_label": "Schadensquelle",
+      "param_extra": "schadensquelle",
+      "tooltip": "Wann immer die Kreatur Wunden durch diese Schadensquelle erleidet,\nbekommt sie 2 zusätzliche Wunden.\n\nSchadensquellen und Beispiele\n\nProfan — profane Waffen, Stürze, Tierangriffe\nMagisch — magische Waffen, Schadenszauber\nGeweiht — geweihte Waffen, Bannstrahl\nDämonisch — Angriffe von Dämonen, Paktierer-Fähigkeiten\nElementar — Lagerfeuer (Feuer), Aquafaxius (Wasser), Angriffe von Luftelementaren (Luft), Fausthieb (Humus), Kälte (Eis), Schwert (Erz)\n\nWelche Schadensquelle wird verursacht?\nGrundsätzlich kann Schaden mehrere Ursachen haben. Ausgenommen davon ist nur die Schadensquelle profan: sie kann nicht gemeinsam mit magisch, geweiht oder dämonisch vorkommen.\n\nBeispiel: Ein gewöhnliches Schwert wäre den Schadensquellen profan und Erz zugeordnet. Das Flammenschwert eines Zauberers hätte dagegen die Quellen magisch, Erz und Feuer.\n\nMehrere Verwundbarkeiten und Resistenzen?\nMehrere Verwundbarkeiten oder Resistenzen werden miteinander verrechnet.\n\nBeispiel: Ein Fausthieb (profan, Humus) würde gegen ein Eiselementar mit Resistenz II (profan) und Verwundbarkeit I (Humus) 1 Wunde weniger anrichten.",
+      "param_extra_tooltip": "Schadensquellen und Beispiele\n\nProfan — profane Waffen, Stürze, Tierangriffe\nMagisch — magische Waffen, Schadenszauber\nGeweiht — geweihte Waffen, Bannstrahl\nDämonisch — Angriffe von Dämonen, Paktierer-Fähigkeiten\nElementar — Lagerfeuer (Feuer), Aquafaxius (Wasser), Angriffe von Luftelementaren (Luft), Fausthieb (Humus), Kälte (Eis), Schwert (Erz)\n\nWelche Schadensquelle wird verursacht?\nGrundsätzlich kann Schaden mehrere Ursachen haben. Ausgenommen davon ist nur die Schadensquelle profan: sie kann nicht gemeinsam mit magisch, geweiht oder dämonisch vorkommen.\n\nBeispiel: Ein gewöhnliches Schwert wäre den Schadensquellen profan und Erz zugeordnet. Das Flammenschwert eines Zauberers hätte dagegen die Quellen magisch, Erz und Feuer.\n\nMehrere Verwundbarkeiten und Resistenzen?\nMehrere Verwundbarkeiten oder Resistenzen werden miteinander verrechnet.\n\nBeispiel: Ein Fausthieb (profan, Humus) würde gegen ein Eiselementar mit Resistenz II (profan) und Verwundbarkeit I (Humus) 1 Wunde weniger anrichten."
+    },
+    {
+      "id": "verwundbarkeit_3",
+      "name": "Verwundbarkeit III",
+      "needs_param": true,
+      "param_label": "Schadensquelle",
+      "param_extra": "schadensquelle",
+      "tooltip": "Wann immer die Kreatur Wunden durch diese Schadensquelle erleidet,\nbekommt sie 3 zusätzliche Wunden.\n\nSchadensquellen und Beispiele\n\nProfan — profane Waffen, Stürze, Tierangriffe\nMagisch — magische Waffen, Schadenszauber\nGeweiht — geweihte Waffen, Bannstrahl\nDämonisch — Angriffe von Dämonen, Paktierer-Fähigkeiten\nElementar — Lagerfeuer (Feuer), Aquafaxius (Wasser), Angriffe von Luftelementaren (Luft), Fausthieb (Humus), Kälte (Eis), Schwert (Erz)\n\nWelche Schadensquelle wird verursacht?\nGrundsätzlich kann Schaden mehrere Ursachen haben. Ausgenommen davon ist nur die Schadensquelle profan: sie kann nicht gemeinsam mit magisch, geweiht oder dämonisch vorkommen.\n\nBeispiel: Ein gewöhnliches Schwert wäre den Schadensquellen profan und Erz zugeordnet. Das Flammenschwert eines Zauberers hätte dagegen die Quellen magisch, Erz und Feuer.\n\nMehrere Verwundbarkeiten und Resistenzen?\nMehrere Verwundbarkeiten oder Resistenzen werden miteinander verrechnet.\n\nBeispiel: Ein Fausthieb (profan, Humus) würde gegen ein Eiselementar mit Resistenz II (profan) und Verwundbarkeit I (Humus) 1 Wunde weniger anrichten.",
+      "param_extra_tooltip": "Schadensquellen und Beispiele\n\nProfan — profane Waffen, Stürze, Tierangriffe\nMagisch — magische Waffen, Schadenszauber\nGeweiht — geweihte Waffen, Bannstrahl\nDämonisch — Angriffe von Dämonen, Paktierer-Fähigkeiten\nElementar — Lagerfeuer (Feuer), Aquafaxius (Wasser), Angriffe von Luftelementaren (Luft), Fausthieb (Humus), Kälte (Eis), Schwert (Erz)\n\nWelche Schadensquelle wird verursacht?\nGrundsätzlich kann Schaden mehrere Ursachen haben. Ausgenommen davon ist nur die Schadensquelle profan: sie kann nicht gemeinsam mit magisch, geweiht oder dämonisch vorkommen.\n\nBeispiel: Ein gewöhnliches Schwert wäre den Schadensquellen profan und Erz zugeordnet. Das Flammenschwert eines Zauberers hätte dagegen die Quellen magisch, Erz und Feuer.\n\nMehrere Verwundbarkeiten und Resistenzen?\nMehrere Verwundbarkeiten oder Resistenzen werden miteinander verrechnet.\n\nBeispiel: Ein Fausthieb (profan, Humus) würde gegen ein Eiselementar mit Resistenz II (profan) und Verwundbarkeit I (Humus) 1 Wunde weniger anrichten."
+    },
+    {
+      "id": "verwundbarkeit_4",
+      "name": "Verwundbarkeit IV",
+      "needs_param": true,
+      "param_label": "Schadensquelle",
+      "param_extra": "schadensquelle",
+      "tooltip": "Wann immer die Kreatur Wunden durch diese Schadensquelle erleidet,\nbekommt sie 4 zusätzliche Wunden.\n\nSchadensquellen und Beispiele\n\nProfan — profane Waffen, Stürze, Tierangriffe\nMagisch — magische Waffen, Schadenszauber\nGeweiht — geweihte Waffen, Bannstrahl\nDämonisch — Angriffe von Dämonen, Paktierer-Fähigkeiten\nElementar — Lagerfeuer (Feuer), Aquafaxius (Wasser), Angriffe von Luftelementaren (Luft), Fausthieb (Humus), Kälte (Eis), Schwert (Erz)\n\nWelche Schadensquelle wird verursacht?\nGrundsätzlich kann Schaden mehrere Ursachen haben. Ausgenommen davon ist nur die Schadensquelle profan: sie kann nicht gemeinsam mit magisch, geweiht oder dämonisch vorkommen.\n\nBeispiel: Ein gewöhnliches Schwert wäre den Schadensquellen profan und Erz zugeordnet. Das Flammenschwert eines Zauberers hätte dagegen die Quellen magisch, Erz und Feuer.\n\nMehrere Verwundbarkeiten und Resistenzen?\nMehrere Verwundbarkeiten oder Resistenzen werden miteinander verrechnet.\n\nBeispiel: Ein Fausthieb (profan, Humus) würde gegen ein Eiselementar mit Resistenz II (profan) und Verwundbarkeit I (Humus) 1 Wunde weniger anrichten.",
+      "param_extra_tooltip": "Schadensquellen und Beispiele\n\nProfan — profane Waffen, Stürze, Tierangriffe\nMagisch — magische Waffen, Schadenszauber\nGeweiht — geweihte Waffen, Bannstrahl\nDämonisch — Angriffe von Dämonen, Paktierer-Fähigkeiten\nElementar — Lagerfeuer (Feuer), Aquafaxius (Wasser), Angriffe von Luftelementaren (Luft), Fausthieb (Humus), Kälte (Eis), Schwert (Erz)\n\nWelche Schadensquelle wird verursacht?\nGrundsätzlich kann Schaden mehrere Ursachen haben. Ausgenommen davon ist nur die Schadensquelle profan: sie kann nicht gemeinsam mit magisch, geweiht oder dämonisch vorkommen.\n\nBeispiel: Ein gewöhnliches Schwert wäre den Schadensquellen profan und Erz zugeordnet. Das Flammenschwert eines Zauberers hätte dagegen die Quellen magisch, Erz und Feuer.\n\nMehrere Verwundbarkeiten und Resistenzen?\nMehrere Verwundbarkeiten oder Resistenzen werden miteinander verrechnet.\n\nBeispiel: Ein Fausthieb (profan, Humus) würde gegen ein Eiselementar mit Resistenz II (profan) und Verwundbarkeit I (Humus) 1 Wunde weniger anrichten."
+    },
+    {
+      "id": "wasserwesen",
+      "name": "Wasserwesen",
+      "tooltip": "An das Leben unter Wasser gewöhnt, dort keinerlei Abzüge.\nAn Land kaum oder gar nicht beweglich."
+    },
+    {
+      "id": "amphibisch",
+      "name": "Amphibisch",
+      "tooltip": "Können an Land und im Wasser ungehindert agieren."
+    },
+    {
+      "id": "zusaetzliche_at_1",
+      "name": "Zusätzliche Attacke I",
+      "tooltip": "In der Initiativephase 1 zusätzliche Aktion Konflikt für Attacken.\nÜblicherweise mit unterschiedlichen Gliedmaßen."
+    },
+    {
+      "id": "zusaetzliche_at_2",
+      "name": "Zusätzliche Attacke II",
+      "tooltip": "In der Initiativephase 2 zusätzliche Aktionen Konflikt für Attacken.\nÜblicherweise mit unterschiedlichen Gliedmaßen."
+    },
+    {
+      "id": "zusaetzliche_at_3",
+      "name": "Zusätzliche Attacke III",
+      "tooltip": "In der Initiativephase 3 zusätzliche Aktionen Konflikt für Attacken.\nÜblicherweise mit unterschiedlichen Gliedmaßen."
+    },
+    {
+      "id": "zusaetzliche_at_4",
+      "name": "Zusätzliche Attacke IV",
+      "tooltip": "In der Initiativephase 4 zusätzliche Aktionen Konflikt für Attacken.\nÜblicherweise mit unterschiedlichen Gliedmaßen."
+    }
+  ],
+  "waffeneigenschaften": [
+    {
+      "id": "kopflastig",
+      "name": "Kopflastig",
+      "kategorie": "standard",
+      "tooltip": "Die Waffe kann zusätzliche Kraft besonders effizient in Schaden umwandeln. Der Schadensbonus durch hohe KK zählt für sie doppelt."
+    },
+    {
+      "id": "parierwaffe",
+      "name": "Parierwaffe",
+      "kategorie": "standard",
+      "tooltip": "Das Führen einer solchen Waffe ist Voraussetzung für den Parierwaffenstil."
+    },
+    {
+      "id": "reittier",
+      "name": "Reittier",
+      "kategorie": "standard",
+      "tooltip": "Ein Reittier ist Voraussetzung für den Reiterkampfstil. Angriffe mit dem Reittier sind um +4 erleichtert, wenn das Reittier in einer höheren Größenklasse als das Ziel ist."
+    },
+    {
+      "id": "ruestungsbrechend",
+      "name": "Rüstungsbrechend",
+      "kategorie": "standard",
+      "tooltip": "Ein schmaler Stoßdorn oder andere Waffenteile können Rüstungen durchschlagen. Ermöglicht das Manöver Rüstungsbrecher (S. 40)."
+    },
+    {
+      "id": "schild",
+      "name": "Schild",
+      "kategorie": "standard",
+      "tooltip": "Ermöglicht den Kampf im Schildkampfstil. Verteidigungen mit einem Schild sind um +4 erleichtert, wenn der Angreifer einer höheren Größenklasse angehört."
+    },
+    {
+      "id": "schwer",
+      "name": "Schwer",
+      "kategorie": "standard",
+      "tooltip": "Du brauchst mindestens die angegebene Körperkraft, um die Waffe ohne Einschränkungen führen zu können. Darunter erleidest du einen Malus von −2."
+    },
+    {
+      "id": "stumpf",
+      "name": "Stumpf",
+      "kategorie": "standard",
+      "tooltip": "Stumpfe Waffen können den Gegner mit dem Manöver Stumpfer Schlag (S. 40) bewusstlos schlagen."
+    },
+    {
+      "id": "unberechenbar",
+      "name": "Unberechenbar",
+      "kategorie": "standard",
+      "tooltip": "Die Waffe verursacht auch bei einer 2 einen Patzer. Dafür kann sie auch um Schilde herumschlagen, was Angriffe gegen Schildträger um +4 erleichtert."
+    },
+    {
+      "id": "wendig",
+      "name": "Wendig",
+      "kategorie": "standard",
+      "tooltip": "Die Waffe ist ungewöhnlich wendig: Du kannst den ersten Passierschlag zwischen zwei Initiativephasen als freie Reaktion ausführen."
+    },
+    {
+      "id": "zerbrechlich",
+      "name": "Zerbrechlich",
+      "kategorie": "standard",
+      "tooltip": "Die Waffe erleidet den vollen Waffenschaden, wenn sie eine nicht-zerbrechliche Waffe erfolgreich verteidigt oder von einer solchen erfolgreich verteidigt wird. Ausweichen vermeidet diesen Schaden."
+    },
+    {
+      "id": "zweihändig",
+      "name": "Zweihändig",
+      "kategorie": "standard",
+      "tooltip": "Die Waffe wird zweihändig geführt. Bei einhändiger Führung erleidest du einen Probenmalus von −2 und die Waffe richtet −4 TP weniger an. Zweihändige Fernkampfwaffen können nicht einhändig benutzt werden."
+    },
+    {
+      "id": "flaechenangriff",
+      "name": "Flächenangriff",
+      "kategorie": "kreatur",
+      "tooltip": "Richtet sich gegen jedes Ziel im angegebenen Bereich. Jedem Ziel steht eine eigene Verteidigung zu."
+    },
+    {
+      "id": "mutation",
+      "name": "Mutation",
+      "kategorie": "kreatur",
+      "tooltip": "Von der Kreatur angerichtete Wunden verfaulen, verwachsen, werden durchsichtig oder zeigen andere widernatürliche Erscheinungen (meist kosmetisch). Kürbar mit Heilkunde Wunden (28) oder heilen nach 1 Monat von selbst."
+    },
+    {
+      "id": "erfrieren",
+      "name": "Erfrieren",
+      "kategorie": "kreatur",
+      "tooltip": "Wundschmerz-ähnlich ab ≥2 Wunden: KO-Probe (20, I), sonst 1 Erschöpfung. Bei 3+ Wunden: KO-Probe (24, I) gegen 1 Erschöpfung. Ohne Schaden: Konterprobe. Typisch eiselementar."
+    },
+    {
+      "id": "ertraenken",
+      "name": "Ertränken",
+      "kategorie": "kreatur",
+      "tooltip": "Ab ≥2 Wunden: GE-Probe (20, I), sonst handlungsunfähig bis übernächste INI. Ohne Schaden: Konterprobe. Typisch wasserelementar."
+    },
+    {
+      "id": "fesseln",
+      "name": "Fesseln",
+      "kategorie": "kreatur",
+      "tooltip": "Ab ≥2 Wunden: GE-Probe (20, I), sonst 4 INI-Phasen keine Bewegung. Ohne Schaden: Konterprobe. Z. B. Ranken von Humuselementaren."
+    },
+    {
+      "id": "nachbrennen",
+      "name": "Nachbrennen",
+      "kategorie": "kreatur",
+      "tooltip": "Ab ≥2 Wunden: KO-Probe (20, I), sonst in Flammen – nach 4 INI-Phasen 1 Wunde wenn nicht gelöscht. Ohne Schaden: Konterprobe. Typisch Feuer."
+    },
+    {
+      "id": "niederschmettern",
+      "name": "Niederschmettern",
+      "kategorie": "kreatur",
+      "tooltip": "Ab ≥2 Wunden: KK-Probe (20, I), sonst Sturz. Ohne Schaden: Konterprobe. Typisch erzelementar."
+    },
+    {
+      "id": "zurueckstossen",
+      "name": "Zurückstoßen",
+      "kategorie": "kreatur",
+      "tooltip": "Ab ≥2 Wunden: KK-Probe (20, I), sonst 4 Schritt zurückgeworfen. Ohne Schaden: Konterprobe. Typisch Luftelementar / kräftige Angriffe."
+    }
+  ],
+  "groessen": [
+    {
+      "id": "winzig",
+      "name": "winzig",
+      "tooltip": ""
+    },
+    {
+      "id": "klein",
+      "name": "klein",
+      "tooltip": ""
+    },
+    {
+      "id": "mittel",
+      "name": "mittel",
+      "tooltip": ""
+    },
+    {
+      "id": "gross",
+      "name": "groß",
+      "tooltip": "Große und sehr große Gegner\nGroße und sehr große Gegner erleiden keinen Malus auf zusätzliche Verteidigungen, wenn sie gegen kleinere Feinde (wie die Charaktere) kämpfen. Dafür sind sie im Fernkampf leichter zu treffen (S. 46) und Schild-Verteidigungen gegen sie sind um +4 erleichtert (S. 47)."
+    },
+    {
+      "id": "sehr_gross",
+      "name": "sehr groß",
+      "tooltip": "Große und sehr große Gegner\nGroße und sehr große Gegner erleiden keinen Malus auf zusätzliche Verteidigungen, wenn sie gegen kleinere Feinde (wie die Charaktere) kämpfen. Dafür sind sie im Fernkampf leichter zu treffen (S. 46) und Schild-Verteidigungen gegen sie sind um +4 erleichtert (S. 47)."
+    }
+  ],
+  "hinweise": {
+    "schwarm": "Schwärme\nManchmal werden deine Spielercharaktere auf Gegner treffen, die nur durch ihre schiere Masse gefährlich werden, wie untote Pestratten, Krähen oder Brabacudas. Solche Kreaturen werden in Schwärmen zusammengefasst. Einzelne Tiere eines Schwarms können einfach getötet werden, doch der Schwarm insgesamt ist widerstandsfähig. Daher ist die Wundschwelle eines Schwarms niedrig, aber er verfügt über den Vorteil Koloss. Jede Wunde dezimiert den Schwarm, bis er sich nach fünf Wunden auflöst. Den Angriffen eines Schwarms ist nicht einfach beizukommen. Er besitzt hohe Angriffswerte und kann mehrmals angreifen, richtet aber nur wenig Schaden an. Ein größerer Schwarm hat höhere Angriffswerte und attackiert öfter, richtet aber nicht mehr Schaden an. Schwärme verfügen über die Eigenschaften Schmerzimmun II, Resistenz II (Stichwaffen) und Verwundbarkeit IV (Flächenschaden). Beispiele: Pestrattenschwarm (S. 105), Blutfischschwarm (S. 100).",
+    "grosse_gegner": "Große und sehr große Gegner\nGroße und sehr große Gegner erleiden keinen Malus auf zusätzliche Verteidigungen, wenn sie gegen kleinere Feinde (wie die Charaktere) kämpfen. Dafür sind sie im Fernkampf leichter zu treffen (S. 46) und Schild-Verteidigungen gegen sie sind um +4 erleichtert (S. 47).",
+    "schadensquellen": "Schadensquellen und Beispiele\n\nProfan — profane Waffen, Stürze, Tierangriffe\nMagisch — magische Waffen, Schadenszauber\nGeweiht — geweihte Waffen, Bannstrahl\nDämonisch — Angriffe von Dämonen, Paktierer-Fähigkeiten\nElementar — Lagerfeuer (Feuer), Aquafaxius (Wasser), Angriffe von Luftelementaren (Luft), Fausthieb (Humus), Kälte (Eis), Schwert (Erz)\n\nWelche Schadensquelle wird verursacht?\nGrundsätzlich kann Schaden mehrere Ursachen haben. Ausgenommen davon ist nur die Schadensquelle profan: sie kann nicht gemeinsam mit magisch, geweiht oder dämonisch vorkommen.\n\nBeispiel: Ein gewöhnliches Schwert wäre den Schadensquellen profan und Erz zugeordnet. Das Flammenschwert eines Zauberers hätte dagegen die Quellen magisch, Erz und Feuer.\n\nMehrere Verwundbarkeiten und Resistenzen?\nMehrere Verwundbarkeiten oder Resistenzen werden miteinander verrechnet.\n\nBeispiel: Ein Fausthieb (profan, Humus) würde gegen ein Eiselementar mit Resistenz II (profan) und Verwundbarkeit I (Humus) 1 Wunde weniger anrichten."
+  }
+}
